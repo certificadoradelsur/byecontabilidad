@@ -81,6 +81,15 @@
 					</div>
 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp; Clase Cuenta</label>
+						<div class="col-4">
+							<select class="browser-default custom-select" id="claseCuenta">
+							<option value="1">Activo</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
 							&nbsp; Grupo Cuenta</label>
 						<div class="col-4">
 							<select class="browser-default custom-select" id="grupoCuenta">
@@ -107,19 +116,39 @@
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#grupoCuenta").select2();
-			
-		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getLista',
-				function(res, code) {
-					var str;
-					for (var i = 0, len = res.length; i < len; i++) {
-						str += "<option value="+res[i].id+">" + res[i].nombre
-								+ "</option>";
+$(document).ready(function() {
+	$("#claseCuenta").select2(),
+	$("#grupoCuenta").select2();
+	
+	$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
+			function(res, code) {
+				var str;
+				for (var i = 0, len = res.length; i < len; i++) {
+					str += "<option value="+res[i].id+">" + res[i].nombre
+							+ "</option>";
+				}
+				document.getElementById("claseCuenta").innerHTML = str;
+			}, "json");
+})
+
+					$('#claseCuenta').on('change', function() {
+					var submitJson = {
+						idClaseCuenta : document.getElementById("claseCuenta").value
 					}
-					document.getElementById("grupoCuenta").innerHTML = str;
-				}, "json");
-	})
+
+					$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+									JSON.stringify(submitJson),
+									function(res, code) {
+										var str;
+										for (var i = 0, len = res.length; i < len; i++) {
+											str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+													+ res[i].nombre
+													+ "</option>";
+
+										}
+										document.getElementById("grupoCuenta").innerHTML = str;
+									}, "json");
+				});
 	
 
 	function guardar() {
@@ -132,8 +161,9 @@
 			return;
 		}
 
+		var texto = document.getElementById("grupoCuenta").value.split('/');
 		var submitJson = {
-			idGrupoCuenta : document.getElementById("grupoCuenta").value,
+			idGrupoCuenta : texto[0],
 			nombre : document.getElementById("nombre").value
 		}
 
@@ -156,5 +186,7 @@
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
+	$("#grupoCuenta").trigger('change');
+	$("#claseCuenta").trigger('change');
 </script>
 </html>

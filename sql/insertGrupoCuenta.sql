@@ -9,7 +9,7 @@ insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (6, 'Pasivo patrimo
 insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (7, 'Costo operación',3)
 insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (8, 'Gastos administracion y ventas',3)
 insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (9, 'Gastos financieros',3)
-insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (10,'Gastos fuera de Explotación',3)
+insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (10,'Gastos fuera de explotación',3)
 
 insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (11, 'Ingresos Explotación',4)
 insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (12, 'Financiero',4)

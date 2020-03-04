@@ -96,8 +96,8 @@
 							</select>
 						</div>
 					</div>
-					<br>
-					<br>
+
+
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -120,7 +120,6 @@
 		$("#claseCuenta").select2(),
 		$("#grupoCuenta").select2();
 		
-		
 		$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
 				function(res, code) {
 					var str;
@@ -132,19 +131,18 @@
 				}, "json");
 	})
 	
-	$('#claseCuenta').on('change',
-					function() {
+	$('#claseCuenta').on('change', function() {
 						var submitJson = {
 							idClaseCuenta : document.getElementById("claseCuenta").value
 						}
 
-						$.post('/conciliacionBancaria/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+						$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
 										JSON.stringify(submitJson),
 										function(res, code) {
 											var str;
 											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+"/"+res[i].numCuenta+">"
-														+ res[i].numCuenta
+												str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+														+ res[i].nombre
 														+ "</option>";
 											}
 											document.getElementById("grupoCuenta").innerHTML = str;
@@ -186,6 +184,7 @@
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
+	
 	$("#grupoCuenta").trigger('change');
 	$("#claseCuenta").trigger('change');
 </script>
