@@ -3,6 +3,9 @@
 	<persistence-unit name="byecontabilidad">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 	<jta-data-source>java:jboss/datasources/byeContabilidad</jta-data-source>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Usuario</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Empresa</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Perfil</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.CuentaContable</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.ClaseCuenta</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Clasificacion</class>

@@ -59,69 +59,8 @@
 	</nav>
 
 	<div class="sidenav">
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/banco.ico"
-				alt="Icono" />&nbsp;Banco
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="banco/index.jsp">Bancos</a> <a
-					class="dropdown-item" href="cuenta/index.jsp">Cuentas</a>
-			</div>
-		</div>
 		<a href="usuario/index.jsp"><img src="../images/user.ico"
 			alt="Icono" />&nbsp;Usuarios </a>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/comprobante.ico"
-				alt="Icono" />&nbsp;Transacción
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="transaccion/index.jsp">Lista</a> <a
-					class="dropdown-item" href="transaccion/ingresos.jsp">Ingreso</a>
-				<a class="dropdown-item" href="transaccion/egresos.jsp">Egreso</a>
-				<a class="dropdown-item" href="transaccion/traspasos.jsp">Traspaso</a>
-			</div>
-		</div>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/comprobante.ico"
-				alt="Icono" />&nbsp;Cartola
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="cartola/agregar.jsp">Digitar</a> <a
-					class="dropdown-item" href="cartola/importar.jsp">Importar</a> <a
-					class="dropdown-item" href="cartola/index.jsp">Lista</a>
-			</div>
-		</div>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/movi.ico"
-				alt="Icono" />&nbsp;Conciliación
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="conciliacion/conciliar.jsp">Conciliar</a>
-				<a class="dropdown-item" href="conciliacion/index.jsp">Ver
-					conciliación</a>
-			</div>
-		</div>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/movi.ico"
-				alt="Icono" />&nbsp;No Conciliados
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="conciliacion/empresa.jsp">Empresa</a>
-				<a class="dropdown-item" href="conciliacion/banco.jsp">Banco</a>
-			</div>
-		</div>
-		<a href="reporte/index.jsp"><img src="../images/reporte.ico"
-			alt="Icono" />&nbsp;Reporte </a>
 	</div>
 
 	<div class="main">

@@ -19,7 +19,7 @@ import cl.certificadoradelsur.byecontabilidad.entities.Usuario;
  */
 @Stateless
 public class UsuarioDAO {
-	@PersistenceContext(name = "conciliacionBancaria")
+	@PersistenceContext(name = "byeContabilidad")
 	private EntityManager em;
 
 	/**

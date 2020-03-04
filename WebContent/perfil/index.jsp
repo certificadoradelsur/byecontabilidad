@@ -16,11 +16,11 @@ $(document).ready(function () {
 	var submitJson = {
 		 id: document.getElementById("idUsuario").value
 	}
-    $.post('/conciliacionBancaria/rest-services/private/usuario/getById', JSON.stringify(submitJson)).done(function(data) {
+    $.post('/byeContabilidad/rest-services/private/usuario/getById', JSON.stringify(submitJson)).done(function(data) {
 		if(data.perfil == "ADMIN"){			
-			location.href="/conciliacionBancaria/administrador/index.jsp";			
+			location.href="/byeContabilidad/administrador/index.jsp";			
 		}else if(data.perfil == "USER") {
-			location.href="/conciliacionBancaria/usuario/index.jsp";
+			location.href="/byeContabilidad/usuario/index.jsp";
 		}
 		
 		})
