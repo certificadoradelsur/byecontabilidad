@@ -24,7 +24,8 @@ import javax.persistence.Table;
 @SequenceGenerator(name = "seq_clase_cuenta", sequenceName = "seq_clase_cuenta")
 @NamedQueries({
 		@NamedQuery(name = "ClaseCuenta.getAll", query = "SELECT c FROM ClaseCuenta c"),
-		@NamedQuery(name = "ClaseCuenta.countAll", query = "SELECT count(c.id) FROM ClaseCuenta c") })
+		@NamedQuery(name = "ClaseCuenta.countAll", query = "SELECT count(c.id) FROM ClaseCuenta c"),
+		@NamedQuery(name = "ClaseCuenta.getAllLista", query = "SELECT c FROM ClaseCuenta c")})
 
 public class ClaseCuenta implements Serializable {
 

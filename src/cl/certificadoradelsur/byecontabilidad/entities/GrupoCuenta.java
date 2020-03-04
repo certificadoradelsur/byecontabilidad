@@ -26,7 +26,10 @@ import javax.persistence.Table;
 @SequenceGenerator(name = "seq_grupo_cuenta", sequenceName = "seq_grupo_cuenta")
 @NamedQueries({
 		@NamedQuery(name = "GrupoCuenta.getAll", query = "SELECT g FROM GrupoCuenta g"),
-		@NamedQuery(name = "GrupoCuenta.countAll", query = "SELECT count(g.id) FROM GrupoCuenta g") })
+		@NamedQuery(name = "GrupoCuenta.countAll", query = "SELECT count(g.id) FROM GrupoCuenta g"), 
+		@NamedQuery(name = "GrupoCuenta.getAllLista", query = "SELECT g FROM GrupoCuenta g "),
+		@NamedQuery(name = "GrupoCuenta.getByIdClaseCuenta", query = "SELECT g FROM GrupoCuenta g  where  g.claseCuenta.id=:idClaseCuenta ")})
+
 
 public class GrupoCuenta implements Serializable {
 
@@ -34,7 +37,6 @@ public class GrupoCuenta implements Serializable {
 	private Long id;
 	private String nombre;
 	private ClaseCuenta claseCuenta;
-	private Clasificacion clasificacion;
 
 	@Id
 	@GeneratedValue(generator = "seq_grupo_cuenta", strategy = GenerationType.AUTO)
@@ -65,14 +67,6 @@ public class GrupoCuenta implements Serializable {
 		this.claseCuenta = claseCuenta;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "id_clasificacion", nullable = true)
-	public Clasificacion getClasificacion() {
-		return clasificacion;
-	}
 
-	public void setClasificacion(Clasificacion clasificacion) {
-		this.clasificacion = clasificacion;
-	}
 
 }

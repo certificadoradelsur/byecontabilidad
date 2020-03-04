@@ -5,7 +5,9 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
+import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CuentaContableJson;
@@ -23,6 +25,10 @@ public class CuentaContableRD {
 	private static Logger log = Logger.getLogger(CuentaContableRD.class);
 	@Inject
 	private CuentaContableDAO cuentadao;
+	@Inject
+	private ClaseCuentaDAO clasedao;
+	@Inject
+	private GrupoCuentaDAO grupodao;
 
 	/**
 	 * funcion que almacena
@@ -41,7 +47,8 @@ public class CuentaContableRD {
 				cuentaContable.setDescripcion(ccj.getDescripcion());
 				cuentaContable.setAnalisis(ccj.isAnalisis());
 				cuentaContable.setImputable(ccj.isImputable());
-
+				cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+				cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));				
 				cuentadao.guardar(cuentaContable);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -58,7 +65,6 @@ public class CuentaContableRD {
 	 */
 	public Long countAll() {
 		try {
-
 			return cuentadao.countAll();
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cuenta contable ", e);
@@ -91,7 +97,8 @@ public class CuentaContableRD {
 				ccj.setDescripcion(lcc.get(i).getDescripcion());
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
 				ccj.setImputable(lcc.get(i).isImputable());
-
+				ccj.setNombreClaseCuenta(clasedao.getById(lcc.get(i).getClaseCuenta().getId()).getNombre());
+				ccj.setNombreGrupoCuenta(grupodao.getById(lcc.get(i).getGrupoCuenta().getId()).getNombre());
 				lbj.add(ccj);
 			}
 
@@ -116,11 +123,15 @@ public class CuentaContableRD {
 			} else {
 				cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
 				cuentaContable.setDescripcion(ccj.getDescripcion());
+				cuentaContable.setAnalisis(ccj.isAnalisis());
+				cuentaContable.setImputable(ccj.isImputable());
+				cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+				cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
 				cuentadao.update(cuentaContable);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el cuenta contable");
+			log.error("No se pudo modificar la cuenta contable");
 			return e.getMessage();
 		}
 	}
@@ -139,8 +150,8 @@ public class CuentaContableRD {
 		ccJson.setDescripcion(cuentaContable.getDescripcion());
 		ccJson.setAnalisis(cuentaContable.isAnalisis());
 		ccJson.setImputable(cuentaContable.isImputable());
-//		ccJson.setIdClaseCuenta(idClaseCuenta);
-//		ccJson.setIdGrupoCuenta(idGrupoCuenta);
+		ccJson.setIdClaseCuenta(cuentaContable.getClaseCuenta().getId());
+		ccJson.setIdGrupoCuenta(cuentaContable.getGrupoCuenta().getId());
 		return ccJson;
 	}
 
@@ -153,10 +164,10 @@ public class CuentaContableRD {
 	public String eliminar(CuentaContableJson bj) {
 		try {
 			CuentaContable cuentaContable = cuentadao.getById(bj.getId());
-			cuentadao.update(cuentaContable);
+			cuentadao.eliminar(cuentaContable);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la  cuenta contable");
+			log.error("No se pudo eliminar la cuenta contable");
 			return e.getMessage();
 		}
 	}

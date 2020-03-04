@@ -35,8 +35,14 @@ public class ClasificacionDAO {
 	 * 
 	 * @return el total de Clasificacion
 	 */
-	public Long countAll() {
+	public Long countAll(String nombre) {
 		Query query = em.createNamedQuery("Clasificacion.countAll");
+		if (nombre.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreNombre", true);
+		} else {
+			query.setParameter("ignoreNombre", false);
+		}
+		query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
 		return (Long) query.getSingleResult();
 	}
 
@@ -49,8 +55,14 @@ public class ClasificacionDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Clasificacion> getAll(Integer inicio, Integer fin) {
+	public List<Clasificacion> getAll(Integer inicio, Integer fin, String nombre) {
 		Query query = em.createNamedQuery("Clasificacion.getAll");
+		if (nombre.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreNombre", true);
+		} else {
+			query.setParameter("ignoreNombre", false);
+		}
+		query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

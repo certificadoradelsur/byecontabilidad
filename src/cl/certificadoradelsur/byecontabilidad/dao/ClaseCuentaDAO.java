@@ -84,4 +84,13 @@ public class ClaseCuentaDAO {
 		em.remove(c);
 	}
 
+	/**
+	 * Obtiene todas las ClaseCuenta
+	 * @return la lista de ClaseCuenta
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ClaseCuenta> getLista() {
+		Query query=em.createNamedQuery("ClaseCuenta.getAllLista");
+		return query.getResultList();
+	}
 }

@@ -7,9 +7,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import cl.certificadoradelsur.byecontabilidad.entities.GrupoCuenta;
-
 
 
 /**
@@ -85,5 +83,27 @@ public class GrupoCuentaDAO {
 	public void eliminar(GrupoCuenta g) {
 		em.remove(g);
 	}
+	
+	/**
+	 * Obtiene todos los GrupoCuenta
+	 * @return la lista de GrupoCuenta
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GrupoCuenta> getLista() {
+		Query query=em.createNamedQuery("GrupoCuenta.getAllLista");
+		return query.getResultList();
+	}
+	
+
+	/**
+	 * Obtiene una lista de cuentas segun el banco seleccionado
+	 * @return lista de cuentas
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GrupoCuenta> getByIdClaseCuenta(Long idClaseCuenta) {
+		Query query=em.createNamedQuery("GrupoCuenta.getByIdClaseCuenta");
+		query.setParameter("idClaseCuenta",idClaseCuenta);
+		return query.getResultList();
+	}	
 
 }

@@ -10,7 +10,7 @@
 <meta name="author" content="">
 
 
-<title>Bye Contabilidad</title>
+<title>ByeContabilidad</title>
 <!-- Bootstrap core CSS -->
 <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 

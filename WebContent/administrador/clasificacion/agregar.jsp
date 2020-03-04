@@ -65,51 +65,34 @@
 		
 	</div>
 
-
 	<div class="main">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Modificar usuario</h1>
+					<h1 class="h2">Agregar clasificación</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
 						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Id</label>
-						<input type="text" id="id" name="id" class="in"
-							placeholder="Ingrese id" readonly="readonly" />
-					</div>
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
-						<input type="text" id="email" name="email" class="in"
-							placeholder="Ingrese email" />
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
+						<input type="text" id="nombre" name="nombre" class="in"
+							placeholder="Ingrese Glosa" required="required" />
 					</div>
 					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
-							Perfil</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="perfil">
-								<option value="USER">Usuario</option>
-								<option value="ADMIN">Administrador</option>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp; Grupo Cuenta</label>
+						<div class="col-4">
+							<select class="browser-default custom-select" id="grupoCuenta">
 							</select>
 						</div>
 					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
-							Estado</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="estado">
-								<option value="true">Activo</option>
-								<option value="false">Inactivo</option>
-							</select>
-						</div>
-					</div>
+					<br>
+					<br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="modificar()">Modificar</button>
+								type="button" onclick="guardar()">Guardar</button>
 						</div>
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -120,55 +103,55 @@
 			</form>
 		</div>
 	</div>
+	<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-$(document).ready(function () {
-
-	var submitjson = {id:"<%=request.getParameter("id")%>" ,};
+	$(document).ready(function() {
+		$("#grupoCuenta").select2();
+			
+		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getLista',
+				function(res, code) {
+					var str;
+					for (var i = 0, len = res.length; i < len; i++) {
+						str += "<option value="+res[i].id+">" + res[i].nombre
+								+ "</option>";
+					}
+					document.getElementById("grupoCuenta").innerHTML = str;
+				}, "json");
+	})
 	
-						$.post('/byeContabilidad/rest-services/private/usuario/getById',
-										JSON.stringify(submitjson)).done(function(data) {
-											document.getElementById("id").value = data.id;
-											document.getElementById("email").value = data.email;
-											document.getElementById("perfil").value = data.perfil;
-											document.getElementById("estado").value = data.activo;
-										}).fail(function(jqxhr, settings, ex) {
-											alert('No se pudo modificar el usuario '
-													+ ex);});
-						
-						$("#estado").select2();
-						$("#perfil").select2();
-						
-						
-					});
 
-	function modificar() {
+	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
 
 		if (bool) {
-			alert("Los campos deben estar llenos");
+			alert("Todos los campos deben estar llenos");
 			return;
 		}
+
 		var submitJson = {
-			id : document.getElementById("id").value,
-			email : document.getElementById("email").value,
-			activo : document.getElementById("estado").value,
-			perfil : document.getElementById("perfil").value
+			idGrupoCuenta : document.getElementById("grupoCuenta").value,
+			nombre : document.getElementById("nombre").value
 		}
-		$.post('/byeContabilidad/rest-services/private/usuario/update',
+
+		$.post('/byeContabilidad/rest-services/private/clasificacion/add',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
-				alert('Se guardaron los cambios');
+				alert('Se guardo la clasificación exitosamente');
 				location.href = "index.jsp";
 			} else {
 				alert(data);
 			}
+
 		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo modificar ' + ex);
+			alert('No se pudo guardar la clasificación ' + ex);
 		});
 	}
+	
+
 
 	back.addEventListener("click", function() {
 		window.history.back();

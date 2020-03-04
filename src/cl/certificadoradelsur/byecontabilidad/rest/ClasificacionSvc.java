@@ -10,14 +10,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Interfaz que declara los servicios rest de Cuenta Contable
+ * Interfaz que declara los servicios rest de clasificacion
  * 
  * @author juan
  *
  */
 @Local
-@Path("/private/cuentaContable")
-public interface CuentaContableSvc {
+@Path("/private/clasificacion")
+public interface ClasificacionSvc {
 	/**
 	 * Funcion que almacena los datos
 	 * 
@@ -30,18 +30,18 @@ public interface CuentaContableSvc {
 	Response add(String datos);
 
 	/**
-	 * Funcion para traer todas las Cuentas
+	 * Funcion para traer todas las clasificaciones
 	 * 
 	 * @param
-	 * @return lista de Cuentas
+	 * @return lista de clasificaciones
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("nombre") String id);
 	
 	/**
-	 * Funcion para modificar una Cuenta
+	 * Funcion para modificar una clasificacion
 	 * 
 	 * @param id
 	 * @return Mensaje de exito o error
@@ -52,7 +52,7 @@ public interface CuentaContableSvc {
 	Response update(String datos);
 
 	/**
-	 * Funcion para buscar Cuenta por id
+	 * Funcion para buscar clasificacion por id
 	 * 
 	 * @param id Cuenta
 	 * @return json de salida
@@ -63,7 +63,7 @@ public interface CuentaContableSvc {
 	Response getById(String datos);
 
 	/**
-	 * Funcion que elimina una Cuenta
+	 * Funcion que elimina una clasificacion
 	 * 
 	 * @param datos el json de entrada
 	 * @return json de salida

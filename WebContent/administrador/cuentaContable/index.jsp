@@ -70,7 +70,7 @@
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de Usuario</h1>
+					<h1 class="h2">Lista de Clasificaciones</h1>
 				</div>
 				<input type="hidden" name="id" id="id" />
 				<div>
@@ -105,40 +105,24 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/usuario/getAll?idUsuario='
-													+ document
-															.getElementById('idUsuario').value,
+											dataSource : '/byeContabilidad/rest-services/private/clasificacion/getAll',
 											autoLoad : false,
 											columns : [
 													{
 														field : 'id',
 														title : 'Identificador',
-														width : 100,
+														hidden : true,
 
 													},
 													{
-														field : 'email',
-														title : 'Email',
+														field : 'nombre',
+														title : 'Nombre',
 														sortable : true
 													},
 													{
-														field : 'perfil',
-														title : 'Perfil',
+														field : 'nombreGrupoCuenta',
+														title : 'Grupo Cuenta',
 														sortable : true
-													},
-													{
-														field : 'nombreEmpresa',
-														title : 'Empresa',
-														sortable : true
-													},
-													{
-														width : 100,
-														title : 'Cambiar clave',
-														tmpl : '<span class="material-icons gj-cursor-pointer">border_color</span>',
-														align : 'center',
-														events : {
-															'click' : cambiarclave
-														}
 													},
 													{
 														width : 100,
@@ -175,37 +159,31 @@
 		document.getElementById("formulario").submit();
 	}
 
-	function cambiarclave(e) {
-		document.getElementById("id").value = e.data.record.id;
-		document.getElementById("formulario").action = 'cambiarClave.jsp';
-		document.getElementById("formulario").method = 'POST';
-		document.getElementById("formulario").submit();
-	}
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar el usuario?')) {
+		if (confirm('¿Esta seguro desea eliminar la clasificación?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
 			$
 					.post(
-							'/byeContabilidad/rest-services/private/usuario/delete',
+							'/byeContabilidad/rest-services/private/clasificacion/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
-							alert('Usuario eliminada correctamente');
+							alert('Clasificación eliminada correctamente');
 							grid.reload();
 						} else {
-							alert('Error al eliminar usuario');
+							alert('Error al eliminar la clasificación');
 						}
 					}).fail(function() {
-						alert('Error al eliminar usuario');
+						alert('Error al eliminar la clasificación');
 					});
 		}
 	}
 	
 	$('#buscar').on('click', function() {
 		grid.reload({
-			id : $('#filtro').val(),
+			nombre : $('#filtro').val(),
 		});
 		clear();
 	});

@@ -14,8 +14,10 @@ public class CuentaContableJson {
 	private Boolean analisis;
 	private String glosaGeneral;
 	private Long idClaseCuenta;
+	private String nombreClaseCuenta; 
 	private Long idGrupoCuenta;
-
+	private String nombreGrupoCuenta;
+	
 	public Long getId() {
 		return id;
 	}
@@ -72,4 +74,21 @@ public class CuentaContableJson {
 		this.idGrupoCuenta = idGrupoCuenta;
 	}
 
+	public String getNombreClaseCuenta() {
+		return nombreClaseCuenta;
+	}
+
+	public void setNombreClaseCuenta(String nombreClaseCuenta) {
+		this.nombreClaseCuenta = nombreClaseCuenta;
+	}
+
+	public String getNombreGrupoCuenta() {
+		return nombreGrupoCuenta;
+	}
+
+	public void setNombreGrupoCuenta(String nombreGrupoCuenta) {
+		this.nombreGrupoCuenta = nombreGrupoCuenta;
+	}
+
+	
 }
