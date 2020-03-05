@@ -58,11 +58,15 @@
 	</nav>
 
 	<div class="sidenav">
-		
+
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a>
-		
-		
+			alt="Icono" />&nbsp;Usuarios </a> 
+		<a href="../clasificacion/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación </a>
+		<a href="../cuentaContable/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>	
+
+
 	</div>
 
 	<div class="main">

@@ -60,7 +60,11 @@
 	<div class="sidenav">
 
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a>
+			alt="Icono" />&nbsp;Usuarios </a> 
+		<a href="../clasificacion/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación </a>
+		<a href="../cuentaContable/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>	
 
 
 	</div>
@@ -85,6 +89,7 @@
 							&nbsp; Clase Cuenta</label>
 						<div class="col-4">
 							<select class="browser-default custom-select" id="claseCuenta">
+							<option value="1">Activo</option>
 							</select>
 						</div>
 					</div>
@@ -113,25 +118,26 @@
 	</div>
 </body>
 <script type="text/javascript">
-	$(document).ready(function() {
-						//$("#claseCuenta").select2(),
-						//$("#grupoCuenta").select2();
-						
-						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
-								function(res, code) {
-									var str;
-									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">" + res[i].nombre
-												+ "</option>";
-									}
-									document.getElementById("claseCuenta").innerHTML = str;
-									busca ();								
-								}, "json");	
-					});
+$(document).ready(function() {
+	$("#claseCuenta").select2(),
+	$("#grupoCuenta").select2();
 	
+	$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
+			function(res, code) {
+				var str;
+				for (var i = 0, len = res.length; i < len; i++) {
+					str += "<option value="+res[i].id+">" + res[i].nombre
+							+ "</option>";
+				}
+				document.getElementById("claseCuenta").innerHTML = str;
+				busca ();								
+			}, "json");	
+});
+
+
 	function busca (){
-		var submitjson = {id: "<%=request.getParameter("id")%>",
-		};
+			var submitjson = {id: "<%=request.getParameter("id")%>",
+				};
 
 		$.post('/byeContabilidad/rest-services/private/clasificacion/getById',
 						JSON.stringify(submitjson))
@@ -140,7 +146,7 @@
 							document.getElementById("nombre").value = data.nombre;
 							document.getElementById("claseCuenta").value = data.idClaseCuenta;
 					
-							//cargaselect(data.idGrupoCuenta,data.idClaseCuenta);
+							cargaselect(data.idGrupoCuenta);
 						})
 
 				.fail(
@@ -149,9 +155,9 @@
 						});
 	}	
 	
-	function cargaselect(id,idClase){
+	function cargaselect(id){
 		var submitJson = {
-				idClaseCuenta : idClase
+				idClaseCuenta : document.getElementById("claseCuenta").value
 				}
 			$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
 							JSON.stringify(submitJson),
@@ -190,7 +196,7 @@
 											document.getElementById("grupoCuenta").innerHTML = str;
 										}, "json");
 					});
-
+	
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1

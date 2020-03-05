@@ -24,8 +24,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "cuenta_contable")
 @SequenceGenerator(name = "seq_cuenta_contable", sequenceName = "seq_cuenta_contable")
-@NamedQueries({ @NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c"),
-		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c") })
+@NamedQueries({ @NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where  (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral)"),
+		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where  (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral)") })
 
 public class CuentaContable implements Serializable {
 

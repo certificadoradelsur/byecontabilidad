@@ -63,9 +63,12 @@ public class CuentaContableRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll() {
+	public Long countAll(String glosaGeneral) {
 		try {
-			return cuentadao.countAll();
+			if(glosaGeneral==null) {
+				glosaGeneral="";
+			}
+			return cuentadao.countAll(glosaGeneral);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cuenta contable ", e);
 			return 0L;
@@ -79,7 +82,7 @@ public class CuentaContableRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<CuentaContableJson> getAll(Integer page, Integer limit) {
+	public List<CuentaContableJson> getAll(Integer page, Integer limit, String glosaGeneral) {
 		List<CuentaContableJson> lbj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -88,8 +91,10 @@ public class CuentaContableRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-
-			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit);
+			if(glosaGeneral==null) {
+				glosaGeneral="";
+			}
+			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral);
 			for (int i = 0; i < lcc.size(); i++) {
 				CuentaContableJson ccj = new CuentaContableJson();
 				ccj.setId(lcc.get(i).getId());

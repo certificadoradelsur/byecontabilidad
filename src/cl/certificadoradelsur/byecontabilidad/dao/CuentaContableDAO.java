@@ -35,8 +35,14 @@ public class CuentaContableDAO {
 	 * 
 	 * @return el total de  CuentaContable
 	 */
-	public Long countAll() {
+	public Long countAll(String glosaGeneral) {
 		Query query = em.createNamedQuery("CuentaContable.countAll");
+		if (glosaGeneral.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreGlosaGeneral", true);
+		} else {
+			query.setParameter("ignoreGlosaGeneral", false);
+		}
+		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
 		return (Long) query.getSingleResult();
 	}
 
@@ -49,8 +55,14 @@ public class CuentaContableDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<CuentaContable> getAll(Integer inicio, Integer fin) {
+	public List<CuentaContable> getAll(Integer inicio, Integer fin, String glosaGeneral) {
 		Query query = em.createNamedQuery("CuentaContable.getAll");
+		if (glosaGeneral.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreGlosaGeneral", true);
+		} else {
+			query.setParameter("ignoreGlosaGeneral", false);
+		}
+		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

@@ -60,7 +60,11 @@
 	<div class="sidenav">
 
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a>
+			alt="Icono" />&nbsp;Usuarios </a> 
+		<a href="../clasificacion/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación </a>
+		<a href="../cuentaContable/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>	
 
 
 	</div>
@@ -117,8 +121,6 @@
 					</div>
 				</div>
 
-
-
 				<br>
 				<br>
 				<div class="row">
@@ -139,8 +141,8 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function() {
-						//$("#claseCuenta").select2(),
-						//$("#grupoCuenta").select2();
+						$("#claseCuenta").select2(),
+						$("#grupoCuenta").select2();
 						
 						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
 								function(res, code) {
@@ -239,7 +241,7 @@
 			analisis :document.getElementById("analisis").checked    
 		}
 
-		$.post('/byeContabilidad/rest-services/private/clasificacion/update',
+		$.post('/byeContabilidad/rest-services/private/cuentaContable/update',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
 				alert('Se guardaron los cambios');

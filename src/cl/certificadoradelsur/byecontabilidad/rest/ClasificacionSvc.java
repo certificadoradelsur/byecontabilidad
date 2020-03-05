@@ -38,7 +38,7 @@ public interface ClasificacionSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("nombre") String id);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("nombre") String nombre);
 	
 	/**
 	 * Funcion para modificar una clasificacion

@@ -58,11 +58,15 @@
 	</nav>
 
 	<div class="sidenav">
-		
+
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a>
-		
-		
+			alt="Icono" />&nbsp;Usuarios </a> 
+		<a href="../clasificacion/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación </a>
+		<a href="../cuentaContable/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>	
+
+
 	</div>
 
 	<div class="main">
@@ -181,29 +185,29 @@
 
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la clasificación?')) {
+		if (confirm('¿Esta seguro desea eliminar la cuenta contable?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
 			$
 					.post(
-							'/byeContabilidad/rest-services/private/clasificacion/delete',
+							'/byeContabilidad/rest-services/private/cuentaContable/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
-							alert('Clasificación eliminada correctamente');
+							alert('Cuenta contable eliminada correctamente');
 							grid.reload();
 						} else {
-							alert('Error al eliminar la clasificación');
+							alert('Error al eliminar la cuenta contable');
 						}
 					}).fail(function() {
-						alert('Error al eliminar la clasificación');
+						alert('Error al eliminar la cuenta contable');
 					});
 		}
 	}
 	
 	$('#buscar').on('click', function() {
 		grid.reload({
-			nombre : $('#filtro').val(),
+			glosaGeneral : $('#filtro').val(),
 		});
 		clear();
 	});

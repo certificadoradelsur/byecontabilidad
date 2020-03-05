@@ -58,11 +58,15 @@
 	</nav>
 
 	<div class="sidenav">
-		
+
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a>
-		
-		
+			alt="Icono" />&nbsp;Usuarios </a> 
+		<a href="../clasificacion/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación </a>
+		<a href="../cuentaContable/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>	
+
+
 	</div>
 
 	<div class="main">
@@ -70,7 +74,7 @@
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de Clasificaciones</h1>
+					<h1 class="h2">Lista de clasificaciones</h1>
 				</div>
 				<input type="hidden" name="id" id="id" />
 				<div>
@@ -83,7 +87,7 @@
 			<div class="form-group">
 				<div class="col-1"></div>
 				<input type="text" id="filtro" name="filtro"
-					placeholder="Filtrar por identificador" />
+					placeholder="Filtrar por nombre" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
 			<div class="margen margin-top-10">
