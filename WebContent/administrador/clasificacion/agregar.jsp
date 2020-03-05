@@ -141,7 +141,7 @@ $(document).ready(function() {
 									function(res, code) {
 										var str;
 										for (var i = 0, len = res.length; i < len; i++) {
-											str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+											str += "<option value="+res[i].id+">"
 													+ res[i].nombre
 													+ "</option>";
 
@@ -161,9 +161,10 @@ $(document).ready(function() {
 			return;
 		}
 
-		var texto = document.getElementById("grupoCuenta").value.split('/');
+		
 		var submitJson = {
-			idGrupoCuenta : texto[0],
+			idClaseCuenta : document.getElementById("claseCuenta").value,	
+			idGrupoCuenta :document.getElementById("grupoCuenta").value,
 			nombre : document.getElementById("nombre").value
 		}
 

@@ -66,7 +66,6 @@
 	</div>
 
 	<div class="main">
-		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
@@ -88,17 +87,40 @@
 							</select>
 						</div>
 					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp; Grupo Cuenta</label>
-						<div class="col-4">
-							<select class="browser-default custom-select" id="grupoCuenta">
-							</select>
-						</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; Grupo Cuenta</label>
+					<div class="col-4">
+						<select class="browser-default custom-select" id="grupoCuenta">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+						<div class="col-1"></div>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Descripción</label>
+						<textarea id="descripcion" class="col-sm-3" name="descripcion"
+							class="in" placeholder="Ingrese descripción" required="required"></textarea>
 					</div>
 
+				<div class="row">
+					<div class="col-sm-2">&nbsp;&nbsp; Seleccione</div>
+					<div class="col-sm-10">
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="imputable">
+							<label class="form-check-label" for="gridCheck1"> Imputable </label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="analisis">
+							<label class="form-check-label" for="gridCheck1"> Analisis </label>
+						</div>
+					</div>
+				</div>
 
-					<div class="row">
+
+
+				<br>
+				<br>
+				<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
 								type="button" onclick="guardar()">Guardar</button>
@@ -110,7 +132,6 @@
 					</div>
 				</div>
 			</form>
-		</div>
 	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
@@ -141,7 +162,7 @@
 										function(res, code) {
 											var str;
 											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+												str += "<option value="+res[i].id+">"
 														+ res[i].nombre
 														+ "</option>";
 											}
@@ -161,11 +182,15 @@
 		}
 
 		var submitJson = {
+			idClaseCuenta : document.getElementById("claseCuenta").value,	
 			idGrupoCuenta : document.getElementById("grupoCuenta").value,
-			nombre : document.getElementById("nombre").value
+			glosaGeneral : document.getElementById("glosa").value,
+			descripcion : document.getElementById("descripcion").value,
+			imputable:document.getElementById("imputable").checked,
+			analisis :document.getElementById("analisis").checked    
 		}
 
-		$.post('/byeContabilidad/rest-services/private/clasificacion/add',
+		$.post('/byeContabilidad/rest-services/private/cuentaContable/add',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
 				alert('Se guardo la clasificación exitosamente');

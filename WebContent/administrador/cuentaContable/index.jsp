@@ -70,7 +70,7 @@
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de Clasificaciones</h1>
+					<h1 class="h2">Lista de cuentas contables</h1>
 				</div>
 				<input type="hidden" name="id" id="id" />
 				<div>
@@ -105,7 +105,7 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/clasificacion/getAll',
+											dataSource : '/byeContabilidad/rest-services/private/cuentaContable/getAll',
 											autoLoad : false,
 											columns : [
 													{
@@ -115,13 +115,33 @@
 
 													},
 													{
-														field : 'nombre',
-														title : 'Nombre',
+														field : 'glosaGeneral',
+														title : 'Glosa',
+														sortable : true
+													},
+													{
+														field : 'descripcion',
+														title : 'Descripción',
+														sortable : true
+													},
+													{
+														field : 'nombreClaseCuenta',
+														title : 'Clase Cuenta',
 														sortable : true
 													},
 													{
 														field : 'nombreGrupoCuenta',
 														title : 'Grupo Cuenta',
+														sortable : true
+													},
+													{
+														field : 'analisis',
+														title : 'Analisís',
+														sortable : true
+													},
+													{
+														field : 'imputable',
+														title : 'Imputable',
 														sortable : true
 													},
 													{

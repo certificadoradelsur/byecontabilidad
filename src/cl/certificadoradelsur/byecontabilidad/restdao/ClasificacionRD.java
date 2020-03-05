@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
+
+import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
@@ -26,6 +28,8 @@ public class ClasificacionRD {
 	private ClasificacionDAO cladao;
 	@Inject
 	private GrupoCuentaDAO grupodao;
+	@Inject
+	private ClaseCuentaDAO clasedao;
 
 	/**
 	 * funcion que almacena
@@ -41,6 +45,8 @@ public class ClasificacionRD {
 			} else {
 				clasificacion.setNombre(ccj.getNombre());
 				clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+				clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+
 				cladao.guardar(clasificacion);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -92,6 +98,7 @@ public class ClasificacionRD {
 				ccj.setId(lcc.get(i).getId());
 				ccj.setNombre(lcc.get(i).getNombre());
 				ccj.setNombreGrupoCuenta(grupodao.getById(lcc.get(i).getGrupoCuenta().getId()).getNombre());
+				ccj.setNombreClaseCuenta(clasedao.getById(lcc.get(i).getClaseCuenta().getId()).getNombre());
 				lbj.add(ccj);
 			}
 
@@ -115,6 +122,7 @@ public class ClasificacionRD {
 			} else {
 				clasificacion.setNombre(ccj.getNombre());
 				clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+				clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
 				cladao.update(clasificacion);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -136,6 +144,7 @@ public class ClasificacionRD {
 		ccJson.setId(clasificacion.getId());
 		ccJson.setNombre(clasificacion.getNombre());
 		ccJson.setIdGrupoCuenta(clasificacion.getGrupoCuenta().getId());
+		ccJson.setIdClaseCuenta(clasificacion.getClaseCuenta().getId());
 		return ccJson;
 	}
 

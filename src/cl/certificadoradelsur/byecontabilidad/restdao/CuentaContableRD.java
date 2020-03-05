@@ -38,7 +38,7 @@ public class CuentaContableRD {
 	 */
 	public String save(CuentaContableJson ccj) {
 		try {
-			CuentaContable cuentaContable = cuentadao.getById(ccj.getId());
+			CuentaContable cuentaContable = new CuentaContable();
 			if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
 					|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);

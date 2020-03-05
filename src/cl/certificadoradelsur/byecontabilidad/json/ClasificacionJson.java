@@ -10,6 +10,8 @@ public class ClasificacionJson {
 
 	private Long id;
 	private String nombre;
+	private Long idClaseCuenta;
+	private String nombreClaseCuenta; 
 	private Long idGrupoCuenta;
 	private String nombreGrupoCuenta;
 
@@ -43,6 +45,22 @@ public class ClasificacionJson {
 
 	public void setNombreGrupoCuenta(String nombreGrupoCuenta) {
 		this.nombreGrupoCuenta = nombreGrupoCuenta;
+	}
+
+	public Long getIdClaseCuenta() {
+		return idClaseCuenta;
+	}
+
+	public void setIdClaseCuenta(Long idClaseCuenta) {
+		this.idClaseCuenta = idClaseCuenta;
+	}
+
+	public String getNombreClaseCuenta() {
+		return nombreClaseCuenta;
+	}
+
+	public void setNombreClaseCuenta(String nombreClaseCuenta) {
+		this.nombreClaseCuenta = nombreClaseCuenta;
 	}
 
 }

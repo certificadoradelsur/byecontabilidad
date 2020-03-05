@@ -33,6 +33,7 @@ public class Clasificacion implements Serializable {
 	private static final long serialVersionUID = 1323287814392112354L;
 	private Long id;
 	private String nombre;
+	private ClaseCuenta claseCuenta;
 	private GrupoCuenta grupoCuenta;
 
 
@@ -65,5 +66,16 @@ public class Clasificacion implements Serializable {
 		this.grupoCuenta = grupoCuenta;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "id_clase_cuenta", nullable = true)
+	public ClaseCuenta getClaseCuenta() {
+		return claseCuenta;
+	}
 
+	public void setClaseCuenta(ClaseCuenta claseCuenta) {
+		this.claseCuenta = claseCuenta;
+	}
+
+	
+	
 }

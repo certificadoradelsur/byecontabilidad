@@ -120,6 +120,11 @@
 														sortable : true
 													},
 													{
+														field : 'nombreClaseCuenta',
+														title : 'Clase Cuenta',
+														sortable : true
+													},
+													{
 														field : 'nombreGrupoCuenta',
 														title : 'Grupo Cuenta',
 														sortable : true
