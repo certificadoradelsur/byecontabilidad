@@ -24,19 +24,23 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "cuenta_contable")
 @SequenceGenerator(name = "seq_cuenta_contable", sequenceName = "seq_cuenta_contable")
-@NamedQueries({ @NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where  (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral)"),
-		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where  (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral)") })
+@NamedQueries({
+		@NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) ORDER BY c.claseCuenta.id"),
+		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta)"),
+		@NamedQuery(name = "CuentaContable.getByCodigo", query = "SELECT c FROM CuentaContable c where  c.codigo= :codigo") })
 
 public class CuentaContable implements Serializable {
 
 	private static final long serialVersionUID = 1323247814392112352L;
 	private Long id;
+	private Long codigo;
 	private String descripcion;
 	private Boolean imputable;
 	private Boolean analisis;
 	private String glosaGeneral;
 	private ClaseCuenta claseCuenta;
 	private GrupoCuenta grupoCuenta;
+	private String analizable;
 
 	@Id
 	@GeneratedValue(generator = "seq_cuenta_contable", strategy = GenerationType.AUTO)
@@ -46,6 +50,15 @@ public class CuentaContable implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@Column(name = "codigo", nullable = false)
+	public Long getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
 	}
 
 	@Column(name = "descripcion", nullable = false)
@@ -104,4 +117,17 @@ public class CuentaContable implements Serializable {
 		this.claseCuenta = claseCuenta;
 	}
 
+	@Column(name = "analizable", nullable = true)
+	public String getAnalizable() {
+		return analizable;
+	}
+
+	public void setAnalizable(String analizable) {
+		this.analizable = analizable;
+	}
+
+	
+ 
+
+	
 }

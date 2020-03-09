@@ -10,6 +10,10 @@
 		<class>cl.certificadoradelsur.byecontabilidad.entities.ClaseCuenta</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Clasificacion</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.GrupoCuenta</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.OficinaContable</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Sucursal</class>
+		
+		
 	
 	<properties>
 				<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" /> 

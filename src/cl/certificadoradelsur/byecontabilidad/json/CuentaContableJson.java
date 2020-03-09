@@ -9,6 +9,7 @@ package cl.certificadoradelsur.byecontabilidad.json;
 public class CuentaContableJson {
 
 	private Long id;
+	private Long codigo;
 	private String descripcion;
 	private Boolean imputable;
 	private Boolean analisis;
@@ -17,6 +18,8 @@ public class CuentaContableJson {
 	private String nombreClaseCuenta; 
 	private Long idGrupoCuenta;
 	private String nombreGrupoCuenta;
+	private String nombreClasificacion;
+	private String analizable;
 	
 	public Long getId() {
 		return id;
@@ -24,6 +27,14 @@ public class CuentaContableJson {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getDescripcion() {
@@ -88,6 +99,22 @@ public class CuentaContableJson {
 
 	public void setNombreGrupoCuenta(String nombreGrupoCuenta) {
 		this.nombreGrupoCuenta = nombreGrupoCuenta;
+	}
+
+	public String getNombreClasificacion() {
+		return nombreClasificacion;
+	}
+
+	public void setNombreClasificacion(String nombreClasificacion) {
+		this.nombreClasificacion = nombreClasificacion;
+	}
+
+	public String getAnalizable() {
+		return analizable;
+	}
+
+	public void setAnalizable(String analizable) {
+		this.analizable = analizable;
 	}
 
 	

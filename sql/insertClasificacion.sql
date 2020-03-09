@@ -44,3 +44,31 @@ insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values 
 insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (39,'Participaciones no controladoras',2,6);
 insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (40,'Prima de emisión',2,6);
 insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (41,'Acciones propias en cartera',2,6);
+
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (42,'Impuesto a la renta',3,7);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (43,'Otros egresos fuera de explotación',3,7);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (44,'Correccción monetaria',3,7);
+
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (45,'Impuesto a la renta',3,8);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (46,'Otros egresos fuera de explotación',3,8);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (47,'Correccción monetaria',3,8);
+
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (48,'Impuesto a la renta',3,9);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (49,'Otros egresos fuera de explotación',3,9);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (50,'Correccción monetaria',3,9);
+
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (51,'Impuesto a la renta',3,10);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (52,'Otros egresos fuera de explotación',3,10);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (53,'Correccción monetaria',3,10);
+
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (54,'Impuesto a la renta',4,11);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (55,'Otros egresos fuera de explotación',4,11);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (56,'Correccción monetaria',4,11);
+
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (57,'Impuesto a la renta',4,12);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (58,'Otros egresos fuera de explotación',4,12);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (59,'Correccción monetaria',4,12);
+
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (60,'Impuesto a la renta',4,13);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (61,'Otros egresos fuera de explotación',4,13);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta) values (62,'Correccción monetaria',4,13);

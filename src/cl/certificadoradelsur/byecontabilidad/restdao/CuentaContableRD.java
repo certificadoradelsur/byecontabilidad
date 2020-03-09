@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
@@ -29,6 +30,8 @@ public class CuentaContableRD {
 	private ClaseCuentaDAO clasedao;
 	@Inject
 	private GrupoCuentaDAO grupodao;
+	@Inject
+	private ClasificacionDAO clasificaciondao;
 
 	/**
 	 * funcion que almacena
@@ -39,19 +42,28 @@ public class CuentaContableRD {
 	public String save(CuentaContableJson ccj) {
 		try {
 			CuentaContable cuentaContable = new CuentaContable();
+			
+			if(cuentadao.getByCodigo(ccj.getCodigo())==null) {
 			if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
-					|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
+					|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0
+					||Utilidades.containsScripting(ccj.getAnalizable()).compareTo(true)==0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
+				cuentaContable.setCodigo(ccj.getCodigo());
 				cuentaContable.setDescripcion(ccj.getDescripcion());
 				cuentaContable.setAnalisis(ccj.isAnalisis());
 				cuentaContable.setImputable(ccj.isImputable());
 				cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-				cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));				
+				cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+				cuentaContable.setAnalizable(ccj.getAnalizable());
 				cuentadao.guardar(cuentaContable);
 				return Constantes.MENSAJE_REST_OK;
+				}
+			}else {
+				return "El codigo ingresado, ya se encuentra registrado";
 			}
+			
 		} catch (Exception e) {
 			log.error("No se pudo guardar la cuenta contable ", e);
 			return Constantes.MENSAJE_REST_FAIL;
@@ -63,12 +75,12 @@ public class CuentaContableRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String glosaGeneral) {
+	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
 		try {
 			if(glosaGeneral==null) {
 				glosaGeneral="";
 			}
-			return cuentadao.countAll(glosaGeneral);
+			return cuentadao.countAll(glosaGeneral, idClaseCuenta, idGrupoCuenta);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cuenta contable ", e);
 			return 0L;
@@ -82,7 +94,7 @@ public class CuentaContableRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<CuentaContableJson> getAll(Integer page, Integer limit, String glosaGeneral) {
+	public List<CuentaContableJson> getAll(Integer page, Integer limit, String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
 		List<CuentaContableJson> lbj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -94,12 +106,17 @@ public class CuentaContableRD {
 			if(glosaGeneral==null) {
 				glosaGeneral="";
 			}
-			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral);
+			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral, idClaseCuenta, idGrupoCuenta);
 			for (int i = 0; i < lcc.size(); i++) {
 				CuentaContableJson ccj = new CuentaContableJson();
 				ccj.setId(lcc.get(i).getId());
+				ccj.setCodigo(lcc.get(i).getCodigo());
 				ccj.setAnalisis(lcc.get(i).isAnalisis());
-				ccj.setDescripcion(lcc.get(i).getDescripcion());
+				if(lcc.get(i).getDescripcion().equals("Sin descripción")) {
+					ccj.setDescripcion(lcc.get(i).getDescripcion());
+				}else {
+					ccj.setDescripcion(clasificaciondao.getById(Long.parseLong(lcc.get(i).getDescripcion())).getNombre());
+				}
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
 				ccj.setImputable(lcc.get(i).isImputable());
 				ccj.setNombreClaseCuenta(clasedao.getById(lcc.get(i).getClaseCuenta().getId()).getNombre());
@@ -114,27 +131,35 @@ public class CuentaContableRD {
 	}
 
 	/**
-	 * metodo que modifica Banco
+	 * metodo que modifica la cuenta contable
 	 * 
-	 * @param pj json de BancoJson
+	 * @param pj json de cuentaContableJson
 	 * @return mensaje de exito o error
 	 */
 	public String update(CuentaContableJson ccj) {
 		try {
 			CuentaContable cuentaContable = cuentadao.getById(ccj.getId());
+			if(cuentadao.getByCodigo(ccj.getCodigo())==null||cuentadao.getByCodigo(ccj.getCodigo()).getCodigo()==cuentaContable.getCodigo()) {
 			if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
-					|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
+					|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0
+					||Utilidades.containsScripting(ccj.getAnalizable()).compareTo(true)==0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
+				cuentaContable.setCodigo(ccj.getCodigo());
 				cuentaContable.setDescripcion(ccj.getDescripcion());
 				cuentaContable.setAnalisis(ccj.isAnalisis());
 				cuentaContable.setImputable(ccj.isImputable());
 				cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
 				cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+				cuentaContable.setAnalizable(ccj.getAnalizable());
 				cuentadao.update(cuentaContable);
 				return Constantes.MENSAJE_REST_OK;
 			}
+			}else {
+				return "El codigo ingresado, ya se encuentra registrado";
+			}
+			
 		} catch (Exception e) {
 			log.error("No se pudo modificar la cuenta contable");
 			return e.getMessage();
@@ -151,12 +176,14 @@ public class CuentaContableRD {
 		CuentaContable cuentaContable = cuentadao.getById(bj.getId());
 		CuentaContableJson ccJson = new CuentaContableJson();
 		ccJson.setId(cuentaContable.getId());
+		ccJson.setCodigo(cuentaContable.getCodigo());
 		ccJson.setGlosaGeneral(cuentaContable.getGlosaGeneral());
 		ccJson.setDescripcion(cuentaContable.getDescripcion());
 		ccJson.setAnalisis(cuentaContable.isAnalisis());
 		ccJson.setImputable(cuentaContable.isImputable());
 		ccJson.setIdClaseCuenta(cuentaContable.getClaseCuenta().getId());
 		ccJson.setIdGrupoCuenta(cuentaContable.getGrupoCuenta().getId());
+		ccJson.setAnalizable(cuentaContable.getAnalizable());
 		return ccJson;
 	}
 

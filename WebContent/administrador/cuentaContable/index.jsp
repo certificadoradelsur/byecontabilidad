@@ -60,11 +60,10 @@
 	<div class="sidenav">
 
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a> 
-		<a href="../clasificacion/index.jsp"><img
-			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación </a>
-		<a href="../cuentaContable/index.jsp"><img
-			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>	
+			alt="Icono" />&nbsp;Usuarios </a> <a href="../clasificacion/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación
+		</a> <a href="../cuentaContable/index.jsp"><img
+			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>
 
 
 	</div>
@@ -84,27 +83,70 @@
 				</div>
 			</form>
 			<br>
+
 			<div class="form-group">
-				<div class="col-1"></div>
-				<input type="text" id="filtro" name="filtro"
-					placeholder="Filtrar por identificador" />
-				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
-			</div>
-			<div class="margen margin-top-10">
-				<table class="table" id="grid"></table>
+				<div class="form-row">
+					<div class="form-group col-md-2">
+						<div class="form-row">
+							<label for="glosa">&nbsp;&nbsp;Glosa</label>
+						</div>
+						<input type="text" id="filtro" name="filtro"
+							placeholder="Filtrar por Glosa" class="form-control" />
+					</div>
+					<div class="form-group col-md-2">
+						<label for="claseCuenta">&nbsp;Clase cuenta</label> 
+						<select
+							class="browser-default custom-select" id="claseCuenta"
+							required="required" class="form-control">
+							<option value="1">Activo</option>
+						</select>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="grupoCuenta">&nbsp;Grupo cuenta</label> <select
+							class="browser-default custom-select" id="grupoCuenta"
+							required="required">
+							<option value="1">Activo circulante</option>
+							<option value="2">Activo fijo</option>
+							<option value="3">Otros activos</option>
+						</select>
+					</div>
+					<div class="form-group col-md-2">
+						<div class="form-row">
+							<label>&nbsp;</label>
+						</div>
+						<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
+					</div>
+				</div>
+
+				<div class="margen margin-top-10">
+					<table class="table" id="grid"></table>
+				</div>
 			</div>
 		</div>
 	</div>
-  	<input type="hidden" name="idUsuario" id="idUsuario"
+	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
-		
-	
+
+
 </body>
 <script type="text/javascript">
 	$(document)
 			.ready(
 					function() {
-
+						$("#claseCuenta").select2(),
+						$("#grupoCuenta").select2();
+						
+						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
+								function(res, code) {
+									var str;
+									for (var i = 0, len = res.length; i < len; i++) {
+										str += "<option value="+res[i].id+">"
+												+ res[i].nombre
+												+ "</option>";
+									}
+									document.getElementById("claseCuenta").innerHTML = str;	
+								}, "json");
+						
 						grid = $('#grid')
 								.grid(
 										{
@@ -119,8 +161,23 @@
 
 													},
 													{
+														field : 'codigo',
+														title : 'Código',
+														width : 100
+													},
+													{
 														field : 'glosaGeneral',
 														title : 'Glosa',
+														sortable : true
+													},
+													{
+														field : 'nombreClaseCuenta',
+														title : 'Clase Cuenta',
+														width : 100
+													},
+													{
+														field : 'nombreGrupoCuenta',
+														title : 'Grupo Cuenta',
 														sortable : true
 													},
 													{
@@ -129,24 +186,14 @@
 														sortable : true
 													},
 													{
-														field : 'nombreClaseCuenta',
-														title : 'Clase Cuenta',
-														sortable : true
-													},
-													{
-														field : 'nombreGrupoCuenta',
-														title : 'Grupo Cuenta',
-														sortable : true
-													},
-													{
 														field : 'analisis',
 														title : 'Analisís',
-														sortable : true
+														width : 80
 													},
 													{
 														field : 'imputable',
 														title : 'Imputable',
-														sortable : true
+														width : 80
 													},
 													{
 														width : 100,
@@ -171,6 +218,29 @@
 											}
 										});
 					});
+	
+	
+	$('#claseCuenta').on('change',function() {
+		var submitJson = {
+			idClaseCuenta : document.getElementById("claseCuenta").value
+		}
+
+		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+						JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+">"
+										+ res[i].nombre
+										+ "</option>";
+							}
+							document
+									.getElementById("grupoCuenta").innerHTML = str;
+							var submitJson = {
+									idGrupoCuenta : document.getElementById("grupoCuenta").value
+								}
+						}, "json");
+	});
 
 	function agregar() {
 		location.href = "agregar.jsp";
@@ -208,6 +278,8 @@
 	$('#buscar').on('click', function() {
 		grid.reload({
 			glosaGeneral : $('#filtro').val(),
+			idClaseCuenta : $('#claseCuenta').val(),
+			idGrupoCuenta : $('#grupoCuenta').val(),
 		});
 		clear();
 	});

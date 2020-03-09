@@ -8,10 +8,11 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
-import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
+import cl.certificadoradelsur.byecontabilidad.entities.Sucursal;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
-import cl.certificadoradelsur.byecontabilidad.json.ClasificacionJson;
+import cl.certificadoradelsur.byecontabilidad.json.SucursalJson;
 import cl.certificadoradelsur.utils.Constantes;
 import cl.certificadoradelsur.utils.Utilidades;
 
@@ -22,14 +23,12 @@ import cl.certificadoradelsur.utils.Utilidades;
  *
  */
 @Stateless
-public class ClasificacionRD {
-	private static Logger log = Logger.getLogger(ClasificacionRD.class);
+public class SucursalRD {
+	private static Logger log = Logger.getLogger(SucursalRD.class);
 	@Inject
-	private ClasificacionDAO cladao;
-	@Inject
-	private GrupoCuentaDAO grupodao;
-	@Inject
-	private ClaseCuentaDAO clasedao;
+	private EmpresaDAO edao;
+//	@Inject
+//	private SucursalDAO sudao;
 
 	/**
 	 * funcion que almacena
@@ -37,21 +36,19 @@ public class ClasificacionRD {
 	 * @param pj objeto json
 	 * @return mensaje hacia el front
 	 */
-	public String save(ClasificacionJson ccj) {
+	public String save(SucursalJson ccj) {
 		try {
-			Clasificacion clasificacion = new Clasificacion();
-			if (Utilidades.containsScripting(ccj.getNombre()).compareTo(true) == 0) {
+			Sucursal sucursal = new Sucursal();
+			if (Utilidades.containsScripting(ccj.getDireccion()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				clasificacion.setNombre(ccj.getNombre());
-				clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
-				clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-
-				cladao.guardar(clasificacion);
+				sucursal.setDireccion(ccj.getDireccion());
+//				sucursal.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+				sudao.guardar(sucursal);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
-			log.error("No se pudo guardar la clasificación ", e);
+			log.error("No se pudo guardar la sucursal ", e);
 			return Constantes.MENSAJE_REST_FAIL;
 		}
 	}
@@ -61,14 +58,11 @@ public class ClasificacionRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String nombre) {
+	public Long countAll() {
 		try {
-			if(nombre==null) {
-				nombre="";
-			}
-			return cladao.countAll(nombre);
+			return sudao.countAll();
 		} catch (Exception e) {
-			log.error("No se puede contar el total de clasificacines ", e);
+			log.error("No se puede contar el total de sucursal ", e);
 			return 0L;
 		}
 	}
@@ -80,8 +74,8 @@ public class ClasificacionRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<ClasificacionJson> getAll(Integer page, Integer limit, String nombre) {
-		List<ClasificacionJson> lbj = new ArrayList<>();
+	public List<SucursalJson> getAll(Integer page, Integer limit) {
+		List<SucursalJson> lbj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
 			if (page.compareTo(1) == 0) {
@@ -92,9 +86,9 @@ public class ClasificacionRD {
 			if(nombre==null) {
 				nombre="";
 			}
-			List<Clasificacion> lcc = cladao.getAll(inicio, limit, nombre);
+			List<Clasificacion> lcc = cladao.getAll(inicio, limit);
 			for (int i = 0; i < lcc.size(); i++) {
-				ClasificacionJson ccj = new ClasificacionJson();
+				SucursalJson ccj = new SucursalJson();
 				ccj.setId(lcc.get(i).getId());
 				ccj.setNombre(lcc.get(i).getNombre());
 				ccj.setNombreGrupoCuenta(grupodao.getById(lcc.get(i).getGrupoCuenta().getId()).getNombre());
@@ -114,7 +108,7 @@ public class ClasificacionRD {
 	 * @param pj json de BancoJson
 	 * @return mensaje de exito o error
 	 */
-	public String update(ClasificacionJson ccj) {
+	public String update(SucursalJson ccj) {
 		try {
 			Clasificacion clasificacion = cladao.getById(ccj.getId());
 			if (Utilidades.containsScripting(ccj.getNombre()).compareTo(true) == 0) {
@@ -138,9 +132,9 @@ public class ClasificacionRD {
 	 * @param id de clasificacion
 	 * @return mensaje de exito o error
 	 */
-	public ClasificacionJson getById(ClasificacionJson bj) {
+	public SucursalJson getById(SucursalJson bj) {
 		Clasificacion clasificacion = cladao.getById(bj.getId());
-		ClasificacionJson ccJson = new ClasificacionJson();
+		SucursalJson ccJson = new SucursalJson();
 		ccJson.setId(clasificacion.getId());
 		ccJson.setNombre(clasificacion.getNombre());
 		ccJson.setIdGrupoCuenta(clasificacion.getGrupoCuenta().getId());
@@ -154,7 +148,7 @@ public class ClasificacionRD {
 	 * @param pj json de clasificacion
 	 * @return mensaje de exito o error
 	 */
-	public String eliminar(ClasificacionJson bj) {
+	public String eliminar(SucursalJson bj) {
 		try {
 			Clasificacion clasificacion = cladao.getById(bj.getId());
 			cladao.eliminar(clasificacion);
@@ -166,31 +160,6 @@ public class ClasificacionRD {
 	}
 	
 
-	/**
-	 * metodo obtener una lista de clasificaciones
-	 * 
-	 * @param idGrupoCuenta
-	 * @return lista clasificacion 
-	 */
-	public List<ClasificacionJson> getByIdGrupoCuenta(Long idGrupoCuenta) {
 
-		List<ClasificacionJson> lcj = new ArrayList<>();
-		try {
-			List<Clasificacion> c = cladao.getByIdGrupoCuenta(idGrupoCuenta);
-			for (int i = 0; i < c.size(); i++) {
-				ClasificacionJson cjj = new ClasificacionJson();
-				cjj.setId(c.get(i).getId());
-				cjj.setNombre(c.get(i).getNombre());
-				lcj.add(cjj);
-			}
-			return lcj;
-		} catch (Exception e) {
-			log.error("No se pudo obtener la lista de clasificación ", e);
-			return lcj;
-		}
-
-	}
-	
-	
 
 }

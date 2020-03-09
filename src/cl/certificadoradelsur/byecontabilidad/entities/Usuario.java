@@ -31,7 +31,7 @@ public class Usuario implements Serializable {
 	private String email;
 	private Boolean eliminado;
 	private Perfil perfil;
-	private Empresa empresa;
+	private OficinaContable oficinaContable;
 
 	@Id
 	public String getId() {
@@ -89,13 +89,13 @@ public class Usuario implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "id_empresa", nullable = true)
-	public Empresa getEmpresa() {
-		return empresa;
+	@JoinColumn(name = "id_oficina_contable", nullable = true)
+	public OficinaContable getOficinaContable() {
+		return oficinaContable;
 	}
 
-	public void setEmpresa(Empresa empresa) {
-		this.empresa = empresa;
+	public void setOficinaContable(OficinaContable oficinaContable) {
+		this.oficinaContable = oficinaContable;
 	}
 
 }

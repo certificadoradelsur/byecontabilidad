@@ -52,7 +52,7 @@ public class UsuarioRD {
 				usuario.setPassword(Utilidades.encriptar(uj.getPassword()));
 				usuario.setEmail(uj.getEmail());
 				usuario.setActivo(uj.isActivo());
-				usuario.setEmpresa(udao.getById(uj.getIdUsuario()).getEmpresa());
+				//usuario.setEmpresa(udao.getById(uj.getIdUsuario()).getEmpresa());
 				usuario.setPerfil(pdao.getById(uj.getPerfil()));
 				usuario.setEliminado(false);
 				udao.guardar(usuario);
@@ -106,7 +106,7 @@ public class UsuarioRD {
 				UsuarioJson uj = new UsuarioJson();
 				uj.setId(lu.get(i).getId());
 				uj.setEmail(lu.get(i).getEmail());
-				uj.setNombreEmpresa(lu.get(i).getEmpresa().getRazonSocial());
+				//uj.setNombreEmpresa(lu.get(i).getEmpresa().getRazonSocial());
 				uj.setActivo(lu.get(i).isActivo());
 				uj.setPerfil(lu.get(i).getPerfil().getDescripcion());
 				lpj.add(uj);

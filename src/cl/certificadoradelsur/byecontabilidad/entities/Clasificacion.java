@@ -26,7 +26,8 @@ import javax.persistence.Table;
 @SequenceGenerator(name = "seq_clasificacion", sequenceName = "seq_clasificacion")
 @NamedQueries({
 		@NamedQuery(name = "Clasificacion.getAll", query = "SELECT c FROM Clasificacion c where  (true = :ignoreNombre or upper(c.nombre) like :nombre)"),
-		@NamedQuery(name = "Clasificacion.countAll", query = "SELECT count(c.id) FROM Clasificacion c where  (true = :ignoreNombre or upper(c.nombre)  like :nombre)") })
+		@NamedQuery(name = "Clasificacion.countAll", query = "SELECT count(c.id) FROM Clasificacion c where  (true = :ignoreNombre or upper(c.nombre)  like :nombre)"),
+		@NamedQuery(name = "Clasificacion.getByIdGrupoCuenta", query = "SELECT c FROM Clasificacion c  where  c.grupoCuenta.id=:idGrupoCuenta")})
 
 public class Clasificacion implements Serializable {
 

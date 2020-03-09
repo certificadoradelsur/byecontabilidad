@@ -28,7 +28,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "GrupoCuenta.getAll", query = "SELECT g FROM GrupoCuenta g"),
 		@NamedQuery(name = "GrupoCuenta.countAll", query = "SELECT count(g.id) FROM GrupoCuenta g"), 
 		@NamedQuery(name = "GrupoCuenta.getAllLista", query = "SELECT g FROM GrupoCuenta g "),
-		@NamedQuery(name = "GrupoCuenta.getByIdClaseCuenta", query = "SELECT g FROM GrupoCuenta g  where  g.claseCuenta.id=:idClaseCuenta ")})
+		@NamedQuery(name = "GrupoCuenta.getByIdClaseCuenta", query = "SELECT g FROM GrupoCuenta g  where  g.claseCuenta.id=:idClaseCuenta")})
 
 
 public class GrupoCuenta implements Serializable {

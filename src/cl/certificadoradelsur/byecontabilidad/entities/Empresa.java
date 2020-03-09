@@ -1,12 +1,13 @@
 package cl.certificadoradelsur.byecontabilidad.entities;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -32,7 +33,8 @@ public class Empresa implements Serializable {
 	private String rut;
 	private String razonSocial;
 	private String giro;
-	private String direccion; 
+	private OficinaContable oficinaContable;
+	
 
 	@Id
 	@GeneratedValue(generator = "seq_empresa", strategy = GenerationType.AUTO)
@@ -71,15 +73,18 @@ public class Empresa implements Serializable {
 		this.giro = giro;
 	}
 
-	@Column(name = "direccion", nullable = true)
-	public String getDireccion() {
-		return direccion;
+	@ManyToOne
+	@JoinColumn(name = "id_oficina_contable", nullable = true)
+	public OficinaContable getOficinaContable() {
+		return oficinaContable;
 	}
 
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
+	public void setOficinaContable(OficinaContable oficinaContable) {
+		this.oficinaContable = oficinaContable;
 	}
 
+
+	
 	
 	
 }

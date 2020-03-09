@@ -97,4 +97,17 @@ public class ClasificacionDAO {
 		em.remove(c);
 	}
 
+	/**
+	 * Obtiene una lista de clasificaciones segun el GrpoCuenta seleccionado
+	 * @return lista de cuentas
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Clasificacion> getByIdGrupoCuenta(Long idGrupoCuenta) {
+		Query query=em.createNamedQuery("Clasificacion.getByIdGrupoCuenta");
+		query.setParameter("idGrupoCuenta",idGrupoCuenta);
+		return query.getResultList();
+	}	
+
+	
+	
 }

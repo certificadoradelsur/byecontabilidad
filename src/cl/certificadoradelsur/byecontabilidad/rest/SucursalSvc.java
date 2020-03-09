@@ -10,14 +10,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Interfaz que declara los servicios rest de clasificacion
+ * Interfaz que declara los servicios rest de sucursal
  * 
  * @author juan
  *
  */
 @Local
-@Path("/private/clasificacion")
-public interface ClasificacionSvc {
+@Path("/private/sucursal")
+public interface SucursalSvc {
 	/**
 	 * Funcion que almacena los datos
 	 * 
@@ -30,18 +30,18 @@ public interface ClasificacionSvc {
 	Response add(String datos);
 
 	/**
-	 * Funcion para traer todas las clasificaciones
+	 * Funcion para traer todas las sucursales
 	 * 
 	 * @param
-	 * @return lista de clasificaciones
+	 * @return lista de sucursales
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("nombre") String nombre);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin);
 	
 	/**
-	 * Funcion para modificar una clasificacion
+	 * Funcion para modificar una sucursal
 	 * 
 	 * @param id
 	 * @return Mensaje de exito o error
@@ -52,9 +52,9 @@ public interface ClasificacionSvc {
 	Response update(String datos);
 
 	/**
-	 * Funcion para buscar clasificacion por id
+	 * Funcion para buscar sucursal por id
 	 * 
-	 * @param id clasificacion
+	 * @param id sucursal
 	 * @return json de salida
 	 */
 	@POST
@@ -63,7 +63,7 @@ public interface ClasificacionSvc {
 	Response getById(String datos);
 
 	/**
-	 * Funcion que elimina una clasificacion
+	 * Funcion que elimina una sucursal
 	 * 
 	 * @param datos el json de entrada
 	 * @return json de salida
@@ -73,15 +73,7 @@ public interface ClasificacionSvc {
 	@Produces("application/json")
 	Response eliminar(String datos);
 		
-	/**
-     * funcion que obtiene las clasificaciones por id gupo cuenta
-     * @param datos
-     * @return cuentas que seran mostrados en el select
-     */
-	@POST
-	@Path("/getByIdGrupoCuenta")
-	@Produces("application/json")
-	Response getByIdGrupoCuenta(String datos);
+
 
 	
 }

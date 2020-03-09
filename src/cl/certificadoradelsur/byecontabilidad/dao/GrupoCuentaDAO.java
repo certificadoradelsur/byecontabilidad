@@ -96,7 +96,7 @@ public class GrupoCuentaDAO {
 	
 
 	/**
-	 * Obtiene una lista de cuentas segun el banco seleccionado
+	 * Obtiene una lista de grupocuenta segun el clasecuenta seleccionada
 	 * @return lista de cuentas
 	 */
 	@SuppressWarnings("unchecked")

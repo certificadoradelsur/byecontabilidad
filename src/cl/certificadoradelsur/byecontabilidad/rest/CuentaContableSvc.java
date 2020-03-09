@@ -38,7 +38,7 @@ public interface CuentaContableSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("glosaGeneral") String glosaGeneral);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idClaseCuenta") Long idClaseCuenta, @QueryParam("idGrupoCuenta") Long idGrupoCuenta);
 	
 	/**
 	 * Funcion para modificar una Cuenta

@@ -9,8 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 
-
-
 /**
  * implementacion de patron dao para CuentaContable
  * 
@@ -24,30 +22,43 @@ public class CuentaContableDAO {
 	private EntityManager em;
 
 	/**
-	 * funcion que guarda  CuentaContable
+	 * funcion que guarda CuentaContable
 	 */
 	public void guardar(CuentaContable c) {
 		em.persist(c);
 	}
 
 	/**
-	 * Funcion que cuenta la cantidad de  CuentaContable
+	 * Funcion que cuenta la cantidad de CuentaContable
 	 * 
-	 * @return el total de  CuentaContable
+	 * @return el total de CuentaContable
 	 */
-	public Long countAll(String glosaGeneral) {
+	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
 		Query query = em.createNamedQuery("CuentaContable.countAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
 		} else {
 			query.setParameter("ignoreGlosaGeneral", false);
 		}
+		if (idClaseCuenta == null) {
+			query.setParameter("ignoreIdClaseCuenta", true);
+		} else {
+			query.setParameter("ignoreIdClaseCuenta", false);
+		}
+		if (idGrupoCuenta == null) {
+			query.setParameter("ignoreIdGrupoCuenta", true);
+		} else {
+			query.setParameter("ignoreIdGrupoCuenta", false);
+		}
+		query.setParameter("idClaseCuenta", idClaseCuenta);
+		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
 		return (Long) query.getSingleResult();
 	}
 
 	/**
-	 * FUncion para obtener todas las  CuentaContable
+	 * FUncion para obtener todas las CuentaContable
+	 * 
 	 * @param inicio
 	 * @param fin
 	 * @param nombre
@@ -55,13 +66,26 @@ public class CuentaContableDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<CuentaContable> getAll(Integer inicio, Integer fin, String glosaGeneral) {
+	public List<CuentaContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Long idClaseCuenta,
+			Long idGrupoCuenta) {
 		Query query = em.createNamedQuery("CuentaContable.getAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
 		} else {
 			query.setParameter("ignoreGlosaGeneral", false);
 		}
+		if (idClaseCuenta == null) {
+			query.setParameter("ignoreIdClaseCuenta", true);
+		} else {
+			query.setParameter("ignoreIdClaseCuenta", false);
+		}
+		if (idGrupoCuenta == null) {
+			query.setParameter("ignoreIdGrupoCuenta", true);
+		} else {
+			query.setParameter("ignoreIdGrupoCuenta", false);
+		}
+		query.setParameter("idClaseCuenta", idClaseCuenta);
+		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
@@ -70,6 +94,7 @@ public class CuentaContableDAO {
 
 	/**
 	 * Funcion para modificar una CuentaContable
+	 * 
 	 * @param c
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -97,5 +122,22 @@ public class CuentaContableDAO {
 		em.remove(c);
 	}
 
-	
+	/**
+	 * busca cuentaCOntable por codigo
+	 * 
+	 * @param idTransaccion
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public CuentaContable getByCodigo(Long codigo) {
+		Query query = em.createNamedQuery("CuentaContable.getByCodigo");
+		try {
+			query.setParameter("codigo", codigo);
+			query.setMaxResults(1);
+			return (CuentaContable) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

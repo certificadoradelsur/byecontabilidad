@@ -30,11 +30,11 @@ public class CuentaContableSvcBean implements CuentaContableSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String glosaGeneral) {
+	public Response list(Integer inicio, Integer fin, String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
 		Gson gson = new GsonBuilder().create();
-		List<CuentaContableJson> lccj = cuentard.getAll(inicio, fin,glosaGeneral);
+		List<CuentaContableJson> lccj = cuentard.getAll(inicio, fin,glosaGeneral, idClaseCuenta, idGrupoCuenta);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<CuentaContableJson>>() {
-		}.getType()) + ", \"total\": " + cuentard.countAll(glosaGeneral) + "}";
+		}.getType()) + ", \"total\": " + cuentard.countAll(glosaGeneral, idClaseCuenta,idGrupoCuenta) + "}";
 		return Response.ok(json).build();
 	}
 

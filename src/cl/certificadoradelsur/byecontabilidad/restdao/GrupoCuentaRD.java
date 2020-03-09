@@ -42,6 +42,12 @@ public class GrupoCuentaRD {
 
 	}
 	
+	
+	/**
+	 * metodo que busca grupoCuenta segun el id de claseCuenta 
+	 * @param idClaseCuenta
+	 * @return lista grupo cuenta
+	 */
 	public List<GrupoCuentaJson> getByIdClaseCuenta(Long idClaseCuenta) {
 
 		List<GrupoCuentaJson> lcj = new ArrayList<>();

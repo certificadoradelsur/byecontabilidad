@@ -42,7 +42,20 @@
 	type="text/javascript">
 	$('.dropdown-toggle').dropdown()
 </script>
+<link rel="stylesheet" type="text/css" href="CSS.css">
+<style type="text/css">
+.collapsing {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: hidden;
+}
 
+.collapse.show {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: visible;
+}
+</style>
 </head>
 <body>
 
@@ -74,9 +87,15 @@
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Agregar cuenta contable</h1>
+					<h1 class="h2">Modificar cuenta contable</h1>
 				</div>
 				<div class="container">
+					<div class="form-group">
+						<div class="col-1"></div>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Código</label>
+						<input type="number" id="codigo" name="codigo" class="in"
+							placeholder="Ingrese código" required="required" min="0" pattern="^[0-9]+" />
+					</div>
 					<div class="form-group">
 						<div class="col-1"></div>
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Glosa general</label>
@@ -97,16 +116,19 @@
 						&nbsp; Grupo Cuenta</label>
 					<div class="col-4">
 						<select class="browser-default custom-select" id="grupoCuenta">
+							<option value="1">Activo circulante</option>				
 						</select>
 					</div>
 				</div>
-				<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Descripción</label>
-						<textarea id="descripcion" class="col-sm-3" name="descripcion"
-							class="in" placeholder="Ingrese descripción" required="required"></textarea>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; Descripción</label>
+					<div class="col-4">
+						<select class="browser-default custom-select" id="descripcion">
+							<option value=" "> </option>
+						</select>
 					</div>
-
+				</div>
 				<div class="row">
 					<div class="col-sm-2">&nbsp;&nbsp; Seleccione</div>
 					<div class="col-sm-10">
@@ -121,6 +143,12 @@
 					</div>
 				</div>
 
+				<div class="row collapse" id="collapse1">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Analizable</label>
+					<input type="text" id="analizable" name="analizable"
+						placeholder="Ingrese rut" required="required" />
+				</div>
 				<br>
 				<br>
 				<div class="row">
@@ -143,6 +171,10 @@
 	$(document).ready(function() {
 						$("#claseCuenta").select2(),
 						$("#grupoCuenta").select2();
+						$("#descripcion").select2();		
+
+						
+
 						
 						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
 								function(res, code) {
@@ -164,22 +196,43 @@
 		$.post('/byeContabilidad/rest-services/private/cuentaContable/getById',
 						JSON.stringify(submitjson))
 				.done(
-						function(data) {	
-							document.getElementById("glosa").value = data.glosaGeneral;
-							document.getElementById("descripcion").value = data.descripcion;
+						function(data) {
 							document.getElementById("analisis").checked = data.analisis;
+							document.getElementById("codigo").value = data.codigo;
+							document.getElementById("glosa").value = data.glosaGeneral;
 							document.getElementById("imputable").checked = data.imputable;
+							document.getElementById("descripcion").value = data.descripcion;
 							document.getElementById("claseCuenta").value = data.idClaseCuenta;
-							cargaselect(data.idGrupoCuenta);
-						})
+							
+							if (document.getElementById("analisis").checked){
+								$('#collapse1').collapse('show');
+								cargaAnalizable(data.analizable)
+								
+							}
+							cargaselect(data.idGrupoCuenta,data.descripcion );
+
+							})
 
 				.fail(
 						function(jqxhr, settings, ex) {
 							alert('No se pudo modificar la clasificación '+ ex);
 						});
 	}	
+
 	
-	function cargaselect(id){
+	function cargaAnalizable(analizable){
+		document.getElementById("analizable").value = analizable;
+	}
+	
+	 $('#analisis').on('change', function(){
+
+         if(document.getElementById("analisis").checked)
+             $('#collapse1').collapse('show');
+         else
+             $('#collapse1').collapse('hide');
+     })	
+     
+	function cargaselect(id, descripcion){
 		var submitJson = {
 				idClaseCuenta : document.getElementById("claseCuenta").value
 				}
@@ -199,11 +252,33 @@
 											+ "</option>";
 							}}
 					document.getElementById("grupoCuenta").innerHTML = str;
+					cargaDes(descripcion);
 			}, "json");
 	}
 	
-	$('#claseCuenta').on('change',
-					function() {
+	function cargaDes(id){
+		var submitJson = {
+				idGrupoCuenta : document.getElementById("grupoCuenta").value
+				}
+			$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str="<option>Sin descripción</option>";                                           
+							for (var i = 0, len = res.length; i < len; i++) {
+							if(id==res[i].id){
+								str += "<option value="+res[i].id+" selected>"
+								+ res[i].nombre + "</option>";
+			
+							}else{
+									str += "<option value="+res[i].id+">"
+											+ res[i].nombre
+											+ "</option>";
+							}}
+								document.getElementById("descripcion").innerHTML = str;
+			}, "json");
+	}
+	
+	$('#claseCuenta').on('change',function() {
 						var submitJson = {
 							idClaseCuenta : document.getElementById("claseCuenta").value
 						}
@@ -218,9 +293,70 @@
 														+ "</option>";
 											}
 											document.getElementById("grupoCuenta").innerHTML = str;
+											buscaGrupo();
 										}, "json");
 					});
 
+	$('#grupoCuenta').on('change',function() {
+				var submitJson = {
+					idGrupoCuenta : document.getElementById("grupoCuenta").value
+				}
+
+				$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
+								JSON.stringify(submitJson),
+								function(res, code) {
+								var str="<option>Sin descripción</option>";                                           
+									for (var i = 0, len = res.length; i < len; i++) {
+										str += "<option value="+res[i].id+">"
+												+ res[i].nombre
+												+ "</option>";
+									}
+									document.getElementById("descripcion").innerHTML = str;
+								}, "json");
+			});
+	
+	function buscaGrupo(){
+		var submitJson = {
+				idClaseCuenta : document.getElementById("claseCuenta").value
+			}
+		$
+		.post(
+				'/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+				JSON.stringify(submitJson),
+				function(res, code) {
+					var str;
+					for (var i = 0, len = res.length; i < len; i++) {
+						str += "<option value="+res[i].id+">"
+								+ res[i].nombre
+								+ "</option>";
+					}
+					document
+							.getElementById("grupoCuenta").innerHTML = str;
+					buscaClasificacion ();
+				}, "json");
+	}
+	
+	function buscaClasificacion (){
+		var submitJson = {
+				idGrupoCuenta : document
+						.getElementById("grupoCuenta").value
+			}
+
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str;
+								for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">"
+											+ res[i].nombre
+											+ "</option>";
+								}
+								document.getElementById("descripcion").innerHTML = str;
+							}, "json");
+	}
+	
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
@@ -233,12 +369,14 @@
 			
 		var submitJson = {
 			id : <%=request.getParameter("id")%>,
+			codigo : document.getElementById("codigo").value,	
 			idClaseCuenta : document.getElementById("claseCuenta").value,	
 			idGrupoCuenta : document.getElementById("grupoCuenta").value,
 			glosaGeneral : document.getElementById("glosa").value,
 			descripcion : document.getElementById("descripcion").value,
 			imputable:document.getElementById("imputable").checked,
-			analisis :document.getElementById("analisis").checked    
+			analisis :document.getElementById("analisis").checked,
+			analizable : document.getElementById("analizable").value
 		}
 
 		$.post('/byeContabilidad/rest-services/private/cuentaContable/update',
@@ -257,6 +395,8 @@
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
+	
+	$("#analisis").trigger('change');
 	$("#grupoCuenta").trigger('change');
 	$("#claseCuenta").trigger('change');
 </script>

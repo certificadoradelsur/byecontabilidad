@@ -63,5 +63,15 @@ public class ClasificacionSvcBean implements ClasificacionSvc {
 		}.getType());
 		return Response.ok(respuesta).build();
 	}
+	
+	@Override
+	public Response getByIdGrupoCuenta(String datos) {
+		Gson gson = new GsonBuilder().create();
+		ClasificacionJson cj = gson.fromJson(datos, ClasificacionJson.class);
+		List<ClasificacionJson> lcj = clard.getByIdGrupoCuenta(cj.getIdGrupoCuenta());
+		String json = gson.toJson(lcj, new TypeToken<List<ClasificacionJson>>() {}.getType());
+		return Response.ok(json).build();
+		
+	}
 
 }
