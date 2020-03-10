@@ -38,7 +38,7 @@ public interface EmpresaSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("razonSocial") String razonSocial);
 	
 	/**
 	 * Funcion para modificar una empresa
@@ -72,5 +72,16 @@ public interface EmpresaSvc {
 	@Path("/delete")
 	@Produces("application/json")
 	Response eliminar(String datos);
-			
+		
+	
+	 /**
+     * funcion que obtiene las empresas
+     * @param datos
+     * @return empresas que seran mostrados en el select
+     */
+	@POST
+	@Path("/getLista")
+	@Produces("application/json")
+	Response getLista();
+
 }

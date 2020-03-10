@@ -9,7 +9,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 
 
@@ -35,8 +34,14 @@ public class EmpresaDAO {
 	 * 
 	 * @return el total de Empresas
 	 */
-	public Long countAll() {
+	public Long countAll(String razonSocial) {
 		Query query = em.createNamedQuery("Empresa.countAll");
+		if (razonSocial.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreRazonSocial", true);
+		} else {
+			query.setParameter("ignoreRazonSocial", false);
+		}
+		query.setParameter("razonSocial", "%" + razonSocial.toUpperCase() + "%");
 		return (Long) query.getSingleResult();
 	}
 
@@ -48,8 +53,14 @@ public class EmpresaDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Empresa> getAll(Integer inicio, Integer fin) {
-		Query query = em.createNamedQuery("Usuario.getAll");
+	public List<Empresa> getAll(Integer inicio, Integer fin, String razonSocial) {
+		Query query = em.createNamedQuery("Empresa.getAll");
+		if (razonSocial.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreRazonSocial", true);
+		} else {
+			query.setParameter("ignoreRazonSocial", false);
+		}
+		query.setParameter("razonSocial", "%" + razonSocial.toUpperCase() + "%");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();
@@ -94,5 +105,15 @@ public class EmpresaDAO {
 	public void eliminar(Empresa e) {
 		em.remove(e);
 
+	}
+	
+	/**
+	 * Obtiene todas las empresas
+	 * @return la lista de empresas
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Empresa> getLista() {
+		Query query=em.createNamedQuery("Empresa.getAllLista");
+		return query.getResultList();
 	}
 }

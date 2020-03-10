@@ -59,13 +59,16 @@
 
 		<div class="sidenav">
 
+		<a href="../empresa/index.jsp"><img
+			src="../../images/empresa.ico" alt="Icono" />&nbsp;Empresa </a>
+		<a href="../sucursal/index.jsp"><img
+			src="../../images/sucur.ico" alt="Icono" />&nbsp;Sucursal </a>	
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
 			alt="Icono" />&nbsp;Usuarios </a> 
 		<a href="../clasificacion/index.jsp"><img
-			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación </a>
+			src="../../images/clasi.ico" alt="Icono" />&nbsp;Clasificación </a> 
 		<a href="../cuentaContable/index.jsp"><img
-			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>	
-
+			src="../../images/conta.ico" alt="Icono" />&nbsp;Cuenta </a> 
 
 	</div>
 
@@ -74,7 +77,7 @@
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de Usuario</h1>
+					<h1 class="h2">Lista de usuario</h1>
 				</div>
 				<input type="hidden" name="id" id="id" />
 				<div>

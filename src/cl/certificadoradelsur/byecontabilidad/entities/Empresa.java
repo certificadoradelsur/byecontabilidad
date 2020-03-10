@@ -22,9 +22,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "empresa")
 @SequenceGenerator(name = "seq_empresa", sequenceName = "seq_empresa")
-@NamedQueries({ @NamedQuery(name = "Empresa.getAll", query = "SELECT e FROM Empresa e  "),
-				@NamedQuery(name = "Empresa.countAll", query = "SELECT count(e.razonSocial) FROM Empresa e"),
-				@NamedQuery(name = "Empresa.get", query = "select e from Empresa e")})
+@NamedQueries({ @NamedQuery(name = "Empresa.getAll", query = "SELECT e FROM Empresa e  where (true = :ignoreRazonSocial or upper(e.razonSocial) like :razonSocial)"),
+				@NamedQuery(name = "Empresa.countAll", query = "SELECT count(e.razonSocial) FROM Empresa e where (true = :ignoreRazonSocial or upper(e.razonSocial) like :razonSocial)"),
+				@NamedQuery(name = "Empresa.getAllLista", query = "SELECT e FROM Empresa e") })
 
 public class Empresa implements Serializable {
 
@@ -34,6 +34,7 @@ public class Empresa implements Serializable {
 	private String razonSocial;
 	private String giro;
 	private OficinaContable oficinaContable;
+	private Boolean activo;
 	
 
 	@Id
@@ -83,6 +84,16 @@ public class Empresa implements Serializable {
 		this.oficinaContable = oficinaContable;
 	}
 
+	@Column(name = "activo", nullable = true)
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
+	
+	
 
 	
 	

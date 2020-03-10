@@ -46,7 +46,6 @@
 </head>
 <body>
 
-
 	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
 		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Certificadora
 			del Sur</a>
@@ -72,52 +71,35 @@
 			src="../../images/conta.ico" alt="Icono" />&nbsp;Cuenta </a> 
 
 	</div>
-	
+
 	<div class="main">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Modificar usuario</h1>
+					<h1 class="h2">Agregar Sucursal</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
 						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Id</label>
-						<input type="text" id="id" name="id" class="in"
-							placeholder="Ingrese id" readonly="readonly" />
-					</div>
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
-						<input type="text" id="email" name="email" class="in"
-							placeholder="Ingrese email" />
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Dirección
+						</label> <input type="text" id="direccion" name="direccion" class="in"
+							placeholder="Ingrese Dirección" required="required" />
 					</div>
 					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
-							Perfil</label>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
 						<div class="col-3">
-							<select class="browser-default custom-select" id="perfil">
-								<option value="USER">Usuario</option>
-								<option value="ADMIN">Administrador</option>
+							<select class="browser-default custom-select" id="empresa">
 							</select>
 						</div>
 					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
-							Estado</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="estado">
-								<option value="true">Activo</option>
-								<option value="false">Inactivo</option>
-							</select>
-						</div>
-					</div>
-					<br><br>
+
+					<br> <br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="modificar()">Modificar</button>
+								type="button" onclick="guardar()">Guardar</button>
 						</div>
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -128,53 +110,50 @@
 			</form>
 		</div>
 	</div>
+	<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-$(document).ready(function () {
+	$(document).ready(function() {
+		$("#empresa").select2();
 
-	var submitjson = {id:"<%=request.getParameter("id")%>" ,};
-	
-						$.post('/byeContabilidad/rest-services/private/usuario/getById',
-										JSON.stringify(submitjson)).done(function(data) {
-											document.getElementById("id").value = data.id;
-											document.getElementById("email").value = data.email;
-											document.getElementById("perfil").value = data.perfil;
-											document.getElementById("estado").value = data.activo;
-										}).fail(function(jqxhr, settings, ex) {
-											alert('No se pudo modificar el usuario '
-													+ ex);});
-						
-						$("#estado").select2();
-						$("#perfil").select2();
-						
-						
-					});
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista',
+				function(res, code) {
+					var str;
+					for (var i = 0, len = res.length; i < len; i++) {
+						str += "<option value="+res[i].id+">" + res[i].razonSocial
+								+ "</option>";
+					}
+					document.getElementById("empresa").innerHTML = str;
+				}, "json");
+	})
 
-	function modificar() {
+	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
 
 		if (bool) {
-			alert("Los campos deben estar llenos");
+			alert("Todos los campos deben estar llenos");
 			return;
 		}
+
 		var submitJson = {
-			id : document.getElementById("id").value,
-			email : document.getElementById("email").value,
-			activo : document.getElementById("estado").value,
-			perfil : document.getElementById("perfil").value
+			direccion : document.getElementById("direccion").value,
+			idEmpresa : document.getElementById("empresa").value
 		}
-		$.post('/byeContabilidad/rest-services/private/usuario/update',
+
+		$.post('/byeContabilidad/rest-services/private/sucursal/add',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
-				alert('Se guardaron los cambios');
+				alert('Se guardo la sucursal exitosamente');
 				location.href = "index.jsp";
 			} else {
 				alert(data);
 			}
+
 		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo modificar ' + ex);
+			alert('No se pudo guardar la sucursal ' + ex);
 		});
 	}
 

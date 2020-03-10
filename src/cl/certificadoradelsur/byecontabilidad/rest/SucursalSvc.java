@@ -38,7 +38,7 @@ public interface SucursalSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("nombreEmpresa") String nombreEmpresa );
 	
 	/**
 	 * Funcion para modificar una sucursal
@@ -73,6 +73,7 @@ public interface SucursalSvc {
 	@Produces("application/json")
 	Response eliminar(String datos);
 		
+
 
 
 	

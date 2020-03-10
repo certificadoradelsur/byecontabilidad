@@ -77,7 +77,7 @@
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de clasificaciones</h1>
+					<h1 class="h2">Lista de empresas</h1>
 				</div>
 				<input type="hidden" name="id" id="id" />
 				<div>
@@ -90,7 +90,7 @@
 			<div class="form-group">
 				<div class="col-1"></div>
 				<input type="text" id="filtro" name="filtro"
-					placeholder="Filtrar por nombre" />
+					placeholder="Filtrar por razon social" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
 			<div class="margen margin-top-10">
@@ -112,28 +112,35 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/clasificacion/getAll',
+											dataSource : '/byeContabilidad/rest-services/private/empresa/getAll?idUsuario='
+													+ document
+															.getElementById('idUsuario').value,
 											autoLoad : false,
 											columns : [
 													{
 														field : 'id',
 														title : 'Identificador',
-														hidden : true,
+														hidden: true
 
 													},
 													{
-														field : 'nombre',
-														title : 'Nombre',
+														field : 'rut',
+														title : 'Rut',
 														sortable : true
 													},
 													{
-														field : 'nombreClaseCuenta',
-														title : 'Clase Cuenta',
+														field : 'razonSocial',
+														title : 'Razon social',
 														sortable : true
 													},
 													{
-														field : 'nombreGrupoCuenta',
-														title : 'Grupo Cuenta',
+														field : 'giro',
+														title : 'Giro',
+														sortable : true
+													},
+													{
+														field : 'razonSocialOficina',
+														title : 'Oficina',
 														sortable : true
 													},
 													{
@@ -173,29 +180,29 @@
 
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la clasificación?')) {
+		if (confirm('¿Esta seguro desea desactivar la empresa?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
 			$
 					.post(
-							'/byeContabilidad/rest-services/private/clasificacion/delete',
+							'/byeContabilidad/rest-services/private/empresa/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
-							alert('Clasificación eliminada correctamente');
+							alert('Empresa inactiva');
 							grid.reload();
 						} else {
-							alert('Error al eliminar la clasificación');
+							alert('Error al inactivar la empresa');
 						}
 					}).fail(function() {
-						alert('Error al eliminar la clasificación');
+						alert('Error al inactivar la empresa');
 					});
 		}
 	}
 	
 	$('#buscar').on('click', function() {
 		grid.reload({
-			nombre : $('#filtro').val(),
+			razonSocial : $('#filtro').val(),
 		});
 		clear();
 	});

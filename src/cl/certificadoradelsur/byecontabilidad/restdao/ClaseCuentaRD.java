@@ -23,6 +23,11 @@ public class ClaseCuentaRD {
 	@Inject
 	private ClaseCuentaDAO clasedao;
 
+	
+	/*
+	 * funcion que trae todas las clasecuenta para llenar select
+	 * 
+	 */
 	public List<ClaseCuentaJson> getAllLista() {
 
 		List<ClaseCuentaJson> lgj = new ArrayList<>();

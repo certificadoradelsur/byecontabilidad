@@ -6,7 +6,6 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import cl.certificadoradelsur.byecontabilidad.json.EmpresaJson;
 import cl.certificadoradelsur.byecontabilidad.restdao.EmpresaRD;
 
@@ -31,11 +30,11 @@ public class EmpresaSvcBean implements EmpresaSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin) {
+	public Response list(Integer inicio, Integer fin,String razonSocial) {
 		Gson gson = new GsonBuilder().create();
-		List<EmpresaJson> lccj = erd.getAll(inicio, fin);
+		List<EmpresaJson> lccj = erd.getAll(inicio, fin,razonSocial);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<EmpresaJson>>() {
-		}.getType()) + ", \"total\": " + erd.countAll() + "}";
+		}.getType()) + ", \"total\": " + erd.countAll(razonSocial) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -66,6 +65,13 @@ public class EmpresaSvcBean implements EmpresaSvc {
 		return Response.ok(respuesta).build();
 	}
 	
-
+	@Override
+	public Response getLista() {
+		Gson gson = new GsonBuilder().create();
+		List<EmpresaJson> lbj = erd.getAllLista();
+		String json = gson.toJson(lbj, new TypeToken<List<EmpresaJson>>() {}.getType());
+		return Response.ok(json).build();
+	}
+	
 
 }

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.OficinaContableDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.EmpresaJson;
@@ -27,6 +28,8 @@ public class EmpresaRD {
 	private EmpresaDAO edao;
 	@Inject
 	private OficinaContableDAO ofidao;
+	@Inject
+	private UsuarioDAO udao;
 
 
 	/**
@@ -46,8 +49,8 @@ public class EmpresaRD {
 				e.setGiro(ej.getGiro());
 				e.setRazonSocial(ej.getRazonSocial());
 				e.setRut(ej.getRut());
-				e.setOficinaContable(ofidao.getById(ej.getIdOficianaContable()));
-
+				e.setActivo(true);
+				e.setOficinaContable(udao.getById(ej.getIdUsuario()).getOficinaContable());
 				edao.guardar(e);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -62,9 +65,12 @@ public class EmpresaRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll() {
+	public Long countAll(String razonSocial) {
 		try {
-			return edao.countAll();
+			if (razonSocial == null) {
+				razonSocial = "";
+			}
+			return edao.countAll(razonSocial);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de empresas ", e);
 			return 0L;
@@ -78,7 +84,7 @@ public class EmpresaRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de empresas
 	 */
-	public List<EmpresaJson> getAll(Integer page, Integer limit) {
+	public List<EmpresaJson> getAll(Integer page, Integer limit, String razonSocial) {
 		List<EmpresaJson> lbj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -87,7 +93,11 @@ public class EmpresaRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-			List<Empresa> lcc = edao.getAll(inicio, limit);
+			
+			if (razonSocial == null) {
+				razonSocial = "";
+			}
+			List<Empresa> lcc = edao.getAll(inicio, limit, razonSocial);
 			for (int i = 0; i < lcc.size(); i++) {
 				EmpresaJson ccj = new EmpresaJson();
 				ccj.setId(lcc.get(i).getId());
@@ -121,7 +131,7 @@ public class EmpresaRD {
 				e.setGiro(ej.getGiro());
 				e.setRut(ej.getRut());
 				e.setRazonSocial(ej.getRazonSocial());
-				e.setOficinaContable(ofidao.getById(ej.getIdOficianaContable()));
+				e.setActivo(ej.isActivo());
 				edao.update(e);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -145,6 +155,7 @@ public class EmpresaRD {
 		ccJson.setRut(e.getRut());
 		ccJson.setRazonSocial(e.getRazonSocial());
 		ccJson.setIdOficianaContable(e.getOficinaContable().getId());
+		ccJson.setActivo(e.getActivo());
 		return ccJson;
 	}
 
@@ -157,12 +168,37 @@ public class EmpresaRD {
 	public String eliminar(EmpresaJson bj) {
 		try {
 			Empresa e = edao.getById(bj.getId());
-			edao.eliminar(e);
+			e.setActivo(false);
+			edao.update(e);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
 			log.error("No se pudo eliminar la empresa");
 			return e.getMessage();
 		}
 	}
+	
+	/*
+	 * funcion que trae todas las empresas para llenar select
+	 * 
+	 */
+	public List<EmpresaJson> getAllLista() {
+
+		List<EmpresaJson> lgj = new ArrayList<>();
+		try {
+			List<Empresa> g = edao.getLista();
+			for (int i = 0; i < g.size(); i++) {
+				EmpresaJson gj = new EmpresaJson();
+				gj.setId(g.get(i).getId());
+				gj.setRazonSocial(g.get(i).getRazonSocial());
+				lgj.add(gj);
+			}
+			return lgj;
+		} catch (Exception e) {
+			log.error("No se pudo obtener la lista de empresas", e);
+			return lgj;
+		}
+
+	}
+
 	
 }

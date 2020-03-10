@@ -57,14 +57,18 @@
 		</ul>
 	</nav>
 
-	<div class="sidenav">
+		<div class="sidenav">
 
+		<a href="../empresa/index.jsp"><img
+			src="../../images/empresa.ico" alt="Icono" />&nbsp;Empresa </a>
+		<a href="../sucursal/index.jsp"><img
+			src="../../images/sucur.ico" alt="Icono" />&nbsp;Sucursal </a>	
 		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a> <a href="../clasificacion/index.jsp"><img
-			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Clasificación
-		</a> <a href="../cuentaContable/index.jsp"><img
-			src="../../images/comprobante.ico" alt="Icono" />&nbsp;Cuenta </a>
-
+			alt="Icono" />&nbsp;Usuarios </a> 
+		<a href="../clasificacion/index.jsp"><img
+			src="../../images/clasi.ico" alt="Icono" />&nbsp;Clasificación </a> 
+		<a href="../cuentaContable/index.jsp"><img
+			src="../../images/conta.ico" alt="Icono" />&nbsp;Cuenta </a> 
 
 	</div>
 
@@ -276,6 +280,10 @@
 	}
 	
 	$('#buscar').on('click', function() {
+		if($('#filtro').val()==''){
+			alert('Debe ingresar una glosa');
+			return
+		}
 		grid.reload({
 			glosaGeneral : $('#filtro').val(),
 			idClaseCuenta : $('#claseCuenta').val(),

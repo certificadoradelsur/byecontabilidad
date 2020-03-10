@@ -22,17 +22,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "clase_cuenta")
 @SequenceGenerator(name = "seq_clase_cuenta", sequenceName = "seq_clase_cuenta")
-@NamedQueries({
-		@NamedQuery(name = "ClaseCuenta.getAll", query = "SELECT c FROM ClaseCuenta c"),
+@NamedQueries({ @NamedQuery(name = "ClaseCuenta.getAll", query = "SELECT c FROM ClaseCuenta c"),
 		@NamedQuery(name = "ClaseCuenta.countAll", query = "SELECT count(c.id) FROM ClaseCuenta c"),
-		@NamedQuery(name = "ClaseCuenta.getAllLista", query = "SELECT c FROM ClaseCuenta c")})
+		@NamedQuery(name = "ClaseCuenta.getAllLista", query = "SELECT c FROM ClaseCuenta c") 
+})
 
 public class ClaseCuenta implements Serializable {
 
 	private static final long serialVersionUID = 1323287814392412352L;
 	private Long id;
 	private String nombre;
-	
 
 	@Id
 	@GeneratedValue(generator = "seq_clase_cuenta", strategy = GenerationType.AUTO)
@@ -52,7 +51,5 @@ public class ClaseCuenta implements Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-
 
 }

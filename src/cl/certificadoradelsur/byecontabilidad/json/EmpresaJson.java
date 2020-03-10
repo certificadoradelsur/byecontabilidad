@@ -14,6 +14,8 @@ public class EmpresaJson {
 	private String giro;
 	private String razonSocialOficina;
 	private Long idOficianaContable;
+	private String idUsuario;
+	private Boolean activo;
 
 	public Long getId() {
 		return id;
@@ -50,6 +52,18 @@ public class EmpresaJson {
 	}
 	public void setIdOficianaContable(Long idOficianaContable) {
 		this.idOficianaContable = idOficianaContable;
+	}
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	public Boolean isActivo() {
+		return activo;
+	}
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 
 	

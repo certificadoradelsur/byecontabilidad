@@ -35,8 +35,14 @@ public class SucursalDAO {
 	 * 
 	 * @return el total de Sucursales
 	 */
-	public Long countAll() {
+	public Long countAll(String nombreEmpresa) {
 		Query query = em.createNamedQuery("Sucursal.countAll");
+		if (nombreEmpresa.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreNombreEmpresa", true);
+		} else {
+			query.setParameter("ignoreNombreEmpresa", false);
+		}
+		query.setParameter("nombreEmpresa", "%" + nombreEmpresa.toUpperCase() + "%");
 		return (Long) query.getSingleResult();
 	}
 
@@ -48,8 +54,14 @@ public class SucursalDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Sucursal> getAll(Integer inicio, Integer fin) {
+	public List<Sucursal> getAll(Integer inicio, Integer fin, String nombreEmpresa) {
 		Query query = em.createNamedQuery("Sucursal.getAll");
+		if (nombreEmpresa.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreNombreEmpresa", true);
+		} else {
+			query.setParameter("ignoreNombreEmpresa", false);
+		}
+		query.setParameter("nombreEmpresa", "%" + nombreEmpresa.toUpperCase() + "%");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

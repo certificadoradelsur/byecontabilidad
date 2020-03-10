@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
 import cl.certificadoradelsur.byecontabilidad.json.SucursalJson;
 import cl.certificadoradelsur.byecontabilidad.restdao.SucursalRD;
 
@@ -29,11 +30,11 @@ public class SucursalSvcBean implements SucursalSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin) {
+	public Response list(Integer inicio, Integer fin, String nombreEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<SucursalJson> lccj = sucrd.getAll(inicio, fin);
+		List<SucursalJson> lccj = sucrd.getAll(inicio, fin, nombreEmpresa);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<SucursalJson>>() {
-		}.getType()) + ", \"total\": " + sucrd.countAll() + "}";
+		}.getType()) + ", \"total\": " + sucrd.countAll(nombreEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 
