@@ -1,8 +1,6 @@
 package cl.certificadoradelsur.byecontabilidad.dao;
 
-
 import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -10,33 +8,35 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
+import cl.certificadoradelsur.byecontabilidad.entities.Sucursal;
+
 
 
 /**
- * clase que implementa las funciones dao para la  empresa
+ * implementacion de patron dao para Sucursal
+ * 
  * @author juan
  *
  */
 @Stateless
-public class EmpresaDAO {
+public class SucursalDAO {
 	@PersistenceContext(name = "byeContabilidad")
 	private EntityManager em;
-	
+
 	/**
-	 * funcion que guarda Empresa
+	 * funcion que guarda Sucursal
 	 */
-	public void guardar(Empresa e) {
-		em.persist(e);
+	public void guardar(Sucursal s) {
+		em.persist(s);
 	}
 
 	/**
-	 * Funcion que cuenta la cantidad de Empresas
+	 * Funcion que cuenta la cantidad de Sucursales
 	 * 
-	 * @return el total de Empresas
+	 * @return el total de Sucursales
 	 */
 	public Long countAll() {
-		Query query = em.createNamedQuery("Empresa.countAll");
+		Query query = em.createNamedQuery("Sucursal.countAll");
 		return (Long) query.getSingleResult();
 	}
 
@@ -44,55 +44,55 @@ public class EmpresaDAO {
 	 * 
 	 * @param inicio
 	 * @param fin
-	 * @return Lista de Empresas
+	 * @return Lista de Sucursales
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Empresa> getAll(Integer inicio, Integer fin) {
-		Query query = em.createNamedQuery("Usuario.getAll");
+	public List<Sucursal> getAll(Integer inicio, Integer fin) {
+		Query query = em.createNamedQuery("Sucursal.getAll");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();
 	}
 
 	/**
-	 * funcion que actualiza datos de Empresa
+	 * funcion que actualiza datos de usuario
 	 * 
-	 * @param u objeto Empresa
+	 * @param u objeto Usuario
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void update(Empresa e) {
-		em.merge(e);
+	public void update(Sucursal s) {
+		em.merge(s);
 	}
 
 	/**
-	 * funcion que actualiza datos de Empresa
+	 * funcion que actualiza datos de Sucursal
 	 * 
-	 * @param u objeto Empresa
+	 * @param u objeto Usuario
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void updatePass(Empresa e) {
-		em.merge(e);
+	public void updatePass(Sucursal s) {
+		em.merge(s);
 	}
 
 	/**
-	 * funcion para obtener una Empresa
+	 * funcion para obtener un usuario
 	 * 
-	 * @param id objeto Empresa
+	 * @param id objeto usuario
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Empresa getById(Long id) {
-		return em.find(Empresa.class, id);
+	public Sucursal getById(Long codigo) {
+		return em.find(Sucursal.class, codigo);
 	}
 
 	/**
-	 * funcion que elimina a una Empresa
+	 * funcion que elimina a una usuario
 	 * 
 	 * @param p objeto usuario
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void eliminar(Empresa e) {
-		em.remove(e);
+	public void eliminar(Sucursal s) {
+		em.remove(s);
 
 	}
 }

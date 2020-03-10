@@ -42,8 +42,6 @@ public class OficinaContable implements Serializable {
 	private List<Empresa> empresas;
 	private Boolean activo;
 
-	
-
 	@Id
 	@GeneratedValue(generator = "seq_oficina_contable", strategy = GenerationType.AUTO)
 	public Long getId() {

@@ -6,10 +6,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
-import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
-import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
-import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.SucursalDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Sucursal;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.SucursalJson;
@@ -26,9 +24,9 @@ import cl.certificadoradelsur.utils.Utilidades;
 public class SucursalRD {
 	private static Logger log = Logger.getLogger(SucursalRD.class);
 	@Inject
+	private SucursalDAO sudao;
+	@Inject
 	private EmpresaDAO edao;
-//	@Inject
-//	private SucursalDAO sudao;
 
 	/**
 	 * funcion que almacena
@@ -38,13 +36,13 @@ public class SucursalRD {
 	 */
 	public String save(SucursalJson ccj) {
 		try {
-			Sucursal sucursal = new Sucursal();
+			Sucursal s = new Sucursal();
 			if (Utilidades.containsScripting(ccj.getDireccion()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				sucursal.setDireccion(ccj.getDireccion());
-//				sucursal.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
-				sudao.guardar(sucursal);
+				s.setDireccion(ccj.getDireccion());
+				s.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+				sudao.guardar(s);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -68,7 +66,7 @@ public class SucursalRD {
 	}
 
 	/**
-	 * Funcion que retorna el total de Bancos en json
+	 * Funcion que retorna el total de Sucursales en json
 	 * 
 	 * @param page  numero de pagina
 	 * @param limit largo de la pagina
@@ -83,16 +81,13 @@ public class SucursalRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-			if(nombre==null) {
-				nombre="";
-			}
-			List<Clasificacion> lcc = cladao.getAll(inicio, limit);
+
+			List<Sucursal> lcc = sudao.getAll(inicio, limit);
 			for (int i = 0; i < lcc.size(); i++) {
 				SucursalJson ccj = new SucursalJson();
-				ccj.setId(lcc.get(i).getId());
-				ccj.setNombre(lcc.get(i).getNombre());
-				ccj.setNombreGrupoCuenta(grupodao.getById(lcc.get(i).getGrupoCuenta().getId()).getNombre());
-				ccj.setNombreClaseCuenta(clasedao.getById(lcc.get(i).getClaseCuenta().getId()).getNombre());
+				ccj.setCodigo(lcc.get(i).getCodigo());
+				ccj.setDireccion(lcc.get(i).getDireccion());
+				ccj.setNombreEmpresa(edao.getById(lcc.get(i).getEmpresa().getId()).getRazonSocial());			
 				lbj.add(ccj);
 			}
 
@@ -110,18 +105,17 @@ public class SucursalRD {
 	 */
 	public String update(SucursalJson ccj) {
 		try {
-			Clasificacion clasificacion = cladao.getById(ccj.getId());
-			if (Utilidades.containsScripting(ccj.getNombre()).compareTo(true) == 0) {
+			Sucursal s = sudao.getById(ccj.getCodigo());
+			if (Utilidades.containsScripting(ccj.getDireccion()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				clasificacion.setNombre(ccj.getNombre());
-				clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
-				clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-				cladao.update(clasificacion);
+				s.setDireccion(ccj.getDireccion());
+				s.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+				sudao.update(s);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar la clasificación");
+			log.error("No se pudo modificar la sucursal");
 			return e.getMessage();
 		}
 	}
@@ -133,33 +127,29 @@ public class SucursalRD {
 	 * @return mensaje de exito o error
 	 */
 	public SucursalJson getById(SucursalJson bj) {
-		Clasificacion clasificacion = cladao.getById(bj.getId());
+		Sucursal s = sudao.getById(bj.getCodigo());
 		SucursalJson ccJson = new SucursalJson();
-		ccJson.setId(clasificacion.getId());
-		ccJson.setNombre(clasificacion.getNombre());
-		ccJson.setIdGrupoCuenta(clasificacion.getGrupoCuenta().getId());
-		ccJson.setIdClaseCuenta(clasificacion.getClaseCuenta().getId());
+		ccJson.setCodigo(s.getCodigo());
+		ccJson.setDireccion(s.getDireccion());	
+		ccJson.setIdEmpresa(s.getEmpresa().getId());
 		return ccJson;
 	}
 
 	/**
-	 * metodo elimina una clasificacion
+	 * metodo elimina una sucursal
 	 * 
-	 * @param pj json de clasificacion
+	 * @param pj json de sucursal
 	 * @return mensaje de exito o error
 	 */
 	public String eliminar(SucursalJson bj) {
 		try {
-			Clasificacion clasificacion = cladao.getById(bj.getId());
-			cladao.eliminar(clasificacion);
+			Sucursal s = sudao.getById(bj.getCodigo());
+			sudao.eliminar(s);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la clasificación");
+			log.error("No se pudo eliminar la sucursal");
 			return e.getMessage();
 		}
 	}
 	
-
-
-
 }

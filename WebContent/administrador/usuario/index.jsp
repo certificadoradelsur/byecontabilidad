@@ -131,8 +131,8 @@
 														sortable : true
 													},
 													{
-														field : 'nombreEmpresa',
-														title : 'Empresa',
+														field : 'razonSocial',
+														title : 'Oficina Contable',
 														sortable : true
 													},
 													{

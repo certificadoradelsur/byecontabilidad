@@ -12,6 +12,8 @@ public class EmpresaJson {
 	private String rut;
 	private String razonSocial;
 	private String giro;
+	private String razonSocialOficina;
+	private Long idOficianaContable;
 
 	public Long getId() {
 		return id;
@@ -37,6 +39,18 @@ public class EmpresaJson {
 	public void setGiro(String giro) {
 		this.giro = giro;
 	}
+	public String getRazonSocialOficina() {
+		return razonSocialOficina;
+	}
+	public void setRazonSocialOficina(String razonSocialOficina) {
+		this.razonSocialOficina = razonSocialOficina;
+	}
+	public Long getIdOficianaContable() {
+		return idOficianaContable;
+	}
+	public void setIdOficianaContable(Long idOficianaContable) {
+		this.idOficianaContable = idOficianaContable;
+	}
 
-
+	
 }

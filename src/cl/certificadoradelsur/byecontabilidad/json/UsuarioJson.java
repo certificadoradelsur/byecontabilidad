@@ -14,9 +14,8 @@ public class UsuarioJson {
 	private String email;
 	private Boolean eliminado;
 	private String perfil;
-	private Long empresa;
 	private Boolean activo;
-	private String nombreEmpresa;
+	private String razonSocial;
 	private String idUsuario;
 	
 	public String getId() {
@@ -56,23 +55,18 @@ public class UsuarioJson {
 	public void setPerfil(String perfil) {
 		this.perfil = perfil;
 	}
-	public Long getEmpresa() {
-		return empresa;
-	}
-	public void setEmpresa(Long empresa) {
-		this.empresa = empresa;
-	}
-	public String getNombreEmpresa() {
-		return nombreEmpresa;
-	}
-	public void setNombreEmpresa(String nombreEmpresa) {
-		this.nombreEmpresa = nombreEmpresa;
-	}
 	public String getIdUsuario() {
 		return idUsuario;
 	}
 	public void setIdUsuario(String idUsuario) {
 		this.idUsuario = idUsuario;
 	}
+	public String getRazonSocial() {
+		return razonSocial;
+	}
+	public void setRazonSocial(String razonSocial) {
+		this.razonSocial = razonSocial;
+	}
 
+	
 }

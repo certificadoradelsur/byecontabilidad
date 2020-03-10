@@ -74,11 +74,11 @@ public class ClasificacionRD {
 	}
 
 	/**
-	 * Funcion que retorna el total de Bancos en json
+	 * Funcion que retorna el total de clasificacion en json
 	 * 
 	 * @param page  numero de pagina
 	 * @param limit largo de la pagina
-	 * @return json con total de Bancos
+	 * @return json con total de clasificaciones
 	 */
 	public List<ClasificacionJson> getAll(Integer page, Integer limit, String nombre) {
 		List<ClasificacionJson> lbj = new ArrayList<>();
@@ -109,9 +109,9 @@ public class ClasificacionRD {
 	}
 
 	/**
-	 * metodo que modifica Banco
+	 * metodo que modifica una clasificacion
 	 * 
-	 * @param pj json de BancoJson
+	 * @param pj json de clasificacionJson
 	 * @return mensaje de exito o error
 	 */
 	public String update(ClasificacionJson ccj) {

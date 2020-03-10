@@ -1,1 +1,1 @@
-insert into empresa (id, giro,rut,razon_social) values (nextval('seq_empresa'),'Desarrollo de software', '14068372-8', 'Certificadora del sur');
+insert into empresa (id, giro,rut,razon_social, id_oficina_contable) values (nextval('seq_empresa'),'Desarrollo de software', '14068372-8', 'Certificadora del sur', 1);
