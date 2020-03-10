@@ -22,9 +22,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "empresa")
 @SequenceGenerator(name = "seq_empresa", sequenceName = "seq_empresa")
-@NamedQueries({ @NamedQuery(name = "Empresa.getAll", query = "SELECT e FROM Empresa e  where (true = :ignoreRazonSocial or upper(e.razonSocial) like :razonSocial)"),
+@NamedQueries({ @NamedQuery(name = "Empresa.getAll", query = "SELECT e FROM Empresa e  where (true = :ignoreRazonSocial or upper(e.razonSocial) like :razonSocial) ORDER BY e.rut"),
 				@NamedQuery(name = "Empresa.countAll", query = "SELECT count(e.razonSocial) FROM Empresa e where (true = :ignoreRazonSocial or upper(e.razonSocial) like :razonSocial)"),
-				@NamedQuery(name = "Empresa.getAllLista", query = "SELECT e FROM Empresa e") })
+				@NamedQuery(name = "Empresa.getAllLista", query = "SELECT e FROM Empresa e where e.activo = true") })
 
 public class Empresa implements Serializable {
 
