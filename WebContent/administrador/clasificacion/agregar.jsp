@@ -46,33 +46,8 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Certificadora
-			del Sur</a>
-
-		<ul class="navbar-nav px-3">
-			<li class="nav-item text-nowrap"><a class="nav-link"
-				href="/byeContabilidad/logout.jsp"><img
-					src="../../images/exit.ico" alt="Icono" /> Salir</a></li>
-		</ul>
-	</nav>
-
-		<div class="sidenav">
-
-		<a href="../empresa/index.jsp"><img
-			src="../../images/empresa.ico" alt="Icono" />&nbsp;Empresa </a>
-		<a href="../sucursal/index.jsp"><img
-			src="../../images/sucur.ico" alt="Icono" />&nbsp;Sucursal </a>	
-		<a href="../usuario/index.jsp"><img src="../../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a> 
-		<a href="../clasificacion/index.jsp"><img
-			src="../../images/clasi.ico" alt="Icono" />&nbsp;Clasificación </a> 
-		<a href="../cuentaContable/index.jsp"><img
-			src="../../images/conta.ico" alt="Icono" />&nbsp;Cuenta </a> 
-
-	</div>
-
-	<div class="main">
+ <%@ include file = "../../complementos/nav.jsp" %>
+	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
