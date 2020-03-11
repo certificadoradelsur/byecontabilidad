@@ -37,10 +37,12 @@ public class CuentaContable implements Serializable {
 	private String descripcion;
 	private Boolean imputable;
 	private Boolean analisis;
+	private Boolean conciliacion;
 	private String glosaGeneral;
 	private ClaseCuenta claseCuenta;
 	private GrupoCuenta grupoCuenta;
 	private String analizable;
+	private Cuenta cuenta;
 
 	@Id
 	@GeneratedValue(generator = "seq_cuenta_contable", strategy = GenerationType.AUTO)
@@ -87,6 +89,15 @@ public class CuentaContable implements Serializable {
 	public void setAnalisis(Boolean analisis) {
 		this.analisis = analisis;
 	}
+	
+	@Column(name = "conciliacion", nullable = true)
+	public Boolean isConciliacion() {
+		return conciliacion;
+	}
+
+	public void setConciliacion(Boolean conciliacion) {
+		this.conciliacion = conciliacion;
+	}
 
 	@Column(name = "glosa_general", nullable = false)
 	public String getGlosaGeneral() {
@@ -125,6 +136,22 @@ public class CuentaContable implements Serializable {
 	public void setAnalizable(String analizable) {
 		this.analizable = analizable;
 	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_cuenta", nullable = true)
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
+	}
+
+
+	
+	
+	
+
 
 	
  

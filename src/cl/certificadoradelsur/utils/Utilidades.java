@@ -3,6 +3,7 @@ package cl.certificadoradelsur.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -10,7 +11,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import javax.ws.rs.core.MultivaluedMap;
+
+import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 
 /**
@@ -122,6 +130,34 @@ public class Utilidades {
 	}
 	
 	/**
+	 * Funcion para procesar archivo
+	 * @param path
+	 * @param input
+	 * @return
+	 * @throws IOException
+	 */
+	public static String procesaArchivoForm(String path, MultipartFormDataInput input) throws IOException {
+
+		String fileName = "";
+
+		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+		List<InputPart> inputParts = uploadForm.get("cartola");
+
+		for (InputPart inputPart : inputParts) {
+
+			MultivaluedMap<String, String> header = inputPart.getHeaders();
+			fileName = getFileName(header);
+			// convert the uploaded file to inputstream
+			InputStream inputStream = inputPart.getBody(InputStream.class, null);
+			byte[] bytes = IOUtils.toByteArray(inputStream);
+			// constructs upload file path
+			fileName = path + fileName;
+			writeFile(bytes, fileName);
+		}
+		return fileName;
+	}
+
+	/**
 	 * 
 	 * @param content
 	 * @param filename
@@ -161,6 +197,10 @@ public class Utilidades {
 		}
 		return "unknown";
 	}
+	
+	
+	
+
 
 	
 

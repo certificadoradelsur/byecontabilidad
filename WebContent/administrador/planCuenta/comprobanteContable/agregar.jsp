@@ -1,0 +1,360 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+
+<title>ByeContabilidad</title>
+<!-- Bootstrap core CSS -->
+<link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="../../css/dashboard.css" rel="stylesheet">
+<link href="../../css/micss.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css" />
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.css"
+	rel="stylesheet" type="text/css" />
+
+<!-- Bootstrap 4.4.1-->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- Select 2-->
+<link
+	href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css"
+	rel="stylesheet" />
+<script
+	src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.js"
+	type="text/javascript">
+	$('.dropdown-toggle').dropdown()
+</script>
+
+</head>
+<body>
+
+<%@ include file = "../../../complementos/nav.jsp" %>
+	<div class="container-lg">
+		<form name="formulario" id="formulario">
+			<div class="container">
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+					<h1 class="h2">Agregar comprobante Contable</h1>
+				</div>
+
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Número</label>
+					<input type="number" id="numTransaccion" name="numTransaccion"
+						placeholder="Ingrese Número" required="required" class="on"
+						 />
+				</div>
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Glosa
+						general</label> <input type="text" id="glosaTransaccion" class="col-sm-5"
+						name="glosaTransaccion" placeholder="Ingrese glosa general"
+						required="required" class="on" />
+				</div>
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Fecha</label>
+					<input type="date" id="fecha" name="fecha" class="in"
+						required="required" />
+				</div>
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						Comprobante</label> <input type="number" id="numComprobante"
+						name="numComprobante" class="in" placeholder="Ingrese Número"
+						required="required" min="0" pattern="^[0-9]+" />
+				</div>
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Glosa</label>
+					<input type="text" id="glosa" class="col-sm-5" name="glosa"
+						class="in" placeholder="Ingrese glosa" required="required" />
+				</div>
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">N°
+						Documento</label> <input type="number" id="numDocumento"
+						name="numDocumento" class="in" placeholder="Ingrese Número"
+						required="required" min="0" pattern="^[0-9]+" />
+				</div>
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Monto</label>
+					<input type="number" id="monto" name="monto" class="in"
+						placeholder="Ingrese monto" required="required" min="0"
+						pattern="^[0-9]+" />
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Banco</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="banco"
+							required="required">
+							<option value="1">Estado</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;N° cuenta</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="cuenta"
+							required="required">
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Movimiento</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="tipoMovimiento"
+							required="required">
+							<option value="INGRESO">Ingreso</option>
+							<option value="EGRESO">Egreso</option>
+							<option value="TRASPASO">Traspaso</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Documento</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="tipoDocumento"
+							required="required">
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp;&nbsp; Estado</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="estado"
+							required="required">
+							<option selected value="false">Pendiente</option>
+							<option value="true">Al día</option>
+						</select>
+					</div>
+				</div>
+
+
+				<div class="row">
+
+						<div class="col-xs-6 col-md-2">
+							<button type="button" class="btn btn-primary btn-lg btn-block"
+								onclick="Save()">Guardar</button>
+						</div>
+
+					<div class="col-xs-6 col-md-2">
+						<button class=" btt btn btn-primary btn-lg btn-block"
+							type="button" id="back">Cancelar</button>
+					</div>
+				</div>
+			</div>
+			<br>
+		</form>
+	</div>
+
+	<input type="hidden" name="numCuenta" id="numCuenta" />
+	<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
+</body>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$("#banco").select2();
+						numT();
+						$("#tipoMovimiento").select2();
+						$("#tipoDocumento").select2();
+						$("#cuenta").select2();
+						$("#estado").select2();
+					});
+
+	function numT() {
+		$
+				.post(
+						'/byeContabilidad/rest-services/private/transaccion/getByT')
+				.done(function(data) {
+					document.getElementById("numTransaccion").value = data + 1;
+				}).fail(function(jqxhr, settings, ex) {
+				});
+	}
+
+	function Save() {
+		var bool = $('.on').toArray().some(function(el) {
+			return $(el).val().length < 1
+		});
+
+		if (bool) {
+			alert("Todos los campos deben estar llenos");
+			return;
+		}
+		
+ 
+		var submitJson = {
+			numTransaccion : document.getElementById("numTransaccion").value,
+			glosaTransaccion : document.getElementById("glosaTransaccion").value,
+			
+			
+			numComprobante : document.getElementById("numComprobante").value,
+			numDocumento : document.getElementById("numDocumento").value,
+			glosa : document.getElementById("glosa").value,
+			monto : document.getElementById("monto").value,
+			tipoMovimiento : document.getElementById("tipoMovimiento").value,
+			tipoDocumento : document.getElementById("tipoDocumento").value,
+			estado : document.getElementById("estado").value,
+			fecha : document.getElementById("fecha").value,
+			idCuenta : document.getElementById("cuenta").value,
+			idUsuario : document.getElementById("idUsuario").value,
+		}
+
+		$.post('/byeContabilidad/rest-services/private/transaccion/add',
+				JSON.stringify(submitJson)).done(function(data) {
+			if (data == 'OK') {
+				alert('Se guardo exitosamente la transacción');
+				grid.reload();
+				limpiaT();
+				location.href = "index.jsp";
+			} else {
+				alert(data);
+			}
+
+		}).fail(function(jqxhr, settings, ex) {
+			alert('No se pudo guardar el comprobante contable ' + ex);
+		});
+
+	}
+
+	back.addEventListener("click", function() {
+		window.history.back();
+	}, false);
+
+	var submitJson = {
+		idUsuario : document.getElementById("idUsuario").value
+	}
+
+	$.post('/byeContabilidad/rest-services/private/banco/getLista', JSON
+			.stringify(submitJson),
+			function(res, code) {
+				var str;
+				for (var i = 0, len = res.length; i < len; i++) {
+					str += "<option value="+res[i].id+">" + res[i].nombre
+							+ "</option>";
+				}
+				document.getElementById("banco").innerHTML = str;
+			}, "json");
+
+	$('#banco') .on( 'change',
+					function() {
+						var submitJson = {
+							idBanco : document.getElementById("banco").value
+						}
+
+						$ .post( '/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].numCuenta
+														+ "</option>";
+											}
+											document.getElementById("cuenta").innerHTML = str;
+										}, "json");
+					});
+
+	var tipoDocumentoIngreso = [ {
+		id : 'DEPOSITO',
+		text : 'Depósito (+)'
+	}, {
+		id : 'CARGO',
+		text : 'Cargo (+)'
+	}, {
+		id : 'AJUSTE INGRESO',
+		text : 'Ajuste (+)'
+	}, ]
+
+	var tipoDocumentoEgreso = [ {
+		id : 'CHEQUE',
+		text : 'Cheque (-)'
+	}, {
+		id : 'ABONO',
+		text : 'Abono (-)'
+	}, {
+		id : 'AJUSTE EGRESO',
+		text : 'Ajuste (-)'
+	}, ]
+	var tipoDocumentoTraspaso = [ {
+		id : 'CHEQUE',
+		text : 'Cheque (-)'
+	}, {
+		id : 'CARGO',
+		text : 'Cargo (+)'
+	}, {
+		id : 'DEPOSITO',
+		text : 'Depósito (+)'
+	}, {
+		id : 'ABONO',
+		text : 'Abono (-)'
+	}, {
+		id : 'AJUSTE INGRESO',
+		text : 'Ajuste Ingreso (+)'
+	}, {
+		id : 'AJUSTE EGRESO',
+		text : 'Ajuste Egreso (-)'
+	}, ]
+
+	$('#tipoMovimiento').on('change', function() {
+		switch ($(this).val()) {
+		case 'INGRESO':
+			$('#tipoDocumento').html("");
+			$('#tipoDocumento').select2({
+				data : tipoDocumentoIngreso
+			});
+			break;
+		case 'EGRESO':
+			$('#tipoDocumento').html("");
+			$('#tipoDocumento').select2({
+				data : tipoDocumentoEgreso
+			});
+			break;
+
+		case 'TRASPASO':
+			$('#tipoDocumento').html("");
+			$('#tipoDocumento').select2({
+				data : tipoDocumentoTraspaso
+			});
+			break;
+		default:
+			$('#tipoDocumento').html("");
+			break;
+		}
+	})
+	$("#tipoMovimiento").trigger('change');
+	$("#banco").trigger('change');
+</script>
+</html>

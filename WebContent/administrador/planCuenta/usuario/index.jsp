@@ -95,7 +95,8 @@
 													{
 														field : 'id',
 														title : 'Identificador',
-														width : 100,
+														sortable : true
+														
 
 													},
 													{
@@ -106,7 +107,7 @@
 													{
 														field : 'perfil',
 														title : 'Perfil',
-														sortable : true
+														width : 140
 													},
 													{
 														field : 'razonSocial',

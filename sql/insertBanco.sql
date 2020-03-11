@@ -1,0 +1,16 @@
+insert into banco (id,eliminado, nombre )values (1,false,'Estado');
+insert into banco (id,eliminado, nombre )values (2,false,'Chile');
+insert into banco (id,eliminado, nombre )values (3,false,'Santander');
+insert into banco (id,eliminado, nombre )values (4,false,'Bci');
+insert into banco (id,eliminado, nombre )values (5,false,'Scotiabank');
+insert into banco (id,eliminado, nombre )values (6,false,'Internacional');
+insert into banco (id,eliminado, nombre )values (7,false,'Credito e inversiones');
+insert into banco (id,eliminado, nombre )values (8,false,'Bice');
+insert into banco (id,eliminado, nombre )values (9,false,'Itau corbanca');
+insert into banco (id,eliminado, nombre )values (10,false,'Hsbc bank');
+insert into banco (id,eliminado, nombre )values (11,false,'Security');
+insert into banco (id,eliminado, nombre )values (12,false,'Falabella');
+insert into banco (id,eliminado, nombre )values (13,false,'Ripley');
+insert into banco (id,eliminado, nombre )values (14,false,'Consorcio');
+insert into banco (id,eliminado, nombre )values (15,false,'Scotiabank azul');
+insert into banco (id,eliminado, nombre )values (16,false,'Btg pactual');

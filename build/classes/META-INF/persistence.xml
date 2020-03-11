@@ -12,6 +12,22 @@
 		<class>cl.certificadoradelsur.byecontabilidad.entities.GrupoCuenta</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.OficinaContable</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Sucursal</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Banco</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Cartola</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Conciliacion</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Cuenta</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Movimiento</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.NoConciliado</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.NoConciliacoCartola</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Transaccion</class>
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 	

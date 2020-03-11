@@ -82,7 +82,7 @@
 				</div>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp; Clase Cuenta</label>
+						&nbsp;&nbsp; Clase Cuenta</label>
 					<div class="col-4">
 						<select class="browser-default custom-select" id="claseCuenta">
 							<option value="1">Activo</option>
@@ -91,7 +91,7 @@
 				</div>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp; Grupo Cuenta</label>
+						&nbsp;&nbsp; Grupo Cuenta</label>
 					<div class="col-4">
 						<select class="browser-default custom-select" id="grupoCuenta">
 							<option value="1">Activo circulante</option>
@@ -100,7 +100,7 @@
 				</div>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp; Descripción</label>
+						&nbsp;&nbsp; Descripción</label>
 					<div class="col-4">
 						<select class="browser-default custom-select" id="descripcion">
 							<option value=" "></option>
@@ -108,7 +108,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-sm-2">&nbsp; Seleccione</div>
+					<div class="col-sm-2">&nbsp;&nbsp; Seleccione</div>
 					<div class="col-sm-10">
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" id="imputable">
@@ -119,6 +119,11 @@
 							<input class="form-check-input" type="checkbox" id="analisis">
 							<label class="form-check-label" for="gridCheck1">
 								Analisis </label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="conciliacion">
+							<label class="form-check-label" for="gridCheck1">
+								Conciliación </label>
 						</div>
 					</div>
 				</div>
