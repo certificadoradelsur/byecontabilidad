@@ -12,25 +12,25 @@
 
 			<li class="nav-item"><a class="color nav-link"
 				href="../empresa/index.jsp" style="color: white;"><img
-					src="../../images/empresa.ico" alt="Icono" /> Empresa</a></li>
+					src="../../../images/empresa.ico" alt="Icono" /> Empresa</a></li>
 			<li class="nav-item"><a class="color nav-link"
 				href="../sucursal/index.jsp" style="color: white;"><img
-					src="../../images/sucur.ico" alt="Icono" /> Sucursal</a></li>
+					src="../../../images/sucur.ico" alt="Icono" /> Sucursal</a></li>
 			 <li class="nav-item"><a class="color nav-link"
 				href="../usuario/index.jsp" style="color: white;"><img
-					src="../../images/user.ico" alt="Icono" /> Usuarios</a></li>		
+					src="../../../images/user.ico" alt="Icono" /> Usuarios</a></li>		
 			<li class="nav-item"><a class="color nav-link"
 				href="../clasificacion/index.jsp" style="color: white;"><img
-					src="../../images/clasi.ico" alt="Icono" /> Clasificación</a></li>
+					src="../../../images/clasi.ico" alt="Icono" /> Clasificación</a></li>
 			<li class="nav-item"><a class="color nav-link"
 				href="../cuentaContable/index.jsp" style="color: white;"><img
-					src="../../images/conta.ico" alt="Icono" /> Cuenta</a></li>
+					src="../../../images/conta.ico" alt="Icono" /> Cuenta</a></li>
 		</ul>
 
 
 		<a style="padding-left: 0; color: white;"
 				href="/byeContabilidad/logout.jsp"><img
-					src="../../images/exit.ico" alt="Icono" /> Salir</a>
+					src="../../../images/exit.ico" alt="Icono" /> Salir</a>
 
 	</div>
 </nav>

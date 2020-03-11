@@ -46,35 +46,38 @@
 </head>
 <body>
 
- <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Modificar empresa</h1>
+					<h1 class="h2">Cambiar clave</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
 						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Dirección
-						</label> <input type="text" id="direccion" name="direccion" class="in"
-							placeholder="Ingrese Dirección" required="required" />
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Id</label>
+						<input type="text" id="id" name="id" class="in"
+							placeholder="Ingrese id" readonly="readonly" />
 					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp;&nbsp; Empresa</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="empresa">
-							</select>
-						</div>
+					<div class="form-group">
+						<div class="col-1"></div>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Password</label>
+						<input type="password" id="password" name="password" class="in"
+							placeholder="Ingrese password" />
 					</div>
-
-					<br> <br>
+					<div class="form-group">
+						<div class="col-1"></div>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Password
+						</label> <input type="password" id="password2" name="password2" class="in"
+							placeholder="Repita la password" />
+					</div>
+					<br><br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="modificar()">Modificar</button>
+								type="button" onclick="cambiarClave()">Guardar</button>
 						</div>
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -88,33 +91,20 @@
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
-
-	$("#empresa").select2();
-
-	$.post('/byeContabilidad/rest-services/private/empresa/getLista',
-			function(res, code) {
-				var str;
-				for (var i = 0, len = res.length; i < len; i++) {
-					str += "<option value="+res[i].id+">" + res[i].razonSocial
-							+ "</option>";
-				}
-				document.getElementById("empresa").innerHTML = str;
-			}, "json");
 	
-	var submitjson = {codigo:"<%=request.getParameter("id")%>" ,};
-						$.post('/byeContabilidad/rest-services/private/sucursal/getById',
-										JSON.stringify(submitjson)).done(function(data) {
-											document.getElementById("direccion").value = data.direccion;
-											document.getElementById("empresa").value = data.idEmpresa;
-										}).fail(function(jqxhr, settings, ex) {
-											alert('No se pudo modificar la sucursal '
-													+ ex);});
-						
-						$("#empresa").select2();
-								
+	var datos = {id: "<%=request.getParameter("id")%>", };
+			$.post('/byeContabilidad/rest-services/private/usuario/getById',JSON.stringify(datos))
+								.done(function(data) {
+											document.getElementById("id").value = data.id;
+										})
+								.fail(
+										function(jqxhr, settings, ex) {
+											alert('No se pudo modificar la clave'
+													+ ex);
+										});
 					});
 
-	function modificar() {
+	function cambiarClave() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
@@ -122,23 +112,29 @@ $(document).ready(function () {
 		if (bool) {
 			alert("Los campos deben estar llenos");
 			return;
+
+		}
+		if (document.getElementById("password").value != document
+				.getElementById("password2").value) {
+			alert('Las password deben coincidir');
+			return;
 		}
 		var submitJson = {
-			codigo : <%=request.getParameter("id")%>,
-			direccion : document.getElementById("direccion").value,
-			idEmpresa : document.getElementById("empresa").value,
+			id : document.getElementById("id").value,
+			password : document.getElementById("password").value
 		}
-		$.post('/byeContabilidad/rest-services/private/sucursal/update',
-				JSON.stringify(submitJson)).done(function(data) {
-			if (data == 'OK') {
-				alert('Se guardaron los cambios');
-				location.href = "index.jsp";
-			} else {
-				alert(data);
-			}
-		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo modificar ' + ex);
-		});
+		$
+				.post('/byeContabilidad/rest-services/private/usuario/updatePass',
+						JSON.stringify(submitJson)).done(function(data) {
+					if (data == 'OK') {
+						alert('Se guardaron la nueva clave');
+						location.href = "index.jsp";
+					} else {
+						alert(data);
+					}
+				}).fail(function(jqxhr, settings, ex) {
+					alert('No se pudo modificar ' + ex);
+				});
 	}
 
 	back.addEventListener("click", function() {

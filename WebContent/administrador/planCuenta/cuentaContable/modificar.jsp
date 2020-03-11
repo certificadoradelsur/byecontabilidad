@@ -59,7 +59,7 @@
 </head>
 <body>
 
-	 <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 			<form name="formulario" id="formulario">
 				<div

@@ -46,13 +46,13 @@
 </head>
 <body>
 
- <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Agregar empresa</h1>
+					<h1 class="h2">Modificar empresa</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
@@ -73,12 +73,22 @@
 						<input type="text" id="giro" name="giro" class="in"
 							placeholder="Ingrese giro" required="required" />
 					</div>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
+							Estado</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="activo">
+								<option value="true">Activo</option>
+								<option value="false">Inactivo</option>
+							</select>
+						</div>
+					</div>
 					<br>
 					<br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="guardar()">Guardar</button>
+								type="button" onclick="modificar()">Modificar</button>
 						</div>
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -89,53 +99,58 @@
 			</form>
 		</div>
 	</div>
-	<input type="hidden" name="idUsuario" id="idUsuario"
-		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-$(document).ready(function() {
+$(document).ready(function () {
+
+	var submitjson = {id:"<%=request.getParameter("id")%>" ,};
 	
+						$.post('/byeContabilidad/rest-services/private/empresa/getById',
+										JSON.stringify(submitjson)).done(function(data) {
+											document.getElementById("rut").value = data.rut;
+											document.getElementById("razonSocial").value = data.razonSocial;
+											document.getElementById("giro").value = data.giro;
+											document.getElementById("activo").value = data.activo;
+										}).fail(function(jqxhr, settings, ex) {
+											alert('No se pudo modificar la empresa '
+													+ ex);});
+						
+						$("#activo").select2();
+								
+					});
 
-})
-
-
-	function guardar() {
+	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
 
 		if (bool) {
-			alert("Todos los campos deben estar llenos");
+			alert("Los campos deben estar llenos");
 			return;
 		}
-
-		
 		var submitJson = {
-			rut : document.getElementById("rut").value,	
-			razonSocial :document.getElementById("razonSocial").value,
-			giro:document.getElementById("giro").value,
-			idUsuario : document.getElementById("idUsuario").value
-		}
+				id : <%=request.getParameter("id")%>,
+			rut : document.getElementById("rut").value,
+			giro : document.getElementById("giro").value,
+			activo : document.getElementById("activo").value,
+			razonSocial : document.getElementById("razonSocial").value
 
-		$.post('/byeContabilidad/rest-services/private/empresa/add',
+		}
+		$.post('/byeContabilidad/rest-services/private/empresa/update',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
-				alert('Se guardo la empresa exitosamente');
+				alert('Se guardaron los cambios');
 				location.href = "index.jsp";
 			} else {
 				alert(data);
 			}
-
 		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo guardar la empresa ' + ex);
+			alert('No se pudo modificar ' + ex);
 		});
 	}
-	
-
 
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
-
 </script>
 </html>

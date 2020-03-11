@@ -46,13 +46,13 @@
 </head>
 <body>
 
- <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de empresas</h1>
+					<h1 class="h2">Lista de clasificaciones</h1>
 				</div>
 				<input type="hidden" name="id" id="id" />
 				<div>
@@ -65,7 +65,7 @@
 			<div class="form-group">
 				<div class="col-1"></div>
 				<input type="text" id="filtro" name="filtro"
-					placeholder="Filtrar por razon social" />
+					placeholder="Filtrar por nombre" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
 			<div class="margen margin-top-10">
@@ -87,35 +87,28 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/empresa/getAll?idUsuario='
-													+ document
-															.getElementById('idUsuario').value,
+											dataSource : '/byeContabilidad/rest-services/private/clasificacion/getAll',
 											autoLoad : false,
 											columns : [
 													{
 														field : 'id',
 														title : 'Identificador',
-														hidden: true
+														hidden : true,
 
 													},
 													{
-														field : 'rut',
-														title : 'Rut',
+														field : 'nombre',
+														title : 'Nombre',
 														sortable : true
 													},
 													{
-														field : 'razonSocial',
-														title : 'Razon social',
+														field : 'nombreClaseCuenta',
+														title : 'Clase Cuenta',
 														sortable : true
 													},
 													{
-														field : 'giro',
-														title : 'Giro',
-														sortable : true
-													},
-													{
-														field : 'razonSocialOficina',
-														title : 'Oficina',
+														field : 'nombreGrupoCuenta',
+														title : 'Grupo Cuenta',
 														sortable : true
 													},
 													{
@@ -155,29 +148,29 @@
 
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea desactivar la empresa?')) {
+		if (confirm('¿Esta seguro desea eliminar la clasificación?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
 			$
 					.post(
-							'/byeContabilidad/rest-services/private/empresa/delete',
+							'/byeContabilidad/rest-services/private/clasificacion/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
-							alert('Empresa inactiva');
+							alert('Clasificación eliminada correctamente');
 							grid.reload();
 						} else {
-							alert('Error al inactivar la empresa');
+							alert('Error al eliminar la clasificación');
 						}
 					}).fail(function() {
-						alert('Error al inactivar la empresa');
+						alert('Error al eliminar la clasificación');
 					});
 		}
 	}
 	
 	$('#buscar').on('click', function() {
 		grid.reload({
-			razonSocial : $('#filtro').val(),
+			nombre : $('#filtro').val(),
 		});
 		clear();
 	});

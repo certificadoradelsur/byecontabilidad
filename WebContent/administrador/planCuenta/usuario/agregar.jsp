@@ -46,38 +46,64 @@
 </head>
 <body>
 
- <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Cambiar clave</h1>
+					<h1 class="h2">Agregar usuario</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
 						<div class="col-1"></div>
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Id</label>
 						<input type="text" id="id" name="id" class="in"
-							placeholder="Ingrese id" readonly="readonly" />
+							placeholder="Ingrese id" required="required" />
 					</div>
 					<div class="form-group">
 						<div class="col-1"></div>
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Password</label>
 						<input type="password" id="password" name="password" class="in"
-							placeholder="Ingrese password" />
+							placeholder="Ingrese password" required="required" />
 					</div>
 					<div class="form-group">
 						<div class="col-1"></div>
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Password
 						</label> <input type="password" id="password2" name="password2" class="in"
-							placeholder="Repita la password" />
+							placeholder="Repita la password" required="required" />
+					</div>
+					<div class="form-group">
+						<div class="col-1"></div>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
+						<input type="email" id="email" name="email" class="in"
+							placeholder="Ingrese email" required="required" />
+					</div>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp; Perfil</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="perfil">
+								<option selected value="USER">Usuario</option>
+								<option value="ADMIN">Administrador</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp; Estado</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="estado">
+								<option selected value="true">Activo</option>
+								<option value="false">Inactivo</option>
+							</select>
+						</div>
 					</div>
 					<br><br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="cambiarClave()">Guardar</button>
+								type="button" onclick="guardar()">Guardar</button>
 						</div>
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -88,53 +114,63 @@
 			</form>
 		</div>
 	</div>
+	<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-$(document).ready(function () {
-	
-	var datos = {id: "<%=request.getParameter("id")%>", };
-			$.post('/byeContabilidad/rest-services/private/usuario/getById',JSON.stringify(datos))
-								.done(function(data) {
-											document.getElementById("id").value = data.id;
-										})
-								.fail(
-										function(jqxhr, settings, ex) {
-											alert('No se pudo modificar la clave'
-													+ ex);
-										});
-					});
+	$(document).ready(function() {
+		$("#estado").select2();
+		$("#perfil").select2();
+	})
 
-	function cambiarClave() {
+	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
 
 		if (bool) {
-			alert("Los campos deben estar llenos");
+			alert("Todos los campos deben estar llenos");
 			return;
-
 		}
 		if (document.getElementById("password").value != document
 				.getElementById("password2").value) {
 			alert('Las password deben coincidir');
 			return;
 		}
+
+		var correo = document.getElementById("email").value
+
+		if (!validar_email(correo)) {
+			alert("El email debe ser valido");
+			return;
+		}
+
 		var submitJson = {
 			id : document.getElementById("id").value,
-			password : document.getElementById("password").value
+			password : document.getElementById("password").value,
+			email : document.getElementById("email").value,
+			activo : document.getElementById("estado").value,
+			perfil : document.getElementById("perfil").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
-		$
-				.post('/byeContabilidad/rest-services/private/usuario/updatePass',
-						JSON.stringify(submitJson)).done(function(data) {
-					if (data == 'OK') {
-						alert('Se guardaron la nueva clave');
-						location.href = "index.jsp";
-					} else {
-						alert(data);
-					}
-				}).fail(function(jqxhr, settings, ex) {
-					alert('No se pudo modificar ' + ex);
-				});
+
+		$.post('/byeContabilidad/rest-services/private/usuario/add',
+				JSON.stringify(submitJson)).done(function(data) {
+			if (data == 'OK') {
+				alert('Se guardo el usuario exitosamente');
+				location.href = "index.jsp";
+			} else {
+				alert(data);
+			}
+
+		}).fail(function(jqxhr, settings, ex) {
+			alert('No se pudo guardar el usuario ' + ex);
+		});
+	}
+
+	function validar_email(email) {
+		var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		return regex.test(email) ? true : false;
 	}
 
 	back.addEventListener("click", function() {

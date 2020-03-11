@@ -46,13 +46,13 @@
 </head>
 <body>
 
- <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Agregar Sucursal</h1>
+					<h1 class="h2">Modificar empresa</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
@@ -74,7 +74,7 @@
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="guardar()">Guardar</button>
+								type="button" onclick="modificar()">Modificar</button>
 						</div>
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -85,50 +85,59 @@
 			</form>
 		</div>
 	</div>
-	<input type="hidden" name="idUsuario" id="idUsuario"
-		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#empresa").select2();
+$(document).ready(function () {
 
-		$.post('/byeContabilidad/rest-services/private/empresa/getLista',
-				function(res, code) {
-					var str;
-					for (var i = 0, len = res.length; i < len; i++) {
-						str += "<option value="+res[i].id+">" + res[i].razonSocial
-								+ "</option>";
-					}
-					document.getElementById("empresa").innerHTML = str;
-				}, "json");
-	})
+	$("#empresa").select2();
 
-	function guardar() {
+	$.post('/byeContabilidad/rest-services/private/empresa/getLista',
+			function(res, code) {
+				var str;
+				for (var i = 0, len = res.length; i < len; i++) {
+					str += "<option value="+res[i].id+">" + res[i].razonSocial
+							+ "</option>";
+				}
+				document.getElementById("empresa").innerHTML = str;
+			}, "json");
+	
+	var submitjson = {codigo:"<%=request.getParameter("id")%>" ,};
+						$.post('/byeContabilidad/rest-services/private/sucursal/getById',
+										JSON.stringify(submitjson)).done(function(data) {
+											document.getElementById("direccion").value = data.direccion;
+											document.getElementById("empresa").value = data.idEmpresa;
+										}).fail(function(jqxhr, settings, ex) {
+											alert('No se pudo modificar la sucursal '
+													+ ex);});
+						
+						$("#empresa").select2();
+								
+					});
+
+	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
 
 		if (bool) {
-			alert("Todos los campos deben estar llenos");
+			alert("Los campos deben estar llenos");
 			return;
 		}
-
 		var submitJson = {
+			codigo : <%=request.getParameter("id")%>,
 			direccion : document.getElementById("direccion").value,
-			idEmpresa : document.getElementById("empresa").value
+			idEmpresa : document.getElementById("empresa").value,
 		}
-
-		$.post('/byeContabilidad/rest-services/private/sucursal/add',
+		$.post('/byeContabilidad/rest-services/private/sucursal/update',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
-				alert('Se guardo la sucursal exitosamente');
+				alert('Se guardaron los cambios');
 				location.href = "index.jsp";
 			} else {
 				alert(data);
 			}
-
 		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo guardar la sucursal ' + ex);
+			alert('No se pudo modificar ' + ex);
 		});
 	}
 

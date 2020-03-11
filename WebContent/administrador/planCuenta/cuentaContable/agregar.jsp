@@ -59,7 +59,7 @@
 </head>
 <body>
 
-	 <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<div
@@ -122,15 +122,14 @@
 						</div>
 					</div>
 				</div>
-										
+					<br>					
 				<div class="row collapse" id="collapse1">
-					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;&nbsp;Analizable</label>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;Analizable</label>
 					<input type="text" id="analizable" name="analizable"
 						placeholder="Ingrese rut" required="required" />
 				</div>
 				<br> <br>
-				<div class="row ">
+				<div class="row">
 					<div class="col-xs-6 col-md-2">
 						<button class=" btt btn btn-primary btn-lg btn-block"
 							type="button" onclick="guardar()">Guardar</button>

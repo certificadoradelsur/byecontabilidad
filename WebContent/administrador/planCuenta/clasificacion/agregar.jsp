@@ -46,20 +46,20 @@
 </head>
 <body>
 
- <%@ include file = "../../complementos/nav.jsp" %>
+ <%@ include file = "../../../complementos/nav.jsp" %>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Modificar clasificación</h1>
+					<h1 class="h2">Agregar clasificación</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
 						<div class="col-1"></div>
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
 						<input type="text" id="nombre" name="nombre" class="in"
-							placeholder="Ingrese Nombre" required="required" />
+							placeholder="Ingrese Glosa" required="required" />
 					</div>
 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
@@ -78,11 +78,12 @@
 							</select>
 						</div>
 					</div>
-					<br> <br>
+					<br>
+					<br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="modificar()">Modificar</button>
+								type="button" onclick="guardar()">Guardar</button>
 						</div>
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -93,10 +94,12 @@
 			</form>
 		</div>
 	</div>
+	<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#claseCuenta").select2(),
+	$("#claseCuenta").select2();
 	$("#grupoCuenta").select2();
 	
 	$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
@@ -107,102 +110,61 @@ $(document).ready(function() {
 							+ "</option>";
 				}
 				document.getElementById("claseCuenta").innerHTML = str;
-				busca ();								
-			}, "json");	
-});
-
-
-	function busca (){
-			var submitjson = {id: "<%=request.getParameter("id")%>",
-				};
-
-		$.post('/byeContabilidad/rest-services/private/clasificacion/getById',
-						JSON.stringify(submitjson))
-				.done(
-						function(data) {	
-							document.getElementById("nombre").value = data.nombre;
-							document.getElementById("claseCuenta").value = data.idClaseCuenta;
-					
-							cargaselect(data.idGrupoCuenta);
-						})
-
-				.fail(
-						function(jqxhr, settings, ex) {
-							alert('No se pudo modificar la clasificación '+ ex);
-						});
-	}	
-	
-	function cargaselect(id){
-		var submitJson = {
-				idClaseCuenta : document.getElementById("claseCuenta").value
-				}
-			$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
-							JSON.stringify(submitJson),
-							function(res, code) {
-								var str;
-								for (var i = 0, len = res.length; i < len; i++) {
-							if(id==res[i].id){
-								str += "<option value="+res[i].id+" selected>"
-								+ res[i].nombre
-								+ "</option>";
-			
-							}else{
-									str += "<option value="+res[i].id+">"
-											+ res[i].nombre
-											+ "</option>";
-							}}
-					document.getElementById("grupoCuenta").innerHTML = str;
 			}, "json");
-	}
-	
-	$('#claseCuenta').on('change',
-					function() {
-						var submitJson = {
-							idClaseCuenta : document.getElementById("claseCuenta").value
-						}
+})
 
-						$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].nombre
-														+ "</option>";
-											}
-											document.getElementById("grupoCuenta").innerHTML = str;
-										}, "json");
-					});
+					$('#claseCuenta').on('change', function() {
+					var submitJson = {
+						idClaseCuenta : document.getElementById("claseCuenta").value
+					}
+
+					$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+									JSON.stringify(submitJson),
+									function(res, code) {
+										var str;
+										for (var i = 0, len = res.length; i < len; i++) {
+											str += "<option value="+res[i].id+">"
+													+ res[i].nombre
+													+ "</option>";
+
+										}
+										document.getElementById("grupoCuenta").innerHTML = str;
+									}, "json");
+				});
 	
-	function modificar() {
+
+	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
 
 		if (bool) {
-			alert("Los campos deben estar llenos");
+			alert("Todos los campos deben estar llenos");
 			return;
 		}
-			
+
+		
 		var submitJson = {
-			id : <%=request.getParameter("id")%>,
 			idClaseCuenta : document.getElementById("claseCuenta").value,	
-			idGrupoCuenta : document.getElementById("grupoCuenta").value,
+			idGrupoCuenta :document.getElementById("grupoCuenta").value,
 			nombre : document.getElementById("nombre").value
 		}
 
-		$.post('/byeContabilidad/rest-services/private/clasificacion/update',
+		$.post('/byeContabilidad/rest-services/private/clasificacion/add',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
-				alert('Se guardaron los cambios');
+				alert('Se guardo la clasificación exitosamente');
 				location.href = "index.jsp";
 			} else {
 				alert(data);
 			}
+
 		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo modificar ' + ex);
+			alert('No se pudo guardar la clasificación ' + ex);
 		});
 	}
+	
+
 
 	back.addEventListener("click", function() {
 		window.history.back();
