@@ -71,7 +71,7 @@
 					placeholder="Filtrar por número de cuenta" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
-			<div class="margen margin-top-10">
+			<div class="table-responsive">
 				<table id="grid"></table>
 			</div>
 		</div>
@@ -103,22 +103,22 @@
 													{
 														field : 'nombreBanco',
 														title : 'Banco',
-														sortable : true
+														width : 200
 													},
 													{
 														field : 'numCuenta',
 														title : 'N° cuenta',
-														sortable : true
+														width : 200
 													},
 													{
 														field : 'nombreEjecutivo',
 														title : 'Ejecutivo',
-														sortable : true
+														width : 200,
 													},
 													{
 														field : 'saldoInicial',
 														title : 'Saldo',
-														sortable : true
+														width : 200
 													},
 													
 													{

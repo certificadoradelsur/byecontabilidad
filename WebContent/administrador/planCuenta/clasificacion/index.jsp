@@ -68,7 +68,7 @@
 					placeholder="Filtrar por nombre" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
-			<div class="margen margin-top-10">
+			<div class="table-responsive">
 				<table class="table" id="grid"></table>
 			</div>
 		</div>
@@ -99,17 +99,17 @@
 													{
 														field : 'nombre',
 														title : 'Nombre',
-														sortable : true
+														width : 200
 													},
 													{
 														field : 'nombreClaseCuenta',
 														title : 'Clase Cuenta',
-														sortable : true
+														width : 100
 													},
 													{
 														field : 'nombreGrupoCuenta',
 														title : 'Grupo Cuenta',
-														sortable : true
+														width : 200
 													},
 													{
 														width : 100,

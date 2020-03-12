@@ -68,7 +68,7 @@
 					placeholder="Filtrar por identificador" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
-			<div class="margen margin-top-10">
+			<div class="table-responsive">
 				<table class="table" id="grid"></table>
 			</div>
 		</div>
@@ -95,14 +95,12 @@
 													{
 														field : 'id',
 														title : 'Identificador',
-														sortable : true
-														
-
+														width : 150														
 													},
 													{
 														field : 'email',
 														title : 'Email',
-														sortable : true
+														width : 140
 													},
 													{
 														field : 'perfil',
@@ -112,7 +110,7 @@
 													{
 														field : 'razonSocial',
 														title : 'Oficina Contable',
-														sortable : true
+														width : 150
 													},
 													{
 														width : 100,

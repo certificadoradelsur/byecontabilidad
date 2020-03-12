@@ -5,9 +5,12 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
+
+import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
@@ -32,6 +35,10 @@ public class CuentaContableRD {
 	private GrupoCuentaDAO grupodao;
 	@Inject
 	private ClasificacionDAO clasificaciondao;
+	@Inject
+	private BancoDAO bdao;
+	@Inject
+	private CuentaDAO cdao;
 
 	/**
 	 * funcion que almacena
@@ -42,28 +49,36 @@ public class CuentaContableRD {
 	public String save(CuentaContableJson ccj) {
 		try {
 			CuentaContable cuentaContable = new CuentaContable();
-			
-			if(cuentadao.getByCodigo(ccj.getCodigo())==null) {
-			if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
-					|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0
-					||Utilidades.containsScripting(ccj.getAnalizable()).compareTo(true)==0) {
-				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
-			} else {
-				cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
-				cuentaContable.setCodigo(ccj.getCodigo());
-				cuentaContable.setDescripcion(ccj.getDescripcion());
-				cuentaContable.setAnalisis(ccj.isAnalisis());
-				cuentaContable.setImputable(ccj.isImputable());
-				cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-				cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
-				cuentaContable.setAnalizable(ccj.getAnalizable());
-				cuentadao.guardar(cuentaContable);
-				return Constantes.MENSAJE_REST_OK;
+
+			if (cuentadao.getByCodigo(ccj.getCodigo()) == null) {
+				if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
+						|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0
+						|| Utilidades.containsScripting(ccj.getAnalizable()).compareTo(true) == 0) {
+					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+				} else {
+					cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
+					cuentaContable.setCodigo(ccj.getCodigo());
+					cuentaContable.setDescripcion(ccj.getDescripcion());
+					cuentaContable.setAnalisis(ccj.isAnalisis());
+					// cuentaContable.setImputable(ccj.isImputable());
+					cuentaContable.setImputable(true);
+					cuentaContable.setConciliacion(ccj.isConciliacion());
+					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+					cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+					if (ccj.isAnalisis().equals(true)) {
+						cuentaContable.setAnalizable(ccj.getAnalizable());
+					}
+					if (ccj.isConciliacion().equals(true)) {
+						cuentaContable.setBanco(bdao.getById(ccj.getIdBanco()));
+						cuentaContable.setCuenta(cdao.getById(ccj.getIdCuenta()));
+					}
+					cuentadao.guardar(cuentaContable);
+					return Constantes.MENSAJE_REST_OK;
 				}
-			}else {
+			} else {
 				return "El codigo ingresado, ya se encuentra registrado";
 			}
-			
+
 		} catch (Exception e) {
 			log.error("No se pudo guardar la cuenta contable ", e);
 			return Constantes.MENSAJE_REST_FAIL;
@@ -77,8 +92,8 @@ public class CuentaContableRD {
 	 */
 	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
 		try {
-			if(glosaGeneral==null) {
-				glosaGeneral="";
+			if (glosaGeneral == null) {
+				glosaGeneral = "";
 			}
 			return cuentadao.countAll(glosaGeneral, idClaseCuenta, idGrupoCuenta);
 		} catch (Exception e) {
@@ -94,7 +109,8 @@ public class CuentaContableRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<CuentaContableJson> getAll(Integer page, Integer limit, String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
+	public List<CuentaContableJson> getAll(Integer page, Integer limit, String glosaGeneral, Long idClaseCuenta,
+			Long idGrupoCuenta) {
 		List<CuentaContableJson> lbj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -103,8 +119,8 @@ public class CuentaContableRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-			if(glosaGeneral==null) {
-				glosaGeneral="";
+			if (glosaGeneral == null) {
+				glosaGeneral = "";
 			}
 			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral, idClaseCuenta, idGrupoCuenta);
 			for (int i = 0; i < lcc.size(); i++) {
@@ -112,10 +128,11 @@ public class CuentaContableRD {
 				ccj.setId(lcc.get(i).getId());
 				ccj.setCodigo(lcc.get(i).getCodigo());
 				ccj.setAnalisis(lcc.get(i).isAnalisis());
-				if(lcc.get(i).getDescripcion().equals("Sin descripción")) {
+				if (lcc.get(i).getDescripcion().equals("Sin descripción")) {
 					ccj.setDescripcion(lcc.get(i).getDescripcion());
-				}else {
-					ccj.setDescripcion(clasificaciondao.getById(Long.parseLong(lcc.get(i).getDescripcion())).getNombre());
+				} else {
+					ccj.setDescripcion(
+							clasificaciondao.getById(Long.parseLong(lcc.get(i).getDescripcion())).getNombre());
 				}
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
 				ccj.setImputable(lcc.get(i).isImputable());
@@ -139,27 +156,39 @@ public class CuentaContableRD {
 	public String update(CuentaContableJson ccj) {
 		try {
 			CuentaContable cuentaContable = cuentadao.getById(ccj.getId());
-			if(cuentadao.getByCodigo(ccj.getCodigo())==null||cuentadao.getByCodigo(ccj.getCodigo()).getCodigo()==cuentaContable.getCodigo()) {
-			if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
-					|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0
-					||Utilidades.containsScripting(ccj.getAnalizable()).compareTo(true)==0) {
-				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+			if (cuentadao.getByCodigo(ccj.getCodigo()) == null
+					|| cuentadao.getByCodigo(ccj.getCodigo()).getCodigo() == cuentaContable.getCodigo()) {
+				if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
+						|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0
+						|| Utilidades.containsScripting(ccj.getAnalizable()).compareTo(true) == 0) {
+					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+				} else {
+					cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
+					cuentaContable.setCodigo(ccj.getCodigo());
+					cuentaContable.setDescripcion(ccj.getDescripcion());
+					cuentaContable.setAnalisis(ccj.isAnalisis());
+					// cuentaContable.setImputable(ccj.isImputable());
+					cuentaContable.setImputable(true);
+					cuentaContable.setConciliacion(ccj.isConciliacion());
+					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+					cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+					if (ccj.isAnalisis().equals(true)) {
+						cuentaContable.setAnalizable(ccj.getAnalizable());
+						cuentaContable.setBanco(null);
+						cuentaContable.setCuenta(null);
+					}
+					if (ccj.isConciliacion().equals(true)) {
+						cuentaContable.setBanco(bdao.getById(ccj.getIdBanco()));
+						cuentaContable.setCuenta(cdao.getById(ccj.getIdCuenta()));
+						cuentaContable.setAnalizable("");
+					}
+					cuentadao.update(cuentaContable);
+					return Constantes.MENSAJE_REST_OK;
+				}
 			} else {
-				cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
-				cuentaContable.setCodigo(ccj.getCodigo());
-				cuentaContable.setDescripcion(ccj.getDescripcion());
-				cuentaContable.setAnalisis(ccj.isAnalisis());
-				cuentaContable.setImputable(ccj.isImputable());
-				cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-				cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
-				cuentaContable.setAnalizable(ccj.getAnalizable());
-				cuentadao.update(cuentaContable);
-				return Constantes.MENSAJE_REST_OK;
-			}
-			}else {
 				return "El codigo ingresado, ya se encuentra registrado";
 			}
-			
+
 		} catch (Exception e) {
 			log.error("No se pudo modificar la cuenta contable");
 			return e.getMessage();
@@ -180,13 +209,24 @@ public class CuentaContableRD {
 		ccJson.setGlosaGeneral(cuentaContable.getGlosaGeneral());
 		ccJson.setDescripcion(cuentaContable.getDescripcion());
 		ccJson.setAnalisis(cuentaContable.isAnalisis());
+		ccJson.setConciliacion(cuentaContable.isConciliacion());
+		if(cuentaContable.isAnalisis().equals(true)) {
+			ccJson.setAnalizable(cuentaContable.getAnalizable());	
+		}
+		if(cuentaContable.isConciliacion().equals(true)) {
+			ccJson.setIdBanco(cuentaContable.getBanco().getId());
+			ccJson.setIdCuenta(cuentaContable.getCuenta().getId());
+		}
+		ccJson.setConciliacion(cuentaContable.isConciliacion());
 		ccJson.setImputable(cuentaContable.isImputable());
 		ccJson.setIdClaseCuenta(cuentaContable.getClaseCuenta().getId());
 		ccJson.setIdGrupoCuenta(cuentaContable.getGrupoCuenta().getId());
-		ccJson.setAnalizable(cuentaContable.getAnalizable());
+
 		return ccJson;
 	}
 
+
+	
 	/**
 	 * metodo elimina una cuenta contable
 	 * 

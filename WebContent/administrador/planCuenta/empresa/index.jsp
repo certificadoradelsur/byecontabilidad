@@ -68,7 +68,7 @@
 					placeholder="Filtrar por razon social" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
-			<div class="margen margin-top-10">
+			<div class="table-responsive">
 				<table class="table" id="grid"></table>
 			</div>
 		</div>
@@ -101,22 +101,22 @@
 													{
 														field : 'rut',
 														title : 'Rut',
-														sortable : true
+														width : 120
 													},
 													{
 														field : 'razonSocial',
 														title : 'Razon social',
-														sortable : true
+														width : 200
 													},
 													{
 														field : 'giro',
 														title : 'Giro',
-														sortable : true
+														width : 150
 													},
 													{
 														field : 'razonSocialOficina',
 														title : 'Oficina',
-														sortable : true
+														width : 200
 													},
 													{
 														width : 100,

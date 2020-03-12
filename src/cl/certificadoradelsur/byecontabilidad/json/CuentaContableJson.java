@@ -13,6 +13,7 @@ public class CuentaContableJson {
 	private String descripcion;
 	private Boolean imputable;
 	private Boolean analisis;
+	private Boolean conciliacion;
 	private String glosaGeneral;
 	private Long idClaseCuenta;
 	private String nombreClaseCuenta; 
@@ -20,6 +21,8 @@ public class CuentaContableJson {
 	private String nombreGrupoCuenta;
 	private String nombreClasificacion;
 	private String analizable;
+	private Long idBanco;
+	private Long idCuenta;
 	
 	public Long getId() {
 		return id;
@@ -115,6 +118,30 @@ public class CuentaContableJson {
 
 	public void setAnalizable(String analizable) {
 		this.analizable = analizable;
+	}
+
+	public Long getIdBanco() {
+		return idBanco;
+	}
+
+	public void setIdBanco(Long idBanco) {
+		this.idBanco = idBanco;
+	}
+
+	public Long getIdCuenta() {
+		return idCuenta;
+	}
+
+	public void setIdCuenta(Long idCuenta) {
+		this.idCuenta = idCuenta;
+	}
+
+	public Boolean isConciliacion() {
+		return conciliacion;
+	}
+
+	public void setConciliacion(Boolean conciliacion) {
+		this.conciliacion = conciliacion;
 	}
 
 	

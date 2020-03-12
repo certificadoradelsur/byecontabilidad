@@ -110,11 +110,11 @@
 				<div class="row">
 					<div class="col-sm-2">&nbsp;&nbsp; Seleccione</div>
 					<div class="col-sm-10">
-						<div class="form-check">
+					<!--  	<div class="form-check">
 							<input class="form-check-input" type="checkbox" id="imputable">
 							<label class="form-check-label" for="gridCheck1">
 								Imputable </label>
-						</div>
+						</div>-->
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" id="analisis">
 							<label class="form-check-label" for="gridCheck1">
@@ -132,6 +132,26 @@
 					<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;Analizable</label>
 					<input type="text" id="analizable" name="analizable"
 						placeholder="Ingrese rut" required="required" />
+				</div>
+				
+				<div class="row collapse" id="collapse2">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Banco</label>
+					<div class="col-3">
+						<select class="browser-default custom-select d-block w-100" id="banco"
+							required="required">
+							<option value="1">Estado</option>
+						</select>
+					</div>
+				</div>
+				<div class="row collapse" id="collapse3" >
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;N° cuenta</label>
+					<div class="col-3">
+						<select class="browser-default custom-select "  id="cuenta"
+							required="required">
+						</select>
+					</div>
 				</div>
 				<br> <br>
 				<div class="row">
@@ -154,14 +174,32 @@
 	$(document).ready(function() {
 		$("#claseCuenta").select2(),
 		$("#grupoCuenta").select2();
-		$("#descripcion").select2();		
+		$("#descripcion").select2();
+		$("#banco").select2({width:'200'});
+		//$("#cuenta").select2({width:'200'});
 		
-		 	 $('#analisis').on('change', function(){
+		 $('#analisis').on('change', function(){
 
-	         if(document.getElementById("analisis").checked)
+	         if(document.getElementById("analisis").checked){
 	             $('#collapse1').collapse('show');
-	         else
+	            document.getElementById("conciliacion").disabled=true;
+	         }else{
 	             $('#collapse1').collapse('hide');
+	             document.getElementById("conciliacion").disabled=false;
+	             }
+	     })
+	     
+	   	$('#conciliacion').on('change', function(){
+
+	         if(document.getElementById("conciliacion").checked){
+	             $('#collapse2').collapse('show');
+	             $('#collapse3').collapse('show');
+	             document.getElementById("analisis").disabled=true;
+	   	}else{
+	             $('#collapse2').collapse('hide');
+	         	 $('#collapse3').collapse('hide');
+	             document.getElementById("analisis").disabled=false;
+				}
 	     })
 	     
 	$ .post( '/byeContabilidad/rest-services/private/claseCuenta/getLista',
@@ -178,7 +216,41 @@
 												}
 										
 										}, "json");
-					})
+		 	 
+		 	 
+		 	$.post('/byeContabilidad/rest-services/private/banco/getLista',
+					function(res, code) {
+						var str;
+						for (var i = 0, len = res.length; i < len; i++) {
+							str += "<option value="+res[i].id+">" + res[i].nombre
+									+ "</option>";
+						}
+						document.getElementById("banco").innerHTML = str;
+					}, "json");
+
+		 	 
+ })
+					
+			$('#banco').on('change',
+							function() {
+								var submitJson = {
+									idBanco : document.getElementById("banco").value
+								}
+
+								$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+												JSON.stringify(submitJson),
+												function(res, code) {
+													var str;
+
+													for (var i = 0, len = res.length; i < len; i++) {
+													str += "<option value="+res[i].id+">"
+																+ res[i].numCuenta
+																+ "</option>";
+													}
+													document.getElementById("cuenta").innerHTML = str;
+												}, "json");
+							}); 				
+					
 
 	$('#claseCuenta').on('change',function() {
 						var submitJson = {
@@ -276,16 +348,26 @@
 			alert("Todos los campos deben estar llenos");
 			return;
 		}
-
+		
+		if(document.getElementById("conciliacion").checked){
+			if(document.getElementById("cuenta").value==""){
+				alert('No existe cuenta asociada al banco');
+				return;
+			}
+		}
+		
 		var submitJson = {
 			codigo : document.getElementById("codigo").value,
 			idClaseCuenta : document.getElementById("claseCuenta").value,
 			idGrupoCuenta : document.getElementById("grupoCuenta").value,
 			glosaGeneral : document.getElementById("glosa").value,
 			descripcion : document.getElementById("descripcion").value,
-			imputable : document.getElementById("imputable").checked,
+			//imputable : document.getElementById("imputable").checked,
 			analisis : document.getElementById("analisis").checked,
-			analizable : document.getElementById("analizable").value
+			conciliacion : document.getElementById("conciliacion").checked,
+			analizable : document.getElementById("analizable").value,
+			idBanco : document.getElementById("banco").value,
+		    idCuenta : document.getElementById("cuenta").value
 		}
 
 		$.post('/byeContabilidad/rest-services/private/cuentaContable/add',
@@ -306,6 +388,7 @@
 		window.history.back();
 	}, false);
 
+	$("#banco").trigger('change');
 	$("#analisis").trigger('change');
 	$("#claseCuenta").trigger('change');
 	$("#grupoCuenta").trigger('change');

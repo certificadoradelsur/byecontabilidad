@@ -47,7 +47,7 @@ public class BancoJson {
 	public void setSaldoInicial(Integer saldoInicial) {
 		this.saldoInicial = saldoInicial;
 	}
-	public Boolean isEliminado() {
+	public Boolean getEliminado() {
 		return eliminado;
 	}
 	public void setEliminado(Boolean eliminado) {
@@ -59,5 +59,7 @@ public class BancoJson {
 	public void setIdUsuario(String idUsuario) {
 		this.idUsuario = idUsuario;
 	}
+	
+	
 	
 }

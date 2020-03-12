@@ -43,6 +43,7 @@ public class CuentaContable implements Serializable {
 	private GrupoCuenta grupoCuenta;
 	private String analizable;
 	private Cuenta cuenta;
+	private Banco banco;
 
 	@Id
 	@GeneratedValue(generator = "seq_cuenta_contable", strategy = GenerationType.AUTO)
@@ -146,6 +147,17 @@ public class CuentaContable implements Serializable {
 	public void setCuenta(Cuenta cuenta) {
 		this.cuenta = cuenta;
 	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_banco", nullable = true)
+	public Banco getBanco() {
+		return banco;
+	}
+
+	public void setBanco(Banco banco) {
+		this.banco = banco;
+	}
+	
 
 
 	

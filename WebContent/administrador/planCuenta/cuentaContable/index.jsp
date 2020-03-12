@@ -97,7 +97,7 @@
 					</div>
 				</div>
 
-				<div class="margen margin-top-10">
+				<div class="table-responsive">
 					<table class="table" id="grid"></table>
 				</div>
 			</div>
@@ -147,7 +147,7 @@
 													{
 														field : 'glosaGeneral',
 														title : 'Glosa',
-														sortable : true
+														width : 200
 													},
 													{
 														field : 'nombreClaseCuenta',
@@ -157,22 +157,7 @@
 													{
 														field : 'nombreGrupoCuenta',
 														title : 'Grupo Cuenta',
-														sortable : true
-													},
-													{
-														field : 'descripcion',
-														title : 'Descripción',
-														sortable : true
-													},
-													{
-														field : 'analisis',
-														title : 'Analisís',
-														width : 80
-													},
-													{
-														field : 'imputable',
-														title : 'Imputable',
-														width : 80
+														width : 200
 													},
 													{
 														width : 100,

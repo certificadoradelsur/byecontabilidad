@@ -68,7 +68,7 @@
 					placeholder="Filtrar por empresa" />
 				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 			</div>
-			<div class="margen margin-top-10">
+			<div class="table-responsive">
 				<table class="table" id="grid"></table>
 			</div>
 		</div>
@@ -101,12 +101,13 @@
 													{
 														field : 'direccion',
 														title : 'Dirección',
-														sortable : true
+														width : 200
+
 													},
 													{
 														field : 'nombreEmpresa',
 														title : 'Empresa',
-														sortable : true
+														width : 200
 													},
 													{
 														width : 100,
