@@ -21,8 +21,8 @@ import javax.persistence.Table;
 @Table(name = "cliente")
 @SequenceGenerator(name = "seq_cliente", sequenceName = "seq_cliente")
 @NamedQueries({ 
-	@NamedQuery(name = "Cliente.getAll", query = "SELECT c FROM Cliente  c  "),
-	@NamedQuery(name = "Cliente.countAll", query = "SELECT count(C.id) FROM Cliente c"),
+	@NamedQuery(name = "Cliente.getAll", query = "SELECT c FROM Cliente  c where  (true = :ignoreRut or upper(c.rut) like :rut) "),
+	@NamedQuery(name = "Cliente.countAll", query = "SELECT count(C.id) FROM Cliente c where  (true = :ignoreRut or upper(c.rut) like :rut)"),
 	@NamedQuery(name = "Cliente.getAllLista", query = "SELECT c FROM Cliente c  where c.activo = true ")
 })
 

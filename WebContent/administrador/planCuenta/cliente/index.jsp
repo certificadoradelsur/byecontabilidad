@@ -53,7 +53,7 @@
 		</form>
 		<div
 			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-			<h1 class="h2">Lista de clasificaciones</h1>
+			<h1 class="h2">Lista de cliente</h1>
 		</div>
 
 		<div>
@@ -64,14 +64,13 @@
 		<div class="form-group">
 			<div class="col-1"></div>
 			<input type="text" id="filtro" name="filtro"
-				placeholder="Filtrar por nombre" />
+				placeholder="Filtrar por rut" />
 			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 		</div>
 		<div class="table-responsive">
 			<table class="table" id="grid"></table>
 		</div>
 	</div>
-
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 
@@ -86,29 +85,54 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/clasificacion/getAll',
+											dataSource : '/byeContabilidad/rest-services/private/cliente/getAll',
 											autoLoad : false,
 											columns : [
 													{
 														field : 'id',
 														title : 'Identificador',
-														hidden : true,
-
+														hidden : true
+													},
+													{
+														field : 'rut',
+														title : 'Rut',
+														width : 120
 													},
 													{
 														field : 'nombre',
-														title : 'Nombre',
-														width : 200
+														title : 'nombre',
+														width : 120
 													},
 													{
-														field : 'nombreClaseCuenta',
-														title : 'Clase Cuenta',
+														field : 'ciudad',
+														title : 'Ciudad',
 														width : 100
 													},
 													{
-														field : 'nombreGrupoCuenta',
-														title : 'Grupo Cuenta',
-														width : 200
+														field : 'direccion',
+														title : 'Direccion',
+														width : 140
+													},
+													{
+														field : 'giro',
+														title : 'Giro',
+														width : 100
+													},
+
+													{
+														field : 'email',
+														title : 'Email',
+														width : 100
+													},
+													{
+														field : 'telefono',
+														title : 'Telefono',
+														width : 100
+													},
+													{
+														field : 'activo',
+														title : 'Activo',
+														width : 100
 													},
 													{
 														width : 100,
@@ -145,31 +169,35 @@
 		document.getElementById("formulario").submit();
 	}
 
+	function cambiarclave(e) {
+		document.getElementById("id").value = e.data.record.id;
+		document.getElementById("formulario").action = 'cambiarClave.jsp';
+		document.getElementById("formulario").method = 'POST';
+		document.getElementById("formulario").submit();
+	}
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la clasificación?')) {
+		if (confirm('¿Esta seguro desea eliminar el usuario?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/clasificacion/delete',
-							JSON.stringify(submitJson)).done(function(data) {
-						if (data == 'OK') {
-							alert('Clasificación eliminada correctamente');
-							grid.reload();
-						} else {
-							alert('Error al eliminar la clasificación');
-						}
-					}).fail(function() {
-						alert('Error al eliminar la clasificación');
-					});
+			$.post('/byeContabilidad/rest-services/private/cliente/delete',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('Cliente eliminado correctamente');
+					grid.reload();
+				} else {
+					alert('Error al eliminar cliente');
+				}
+			}).fail(function() {
+				alert('Error al eliminar cliente');
+			});
 		}
 	}
-	
+
 	$('#buscar').on('click', function() {
 		grid.reload({
-			nombre : $('#filtro').val(),
+			rut : $('#filtro').val(),
 		});
 		clear();
 	});

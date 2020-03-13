@@ -20,7 +20,7 @@ import cl.certificadoradelsur.byecontabilidad.restdao.ClienteRD;
  * @author juan
  *
  */
-public class ClienteSvcBean implements BancoSvc {
+public class ClienteSvcBean implements ClienteSvc {
 	@Inject
 	private ClienteRD crd;
 	
@@ -34,11 +34,11 @@ public class ClienteSvcBean implements BancoSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin , String nombre) {
+	public Response list(Integer inicio, Integer fin, String rut) {
 		Gson gson = new GsonBuilder().create();
-		List<ClienteJson> lcj = crd.getAll(inicio, fin);
+		List<ClienteJson> lcj = crd.getAll(inicio, fin, rut);
 		String json = "{\"records\": " + gson.toJson(lcj, new TypeToken<List<ClienteJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll() + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(rut) + "}";
 		return Response.ok(json).build();
 	}
 

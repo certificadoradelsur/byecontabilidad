@@ -46,60 +46,55 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav.jsp" %>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
-		<div class="container">
-			<form name="formulario" id="formulario">
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de cuentas contables</h1>
-				</div>
-				<input type="hidden" name="id" id="id" />
-				<div>
-					<div class="col-xs-6 col-md-2">
-						<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
-					</div>
-				</div>
-			</form>
-			<br>
+		<form name="formulario" id="formulario">
+			<input type="hidden" name="id" id="id" />
+		</form>
+		<div
+			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+			<h1 class="h2">Lista de cuentas contables</h1>
+		</div>
+		<div>
+				<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
+		</div>
+		<br>
 
-			<div class="form-group">
-				<div class="form-row">
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label for="glosa">&nbsp;&nbsp;Glosa</label>
-						</div>
-						<input type="text" id="filtro" name="filtro"
-							placeholder="Filtrar por Glosa" class="form-control" />
+		<div class="form-group">
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="glosa">&nbsp;&nbsp;Glosa</label>
 					</div>
-					<div class="form-group col-md-2">
-						<label for="claseCuenta">&nbsp;Clase cuenta</label> 
-						<select
-							class="browser-default custom-select" id="claseCuenta"
-							required="required" class="form-control">
-							<option value="1">Activo</option>
-						</select>
-					</div>
-					<div class="form-group col-md-2">
-						<label for="grupoCuenta">&nbsp;Grupo cuenta</label> <select
-							class="browser-default custom-select" id="grupoCuenta"
-							required="required">
-							<option value="1">Activo circulante</option>
-							<option value="2">Activo fijo</option>
-							<option value="3">Otros activos</option>
-						</select>
-					</div>
-					<div class="form-group col-md-3">
-						<div class="form-row clo md 3">
-							<label>&nbsp;</label>
-						</div>
-						<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
-					</div>
+					<input type="text" id="filtro" name="filtro"
+						placeholder="Filtrar por Glosa" class="form-control" />
 				</div>
+				<div class="form-group col-md-2">
+					<label for="claseCuenta">&nbsp;Clase cuenta</label> <select
+						class="browser-default custom-select" id="claseCuenta"
+						required="required" class="form-control">
+						<option value="1">Activo</option>
+					</select>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="grupoCuenta">&nbsp;Grupo cuenta</label> <select
+						class="browser-default custom-select" id="grupoCuenta"
+						required="required">
+						<option value="1">Activo circulante</option>
+						<option value="2">Activo fijo</option>
+						<option value="3">Otros activos</option>
+					</select>
+				</div>
+				<div class="form-group col-md-3">
+					<div class="form-row clo md 3">
+						<label>&nbsp;</label>
+					</div>
+					<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
+				</div>
+			</div>
 
-				<div class="table-responsive">
-					<table class="table" id="grid"></table>
-				</div>
+			<div class="table-responsive">
+				<table class="table" id="grid"></table>
 			</div>
 		</div>
 	</div>

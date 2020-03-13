@@ -39,7 +39,7 @@ public interface ClienteSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("rut") String rut);
 	
 	/**
 	 * Funcion para modificar un cliente

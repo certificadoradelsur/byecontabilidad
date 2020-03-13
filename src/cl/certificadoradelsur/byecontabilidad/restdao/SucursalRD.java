@@ -76,7 +76,7 @@ public class SucursalRD {
 	 * @return json con total de Bancos
 	 */
 	public List<SucursalJson> getAll(Integer page, Integer limit, String nombreEmpresa) {
-		List<SucursalJson> lbj = new ArrayList<>();
+		List<SucursalJson> lsj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
 			if (page.compareTo(1) == 0) {
@@ -88,19 +88,19 @@ public class SucursalRD {
 			if(nombreEmpresa==null) {
 				nombreEmpresa="";
 			}
-			List<Sucursal> lcc = sudao.getAll(inicio, limit, nombreEmpresa);
-			for (int i = 0; i < lcc.size(); i++) {
-				SucursalJson ccj = new SucursalJson();
-				ccj.setCodigo(lcc.get(i).getCodigo());
-				ccj.setDireccion(lcc.get(i).getDireccion());
-				ccj.setNombreEmpresa(edao.getById(lcc.get(i).getEmpresa().getId()).getRazonSocial());			
-				lbj.add(ccj);
+			List<Sucursal> ls = sudao.getAll(inicio, limit, nombreEmpresa);
+			for (int i = 0; i < ls.size(); i++) {
+				SucursalJson sj = new SucursalJson();
+				sj.setCodigo(ls.get(i).getCodigo());
+				sj.setDireccion(ls.get(i).getDireccion());
+				sj.setNombreEmpresa(edao.getById(ls.get(i).getEmpresa().getId()).getRazonSocial());			
+				lsj.add(sj);
 			}
 
 		} catch (Exception e) {
 			log.error("No se puede obtener la lista de clasificaciones ", e);
 		}
-		return lbj;
+		return lsj;
 	}
 
 	/**
@@ -134,11 +134,11 @@ public class SucursalRD {
 	 */
 	public SucursalJson getById(SucursalJson bj) {
 		Sucursal s = sudao.getById(bj.getCodigo());
-		SucursalJson ccJson = new SucursalJson();
-		ccJson.setCodigo(s.getCodigo());
-		ccJson.setDireccion(s.getDireccion());	
-		ccJson.setIdEmpresa(s.getEmpresa().getId());
-		return ccJson;
+		SucursalJson sJson = new SucursalJson();
+		sJson.setCodigo(s.getCodigo());
+		sJson.setDireccion(s.getDireccion());	
+		sJson.setIdEmpresa(s.getEmpresa().getId());
+		return sJson;
 	}
 
 	/**

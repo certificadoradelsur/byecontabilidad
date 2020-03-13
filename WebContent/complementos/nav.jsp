@@ -20,14 +20,17 @@
 				href="../cuenta/index.jsp" style="color: white;"><img
 					src="../../../images/banco.ico" alt="Icono" /> Cuenta Banco</a></li>
 			 <li class="nav-item"><a class="color nav-link"
-				href="../usuario/index.jsp" style="color: white;"><img
-					src="../../../images/user.ico" alt="Icono" /> Usuarios</a></li>		
+				href="../cliente/index.jsp" style="color: white;"><img
+					src="../../../images/cliente.ico" alt="Icono" /> Cliente</a></li>		
 			<li class="nav-item"><a class="color nav-link"
 				href="../clasificacion/index.jsp" style="color: white;"><img
 					src="../../../images/clasi.ico" alt="Icono" /> Clasificación</a></li>
 			<li class="nav-item"><a class="color nav-link"
 				href="../cuentaContable/index.jsp" style="color: white;"><img
 					src="../../../images/conta.ico" alt="Icono" /> Cuenta Contable</a></li>
+			<li class="nav-item"><a class="color nav-link"
+				href="../usuario/index.jsp" style="color: white;"><img
+					src="../../../images/user.ico" alt="Icono" /> Usuarios</a></li>				
 		</ul>
 
 

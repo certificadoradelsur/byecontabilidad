@@ -85,7 +85,7 @@ public class EmpresaRD {
 	 * @return json con total de empresas
 	 */
 	public List<EmpresaJson> getAll(Integer page, Integer limit, String razonSocial) {
-		List<EmpresaJson> lbj = new ArrayList<>();
+		List<EmpresaJson> lej = new ArrayList<>();
 		try {
 			Integer inicio = 0;
 			if (page.compareTo(1) == 0) {
@@ -97,21 +97,21 @@ public class EmpresaRD {
 			if (razonSocial == null) {
 				razonSocial = "";
 			}
-			List<Empresa> lcc = edao.getAll(inicio, limit, razonSocial);
-			for (int i = 0; i < lcc.size(); i++) {
-				EmpresaJson ccj = new EmpresaJson();
-				ccj.setId(lcc.get(i).getId());
-				ccj.setGiro(lcc.get(i).getGiro());
-				ccj.setRut(lcc.get(i).getRut());
-				ccj.setRazonSocial(lcc.get(i).getRazonSocial());
-				ccj.setRazonSocialOficina(ofidao.getById(lcc.get(i).getOficinaContable().getId()).getRazonSocial());
-				lbj.add(ccj);
+			List<Empresa> le = edao.getAll(inicio, limit, razonSocial);
+			for (int i = 0; i < le.size(); i++) {
+				EmpresaJson ej = new EmpresaJson();
+				ej.setId(le.get(i).getId());
+				ej.setGiro(le.get(i).getGiro());
+				ej.setRut(le.get(i).getRut());
+				ej.setRazonSocial(le.get(i).getRazonSocial());
+				ej.setRazonSocialOficina(ofidao.getById(le.get(i).getOficinaContable().getId()).getRazonSocial());
+				lej.add(ej);
 			}
 
 		} catch (Exception e) {
 			log.error("No se puede obtener la lista de empresas ", e);
 		}
-		return lbj;
+		return lej;
 	}
 
 	/**
@@ -149,14 +149,14 @@ public class EmpresaRD {
 	 */
 	public EmpresaJson getById(EmpresaJson bj) {
 		Empresa e = edao.getById(bj.getId());
-		EmpresaJson ccJson = new EmpresaJson();
-		ccJson.setId(e.getId());
-		ccJson.setGiro(e.getGiro());
-		ccJson.setRut(e.getRut());
-		ccJson.setRazonSocial(e.getRazonSocial());
-		ccJson.setIdOficianaContable(e.getOficinaContable().getId());
-		ccJson.setActivo(e.getActivo());
-		return ccJson;
+		EmpresaJson eJson = new EmpresaJson();
+		eJson.setId(e.getId());
+		eJson.setGiro(e.getGiro());
+		eJson.setRut(e.getRut());
+		eJson.setRazonSocial(e.getRazonSocial());
+		eJson.setIdOficianaContable(e.getOficinaContable().getId());
+		eJson.setActivo(e.getActivo());
+		return eJson;
 	}
 
 	/**

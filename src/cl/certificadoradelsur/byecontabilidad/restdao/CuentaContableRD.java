@@ -111,7 +111,7 @@ public class CuentaContableRD {
 	 */
 	public List<CuentaContableJson> getAll(Integer page, Integer limit, String glosaGeneral, Long idClaseCuenta,
 			Long idGrupoCuenta) {
-		List<CuentaContableJson> lbj = new ArrayList<>();
+		List<CuentaContableJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
 			if (page.compareTo(1) == 0) {
@@ -138,13 +138,13 @@ public class CuentaContableRD {
 				ccj.setImputable(lcc.get(i).isImputable());
 				ccj.setNombreClaseCuenta(clasedao.getById(lcc.get(i).getClaseCuenta().getId()).getNombre());
 				ccj.setNombreGrupoCuenta(grupodao.getById(lcc.get(i).getGrupoCuenta().getId()).getNombre());
-				lbj.add(ccj);
+				lcj.add(ccj);
 			}
 
 		} catch (Exception e) {
 			log.error("No se puede obtener la lista de cuenta contable ", e);
 		}
-		return lbj;
+		return lcj;
 	}
 
 	/**

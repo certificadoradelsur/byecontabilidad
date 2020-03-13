@@ -33,7 +33,13 @@ public class ClienteRD {
 	public String save(ClienteJson cj) {
 		try {
 			Cliente c = new Cliente();
-			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0 ) {
+			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getRut()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getDireccion()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getGiro()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getEmail()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getTelefono()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				c.setRut(cj.getRut());
@@ -59,10 +65,13 @@ public class ClienteRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll() {
+	public Long countAll(String rut) {
 		try {
+			if(rut==null) {
+				rut="";
+			}
 
-			return clidao.countAll();
+			return clidao.countAll(rut);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cliente ", e);
 			return 0L;
@@ -76,7 +85,7 @@ public class ClienteRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<ClienteJson> getAll(Integer page, Integer limit) {
+	public List<ClienteJson> getAll(Integer page, Integer limit, String rut) {
 		List<ClienteJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -85,8 +94,10 @@ public class ClienteRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-
-			List<Cliente> lc = clidao.getAll(inicio, limit);
+			if(rut==null) {
+				rut="";
+			}
+			List<Cliente> lc = clidao.getAll(inicio, limit, rut);
 			for (int i = 0; i < lc.size(); i++) {
 				ClienteJson cj = new ClienteJson();
 				cj.setId(lc.get(i).getId());
@@ -115,7 +126,13 @@ public class ClienteRD {
 	public String update(ClienteJson cj) {
 		try {
 			Cliente c = clidao.getById(cj.getId());
-			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0) {
+			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getRut()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getDireccion()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getGiro()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getEmail()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getTelefono()).compareTo(true) == 0
+					||Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				c.setRut(cj.getRut());
@@ -147,17 +164,17 @@ public class ClienteRD {
 		cJson.setId(c.getId());
 		cJson.setRut(c.getRut());
 		cJson.setNombre(c.getNombre());
-		cJson.setDireccion(cj.getDireccion());
-		cJson.setCiudad(cj.getCiudad());
-		cJson.setGiro(cj.getGiro());
-		cJson.setEmail(cj.getEmail());
-		cJson.setTelefono(cj.getTelefono());
-		cJson.setActivo(cj.isActivo());
+		cJson.setDireccion(c.getDireccion());
+		cJson.setCiudad(c.getCiudad());
+		cJson.setGiro(c.getGiro());
+		cJson.setEmail(c.getEmail());
+		cJson.setTelefono(c.getTelefono());
+		cJson.setActivo(c.isActivo());
 		return cJson;
 	}
 
 	/**
-	 * metodo elimina un Banco
+	 * metodo elimina un Cliente
 	 * 
 	 * @param pj json de Banco
 	 * @return mensaje de exito o error

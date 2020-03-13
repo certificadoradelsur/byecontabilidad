@@ -30,19 +30,19 @@ public class ClaseCuentaRD {
 	 */
 	public List<ClaseCuentaJson> getAllLista() {
 
-		List<ClaseCuentaJson> lgj = new ArrayList<>();
+		List<ClaseCuentaJson> lcj = new ArrayList<>();
 		try {
-			List<ClaseCuenta> g = clasedao.getLista();
-			for (int i = 0; i < g.size(); i++) {
-				ClaseCuentaJson gj = new ClaseCuentaJson();
-				gj.setId(g.get(i).getId());
-				gj.setNombre(g.get(i).getNombre());
-				lgj.add(gj);
+			List<ClaseCuenta> c = clasedao.getLista();
+			for (int i = 0; i < c.size(); i++) {
+				ClaseCuentaJson cj = new ClaseCuentaJson();
+				cj.setId(c.get(i).getId());
+				cj.setNombre(c.get(i).getNombre());
+				lcj.add(cj);
 			}
-			return lgj;
+			return lcj;
 		} catch (Exception e) {
 			log.error("No se pudo obtener la lista de clase cuenta ", e);
-			return lgj;
+			return lcj;
 		}
 
 	}
