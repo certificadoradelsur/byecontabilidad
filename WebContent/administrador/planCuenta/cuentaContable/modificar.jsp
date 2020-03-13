@@ -485,19 +485,36 @@
 			}
 		}
 
-		var submitJson = {
-				id :<%=request.getParameter("id")%>,
-				codigo : document.getElementById("codigo").value,	
-				idClaseCuenta : document.getElementById("claseCuenta").value,	
+
+	if (document.getElementById("analisis").checked) {
+			var submitJson = {
+				id : <%=request.getParameter("id")%> ,
+				codigo : document.getElementById("codigo").value,
+				idClaseCuenta : document.getElementById("claseCuenta").value,
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
 				glosaGeneral : document.getElementById("glosa").value,
 				descripcion : document.getElementById("descripcion").value,
 				//imputable:document.getElementById("imputable").checked,
-				analisis :document.getElementById("analisis").checked,
+				analisis : document.getElementById("analisis").checked,
+				conciliacion : document.getElementById("conciliacion").checked,
+				analizable : document.getElementById("analizable").value
+			}
+		} else {
+
+			var submitJson = {
+				id : <%=request.getParameter("id")%> ,
+				codigo : document.getElementById("codigo").value,
+				idClaseCuenta : document.getElementById("claseCuenta").value,
+				idGrupoCuenta : document.getElementById("grupoCuenta").value,
+				glosaGeneral : document.getElementById("glosa").value,
+				descripcion : document.getElementById("descripcion").value,
+				//imputable:document.getElementById("imputable").checked,
+				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
 				analizable : document.getElementById("analizable").value,
 				idBanco : document.getElementById("banco").value,
-			    idCuenta : document.getElementById("cuenta").value
+				idCuenta : document.getElementById("cuenta").value
+			}
 		}
 
 		$.post('/byeContabilidad/rest-services/private/cuentaContable/update',
@@ -512,39 +529,37 @@
 			alert('No se pudo modificar ' + ex);
 		});
 	}
-	
-	 $('#analisis').on('change', function(){
 
-         if(document.getElementById("analisis").checked){
-             $('#collapse1').collapse('show');
-            document.getElementById("conciliacion").disabled=true;
-         }else{
-             $('#collapse1').collapse('hide');
-             document.getElementById("conciliacion").disabled=false;
-             }
-     })
-     
-   	$('#conciliacion').on('change', function(){
+	$('#analisis').on('change', function() {
 
-         if(document.getElementById("conciliacion").checked){
-             $('#collapse2').collapse('show');
-             $('#collapse3').collapse('show');
-             document.getElementById("analisis").disabled=true;
-		     cargoBanco();
+		if (document.getElementById("analisis").checked) {
+			$('#collapse1').collapse('show');
+			document.getElementById("conciliacion").disabled = true;
+		} else {
+			$('#collapse1').collapse('hide');
+			document.getElementById("conciliacion").disabled = false;
+		}
+	})
 
-   	}else{
-             $('#collapse2').collapse('hide');
-         	 $('#collapse3').collapse('hide');
-             document.getElementById("analisis").disabled=false;
-			}
-     })
-	
-	
+	$('#conciliacion').on('change', function() {
+
+		if (document.getElementById("conciliacion").checked) {
+			$('#collapse2').collapse('show');
+			$('#collapse3').collapse('show');
+			document.getElementById("analisis").disabled = true;
+			cargoBanco();
+
+		} else {
+			$('#collapse2').collapse('hide');
+			$('#collapse3').collapse('hide');
+			document.getElementById("analisis").disabled = false;
+		}
+	})
 
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
-	
+
 	$("#analisis").trigger('change');
 	$("#grupoCuenta").trigger('change');
 	$("#claseCuenta").trigger('change');

@@ -21,13 +21,15 @@ import javax.persistence.Table;
 @Table(name = "cliente")
 @SequenceGenerator(name = "seq_cliente", sequenceName = "seq_cliente")
 @NamedQueries({ 
-	@NamedQuery(name = "Cliente.getAll", query = "SELECT c FROM Cliente  c  where c.activo = true "),
-	@NamedQuery(name = "Cliente.countAll", query = "SELECT count(C.id) FROM Cliente c where c.activo = true") })
+	@NamedQuery(name = "Cliente.getAll", query = "SELECT c FROM Cliente  c  "),
+	@NamedQuery(name = "Cliente.countAll", query = "SELECT count(C.id) FROM Cliente c"),
+	@NamedQuery(name = "Cliente.getAllLista", query = "SELECT c FROM Cliente c  where c.activo = true ")
+})
 
 public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 884233189837672260L;
-	private String id;
+	private Long id;
 	private String rut;
 	private String nombre;
 	private String direccion;
@@ -39,11 +41,11 @@ public class Cliente implements Serializable {
 
 	@Id
 	@GeneratedValue(generator = "seq_cliente", strategy = GenerationType.AUTO)
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -49,7 +49,7 @@ public class ClienteDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Cliente> getAll(Integer inicio, Integer fin, String nombre) {
+	public List<Cliente> getAll(Integer inicio, Integer fin) {
 		Query query = em.createNamedQuery("Cliente.getAll");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
