@@ -46,7 +46,7 @@
 </head>
 <body>
 
-<%@ include file = "../../../complementos/nav.jsp" %>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<div class="container">
@@ -59,9 +59,15 @@
 				<div class="form-group">
 					<div class="col-1"></div>
 					<label for="colFormLabel" class="col-sm-2 col-form-label">Número</label>
-					<input type="number" id="numTransaccion" name="numTransaccion"
-						placeholder="Ingrese Número" required="required" class="on"
-						 />
+					<input type="number" id="numero" name="numero"
+						placeholder="Ingrese Número" required="required" class="on" />
+				</div>
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Fecha</label>
+					<input type="date" id="fecha" name="fecha" class="in"
+						required="required" />
 				</div>
 
 				<div class="form-group">
@@ -72,64 +78,9 @@
 						required="required" class="on" />
 				</div>
 
-				<div class="form-group">
-					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">Fecha</label>
-					<input type="date" id="fecha" name="fecha" class="in"
-						required="required" />
-				</div>
-				<div class="form-group">
-					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						Comprobante</label> <input type="number" id="numComprobante"
-						name="numComprobante" class="in" placeholder="Ingrese Número"
-						required="required" min="0" pattern="^[0-9]+" />
-				</div>
-
-				<div class="form-group">
-					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">Glosa</label>
-					<input type="text" id="glosa" class="col-sm-5" name="glosa"
-						class="in" placeholder="Ingrese glosa" required="required" />
-				</div>
-
-				<div class="form-group">
-					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">N°
-						Documento</label> <input type="number" id="numDocumento"
-						name="numDocumento" class="in" placeholder="Ingrese Número"
-						required="required" min="0" pattern="^[0-9]+" />
-				</div>
-
-				<div class="form-group">
-					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">Monto</label>
-					<input type="number" id="monto" name="monto" class="in"
-						placeholder="Ingrese monto" required="required" min="0"
-						pattern="^[0-9]+" />
-				</div>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp; &nbsp;Banco</label>
-					<div class="col-3">
-						<select class="browser-default custom-select" id="banco"
-							required="required">
-							<option value="1">Estado</option>
-						</select>
-					</div>
-				</div>
-				<div class="row">
-					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp; &nbsp;N° cuenta</label>
-					<div class="col-3">
-						<select class="browser-default custom-select" id="cuenta"
-							required="required">
-						</select>
-					</div>
-				</div>
-				<div class="row">
-					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp; &nbsp;Movimiento</label>
+						&nbsp; &nbsp;Tipo</label>
 					<div class="col-3">
 						<select class="browser-default custom-select" id="tipoMovimiento"
 							required="required">
@@ -139,34 +90,23 @@
 						</select>
 					</div>
 				</div>
+				<br>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp; &nbsp;Documento</label>
+						&nbsp;&nbsp; Cuenta Contable</label>
 					<div class="col-3">
-						<select class="browser-default custom-select" id="tipoDocumento"
-							required="required">
-						</select>
-					</div>
-				</div>
-				<div class="row">
-					<label for="colFormLabel" class="col-sm-2 col-form-label">
-						&nbsp;&nbsp; Estado</label>
-					<div class="col-3">
-						<select class="browser-default custom-select" id="estado"
-							required="required">
-							<option selected value="false">Pendiente</option>
-							<option value="true">Al día</option>
+						<select class="browser-default custom-select" id="cuentaContable">
 						</select>
 					</div>
 				</div>
 
+				<br> <br>
 
 				<div class="row">
-
-						<div class="col-xs-6 col-md-2">
-							<button type="button" class="btn btn-primary btn-lg btn-block"
-								onclick="Save()">Guardar</button>
-						</div>
+					<div class="col-xs-6 col-md-2">
+						<button type="button" class="btn btn-primary btn-lg btn-block"
+							onclick="Save()">Guardar</button>
+					</div>
 
 					<div class="col-xs-6 col-md-2">
 						<button class=" btt btn btn-primary btn-lg btn-block"
@@ -178,183 +118,55 @@
 		</form>
 	</div>
 
-	<input type="hidden" name="numCuenta" id="numCuenta" />
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						$("#banco").select2();
-						numT();
-						$("#tipoMovimiento").select2();
-						$("#tipoDocumento").select2();
-						$("#cuenta").select2();
-						$("#estado").select2();
-					});
+$(document).ready(function() {
+	$("#tipoMovimiento").select2();
+	$("#cuentaContable").select2();
+	numero();
 
-	function numT() {
-		$
-				.post(
-						'/byeContabilidad/rest-services/private/transaccion/getByT')
-				.done(function(data) {
-					document.getElementById("numTransaccion").value = data + 1;
-				}).fail(function(jqxhr, settings, ex) {
-				});
-	}
-
-	function Save() {
-		var bool = $('.on').toArray().some(function(el) {
-			return $(el).val().length < 1
-		});
-
-		if (bool) {
-			alert("Todos los campos deben estar llenos");
-			return;
-		}
-		
- 
-		var submitJson = {
-			numTransaccion : document.getElementById("numTransaccion").value,
-			glosaTransaccion : document.getElementById("glosaTransaccion").value,
-			
-			
-			numComprobante : document.getElementById("numComprobante").value,
-			numDocumento : document.getElementById("numDocumento").value,
-			glosa : document.getElementById("glosa").value,
-			monto : document.getElementById("monto").value,
-			tipoMovimiento : document.getElementById("tipoMovimiento").value,
-			tipoDocumento : document.getElementById("tipoDocumento").value,
-			estado : document.getElementById("estado").value,
-			fecha : document.getElementById("fecha").value,
-			idCuenta : document.getElementById("cuenta").value,
-			idUsuario : document.getElementById("idUsuario").value,
-		}
-
-		$.post('/byeContabilidad/rest-services/private/transaccion/add',
-				JSON.stringify(submitJson)).done(function(data) {
-			if (data == 'OK') {
-				alert('Se guardo exitosamente la transacción');
-				grid.reload();
-				limpiaT();
-				location.href = "index.jsp";
-			} else {
-				alert(data);
-			}
-
-		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo guardar el comprobante contable ' + ex);
-		});
-
-	}
-
-	back.addEventListener("click", function() {
-		window.history.back();
-	}, false);
-
-	var submitJson = {
-		idUsuario : document.getElementById("idUsuario").value
-	}
-
-	$.post('/byeContabilidad/rest-services/private/banco/getLista', JSON
-			.stringify(submitJson),
+	var varAnalisis;
+	var varConciliacion;
+	$.post('/byeContabilidad/rest-services/private/cuentaContable/getLista',
 			function(res, code) {
 				var str;
-				for (var i = 0, len = res.length; i < len; i++) {
-					str += "<option value="+res[i].id+">" + res[i].nombre
-							+ "</option>";
+				for (var i = 0; i < res.length; i++) {
+					str += "<option value="+res[i].id+"/"+res[i].analisis+"/"+res[i].conciliacion+">" + res[i].descripcion
+					+"</option>";
 				}
-				document.getElementById("banco").innerHTML = str;
+				
+				document.getElementById("cuentaContable").innerHTML = str;
+				var analisis= document.getElementById("cuentaContable").value.split("/");
+				varAnalisis = analisis [1];
+				var coinciliacion = document.getElementById("cuentaContable").value.split("/");
+				varConciliacion = coinciliacion [2];
 			}, "json");
+	
 
-	$('#banco') .on( 'change',
-					function() {
-						var submitJson = {
-							idBanco : document.getElementById("banco").value
-						}
 
-						$ .post( '/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].numCuenta
-														+ "</option>";
-											}
-											document.getElementById("cuenta").innerHTML = str;
-										}, "json");
-					});
+});
 
-	var tipoDocumentoIngreso = [ {
-		id : 'DEPOSITO',
-		text : 'Depósito (+)'
-	}, {
-		id : 'CARGO',
-		text : 'Cargo (+)'
-	}, {
-		id : 'AJUSTE INGRESO',
-		text : 'Ajuste (+)'
-	}, ]
-
-	var tipoDocumentoEgreso = [ {
-		id : 'CHEQUE',
-		text : 'Cheque (-)'
-	}, {
-		id : 'ABONO',
-		text : 'Abono (-)'
-	}, {
-		id : 'AJUSTE EGRESO',
-		text : 'Ajuste (-)'
-	}, ]
-	var tipoDocumentoTraspaso = [ {
-		id : 'CHEQUE',
-		text : 'Cheque (-)'
-	}, {
-		id : 'CARGO',
-		text : 'Cargo (+)'
-	}, {
-		id : 'DEPOSITO',
-		text : 'Depósito (+)'
-	}, {
-		id : 'ABONO',
-		text : 'Abono (-)'
-	}, {
-		id : 'AJUSTE INGRESO',
-		text : 'Ajuste Ingreso (+)'
-	}, {
-		id : 'AJUSTE EGRESO',
-		text : 'Ajuste Egreso (-)'
-	}, ]
-
-	$('#tipoMovimiento').on('change', function() {
-		switch ($(this).val()) {
-		case 'INGRESO':
-			$('#tipoDocumento').html("");
-			$('#tipoDocumento').select2({
-				data : tipoDocumentoIngreso
-			});
-			break;
-		case 'EGRESO':
-			$('#tipoDocumento').html("");
-			$('#tipoDocumento').select2({
-				data : tipoDocumentoEgreso
-			});
-			break;
-
-		case 'TRASPASO':
-			$('#tipoDocumento').html("");
-			$('#tipoDocumento').select2({
-				data : tipoDocumentoTraspaso
-			});
-			break;
-		default:
-			$('#tipoDocumento').html("");
-			break;
+$('#cuentaContable').on('change',function() {
+				var analisis= document.getElementById("cuentaContable").value.split("/");
+				varAnalisis = analisis [1];
+				var coinciliacion = document.getElementById("cuentaContable").value.split("/");
+				varConciliacion = coinciliacion [2];
+				//alert(varAnalisis+" "+varConciliacion);
+				
+		if(varAnalisis==true && varConciliacion==false){
+			
 		}
-	})
-	$("#tipoMovimiento").trigger('change');
-	$("#banco").trigger('change');
+});
+				
+
+function numero() {
+	$.post('/byeContabilidad/rest-services/private/comprobanteContable/getMaxNumero')
+			.done(function(data) {
+				document.getElementById("numero").value = data + 1;
+			}).fail(function(jqxhr, settings, ex) {
+		});
+}
 </script>
 </html>

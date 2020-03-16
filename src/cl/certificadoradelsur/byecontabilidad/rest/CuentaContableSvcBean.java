@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
 import cl.certificadoradelsur.byecontabilidad.json.CuentaContableJson;
 import cl.certificadoradelsur.byecontabilidad.restdao.CuentaContableRD;
 
@@ -62,6 +63,20 @@ public class CuentaContableSvcBean implements CuentaContableSvc {
 		CuentaContableJson ccj = gson.fromJson(datos, CuentaContableJson.class);
 		String respuesta = gson.toJson(cuentard.eliminar(ccj), new TypeToken<String>() {
 		}.getType());
+		return Response.ok(respuesta).build();
+	}
+	
+	@Override
+	public Response getLista() {
+		Gson gson = new GsonBuilder().create();
+		List<CuentaContableJson> lbj = cuentard.getAllLista();
+		String json = gson.toJson(lbj, new TypeToken<List<CuentaContableJson>>() {}.getType());
+		return Response.ok(json).build();
+	}
+	
+	@Override
+	public Response getByCodigo() {
+		Long respuesta = cuentard.getByCodigo();
 		return Response.ok(respuesta).build();
 	}
 

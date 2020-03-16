@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 
 /**
@@ -123,7 +124,7 @@ public class CuentaContableDAO {
 	}
 
 	/**
-	 * busca cuentaCOntable por codigo
+	 * busca cuentaContable por codigo
 	 * 
 	 * @param idTransaccion
 	 * @return
@@ -139,5 +140,25 @@ public class CuentaContableDAO {
 			return null;
 		}
 	}
+	
+	/**
+	 * Obtiene todas las Cuentas Contables
+	 * @return la lista de Cuentas Contables
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CuentaContable> getLista() {
+		Query query=em.createNamedQuery("CuentaContable.getAllLista");
+		return query.getResultList();
+	}
 
+	/**
+	 * Funcion que trae el codigo más alto
+	 * 
+	 * @return max codigo
+	 */
+	public Long getByCodigo() {
+		Query query = em.createNamedQuery("CuentaContable.maxCodigo");
+		return (Long) query.getSingleResult();
+	}
+	
 }

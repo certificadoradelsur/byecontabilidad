@@ -244,4 +244,32 @@ public class CuentaContableRD {
 		}
 	}
 
+	/*
+	 * funcion que trae todas las cuenta contable para llenar select
+	 * 
+	 */
+	public List<CuentaContableJson> getAllLista() {
+
+		List<CuentaContableJson> lcj = new ArrayList<>();
+		try {
+			List<CuentaContable> c = cuentadao.getLista();
+			for (int i = 0; i < c.size(); i++) {
+				CuentaContableJson cj = new CuentaContableJson();
+				cj.setId(c.get(i).getId());
+				cj.setDescripcion(c.get(i).getDescripcion());
+				cj.setConciliacion(c.get(i).isConciliacion());
+				cj.setAnalisis(c.get(i).isAnalisis());
+				lcj.add(cj);
+			}
+			return lcj;
+		} catch (Exception e) {
+			log.error("No se pudo obtener la lista de cuenta contable ", e);
+			return lcj;
+		}
+
+	}
+	
+	public Long getByCodigo() {
+		return cuentadao.getByCodigo();	
+	}
 }

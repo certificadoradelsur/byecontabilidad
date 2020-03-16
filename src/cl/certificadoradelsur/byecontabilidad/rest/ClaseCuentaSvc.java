@@ -19,7 +19,7 @@ public interface ClaseCuentaSvc {
     /**
      * funcion que obtiene los claseCuenta
      * @param datos
-     * @return grupoCuenta que seran mostrados en el select
+     * @return clase cuenta que seran mostrados en el select
      */
 	@POST
 	@Path("/getLista")

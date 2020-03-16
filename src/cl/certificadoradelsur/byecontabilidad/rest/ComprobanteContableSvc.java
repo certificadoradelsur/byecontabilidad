@@ -10,14 +10,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Interfaz que declara los servicios rest de Cuenta Contable
+ * Interfaz que declara los servicios rest de comprobante Contable
  * 
  * @author juan
  *
  */
 @Local
-@Path("/private/cuentaContable")
-public interface CuentaContableSvc {
+@Path("/private/comprobanteContable")
+public interface ComprobanteContableSvc {
 	/**
 	 * Funcion que almacena los datos
 	 * 
@@ -30,7 +30,7 @@ public interface CuentaContableSvc {
 	Response add(String datos);
 
 	/**
-	 * Funcion para traer todas las Cuentas
+	 * Funcion para traer todas los comprobantes Contables
 	 * 
 	 * @param
 	 * @return lista de Cuentas
@@ -38,10 +38,14 @@ public interface CuentaContableSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idClaseCuenta") Long idClaseCuenta, @QueryParam("idGrupoCuenta") Long idGrupoCuenta);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin
+			//, @QueryParam("glosaGeneral") String glosaGeneral
+			//, @QueryParam("idClaseCuenta") Long idClaseCuenta
+			//, @QueryParam("idGrupoCuenta") Long idGrupoCuenta
+			);
 	
 	/**
-	 * Funcion para modificar una Cuenta
+	 * Funcion para modificar un comprobante Contable
 	 * 
 	 * @param id
 	 * @return Mensaje de exito o error
@@ -52,9 +56,9 @@ public interface CuentaContableSvc {
 	Response update(String datos);
 
 	/**
-	 * Funcion para buscar Cuenta por id
+	 * Funcion para buscar comprobante Contable por id
 	 * 
-	 * @param id Cuenta
+	 * @param id comprobante Contable
 	 * @return json de salida
 	 */
 	@POST
@@ -63,7 +67,7 @@ public interface CuentaContableSvc {
 	Response getById(String datos);
 
 	/**
-	 * Funcion que elimina una Cuenta
+	 * Funcion que elimina un comprobante Contable
 	 * 
 	 * @param datos el json de entrada
 	 * @return json de salida
@@ -73,23 +77,14 @@ public interface CuentaContableSvc {
 	@Produces("application/json")
 	Response eliminar(String datos);
 		
-    /**
-     * funcion que obtiene los cuenta contable
-     * @param datos
-     * @return cuetna contable que seran mostrados en el select
-     */
-	@POST
-	@Path("/getLista")
-	@Produces("application/json")
-	Response getLista();
-
 	/**
 	 * Funcion para buscar el codigo más grande de cuenta contable
 	 * @return max codigo
 	 */
 	@POST
-	@Path("/getByCodigo")
+	@Path("/getMaxNumero")
 	@Produces("application/json")
-	Response getByCodigo();
+	Response getMaxNumero();
+	
 	
 }

@@ -129,6 +129,11 @@
 
 					});
 
+	function agregar() {
+		location.href = "agregar.jsp";
+	}
+	
+	
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la transacción? Perdera todos los movimientos contenidos en ella')) {
 			var submitJson = {

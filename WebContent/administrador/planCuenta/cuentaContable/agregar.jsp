@@ -177,6 +177,7 @@
 		$("#descripcion").select2();
 		$("#banco").select2({width:'200'});
 		//$("#cuenta").select2({width:'200'});
+		codigo();
 		
 		 $('#analisis').on('change', function(){
 
@@ -274,16 +275,13 @@
 										}, "json");
 					});
 
-	$('#grupoCuenta')
-			.on('change',function() {
+	$('#grupoCuenta').on('change',function() {
 						var submitJson = {
 							idGrupoCuenta : document
 									.getElementById("grupoCuenta").value
 						}
 
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
+						$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
 										JSON.stringify(submitJson),
 										function(res, code) {
 											var str="<option>Sin descripción</option>";                                           
@@ -388,6 +386,15 @@
 		window.history.back();
 	}, false);
 
+	
+	function codigo() {
+		$.post('/byeContabilidad/rest-services/private/cuentaContable/getByCodigo')
+				.done(function(data) {
+					document.getElementById("codigo").value = data + 1;
+				}).fail(function(jqxhr, settings, ex) {
+			});
+	}
+	
 	$("#banco").trigger('change');
 	$("#analisis").trigger('change');
 	$("#claseCuenta").trigger('change');
