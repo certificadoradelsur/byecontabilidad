@@ -256,8 +256,13 @@ public class CuentaContableRD {
 			for (int i = 0; i < c.size(); i++) {
 				CuentaContableJson cj = new CuentaContableJson();
 				cj.setId(c.get(i).getId());
+				cj.setGlosaGeneral(c.get(i).getGlosaGeneral());
 				cj.setDescripcion(c.get(i).getDescripcion());
 				cj.setConciliacion(c.get(i).isConciliacion());
+				if(c.get(i).isConciliacion()) {
+				cj.setIdBanco(c.get(i).getBanco().getId());
+				cj.setIdCuenta(c.get(i).getCuenta().getId());
+				}
 				cj.setAnalisis(c.get(i).isAnalisis());
 				lcj.add(cj);
 			}

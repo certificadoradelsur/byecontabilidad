@@ -118,19 +118,13 @@ $(document).ready(function () {
 	
 	var datos = {id: "<%=request.getParameter("id")%>",};
 
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/cuenta/getById',
+						$.post('/byeContabilidad/rest-services/private/cuenta/getById',
 										JSON.stringify(datos))
-								.done(
-										function(data) {
+								.done(function(data) {
 											document.getElementById("banco").value = data.idBanco;
-											document
-													.getElementById("numCuenta").value = data.numCuenta;
-											document
-													.getElementById("nombreEjecutivo").value = data.nombreEjecutivo;
-											document
-													.getElementById("saldoInicial").value = data.saldoInicial;
+											document.getElementById("numCuenta").value = data.numCuenta;
+											document.getElementById("nombreEjecutivo").value = data.nombreEjecutivo;
+											document.getElementById("saldoInicial").value = data.saldoInicial;
 										})
 								.fail(
 										function(jqxhr, settings, ex) {

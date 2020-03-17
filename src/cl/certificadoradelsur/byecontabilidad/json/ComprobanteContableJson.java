@@ -14,7 +14,9 @@ public class ComprobanteContableJson {
 	private String fecha;
 	private String tipo;
 	private Long idCuentaContable;
-	private String DescripcionCuentaContable;
+	private String descripcionCuentaContable;
+
+	
 	public Long getId() {
 		return id;
 	}
@@ -52,11 +54,12 @@ public class ComprobanteContableJson {
 		this.idCuentaContable = idCuentaContable;
 	}
 	public String getDescripcionCuentaContable() {
-		return DescripcionCuentaContable;
+		return descripcionCuentaContable;
 	}
 	public void setDescripcionCuentaContable(String descripcionCuentaContable) {
-		DescripcionCuentaContable = descripcionCuentaContable;
+		this.descripcionCuentaContable = descripcionCuentaContable;
 	}
+
 
 	
 }
