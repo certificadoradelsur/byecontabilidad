@@ -117,6 +117,7 @@ $(document).ready(function() {
 			idUsuario : document.getElementById("idUsuario").value
 		}
 
+		
 		$.post('/byeContabilidad/rest-services/private/empresa/add',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {

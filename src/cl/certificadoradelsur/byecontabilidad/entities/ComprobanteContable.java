@@ -40,6 +40,8 @@ public class ComprobanteContable implements Serializable {
 	private Timestamp fecha;
 	private String tipo;
 	private CuentaContable cuentaContable;
+	private Long debe;
+	private Long haber;
 
 	@Id
 	@GeneratedValue(generator = "seq_comprobante_contable", strategy = GenerationType.AUTO)
@@ -95,5 +97,25 @@ public class ComprobanteContable implements Serializable {
 	public void setCuentaContable(CuentaContable cuentaContable) {
 		this.cuentaContable = cuentaContable;
 	}
+
+	@Column(name = "debe", nullable = true)
+	public Long getDebe() {
+		return debe;
+	}
+
+	public void setDebe(Long debe) {
+		this.debe = debe;
+	}
+	@Column(name = "haber", nullable = true)
+	public Long getHaber() {
+		return haber;
+	}
+
+	public void setHaber(Long haber) {
+		this.haber = haber;
+	}
+	
+	
+	
 
 }

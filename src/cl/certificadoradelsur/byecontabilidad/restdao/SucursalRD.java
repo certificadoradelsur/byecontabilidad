@@ -8,11 +8,12 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.SucursalDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Sucursal;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.SucursalJson;
-import cl.certificadoradelsur.utils.Constantes;
-import cl.certificadoradelsur.utils.Utilidades;
+import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
+import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
 /**
  * Clase que hace el nexo entre los servicios rest y el patron dao
@@ -27,6 +28,8 @@ public class SucursalRD {
 	private SucursalDAO sudao;
 	@Inject
 	private EmpresaDAO edao;
+	@Inject
+	private UsuarioDAO udao;
 
 	/**
 	 * funcion que almacena
@@ -56,12 +59,12 @@ public class SucursalRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String nombreEmpresa) {
+	public Long countAll(String nombreEmpresa, String idUsuario) {
 		try {
 			if(nombreEmpresa==null) {
 				nombreEmpresa="";
 			}
-			return sudao.countAll(nombreEmpresa);
+			return sudao.countAll(nombreEmpresa,udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de sucursal ", e);
 			return 0L;
@@ -75,7 +78,7 @@ public class SucursalRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<SucursalJson> getAll(Integer page, Integer limit, String nombreEmpresa) {
+	public List<SucursalJson> getAll(Integer page, Integer limit, String nombreEmpresa, String idUsuario) {
 		List<SucursalJson> lsj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -88,7 +91,7 @@ public class SucursalRD {
 			if(nombreEmpresa==null) {
 				nombreEmpresa="";
 			}
-			List<Sucursal> ls = sudao.getAll(inicio, limit, nombreEmpresa);
+			List<Sucursal> ls = sudao.getAll(inicio, limit, nombreEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < ls.size(); i++) {
 				SucursalJson sj = new SucursalJson();
 				sj.setCodigo(ls.get(i).getCodigo());

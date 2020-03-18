@@ -130,8 +130,8 @@
 														width : 100
 													},
 													{
-														field : 'activo',
-														title : 'Activo',
+														field : 'razonSocialEmpresa',
+														title : 'Empresa',
 														width : 100
 													},
 													{

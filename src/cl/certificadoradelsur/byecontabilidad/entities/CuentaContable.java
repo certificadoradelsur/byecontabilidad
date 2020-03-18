@@ -25,10 +25,10 @@ import javax.persistence.Table;
 @Table(name = "cuenta_contable")
 @SequenceGenerator(name = "seq_cuenta_contable", sequenceName = "seq_cuenta_contable")
 @NamedQueries({
-		@NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) ORDER BY c.claseCuenta.id"),
-		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta)"),
+		@NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) ORDER BY c.claseCuenta.id"),
+		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta)"),
 		@NamedQuery(name = "CuentaContable.getByCodigo", query = "SELECT c FROM CuentaContable c where  c.codigo= :codigo"),
-		@NamedQuery(name = "CuentaContable.getAllLista", query = "SELECT c FROM CuentaContable c"), 
+		@NamedQuery(name = "CuentaContable.getAllLista", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable"), 
 		@NamedQuery(name = "CuentaContable.maxCodigo", query = "SELECT MAX(c.codigo) FROM CuentaContable c")
 		})
 
@@ -44,9 +44,9 @@ public class CuentaContable implements Serializable {
 	private String glosaGeneral;
 	private ClaseCuenta claseCuenta;
 	private GrupoCuenta grupoCuenta;
-	private String analizable;
 	private Cuenta cuenta;
 	private Banco banco;
+	private Empresa empresa;
 
 	@Id
 	@GeneratedValue(generator = "seq_cuenta_contable", strategy = GenerationType.AUTO)
@@ -132,15 +132,6 @@ public class CuentaContable implements Serializable {
 		this.claseCuenta = claseCuenta;
 	}
 
-	@Column(name = "analizable", nullable = true)
-	public String getAnalizable() {
-		return analizable;
-	}
-
-	public void setAnalizable(String analizable) {
-		this.analizable = analizable;
-	}
-
 	@ManyToOne
 	@JoinColumn(name = "id_cuenta", nullable = true)
 	public Cuenta getCuenta() {
@@ -160,6 +151,17 @@ public class CuentaContable implements Serializable {
 	public void setBanco(Banco banco) {
 		this.banco = banco;
 	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_empresa", nullable = true)
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
 	
 
 

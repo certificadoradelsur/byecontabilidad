@@ -19,6 +19,7 @@ import cl.certificadoradelsur.byecontabilidad.restdao.CuentaContableRD;
 public class CuentaContableSvcBean implements CuentaContableSvc {
 	@Inject
 	private CuentaContableRD cuentard;
+	
 
 	@Override
 	public Response add(String datos) {
@@ -31,11 +32,11 @@ public class CuentaContableSvcBean implements CuentaContableSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
+	public Response list(Integer inicio, Integer fin, String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<CuentaContableJson> lccj = cuentard.getAll(inicio, fin,glosaGeneral, idClaseCuenta, idGrupoCuenta);
+		List<CuentaContableJson> lccj = cuentard.getAll(inicio, fin,glosaGeneral, idClaseCuenta, idGrupoCuenta,idUsuario);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<CuentaContableJson>>() {
-		}.getType()) + ", \"total\": " + cuentard.countAll(glosaGeneral, idClaseCuenta,idGrupoCuenta) + "}";
+		}.getType()) + ", \"total\": " + cuentard.countAll(glosaGeneral, idClaseCuenta,idGrupoCuenta,idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -67,9 +68,10 @@ public class CuentaContableSvcBean implements CuentaContableSvc {
 	}
 	
 	@Override
-	public Response getLista() {
+	public Response getLista(String datos) {
 		Gson gson = new GsonBuilder().create();
-		List<CuentaContableJson> lbj = cuentard.getAllLista();
+		CuentaContableJson ccj = gson.fromJson(datos, CuentaContableJson.class);
+		List<CuentaContableJson> lbj = cuentard.getAllLista(ccj);
 		String json = gson.toJson(lbj, new TypeToken<List<CuentaContableJson>>() {}.getType());
 		return Response.ok(json).build();
 	}

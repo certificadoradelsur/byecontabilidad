@@ -34,7 +34,7 @@ public class EmpresaDAO {
 	 * 
 	 * @return el total de Empresas
 	 */
-	public Long countAll(String razonSocial) {
+	public Long countAll(String razonSocial, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Empresa.countAll");
 		if (razonSocial.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreRazonSocial", true);
@@ -42,6 +42,7 @@ public class EmpresaDAO {
 			query.setParameter("ignoreRazonSocial", false);
 		}
 		query.setParameter("razonSocial", "%" + razonSocial.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		return (Long) query.getSingleResult();
 	}
 
@@ -53,7 +54,7 @@ public class EmpresaDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Empresa> getAll(Integer inicio, Integer fin, String razonSocial) {
+	public List<Empresa> getAll(Integer inicio, Integer fin, String razonSocial, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Empresa.getAll");
 		if (razonSocial.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreRazonSocial", true);
@@ -61,6 +62,7 @@ public class EmpresaDAO {
 			query.setParameter("ignoreRazonSocial", false);
 		}
 		query.setParameter("razonSocial", "%" + razonSocial.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();
@@ -112,8 +114,9 @@ public class EmpresaDAO {
 	 * @return la lista de empresas
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Empresa> getLista() {
+	public List<Empresa> getLista(Long idOficinaContable) {
 		Query query=em.createNamedQuery("Empresa.getAllLista");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
 }

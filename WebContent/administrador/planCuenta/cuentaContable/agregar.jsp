@@ -81,9 +81,17 @@
 						placeholder="Ingrese Glosa" required="required" />
 				</div>
 				<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+					</div>
+				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp;&nbsp; Clase Cuenta</label>
-					<div class="col-4">
+					<div class="col-3">
 						<select class="browser-default custom-select" id="claseCuenta">
 							<option value="1">Activo</option>
 						</select>
@@ -92,7 +100,7 @@
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp;&nbsp; Grupo Cuenta</label>
-					<div class="col-4">
+					<div class="col-3">
 						<select class="browser-default custom-select" id="grupoCuenta">
 							<option value="1">Activo circulante</option>
 						</select>
@@ -101,7 +109,7 @@
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp;&nbsp; Descripción</label>
-					<div class="col-4">
+					<div class="col-3">
 						<select class="browser-default custom-select" id="descripcion">
 							<option value=" "></option>
 						</select>
@@ -127,13 +135,7 @@
 						</div>
 					</div>
 				</div>
-					<br>					
-				<div class="row collapse" id="collapse1">
-					<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;Analizable</label>
-					<input type="text" id="analizable" name="analizable"
-						placeholder="Ingrese rut" required="required" />
-				</div>
-				
+				<br>							
 				<div class="row collapse" id="collapse2">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp; &nbsp;Banco</label>
@@ -172,20 +174,19 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#claseCuenta").select2(),
+		$("#claseCuenta").select2({width:'200'}),
 		$("#grupoCuenta").select2();
 		$("#descripcion").select2();
 		$("#banco").select2({width:'200'});
-		//$("#cuenta").select2({width:'200'});
+		$("#empresa").select2({width:'200'});
+		$("#cuenta").select2({width:'200'});
 		codigo();
 		
 		 $('#analisis').on('change', function(){
 
 	         if(document.getElementById("analisis").checked){
-	             $('#collapse1').collapse('show');
 	            document.getElementById("conciliacion").disabled=true;
 	         }else{
-	             $('#collapse1').collapse('hide');
 	             document.getElementById("conciliacion").disabled=false;
 	             }
 	     })
@@ -229,7 +230,18 @@
 						document.getElementById("banco").innerHTML = str;
 					}, "json");
 
-		 	 
+			var submitJson = {
+					idUsuario : document.getElementById("idUsuario").value}
+					
+					$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+							function(res, code) {
+								var str;
+								for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">" + res[i].razonSocial
+											+ "</option>";
+								}
+								document.getElementById("empresa").innerHTML = str;
+							}, "json");	 	 
  })
 					
 			$('#banco').on('change',
@@ -363,9 +375,9 @@
 			//imputable : document.getElementById("imputable").checked,
 			analisis : document.getElementById("analisis").checked,
 			conciliacion : document.getElementById("conciliacion").checked,
-			analizable : document.getElementById("analizable").value,
 			idBanco : document.getElementById("banco").value,
-		    idCuenta : document.getElementById("cuenta").value
+		    idCuenta : document.getElementById("cuenta").value,
+		    idEmpresa : document.getElementById("empresa").value
 		}
 
 		$.post('/byeContabilidad/rest-services/private/cuentaContable/add',

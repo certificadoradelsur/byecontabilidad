@@ -34,7 +34,7 @@ public class CuentaContableDAO {
 	 * 
 	 * @return el total de CuentaContable
 	 */
-	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta) {
+	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta,Long idOficinaContable) {
 		Query query = em.createNamedQuery("CuentaContable.countAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -51,6 +51,7 @@ public class CuentaContableDAO {
 		} else {
 			query.setParameter("ignoreIdGrupoCuenta", false);
 		}
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idClaseCuenta", idClaseCuenta);
 		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
@@ -68,7 +69,7 @@ public class CuentaContableDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<CuentaContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Long idClaseCuenta,
-			Long idGrupoCuenta) {
+			Long idGrupoCuenta,Long idOficinaContable) {
 		Query query = em.createNamedQuery("CuentaContable.getAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -85,6 +86,7 @@ public class CuentaContableDAO {
 		} else {
 			query.setParameter("ignoreIdGrupoCuenta", false);
 		}
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idClaseCuenta", idClaseCuenta);
 		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
@@ -146,8 +148,9 @@ public class CuentaContableDAO {
 	 * @return la lista de Cuentas Contables
 	 */
 	@SuppressWarnings("unchecked")
-	public List<CuentaContable> getLista() {
+	public List<CuentaContable> getLista(Long idOficinaContable ) {
 		Query query=em.createNamedQuery("CuentaContable.getAllLista");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
 

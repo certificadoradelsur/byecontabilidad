@@ -125,7 +125,7 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/cuentaContable/getAll',
+											dataSource : "/byeContabilidad/rest-services/private/cuentaContable/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
 											autoLoad : false,
 											columns : [
 													{

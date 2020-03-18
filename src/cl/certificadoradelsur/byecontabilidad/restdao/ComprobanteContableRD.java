@@ -11,8 +11,8 @@ import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ComprobanteContableJson;
-import cl.certificadoradelsur.utils.Constantes;
-import cl.certificadoradelsur.utils.Utilidades;
+import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
+import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
 /**
  * Clase que hace el nexo entre los servicios rest y el patron dao
@@ -111,7 +111,7 @@ public class ComprobanteContableRD {
 				ccj.setId(lcc.get(i).getId());
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
 				ccj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion(lcc.get(i).getFecha()));
-				ccj.setDescripcionCuentaContable(cuentadao.getById(ccj.getIdCuentaContable()).getDescripcion());
+				ccj.setGlosaGeneralCuentaContable(cuentadao.getById(ccj.getIdCuentaContable()).getDescripcion());
 				lcj.add(ccj);
 			}
 

@@ -30,11 +30,11 @@ public class SucursalSvcBean implements SucursalSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String nombreEmpresa) {
+	public Response list(Integer inicio, Integer fin, String nombreEmpresa, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<SucursalJson> lccj = sucrd.getAll(inicio, fin, nombreEmpresa);
+		List<SucursalJson> lccj = sucrd.getAll(inicio, fin, nombreEmpresa, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<SucursalJson>>() {
-		}.getType()) + ", \"total\": " + sucrd.countAll(nombreEmpresa) + "}";
+		}.getType()) + ", \"total\": " + sucrd.countAll(nombreEmpresa,idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 

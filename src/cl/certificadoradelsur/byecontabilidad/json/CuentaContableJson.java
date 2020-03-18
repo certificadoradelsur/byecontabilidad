@@ -20,9 +20,11 @@ public class CuentaContableJson {
 	private Long idGrupoCuenta;
 	private String nombreGrupoCuenta;
 	private String nombreClasificacion;
-	private String analizable;
 	private Long idBanco;
 	private Long idCuenta;
+	private String idUsuario;
+	private Long idEmpresa;
+	private String razonSocialEmpresa;
 	
 	public Long getId() {
 		return id;
@@ -112,14 +114,6 @@ public class CuentaContableJson {
 		this.nombreClasificacion = nombreClasificacion;
 	}
 
-	public String getAnalizable() {
-		return analizable;
-	}
-
-	public void setAnalizable(String analizable) {
-		this.analizable = analizable;
-	}
-
 	public Long getIdBanco() {
 		return idBanco;
 	}
@@ -136,12 +130,36 @@ public class CuentaContableJson {
 		this.idCuenta = idCuenta;
 	}
 
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
 	public Boolean isConciliacion() {
 		return conciliacion;
 	}
 
 	public void setConciliacion(Boolean conciliacion) {
 		this.conciliacion = conciliacion;
+	}
+
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
+
+	public String getRazonSocialEmpresa() {
+		return razonSocialEmpresa;
+	}
+
+	public void setRazonSocialEmpresa(String razonSocialEmpresa) {
+		this.razonSocialEmpresa = razonSocialEmpresa;
 	}
 
 	

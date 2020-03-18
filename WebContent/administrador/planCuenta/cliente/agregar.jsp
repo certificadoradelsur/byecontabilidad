@@ -96,6 +96,14 @@
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Telefono</label>
 						<input type="text" id="telefono" name="telefono" class="in"
 							placeholder="Ingrese el telefono" required="required" />
+					</div>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
 					</div>									
 					
 					<br><br>
@@ -118,7 +126,20 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$("#empresa").select2({width:'200'});
 
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value}
+				
+				$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+">" + res[i].razonSocial
+										+ "</option>";
+							}
+							document.getElementById("empresa").innerHTML = str;
+						}, "json");	
 	})
 
 	function guardar() {
@@ -146,7 +167,8 @@
 			direccion : document.getElementById("direccion").value,
 			giro : document.getElementById("giro").value,
 			telefono : document.getElementById("telefono").value,
-			email : document.getElementById("email").value
+			email : document.getElementById("email").value,
+			idEmpresa : document.getElementById("empresa").value
 		}
 		
 		console.log(submitJson)

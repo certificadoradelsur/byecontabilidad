@@ -38,7 +38,7 @@ public interface CuentaContableSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idClaseCuenta") Long idClaseCuenta, @QueryParam("idGrupoCuenta") Long idGrupoCuenta);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idClaseCuenta") Long idClaseCuenta, @QueryParam("idGrupoCuenta") Long idGrupoCuenta, @QueryParam("idUsuario") String idUsuario);
 	
 	/**
 	 * Funcion para modificar una Cuenta
@@ -81,7 +81,7 @@ public interface CuentaContableSvc {
 	@POST
 	@Path("/getLista")
 	@Produces("application/json")
-	Response getLista();
+	Response getLista(String datos);
 
 	/**
 	 * Funcion para buscar el codigo más grande de cuenta contable

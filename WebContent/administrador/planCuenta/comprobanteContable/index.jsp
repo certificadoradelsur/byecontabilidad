@@ -78,54 +78,54 @@
 			.ready(
 					function() {
 						tablaP();
-						grid = $('#grid')
-								.grid(
-										{
-											primaryKey : 'ID',
-											dataSource : '/conciliacionBancaria/rest-services/private/transaccion/getAll'
-													,
-											autoLoad : false,
-											columns : [
-													{
-														field : 'id',
-														title : 'Identificador',
-														width : 100,
-														hidden : true
+// 						grid = $('#grid')
+// 								.grid(
+// 										{
+// 											primaryKey : 'ID',
+// 											dataSource : '/conciliacionBancaria/rest-services/private//getAll'
+// 													,
+// 											autoLoad : false,
+// 											columns : [
+// 													{
+// 														field : 'id',
+// 														title : 'Identificador',
+// 														width : 100,
+// 														hidden : true
 
-													},
-													{
-														field : 'numTransaccion',
-														title : 'N° Transacción',
-														width : 140
-													},
+// 													},
+// 													{
+// 														field : 'numTransaccion',
+// 														title : 'N° Transacción',
+// 														width : 140
+// 													},
 
-													{
-														field : 'glosaTransaccion',
-														title : 'Glosa',
-														sortable : true
-													},
-													{
-														width : 100,
-														title : 'Ver más',
-														tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
-														align : 'center',
-														events : {
-															'click' : ver
-														}
-													},
-													{
-														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-														align : 'center',
-														events : {
-															'click' : eliminar
-														}
-													}, ],
-											pager : {
-												limit : 10
-											}
-										});
+// 													{
+// 														field : 'glosaTransaccion',
+// 														title : 'Glosa',
+// 														sortable : true
+// 													},
+// 													{
+// 														width : 100,
+// 														title : 'Ver más',
+// 														tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
+// 														align : 'center',
+// 														events : {
+// 															'click' : ver
+// 														}
+// 													},
+// 													{
+// 														width : 100,
+// 														title : 'Eliminar',
+// 														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+// 														align : 'center',
+// 														events : {
+// 															'click' : eliminar
+// 														}
+// 													}, ],
+// 											pager : {
+// 												limit : 10
+// 											}
+// 										});
 
 					});
 

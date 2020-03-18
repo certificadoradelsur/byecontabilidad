@@ -67,8 +67,7 @@
 				<table class="table" id="grid"></table>
 			</div>
 		</div>
-  	<input type="hidden" name="idUsuario" id="idUsuario"
-		value=<%=request.getUserPrincipal().getName()%> />
+  	<input type="hidden" name="idUsuario" id="idUsuario" value=<%=request.getUserPrincipal().getName()%> />
 		
 	
 </body>
@@ -81,9 +80,7 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/empresa/getAll?idUsuario='
-													+ document
-															.getElementById('idUsuario').value,
+											dataSource : "/byeContabilidad/rest-services/private/empresa/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
 											autoLoad : false,
 											columns : [
 													{

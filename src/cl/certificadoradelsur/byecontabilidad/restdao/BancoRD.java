@@ -10,8 +10,8 @@ import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Banco;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.BancoJson;
-import cl.certificadoradelsur.utils.Constantes;
-import cl.certificadoradelsur.utils.Utilidades;
+import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
+import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
 /**
  * Clase que hace el nexo entre los servicios rest y el patron dao

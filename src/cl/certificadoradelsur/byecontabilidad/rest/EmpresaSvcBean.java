@@ -30,11 +30,11 @@ public class EmpresaSvcBean implements EmpresaSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin,String razonSocial) {
+	public Response list(Integer inicio, Integer fin,String razonSocial, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<EmpresaJson> lccj = erd.getAll(inicio, fin,razonSocial);
+		List<EmpresaJson> lccj = erd.getAll(inicio, fin,razonSocial, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<EmpresaJson>>() {
-		}.getType()) + ", \"total\": " + erd.countAll(razonSocial) + "}";
+		}.getType()) + ", \"total\": " + erd.countAll(razonSocial, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -66,9 +66,10 @@ public class EmpresaSvcBean implements EmpresaSvc {
 	}
 	
 	@Override
-	public Response getLista() {
+	public Response getLista(String datos) {
 		Gson gson = new GsonBuilder().create();
-		List<EmpresaJson> lbj = erd.getAllLista();
+		EmpresaJson ccj = gson.fromJson(datos, EmpresaJson.class);
+		List<EmpresaJson> lbj = erd.getAllLista(ccj);
 		String json = gson.toJson(lbj, new TypeToken<List<EmpresaJson>>() {}.getType());
 		return Response.ok(json).build();
 	}

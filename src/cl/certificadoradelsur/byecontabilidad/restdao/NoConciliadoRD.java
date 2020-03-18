@@ -10,8 +10,8 @@ import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.json.NoConciliadoJson;
-import cl.certificadoradelsur.utils.Constantes;
-import cl.certificadoradelsur.utils.Utilidades;
+import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
+import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
 /**
  * Clase que hace el nexo entre los servicios rest y el patron dao

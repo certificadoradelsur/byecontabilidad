@@ -23,7 +23,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Conciliacion;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
-import cl.certificadoradelsur.utils.Utilidades;
+import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
 
 /**

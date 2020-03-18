@@ -92,7 +92,10 @@
 	$(document).ready(function() {
 		$("#empresa").select2();
 
-		$.post('/byeContabilidad/rest-services/private/empresa/getLista',
+		var submitJson = {
+		idUsuario : document.getElementById("idUsuario").value}
+		
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
 				function(res, code) {
 					var str;
 					for (var i = 0, len = res.length; i < len; i++) {
@@ -115,7 +118,8 @@
 
 		var submitJson = {
 			direccion : document.getElementById("direccion").value,
-			idEmpresa : document.getElementById("empresa").value
+			idEmpresa : document.getElementById("empresa").value, 
+			idUsuario : document.getElementById("idUsuario").value, 
 		}
 
 		$.post('/byeContabilidad/rest-services/private/sucursal/add',

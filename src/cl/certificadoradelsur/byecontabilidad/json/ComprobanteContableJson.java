@@ -14,9 +14,14 @@ public class ComprobanteContableJson {
 	private String fecha;
 	private String tipo;
 	private Long idCuentaContable;
-	private String descripcionCuentaContable;
+	private String glosaGeneralCuentaContable;
+	private Long monto;
+	private Long idCliente;
+	private String glosa;
+	private Long numDocumento;
+	private String tipoDocumento;
 
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -53,11 +58,41 @@ public class ComprobanteContableJson {
 	public void setIdCuentaContable(Long idCuentaContable) {
 		this.idCuentaContable = idCuentaContable;
 	}
-	public String getDescripcionCuentaContable() {
-		return descripcionCuentaContable;
+	public String getGlosaGeneralCuentaContable() {
+		return glosaGeneralCuentaContable;
 	}
-	public void setDescripcionCuentaContable(String descripcionCuentaContable) {
-		this.descripcionCuentaContable = descripcionCuentaContable;
+	public void setGlosaGeneralCuentaContable(String glosaGeneralCuentaContable) {
+		this.glosaGeneralCuentaContable = glosaGeneralCuentaContable;
+	}
+	public Long getMonto() {
+		return monto;
+	}
+	public void setMonto(Long monto) {
+		this.monto = monto;
+	}
+	public Long getIdCliente() {
+		return idCliente;
+	}
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+	public String getGlosa() {
+		return glosa;
+	}
+	public void setGlosa(String glosa) {
+		this.glosa = glosa;
+	}
+	public Long getNumDocumento() {
+		return numDocumento;
+	}
+	public void setNumDocumento(Long numDocumento) {
+		this.numDocumento = numDocumento;
+	}
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
 	}
 
 

@@ -81,6 +81,14 @@
 						placeholder="Ingrese Glosa" required="required" />
 				</div>
 				<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+				</div>
+				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp; Clase Cuenta</label>
 					<div class="col-4">
@@ -128,12 +136,6 @@
 					</div>
 				</div>
 				<br>
-				<div class="row collapse" id="collapse1">
-					<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;&nbsp;&nbsp;Analizable</label>
-					<input type="text" id="analizable" name="analizable"
-						placeholder="Ingrese rut" required="required" />
-				</div>
-
 				<div class="row collapse" id="collapse2">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp; &nbsp;Banco</label>
@@ -172,10 +174,11 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#claseCuenta").select2(),
+		$("#claseCuenta").select2({width:'200'}),
 		$("#grupoCuenta").select2();
 		$("#descripcion").select2();
 		$("#banco").select2({width:'200'});
+		$("#empresa").select2({width:'200'});
 		//$("#cuenta").select2({width:'200'});
 		
 
@@ -189,6 +192,19 @@
 									document.getElementById("claseCuenta").innerHTML = str;
 									busca ();								
 								}, "json");	
+						
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value}
+								
+								$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">" + res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+										}, "json");	 	 
 					});
 	
  	
@@ -204,9 +220,9 @@
 							//document.getElementById("imputable").checked = data.imputable;
 							document.getElementById("descripcion").value = data.descripcion;
 							document.getElementById("claseCuenta").value = data.idClaseCuenta;
+							document.getElementById("empresa").value = data.idEmpresa;
 							
 							if (document.getElementById("analisis").checked){
-								$('#collapse1').collapse('show');
 								document.getElementById("conciliacion").disabled=true;
 								cargaAnalizable(data.analizable)	
 							}
@@ -240,13 +256,6 @@
 		document.getElementById("analizable").value = analizable;
 	}
 	
-	 $('#analisis').on('change', function(){
-
-         if(document.getElementById("analisis").checked)
-             $('#collapse1').collapse('show');
-         else
-             $('#collapse1').collapse('hide');
-     })
      
     function cargoBanco(){
 		 $.post('/byeContabilidad/rest-services/private/banco/getLista',
@@ -494,10 +503,10 @@
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
 				glosaGeneral : document.getElementById("glosa").value,
 				descripcion : document.getElementById("descripcion").value,
+				idEmpresa : document.getElementById("empresa").value, 
 				//imputable:document.getElementById("imputable").checked,
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
-				analizable : document.getElementById("analizable").value
 			}
 		} else {
 
@@ -511,7 +520,6 @@
 				//imputable:document.getElementById("imputable").checked,
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
-				analizable : document.getElementById("analizable").value,
 				idBanco : document.getElementById("banco").value,
 				idCuenta : document.getElementById("cuenta").value
 			}
@@ -533,10 +541,8 @@
 	$('#analisis').on('change', function() {
 
 		if (document.getElementById("analisis").checked) {
-			$('#collapse1').collapse('show');
 			document.getElementById("conciliacion").disabled = true;
 		} else {
-			$('#collapse1').collapse('hide');
 			document.getElementById("conciliacion").disabled = false;
 		}
 	})

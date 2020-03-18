@@ -12,8 +12,8 @@ import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.EmpresaJson;
-import cl.certificadoradelsur.utils.Constantes;
-import cl.certificadoradelsur.utils.Utilidades;
+import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
+import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
 /**
  * Clase que hace el nexo entre los servicios rest y el patron dao
@@ -65,12 +65,12 @@ public class EmpresaRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String razonSocial) {
+	public Long countAll(String razonSocial, String idUsuario) {
 		try {
 			if (razonSocial == null) {
 				razonSocial = "";
 			}
-			return edao.countAll(razonSocial);
+			return edao.countAll(razonSocial, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de empresas ", e);
 			return 0L;
@@ -84,7 +84,7 @@ public class EmpresaRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de empresas
 	 */
-	public List<EmpresaJson> getAll(Integer page, Integer limit, String razonSocial) {
+	public List<EmpresaJson> getAll(Integer page, Integer limit, String razonSocial, String idUsuario) {
 		List<EmpresaJson> lej = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -97,7 +97,7 @@ public class EmpresaRD {
 			if (razonSocial == null) {
 				razonSocial = "";
 			}
-			List<Empresa> le = edao.getAll(inicio, limit, razonSocial);
+			List<Empresa> le = edao.getAll(inicio, limit, razonSocial, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < le.size(); i++) {
 				EmpresaJson ej = new EmpresaJson();
 				ej.setId(le.get(i).getId());
@@ -181,11 +181,11 @@ public class EmpresaRD {
 	 * funcion que trae todas las empresas para llenar select
 	 * 
 	 */
-	public List<EmpresaJson> getAllLista() {
+	public List<EmpresaJson> getAllLista(EmpresaJson ej) {
 
 		List<EmpresaJson> lgj = new ArrayList<>();
 		try {
-			List<Empresa> g = edao.getLista();
+			List<Empresa> g = edao.getLista(udao.getById(ej.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < g.size(); i++) {
 				EmpresaJson gj = new EmpresaJson();
 				gj.setId(g.get(i).getId());

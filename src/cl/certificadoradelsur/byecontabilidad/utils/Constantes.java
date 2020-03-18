@@ -1,4 +1,4 @@
-package cl.certificadoradelsur.utils;
+package cl.certificadoradelsur.byecontabilidad.utils;
 
 /**
  * Clase que contiene las constantes del sistema

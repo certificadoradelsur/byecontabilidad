@@ -97,7 +97,15 @@
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Telefono</label>
 						<input type="text" id="telefono" name="telefono" class="in"
 							placeholder="Ingrese el telefono" required="required" />
-					</div>	
+					</div>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+					</div>						
 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
 							Estado</label>
@@ -123,29 +131,49 @@
 			</form>
 		</div>
 	</div>
+		<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
 
 	$("#activo").select2();
+	$("#empresa").select2();
+
+	var submit = {id:"<%=request.getParameter("id")%>" ,};
 	
-	var submitjson = {id:"<%=request.getParameter("id")%>" ,};
+	$.post('/byeContabilidad/rest-services/private/cliente/getById',
+					JSON.stringify(submit)).done(function(data) {
+						document.getElementById("rut").value = data.rut;
+						document.getElementById("nombre").value = data.nombre;
+						document.getElementById("ciudad").value = data.ciudad;
+						document.getElementById("direccion").value = data.direccion;
+						document.getElementById("email").value = data.email;
+						document.getElementById("giro").value = data.giro;
+						document.getElementById("telefono").value = data.telefono;
+						document.getElementById("activo").value = data.activo;
+						document.getElementById("empresa").value = data.idEmpresa;
+						
+ }).fail(function(jqxhr, settings, ex) {
+						alert('No se pudo modificar el cliente '
+								+ ex);});
 	
-						$.post('/byeContabilidad/rest-services/private/cliente/getById',
-										JSON.stringify(submitjson)).done(function(data) {
-											document.getElementById("rut").value = data.rut;
-											document.getElementById("nombre").value = data.nombre;
-											document.getElementById("ciudad").value = data.ciudad;
-											document.getElementById("direccion").value = data.direccion;
-											document.getElementById("email").value = data.email;
-											document.getElementById("giro").value = data.giro;
-											document.getElementById("telefono").value = data.telefono;
-											document.getElementById("activo").value = data.activo;
-										}).fail(function(jqxhr, settings, ex) {
-											alert('No se pudo modificar el cliente '
-													+ ex);});
+	var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value}
+			
+			$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+					function(res, code) {
+						var str;
+						for (var i = 0, len = res.length; i < len; i++) {
+							str += "<option value="+res[i].id+">" + res[i].razonSocial
+									+ "</option>";
+						}
+						document.getElementById("empresa").innerHTML = str;
+					}, "json");	
+	
+
 		
-					});
+});
 
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
@@ -156,6 +184,7 @@ $(document).ready(function () {
 			alert("Los campos deben estar llenos");
 			return;
 		}
+		
 		var submitJson = {
 				id : <%=request.getParameter("id")%>,
 				rut : document.getElementById("rut").value,
@@ -165,8 +194,10 @@ $(document).ready(function () {
 				giro : document.getElementById("giro").value,
 				telefono : document.getElementById("telefono").value,
 				email : document.getElementById("email").value,
-				activo : document.getElementById("activo").value
+				activo : document.getElementById("activo").value,
+				idEmpresa : document.getElementById("empresa").value
 		}
+		
 		$.post('/byeContabilidad/rest-services/private/cliente/update',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {

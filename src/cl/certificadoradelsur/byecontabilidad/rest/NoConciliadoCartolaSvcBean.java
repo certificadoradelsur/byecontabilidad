@@ -6,7 +6,6 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import cl.certificadoradelsur.byecontabilidad.json.NoConciliadoCartolaJson;
 import cl.certificadoradelsur.byecontabilidad.restdao.NoConciliadoCartolaRD;
 

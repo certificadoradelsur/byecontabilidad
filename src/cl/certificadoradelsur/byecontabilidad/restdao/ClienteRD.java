@@ -6,11 +6,12 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Cliente;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ClienteJson;
-import cl.certificadoradelsur.utils.Constantes;
-import cl.certificadoradelsur.utils.Utilidades;
+import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
+import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
 /**
  * Clase que hace el nexo entre los servicios rest y el patron dao
@@ -23,6 +24,8 @@ public class ClienteRD {
 	private static Logger log = Logger.getLogger(ClienteRD.class);
 	@Inject
 	private ClienteDAO clidao;
+	@Inject
+	private EmpresaDAO edao;
 
 	/**
 	 * funcion que almacena
@@ -49,6 +52,7 @@ public class ClienteRD {
 				c.setGiro(cj.getGiro());
 				c.setEmail(cj.getEmail());
 				c.setTelefono(cj.getTelefono());
+				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				c.setActivo(true);
 				clidao.guardar(c);
 				return Constantes.MENSAJE_REST_OK;
@@ -109,6 +113,7 @@ public class ClienteRD {
 				cj.setEmail(lc.get(i).getEmail());
 				cj.setTelefono(lc.get(i).getTelefono());
 				cj.setActivo(lc.get(i).isActivo());
+				cj.setRazonSocialEmpresa(lc.get(i).getEmpresa().getRazonSocial());
 			    lcj.add(cj);
 			}
 		} catch (Exception e) {
@@ -142,6 +147,7 @@ public class ClienteRD {
 				c.setGiro(cj.getGiro());
 				c.setEmail(cj.getEmail());
 				c.setTelefono(cj.getTelefono());
+				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				c.setActivo(cj.isActivo());
 				clidao.update(c);
 				return Constantes.MENSAJE_REST_OK;
@@ -169,6 +175,7 @@ public class ClienteRD {
 		cJson.setGiro(c.getGiro());
 		cJson.setEmail(c.getEmail());
 		cJson.setTelefono(c.getTelefono());
+		cJson.setIdEmpresa(c.getEmpresa().getId());
 		cJson.setActivo(c.isActivo());
 		return cJson;
 	}

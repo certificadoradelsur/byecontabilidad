@@ -17,7 +17,16 @@ public class ClienteJson {
 	private String email;
 	private String telefono;
 	private Boolean activo;
+	private Long idEmpresa;
+	private String razonSocialEmpresa;
+	private String idUsuario;
 	
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -72,7 +81,17 @@ public class ClienteJson {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
-
-	
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
+	public String getRazonSocialEmpresa() {
+		return razonSocialEmpresa;
+	}
+	public void setRazonSocialEmpresa(String razonSocialEmpresa) {
+		this.razonSocialEmpresa = razonSocialEmpresa;
+	}
 	
 }
