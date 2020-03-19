@@ -168,10 +168,11 @@
 			giro : document.getElementById("giro").value,
 			telefono : document.getElementById("telefono").value,
 			email : document.getElementById("email").value,
-			idEmpresa : document.getElementById("empresa").value
+			idEmpresa : document.getElementById("empresa").value,
+			idUsuario : document.getElementById("idUsuario").value
+
 		}
 		
-		console.log(submitJson)
 
 		$.post('/byeContabilidad/rest-services/private/cliente/add',
 				JSON.stringify(submitJson)).done(function(data) {

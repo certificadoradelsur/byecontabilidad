@@ -25,9 +25,9 @@ import javax.persistence.Table;
 @Table(name = "cuenta")
 @SequenceGenerator(name = "seq_cuenta", sequenceName = "seq_cuenta")
 @NamedQueries({
-		@NamedQuery(name = "Cuenta.getAll", query = "SELECT c FROM Cuenta c  where c.eliminado = false and (true = :ignoreNumCuenta or  upper(c.numCuenta)  like :numCuenta )"),
-		@NamedQuery(name = "Cuenta.countAll", query = "SELECT count(c.numCuenta) FROM Cuenta c  where c.eliminado = false and (true = :ignoreNumCuenta or  upper(c.numCuenta)  like :numCuenta )"),
-		@NamedQuery(name = "Cuenta.getByIdBanco", query = "SELECT c FROM Cuenta c  where c.eliminado = false and  c.banco.id=:idBanco ") })
+		@NamedQuery(name = "Cuenta.getAll", query = "SELECT c FROM Cuenta c  where c.empresa.oficinaContable.id =:idOficinaContable and c.eliminado = false and (true = :ignoreNumCuenta or  upper(c.numCuenta)  like :numCuenta )"),
+		@NamedQuery(name = "Cuenta.countAll", query = "SELECT count(c.numCuenta) FROM Cuenta c  where c.empresa.oficinaContable.id =:idOficinaContable and c.eliminado = false and (true = :ignoreNumCuenta or  upper(c.numCuenta)  like :numCuenta )"),
+		@NamedQuery(name = "Cuenta.getByIdBanco", query = "SELECT c FROM Cuenta c  where c.empresa.oficinaContable.id =:idOficinaContable and c.eliminado = false and  c.banco.id=:idBanco ") })
 
 public class Cuenta implements Serializable {
 
@@ -38,6 +38,7 @@ public class Cuenta implements Serializable {
 	private String nombreEjecutivo;
 	private Integer saldoInicial;
 	private Banco banco;
+	private Empresa empresa;
 
 	@Id
 	@GeneratedValue(generator = "seq_cuenta", strategy = GenerationType.AUTO)
@@ -94,5 +95,18 @@ public class Cuenta implements Serializable {
 	public void setBanco(Banco banco) {
 		this.banco = banco;
 	}
+	
+	@ManyToOne
+	@JoinColumn(name = "id_empresa", nullable = true)
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
+
+	
 
 }

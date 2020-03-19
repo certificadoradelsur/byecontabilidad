@@ -19,8 +19,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "usuario")
 @NamedQueries({
-		@NamedQuery(name = "Usuario.getAll", query = "SELECT u FROM Usuario  u  where u.eliminado = false and (true = :ignoreId or upper(u.id)  like :id)"),
-		@NamedQuery(name = "Usuario.countAll", query = "SELECT count(u.id) FROM Usuario u where u.eliminado = false and (true = :ignoreId or upper(u.id)  like :id)") })
+		@NamedQuery(name = "Usuario.getAll", query = "SELECT u FROM Usuario  u  where u.oficinaContable.id =:idOficinaContable and u.eliminado = false and (true = :ignoreId or upper(u.id)  like :id)"),
+		@NamedQuery(name = "Usuario.countAll", query = "SELECT count(u.id) FROM Usuario u where u.oficinaContable.id =:idOficinaContable and u.eliminado = false and (true = :ignoreId or upper(u.id)  like :id)") })
 
 public class Usuario implements Serializable {
 

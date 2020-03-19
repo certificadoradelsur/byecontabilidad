@@ -8,7 +8,9 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ClasificacionJson;
@@ -30,6 +32,10 @@ public class ClasificacionRD {
 	private GrupoCuentaDAO grupodao;
 	@Inject
 	private ClaseCuentaDAO clasedao;
+	@Inject
+	private UsuarioDAO udao;
+	@Inject
+	private EmpresaDAO edao;
 
 	/**
 	 * funcion que almacena
@@ -46,6 +52,7 @@ public class ClasificacionRD {
 				clasificacion.setNombre(ccj.getNombre());
 				clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
 				clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+				clasificacion.setEmpresa(edao.getById(ccj.getIdEmpresa()));
 
 				cladao.guardar(clasificacion);
 				return Constantes.MENSAJE_REST_OK;
@@ -61,12 +68,12 @@ public class ClasificacionRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String nombre) {
+	public Long countAll(String nombre, String idUsuario) {
 		try {
 			if(nombre==null) {
 				nombre="";
 			}
-			return cladao.countAll(nombre);
+			return cladao.countAll(nombre, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de clasificacines ", e);
 			return 0L;
@@ -80,7 +87,7 @@ public class ClasificacionRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de clasificaciones
 	 */
-	public List<ClasificacionJson> getAll(Integer page, Integer limit, String nombre) {
+	public List<ClasificacionJson> getAll(Integer page, Integer limit, String nombre, String idUsuario) {
 		List<ClasificacionJson> lbj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -92,13 +99,14 @@ public class ClasificacionRD {
 			if(nombre==null) {
 				nombre="";
 			}
-			List<Clasificacion> lcc = cladao.getAll(inicio, limit, nombre);
+			List<Clasificacion> lcc = cladao.getAll(inicio, limit, nombre, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lcc.size(); i++) {
 				ClasificacionJson ccj = new ClasificacionJson();
 				ccj.setId(lcc.get(i).getId());
 				ccj.setNombre(lcc.get(i).getNombre());
 				ccj.setNombreGrupoCuenta(grupodao.getById(lcc.get(i).getGrupoCuenta().getId()).getNombre());
 				ccj.setNombreClaseCuenta(clasedao.getById(lcc.get(i).getClaseCuenta().getId()).getNombre());
+				ccj.setRazonSocialEmpresa(edao.getById(lcc.get(i).getEmpresa().getId()).getRazonSocial());
 				lbj.add(ccj);
 			}
 
@@ -123,6 +131,7 @@ public class ClasificacionRD {
 				clasificacion.setNombre(ccj.getNombre());
 				clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
 				clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+				clasificacion.setEmpresa(edao.getById(ccj.getIdEmpresa()));
 				cladao.update(clasificacion);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -145,6 +154,7 @@ public class ClasificacionRD {
 		ccJson.setNombre(clasificacion.getNombre());
 		ccJson.setIdGrupoCuenta(clasificacion.getGrupoCuenta().getId());
 		ccJson.setIdClaseCuenta(clasificacion.getClaseCuenta().getId());
+		ccJson.setIdEmpresa(clasificacion.getEmpresa().getId());
 		return ccJson;
 	}
 
@@ -172,11 +182,11 @@ public class ClasificacionRD {
 	 * @param idGrupoCuenta
 	 * @return lista clasificacion 
 	 */
-	public List<ClasificacionJson> getByIdGrupoCuenta(Long idGrupoCuenta) {
+	public List<ClasificacionJson> getByIdGrupoCuenta(ClasificacionJson cj) {
 
 		List<ClasificacionJson> lcj = new ArrayList<>();
 		try {
-			List<Clasificacion> c = cladao.getByIdGrupoCuenta(idGrupoCuenta);
+			List<Clasificacion> c = cladao.getByIdGrupoCuenta(cj.getIdGrupoCuenta(), udao.getById(cj.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < c.size(); i++) {
 				ClasificacionJson cjj = new ClasificacionJson();
 				cjj.setId(c.get(i).getId());

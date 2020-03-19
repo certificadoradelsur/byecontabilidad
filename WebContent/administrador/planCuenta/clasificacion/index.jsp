@@ -86,7 +86,7 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/clasificacion/getAll',
+											dataSource : "/byeContabilidad/rest-services/private/clasificacion/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
 											autoLoad : false,
 											columns : [
 													{

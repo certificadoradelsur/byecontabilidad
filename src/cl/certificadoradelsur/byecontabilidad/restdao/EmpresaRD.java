@@ -165,9 +165,9 @@ public class EmpresaRD {
 	 * @param pj json de empresa
 	 * @return mensaje de exito o error
 	 */
-	public String eliminar(EmpresaJson bj) {
+	public String eliminar(EmpresaJson ej) {
 		try {
-			Empresa e = edao.getById(bj.getId());
+			Empresa e = edao.getById(ej.getId());
 			e.setActivo(false);
 			edao.update(e);
 			return Constantes.MENSAJE_REST_OK;

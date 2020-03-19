@@ -39,7 +39,7 @@ public interface CuentaSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("numCuenta") String numCuenta);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("numCuenta") String numCuenta, @QueryParam("idUsuario") String idUsuario);
 	
 	/**
 	 * Funcion para modificar una cuenta

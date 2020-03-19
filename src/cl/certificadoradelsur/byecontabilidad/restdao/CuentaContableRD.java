@@ -258,6 +258,7 @@ public class CuentaContableRD {
 				cj.setGlosaGeneral(c.get(i).getGlosaGeneral());
 				cj.setDescripcion(c.get(i).getDescripcion());
 				cj.setConciliacion(c.get(i).isConciliacion());
+				cj.setCodigo(c.get(i).getCodigo());
 				if(c.get(i).isConciliacion()) {
 				cj.setIdBanco(c.get(i).getBanco().getId());
 				cj.setIdCuenta(c.get(i).getCuenta().getId());

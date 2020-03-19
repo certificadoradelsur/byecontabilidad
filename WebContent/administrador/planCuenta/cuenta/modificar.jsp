@@ -84,6 +84,14 @@
 							name="saldoInicial" class="in"
 							placeholder="Ingrese saldo inicial" />
 					</div>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+					</div>	
 					<br> <br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
@@ -100,10 +108,13 @@
 			</form>
 		</div>
 	</div>
+			<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
 		$("#banco").select2();
+		$("#empresa").select2();
 	
 		$.post('/byeContabilidad/rest-services/private/banco/getLista', 
 				function(res, code) {
@@ -125,6 +136,8 @@ $(document).ready(function () {
 											document.getElementById("numCuenta").value = data.numCuenta;
 											document.getElementById("nombreEjecutivo").value = data.nombreEjecutivo;
 											document.getElementById("saldoInicial").value = data.saldoInicial;
+											document.getElementById("empresa").value = data.idEmpresa;
+											cargaEmpresa(data.idEmpresa);
 										})
 								.fail(
 										function(jqxhr, settings, ex) {
@@ -132,6 +145,27 @@ $(document).ready(function () {
 													+ ex);
 										});
 					});
+
+function cargaEmpresa(idEmpresa) {
+	var submitJson = {
+		idUsuario : document.getElementById("idUsuario").value
+	}
+
+	$.post('/byeContabilidad/rest-services/private/empresa/getLista', JSON
+			.stringify(submitJson), function(res, code) {
+		var str;
+		for (var i = 0, len = res.length; i < len; i++) {
+			if (idEmpresa == res[i].id) {
+				str += "<option value="+res[i].id+" selected>"
+						+ res[i].razonSocial + "</option>";
+			} else {
+				str += "<option value="+res[i].id+">" + res[i].razonSocial
+						+ "</option>";
+			}
+		}
+		document.getElementById("empresa").innerHTML = str;
+	}, "json");
+}
 
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
@@ -148,7 +182,8 @@ $(document).ready(function () {
 			idBanco : document.getElementById("banco").value,
 			numCuenta : document.getElementById("numCuenta").value,
 			nombreEjecutivo : document.getElementById("nombreEjecutivo").value,
-			saldoInicial : document.getElementById("saldoInicial").value
+			saldoInicial : document.getElementById("saldoInicial").value,
+			idEmpresa : document.getElementById("empresa").value
 		}
 		$.post('/byeContabilidad/rest-services/private/cuenta/update',
 				JSON.stringify(submitJson)).done(function(data) {

@@ -78,6 +78,14 @@
 							</select>
 						</div>
 					</div>
+										<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+					</div>		
 					<br> <br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
@@ -122,7 +130,8 @@ $(document).ready(function() {
 						function(data) {	
 							document.getElementById("nombre").value = data.nombre;
 							document.getElementById("claseCuenta").value = data.idClaseCuenta;
-					
+							document.getElementById("empresa").value = data.idEmpresa;
+							cargaEmpresa(data.idEmpresa);
 							cargaselect(data.idGrupoCuenta);
 						})
 
@@ -153,6 +162,27 @@ $(document).ready(function() {
 							}}
 					document.getElementById("grupoCuenta").innerHTML = str;
 			}, "json");
+	}
+	
+	function cargaEmpresa(idEmpresa) {
+		var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value
+		}
+
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista', JSON
+				.stringify(submitJson), function(res, code) {
+			var str;
+			for (var i = 0, len = res.length; i < len; i++) {
+				if (idEmpresa == res[i].id) {
+					str += "<option value="+res[i].id+" selected>"
+							+ res[i].razonSocial + "</option>";
+				} else {
+					str += "<option value="+res[i].id+">" + res[i].razonSocial
+							+ "</option>";
+				}
+			}
+			document.getElementById("empresa").innerHTML = str;
+		}, "json");
 	}
 	
 	$('#claseCuenta').on('change',

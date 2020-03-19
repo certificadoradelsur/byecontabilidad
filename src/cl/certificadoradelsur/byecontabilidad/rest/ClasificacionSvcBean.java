@@ -29,11 +29,11 @@ public class ClasificacionSvcBean implements ClasificacionSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String nombre) {
+	public Response list(Integer inicio, Integer fin, String nombre,String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<ClasificacionJson> lccj = clard.getAll(inicio, fin, nombre);
+		List<ClasificacionJson> lccj = clard.getAll(inicio, fin, nombre, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<ClasificacionJson>>() {
-		}.getType()) + ", \"total\": " + clard.countAll(nombre) + "}";
+		}.getType()) + ", \"total\": " + clard.countAll(nombre, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -68,7 +68,7 @@ public class ClasificacionSvcBean implements ClasificacionSvc {
 	public Response getByIdGrupoCuenta(String datos) {
 		Gson gson = new GsonBuilder().create();
 		ClasificacionJson cj = gson.fromJson(datos, ClasificacionJson.class);
-		List<ClasificacionJson> lcj = clard.getByIdGrupoCuenta(cj.getIdGrupoCuenta());
+		List<ClasificacionJson> lcj = clard.getByIdGrupoCuenta(cj);
 		String json = gson.toJson(lcj, new TypeToken<List<ClasificacionJson>>() {}.getType());
 		return Response.ok(json).build();
 		

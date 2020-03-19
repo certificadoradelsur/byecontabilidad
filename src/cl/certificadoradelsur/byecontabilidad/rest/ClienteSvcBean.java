@@ -34,11 +34,11 @@ public class ClienteSvcBean implements ClienteSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String rut) {
+	public Response list(Integer inicio, Integer fin, String rut, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<ClienteJson> lcj = crd.getAll(inicio, fin, rut);
+		List<ClienteJson> lcj = crd.getAll(inicio, fin, rut, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lcj, new TypeToken<List<ClienteJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll(rut) + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(rut, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -71,7 +71,8 @@ public class ClienteSvcBean implements ClienteSvc {
 	@Override
 	public Response getLista(String datos) {
 		Gson gson = new GsonBuilder().create();
-		List<ClienteJson> lcj = crd.getAllLista();
+		ClienteJson cj = gson.fromJson(datos, ClienteJson.class);
+		List<ClienteJson> lcj = crd.getAllLista(cj);
 		String json = gson.toJson(lcj, new TypeToken<List<ClienteJson>>() {}.getType());
 		return Response.ok(json).build();
 		

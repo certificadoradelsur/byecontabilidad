@@ -34,7 +34,7 @@ public class UsuarioDAO {
 	 * 
 	 * @return el total de usuarios
 	 */
-	public Long countAll(String id) {
+	public Long countAll(String id, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Usuario.countAll");
 		if (id.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreId", true);
@@ -42,6 +42,7 @@ public class UsuarioDAO {
 			query.setParameter("ignoreId", false);
 		}
 		query.setParameter("id", "%" + id.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		return (Long) query.getSingleResult();
 	}
 
@@ -53,7 +54,7 @@ public class UsuarioDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Usuario> getAll(Integer inicio, Integer fin, String id) {
+	public List<Usuario> getAll(Integer inicio, Integer fin, String id, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Usuario.getAll");
 		if (id.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreId", true);
@@ -61,6 +62,7 @@ public class UsuarioDAO {
 			query.setParameter("ignoreId", false);
 		}
 		query.setParameter("id", "%" + id.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

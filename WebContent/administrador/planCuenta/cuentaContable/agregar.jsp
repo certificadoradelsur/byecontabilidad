@@ -246,10 +246,12 @@
 					
 			$('#banco').on('change',
 							function() {
-								var submitJson = {
-									idBanco : document.getElementById("banco").value
-								}
+								var submitJson = { 
 
+									    idUsuario : document.getElementById("idUsuario").value,
+										idBanco : document.getElementById("banco").value
+								}
+	
 								$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 												JSON.stringify(submitJson),
 												function(res, code) {
@@ -289,8 +291,8 @@
 
 	$('#grupoCuenta').on('change',function() {
 						var submitJson = {
-							idGrupoCuenta : document
-									.getElementById("grupoCuenta").value
+							idGrupoCuenta : document .getElementById("grupoCuenta").value,
+							idUsuario : document .getElementById("idUsuario").value
 						}
 
 						$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
@@ -312,8 +314,7 @@
 				idClaseCuenta : document.getElementById("claseCuenta").value
 			}
 		$
-		.post(
-				'/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+		.post( '/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
 				JSON.stringify(submitJson),
 				function(res, code) {
 					var str;
@@ -322,21 +323,18 @@
 								+ res[i].nombre
 								+ "</option>";
 					}
-					document
-							.getElementById("grupoCuenta").innerHTML = str;
+					document .getElementById("grupoCuenta").innerHTML = str;
 					buscaClasificacion ();
 				}, "json");
 	}
 	
 	function buscaClasificacion (){
 		var submitJson = {
-				idGrupoCuenta : document
-						.getElementById("grupoCuenta").value
+				idGrupoCuenta : document.getElementById("grupoCuenta").value,
+				idUsuario : document .getElementById("idUsuario").value
 			}
 
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
+			$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
 							JSON.stringify(submitJson),
 							function(res, code) {
 								var str="<option>Sin descripción</option>";

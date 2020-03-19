@@ -31,11 +31,11 @@ public class UsuarioSvcBean implements UsuarioSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String id) {
+	public Response list(Integer inicio, Integer fin, String id,String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<UsuarioJson> luj = urd.getAll(inicio, fin, id);
+		List<UsuarioJson> luj = urd.getAll(inicio, fin, id,idUsuario);
 		String json = "{\"records\": " + gson.toJson(luj, new TypeToken<List<UsuarioJson>>() {
-		}.getType()) + ", \"total\": " + urd.countAll(id) + "}";
+		}.getType()) + ", \"total\": " + urd.countAll(id,idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 

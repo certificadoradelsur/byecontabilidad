@@ -68,12 +68,12 @@ public class UsuarioRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String id) {
+	public Long countAll(String id, String idUsuario) {
 		try {
 			if(id==null) {
 				id="";
 			}
-			return udao.countAll(id);
+			return udao.countAll(id, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de usuarios ", e);
 			return 0L;
@@ -87,7 +87,7 @@ public class UsuarioRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de usuarios
 	 */
-	public List<UsuarioJson> getAll(Integer page, Integer limit, String id) {
+	public List<UsuarioJson> getAll(Integer page, Integer limit, String id,String idUsuario) {
 		List<UsuarioJson> lpj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -100,7 +100,7 @@ public class UsuarioRD {
 				id="";
 			}
 
-			List<Usuario> lu = udao.getAll(inicio, limit, id);
+			List<Usuario> lu = udao.getAll(inicio, limit, id, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lu.size(); i++) {
 				UsuarioJson uj = new UsuarioJson();
 				uj.setId(lu.get(i).getId());

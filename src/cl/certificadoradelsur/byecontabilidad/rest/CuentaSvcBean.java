@@ -34,11 +34,11 @@ public class CuentaSvcBean implements CuentaSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin , String numCuenta) {
+	public Response list(Integer inicio, Integer fin , String numCuenta, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<CuentaJson> lbj = crd.getAll(inicio, fin, numCuenta);
+		List<CuentaJson> lbj = crd.getAll(inicio, fin, numCuenta,idUsuario);
 		String json = "{\"records\": " + gson.toJson(lbj, new TypeToken<List<CuentaJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll(numCuenta) + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(numCuenta, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -72,7 +72,7 @@ public class CuentaSvcBean implements CuentaSvc {
 	public Response getByIdBanco(String datos) {
 		Gson gson = new GsonBuilder().create();
 		CuentaJson cj = gson.fromJson(datos, CuentaJson.class);
-		List<CuentaJson> lcj = crd.getByIdBanco(cj.getIdBanco());
+		List<CuentaJson> lcj = crd.getByIdBanco(cj);
 		String json = gson.toJson(lcj, new TypeToken<List<CuentaJson>>() {}.getType());
 		return Response.ok(json).build();
 		

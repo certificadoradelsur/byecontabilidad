@@ -35,7 +35,7 @@ public class ClasificacionDAO {
 	 * 
 	 * @return el total de Clasificacion
 	 */
-	public Long countAll(String nombre) {
+	public Long countAll(String nombre, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Clasificacion.countAll");
 		if (nombre.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreNombre", true);
@@ -43,6 +43,7 @@ public class ClasificacionDAO {
 			query.setParameter("ignoreNombre", false);
 		}
 		query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		return (Long) query.getSingleResult();
 	}
 
@@ -55,7 +56,7 @@ public class ClasificacionDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Clasificacion> getAll(Integer inicio, Integer fin, String nombre) {
+	public List<Clasificacion> getAll(Integer inicio, Integer fin, String nombre, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Clasificacion.getAll");
 		if (nombre.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreNombre", true);
@@ -63,6 +64,7 @@ public class ClasificacionDAO {
 			query.setParameter("ignoreNombre", false);
 		}
 		query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();
@@ -102,9 +104,10 @@ public class ClasificacionDAO {
 	 * @return lista de cuentas
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Clasificacion> getByIdGrupoCuenta(Long idGrupoCuenta) {
+	public List<Clasificacion> getByIdGrupoCuenta(Long idGrupoCuenta, Long idOficinaContable) {
 		Query query=em.createNamedQuery("Clasificacion.getByIdGrupoCuenta");
 		query.setParameter("idGrupoCuenta",idGrupoCuenta);
+		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}	
 

@@ -14,6 +14,9 @@ public class ClasificacionJson {
 	private String nombreClaseCuenta; 
 	private Long idGrupoCuenta;
 	private String nombreGrupoCuenta;
+	private Long idEmpresa;
+	private String razonSocialEmpresa;
+	private String idUsuario;
 
 	public Long getId() {
 		return id;
@@ -62,5 +65,30 @@ public class ClasificacionJson {
 	public void setNombreClaseCuenta(String nombreClaseCuenta) {
 		this.nombreClaseCuenta = nombreClaseCuenta;
 	}
+
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
+
+	public String getRazonSocialEmpresa() {
+		return razonSocialEmpresa;
+	}
+
+	public void setRazonSocialEmpresa(String razonSocialEmpresa) {
+		this.razonSocialEmpresa = razonSocialEmpresa;
+	}
+
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	
 
 }

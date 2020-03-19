@@ -85,7 +85,15 @@
 							name="saldoInicial" class="in"
 							placeholder="Ingrese saldo inicial" required="required" />
 					</div>
-
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+					</div>	
+					<br><br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -106,8 +114,8 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function() {
-
-		$("#banco").select2();
+		$("#empresa").select2({width:'200'});
+		$("#banco").select2({width:'200'});
 
 		$.post('/byeContabilidad/rest-services/private/banco/getLista',
 				function(res, code) {
@@ -119,6 +127,18 @@
 					document.getElementById("banco").innerHTML = str;
 				}, "json");
 
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value}
+				
+				$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+">" + res[i].razonSocial
+										+ "</option>";
+							}
+							document.getElementById("empresa").innerHTML = str;
+						}, "json");	
 	});
 
 	
@@ -136,6 +156,7 @@
 			numCuenta : document.getElementById("numCuenta").value,
 			nombreEjecutivo : document.getElementById("nombreEjecutivo").value,
 			saldoInicial : document.getElementById("saldoInicial").value,
+			idEmpresa : document.getElementById("empresa").value,
 			idUsuario : document.getElementById("idUsuario").value
 		}
 

@@ -39,7 +39,7 @@ public interface UsuarioSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("id") String id);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("id") String id, @QueryParam("idUsuario") String idUsuario);
 
 	/**
 	 * Funcion para modificar un usuario

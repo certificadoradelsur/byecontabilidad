@@ -9,7 +9,9 @@ import org.apache.log4j.Logger;
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Cuenta;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CuentaJson;
@@ -33,6 +35,10 @@ public class CuentaRD {
 	private CartolaDAO cardao;
 	@Inject
 	private MovimientoDAO mdao;
+	@Inject
+	private EmpresaDAO edao;
+	@Inject
+	private UsuarioDAO udao;
 
 	
 
@@ -53,6 +59,7 @@ public class CuentaRD {
 				cuenta.setNombreEjecutivo(cj.getNombreEjecutivo());
 				cuenta.setSaldoInicial(cj.getSaldoInicial());
 				cuenta.setBanco(bdao.getById(cj.getIdBanco()));
+				cuenta.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				cuenta.setEliminado(false);
 				cdao.guardar(cuenta);
 				return Constantes.MENSAJE_REST_OK;
@@ -70,12 +77,12 @@ public class CuentaRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String numCuenta) {
+	public Long countAll(String numCuenta, String idUsuario) {
 		try {
 			if (numCuenta == null) {
 				numCuenta = "";
 			}
-			return cdao.countAll(numCuenta);
+			return cdao.countAll(numCuenta, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cuentas ", e);
 			return 0L;
@@ -89,7 +96,7 @@ public class CuentaRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de cuentas
 	 */
-	public List<CuentaJson> getAll(Integer page, Integer limit, String numCuenta) {
+	public List<CuentaJson> getAll(Integer page, Integer limit, String numCuenta, String idUsuario) {
 		List<CuentaJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -101,7 +108,7 @@ public class CuentaRD {
 			if (numCuenta == null) {
 				numCuenta = "";
 			}
-			List<Cuenta> lc = cdao.getAll(inicio, limit, numCuenta);
+			List<Cuenta> lc = cdao.getAll(inicio, limit, numCuenta, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lc.size(); i++) {
 				CuentaJson cj = new CuentaJson();
 				cj.setId(lc.get(i).getId());
@@ -109,6 +116,7 @@ public class CuentaRD {
 				cj.setNumCuenta(lc.get(i).getNumCuenta());
 				cj.setNombreEjecutivo(lc.get(i).getNombreEjecutivo());
 				cj.setSaldoInicial(lc.get(i).getSaldoInicial());
+				cj.setRazonSocialEmpresa(lc.get(i).getEmpresa().getRazonSocial());
 				lcj.add(cj);
 			}
 
@@ -136,6 +144,7 @@ public class CuentaRD {
 				cuenta.setNumCuenta(cj.getNumCuenta());
 				cuenta.setNombreEjecutivo(cj.getNombreEjecutivo());
 				cuenta.setSaldoInicial(cj.getSaldoInicial());
+				cuenta.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				cdao.update(cuenta);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -159,6 +168,7 @@ public class CuentaRD {
 		cJson.setNumCuenta(cuenta.getNumCuenta());
 		cJson.setNombreEjecutivo(cuenta.getNombreEjecutivo());
 		cJson.setSaldoInicial(cuenta.getSaldoInicial());
+		cJson.setIdEmpresa(cuenta.getEmpresa().getId());
 		return cJson;
 	}
 
@@ -190,12 +200,12 @@ public class CuentaRD {
 	 * @param idBanco
 	 * @return
 	 */
-	public List<CuentaJson> getByIdBanco(Long idBanco) {
+	public List<CuentaJson> getByIdBanco(CuentaJson bj) {
 
 		List<CuentaJson> lcj = new ArrayList<>();
 		try {
 
-			List<Cuenta> b = cdao.getByIdBanco(idBanco);
+			List<Cuenta> b = cdao.getByIdBanco(bj.getIdBanco(),udao.getById(bj.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < b.size(); i++) {
 				CuentaJson bjj = new CuentaJson();
 				bjj.setId(b.get(i).getId());

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Cliente;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ClienteJson;
@@ -26,6 +27,8 @@ public class ClienteRD {
 	private ClienteDAO clidao;
 	@Inject
 	private EmpresaDAO edao;
+	@Inject
+	private UsuarioDAO udao;
 
 	/**
 	 * funcion que almacena
@@ -69,13 +72,13 @@ public class ClienteRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String rut) {
+	public Long countAll(String rut, String idUsuario) {
 		try {
 			if(rut==null) {
 				rut="";
 			}
 
-			return clidao.countAll(rut);
+			return clidao.countAll(rut, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cliente ", e);
 			return 0L;
@@ -89,7 +92,7 @@ public class ClienteRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<ClienteJson> getAll(Integer page, Integer limit, String rut) {
+	public List<ClienteJson> getAll(Integer page, Integer limit, String rut, String idUsuario) {
 		List<ClienteJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -101,7 +104,7 @@ public class ClienteRD {
 			if(rut==null) {
 				rut="";
 			}
-			List<Cliente> lc = clidao.getAll(inicio, limit, rut);
+			List<Cliente> lc = clidao.getAll(inicio, limit, rut, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lc.size(); i++) {
 				ClienteJson cj = new ClienteJson();
 				cj.setId(lc.get(i).getId());
@@ -203,11 +206,11 @@ public class ClienteRD {
 	 * Metodo para traer una lista de cliente (select)
 	 * @return
 	 */
-	public List<ClienteJson> getAllLista() {
+	public List<ClienteJson> getAllLista(ClienteJson cj) {
 
 		List<ClienteJson> lcj = new ArrayList<>();
 		try {
-			List<Cliente> c = clidao.getLista();
+			List<Cliente> c = clidao.getLista(udao.getById(cj.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < c.size(); i++) {
 				ClienteJson cjj = new ClienteJson();
 				cjj.setId(c.get(i).getId());

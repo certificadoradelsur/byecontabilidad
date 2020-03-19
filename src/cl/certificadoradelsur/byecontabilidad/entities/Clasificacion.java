@@ -25,9 +25,9 @@ import javax.persistence.Table;
 @Table(name = "clasificacion")
 @SequenceGenerator(name = "seq_clasificacion", sequenceName = "seq_clasificacion")
 @NamedQueries({
-		@NamedQuery(name = "Clasificacion.getAll", query = "SELECT c FROM Clasificacion c where  (true = :ignoreNombre or upper(c.nombre) like :nombre)"),
-		@NamedQuery(name = "Clasificacion.countAll", query = "SELECT count(c.id) FROM Clasificacion c where  (true = :ignoreNombre or upper(c.nombre)  like :nombre)"),
-		@NamedQuery(name = "Clasificacion.getByIdGrupoCuenta", query = "SELECT c FROM Clasificacion c  where  c.grupoCuenta.id=:idGrupoCuenta")})
+		@NamedQuery(name = "Clasificacion.getAll", query = "SELECT c FROM Clasificacion c where c.empresa.oficinaContable.id=:idOficinaContable and (true = :ignoreNombre or upper(c.nombre) like :nombre)"),
+		@NamedQuery(name = "Clasificacion.countAll", query = "SELECT count(c.id) FROM Clasificacion c where c.empresa.oficinaContable.id=:idOficinaContable and (true = :ignoreNombre or upper(c.nombre)  like :nombre)"),
+		@NamedQuery(name = "Clasificacion.getByIdGrupoCuenta", query = "SELECT c FROM Clasificacion c  where c.empresa.oficinaContable.id=:idOficinaContable and c.grupoCuenta.id=:idGrupoCuenta")})
 
 public class Clasificacion implements Serializable {
 
@@ -36,6 +36,7 @@ public class Clasificacion implements Serializable {
 	private String nombre;
 	private ClaseCuenta claseCuenta;
 	private GrupoCuenta grupoCuenta;
+	private Empresa empresa;
 
 
 	@Id
@@ -76,6 +77,18 @@ public class Clasificacion implements Serializable {
 	public void setClaseCuenta(ClaseCuenta claseCuenta) {
 		this.claseCuenta = claseCuenta;
 	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_empresa", nullable = true)
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
+	
 
 	
 	

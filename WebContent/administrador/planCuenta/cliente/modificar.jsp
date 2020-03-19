@@ -107,7 +107,7 @@
 						</div>
 					</div>						
 					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
+						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;&nbsp;
 							Estado</label>
 						<div class="col-3">
 							<select class="browser-default custom-select" id="activo">
@@ -153,27 +153,34 @@ $(document).ready(function () {
 						document.getElementById("telefono").value = data.telefono;
 						document.getElementById("activo").value = data.activo;
 						document.getElementById("empresa").value = data.idEmpresa;
+						cargaEmpresa(data.idEmpresa);
 						
  }).fail(function(jqxhr, settings, ex) {
 						alert('No se pudo modificar el cliente '
-								+ ex);});
-	
-	var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value}
-			
-			$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
-					function(res, code) {
-						var str;
-						for (var i = 0, len = res.length; i < len; i++) {
-							str += "<option value="+res[i].id+">" + res[i].razonSocial
-									+ "</option>";
-						}
-						document.getElementById("empresa").innerHTML = str;
-					}, "json");	
-	
-
-		
+								+ ex);});	
 });
+   
+
+	function cargaEmpresa(idEmpresa) {
+		var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value
+		}
+
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista', JSON
+				.stringify(submitJson), function(res, code) {
+			var str;
+			for (var i = 0, len = res.length; i < len; i++) {
+				if (idEmpresa == res[i].id) {
+					str += "<option value="+res[i].id+" selected>"
+							+ res[i].razonSocial + "</option>";
+				} else {
+					str += "<option value="+res[i].id+">" + res[i].razonSocial
+							+ "</option>";
+				}
+			}
+			document.getElementById("empresa").innerHTML = str;
+		}, "json");
+	}
 
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
@@ -184,9 +191,9 @@ $(document).ready(function () {
 			alert("Los campos deben estar llenos");
 			return;
 		}
-		
+
 		var submitJson = {
-				id : <%=request.getParameter("id")%>,
+			id : <%=request.getParameter("id")%>,
 				rut : document.getElementById("rut").value,
 				nombre : document.getElementById("nombre").value,
 				ciudad : document.getElementById("ciudad").value,

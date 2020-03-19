@@ -64,7 +64,7 @@
 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
 							&nbsp; Clase Cuenta</label>
-						<div class="col-4">
+						<div class="col-3">
 							<select class="browser-default custom-select" id="claseCuenta">
 							<option value="1">Activo</option>
 							</select>
@@ -73,13 +73,21 @@
 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
 							&nbsp; Grupo Cuenta</label>
-						<div class="col-4">
+						<div class="col-3">
 							<select class="browser-default custom-select" id="grupoCuenta">
 							</select>
 						</div>
 					</div>
-					<br>
-					<br>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+					</div>									
+					
+					<br><br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -101,7 +109,20 @@
 $(document).ready(function() {
 	$("#claseCuenta").select2();
 	$("#grupoCuenta").select2();
-	
+	$("#empresa").select2({width:'200'});
+
+	var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value}
+			
+			$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+					function(res, code) {
+						var str;
+						for (var i = 0, len = res.length; i < len; i++) {
+							str += "<option value="+res[i].id+">" + res[i].razonSocial
+									+ "</option>";
+						}
+						document.getElementById("empresa").innerHTML = str;
+					}, "json");	
 	$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
 			function(res, code) {
 				var str;
@@ -147,7 +168,9 @@ $(document).ready(function() {
 		var submitJson = {
 			idClaseCuenta : document.getElementById("claseCuenta").value,	
 			idGrupoCuenta :document.getElementById("grupoCuenta").value,
-			nombre : document.getElementById("nombre").value
+			nombre : document.getElementById("nombre").value,
+			idEmpresa : document.getElementById("empresa").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 
 		$.post('/byeContabilidad/rest-services/private/clasificacion/add',
