@@ -1,5 +1,7 @@
 package cl.certificadoradelsur.byecontabilidad.json;
 
+import java.util.List;
+
 /**
  * Clase json de CuentaContable
  * 
@@ -20,7 +22,8 @@ public class ComprobanteContableJson {
 	private String glosa;
 	private Long numDocumento;
 	private String tipoDocumento;
-
+	List<MovimientoJson> movimientos;
+	List<CuentaContableJson> cuentasContables;
 
 	public Long getId() {
 		return id;
@@ -94,7 +97,17 @@ public class ComprobanteContableJson {
 	public void setTipoDocumento(String tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
 	}
-
-
+	public List<MovimientoJson> getMovimientos() {
+		return movimientos;
+	}
+	public void setMovimientos(List<MovimientoJson> movimientos) {
+		this.movimientos = movimientos;
+	}
+	public List<CuentaContableJson> getCuentasContables() {
+		return cuentasContables;
+	}
+	public void setCuentasContables(List<CuentaContableJson> cuentasContables) {
+		this.cuentasContables = cuentasContables;
+	}
 	
 }

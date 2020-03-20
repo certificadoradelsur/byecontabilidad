@@ -27,7 +27,7 @@ public class MovimientoJson {
 	private Long idCuenta;
 	private String numCuenta;
 	private Long numComprobante;
-	
+	private Long idCuentaContable;
 	private String fechaI;
 	private String fechaF;
 
@@ -154,5 +154,11 @@ public class MovimientoJson {
 	public void setNumComprobante(Long numComprobante) {
 		this.numComprobante = numComprobante;
 	}
-
+	public Long getIdCuentaContable() {
+		return idCuentaContable;
+	}
+	public void setIdCuentaContable(Long idCuentaContable) {
+		this.idCuentaContable = idCuentaContable;
+	}
+	
 }

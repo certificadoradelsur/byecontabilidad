@@ -11,8 +11,8 @@ public class TransaccionJson {
 	private Long id;
 	private Long numTransaccion;
 	private String glosaTransaccion;
-	List<MovimientoJson> movimientos;
 	private Boolean eliminado;
+	List<MovimientoJson> movimientos;
 	
 	public Long getId() {
 		return id;
@@ -53,7 +53,5 @@ public class TransaccionJson {
 	public void setEliminado(Boolean eliminado) {
 		this.eliminado = eliminado;
 	}
-
-	
 
 }

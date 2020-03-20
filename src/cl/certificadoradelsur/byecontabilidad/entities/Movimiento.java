@@ -51,6 +51,7 @@ public class Movimiento implements Serializable {
 	private boolean eliminado;
 	private Cuenta cuenta;
 	private Transaccion transaccion;
+	private ComprobanteContable comprobanteContable;
 	private Empresa empresa;
 	private Usuario usuario;
 
@@ -173,6 +174,16 @@ public class Movimiento implements Serializable {
 
 	public void setTransaccion(Transaccion transaccion) {
 		this.transaccion = transaccion;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_comprobante_contable", nullable = true)
+	public ComprobanteContable getComprobanteContable() {
+		return comprobanteContable;
+	}
+
+	public void setComprobanteContable(ComprobanteContable comprobanteContable) {
+		this.comprobanteContable = comprobanteContable;
 	}
 
 	@ManyToOne

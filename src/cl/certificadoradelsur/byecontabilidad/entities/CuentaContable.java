@@ -47,6 +47,7 @@ public class CuentaContable implements Serializable {
 	private Cuenta cuenta;
 	private Banco banco;
 	private Empresa empresa;
+	private ComprobanteContable comprobanteContable;
 
 	@Id
 	@GeneratedValue(generator = "seq_cuenta_contable", strategy = GenerationType.AUTO)
@@ -160,6 +161,16 @@ public class CuentaContable implements Serializable {
 
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_comprobante_contable", nullable = true)
+	public ComprobanteContable getComprobanteContable() {
+		return comprobanteContable;
+	}
+
+	public void setComprobanteContable(ComprobanteContable comprobanteContable) {
+		this.comprobanteContable = comprobanteContable;
 	}
 	
 	

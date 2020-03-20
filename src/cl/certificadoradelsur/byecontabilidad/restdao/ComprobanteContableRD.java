@@ -8,7 +8,12 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
+import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
+import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ComprobanteContableJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -27,7 +32,12 @@ public class ComprobanteContableRD {
 	private ComprobanteContableDAO comdao;
 	@Inject
 	private CuentaContableDAO cuentadao;
-
+	@Inject
+	private EmpresaDAO edao;
+	@Inject
+	private CuentaDAO cdao;
+	@Inject
+	private UsuarioDAO udao;
 
 	/**
 	 * funcion que almacena
@@ -38,16 +48,41 @@ public class ComprobanteContableRD {
 	public String save(ComprobanteContableJson ccj) {
 		try {
 			ComprobanteContable c = new ComprobanteContable();
-
 			if (comdao.getByNumero(ccj.getNumero()) == null) {
 				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
 					c.setGlosaGeneral(ccj.getGlosaGeneral());
 					c.setNumero(ccj.getNumero());
-					c.setFecha(Utilidades.convertidorFecha(ccj.getFecha()));
-					c.setTipo(ccj.getTipo());
-					c.setCuentaContable(cuentadao.getById(ccj.getIdCuentaContable()));
+					c.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
+					List<CuentaContable> cuentasContables = new ArrayList<>();
+					for (int i = 0; i < ccj.getCuentasContables().size(); i++) {
+						cuentasContables.add(cuentadao.getById(ccj.getCuentasContables().get(i).getIdCuentaContable()));
+					}
+					List<Movimiento> movimientos = new ArrayList<>();
+					for (int i = 0; i < ccj.getMovimientos().size(); i++) {
+						Movimiento movimiento = new Movimiento();
+						if (Utilidades.containsScripting(ccj.getMovimientos().get(i).getGlosa()).compareTo(true) == 0) {
+							throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+						} else {
+							movimiento.setGlosa(ccj.getMovimientos().get(i).getGlosa());
+							movimiento.setMonto(ccj.getMovimientos().get(i).getMonto());
+							movimiento.setTipoMovimiento(ccj.getMovimientos().get(i).getTipoMovimiento());
+							movimiento.setTipoDocumento(ccj.getMovimientos().get(i).getTipoDocumento());
+							movimiento.setNumComprobante(ccj.getMovimientos().get(i).getNumComprobante());
+							movimiento.setNumDocumento(ccj.getMovimientos().get(i).getNumDocumento());
+							movimiento.setEstado(ccj.getMovimientos().get(i).isEstado());
+							movimiento.setFecha(
+									Utilidades.convertidorFechaSinHora(ccj.getMovimientos().get(i).getFecha()));
+							movimiento.setEmpresa(edao.getById(cuentadao
+									.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).getEmpresa().getId()));
+							movimiento.setUsuario(udao.getById(ccj.getMovimientos().get(i).getIdUsuario()));
+							movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
+							movimiento.setEliminado(false);
+							movimiento.setComprobanteContable(c);
+							movimientos.add(movimiento);
+						}
+					}
 					comdao.guardar(c);
 					return Constantes.MENSAJE_REST_OK;
 				}
@@ -67,15 +102,15 @@ public class ComprobanteContableRD {
 	 * @return el total
 	 */
 	public Long countAll(
-			//String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta
-			) {
+	// String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta
+	) {
 		try {
-		//	if (glosaGeneral == null) {
-		//		glosaGeneral = "";
-		//	}
+			// if (glosaGeneral == null) {
+			// glosaGeneral = "";
+			// }
 			return comdao.countAll(
-					//glosaGeneral, idClaseCuenta, idGrupoCuenta
-					);
+			// glosaGeneral, idClaseCuenta, idGrupoCuenta
+			);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de comprobantes contables ", e);
 			return 0L;
@@ -90,8 +125,8 @@ public class ComprobanteContableRD {
 	 * @return json con total de Bancos
 	 */
 	public List<ComprobanteContableJson> getAll(Integer page, Integer limit
-			//, String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta
-			) {
+	// , String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta
+	) {
 		List<ComprobanteContableJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -100,12 +135,12 @@ public class ComprobanteContableRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-		//	if (glosaGeneral == null) {
-		//		glosaGeneral = "";
-		//	}
+			// if (glosaGeneral == null) {
+			// glosaGeneral = "";
+			// }
 			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit
-					//, glosaGeneral, idClaseCuenta, idGrupoCuenta
-					);
+			// , glosaGeneral, idClaseCuenta, idGrupoCuenta
+			);
 			for (int i = 0; i < lcc.size(); i++) {
 				ComprobanteContableJson ccj = new ComprobanteContableJson();
 				ccj.setId(lcc.get(i).getId());
@@ -132,31 +167,27 @@ public class ComprobanteContableRD {
 			ComprobanteContable c = comdao.getById(ccj.getId());
 			if (comdao.getByNumero(ccj.getNumero()) == null
 					|| comdao.getByNumero(ccj.getNumero()).getNumero() == c.getNumero()) {
-				if ( Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
+				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
 					/*
-					cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
-					cuentaContable.setCodigo(ccj.getCodigo());
-					cuentaContable.setDescripcion(ccj.getDescripcion());
-					cuentaContable.setAnalisis(ccj.isAnalisis());
-					// cuentaContable.setImputable(ccj.isImputable());
-					cuentaContable.setImputable(true);
-					cuentaContable.setConciliacion(ccj.isConciliacion());
-					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-					cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
-					if (ccj.isAnalisis().equals(true)) {
-						cuentaContable.setAnalizable(ccj.getAnalizable());
-						cuentaContable.setBanco(null);
-						cuentaContable.setCuenta(null);
-					}
-					if (ccj.isConciliacion().equals(true)) {
-						cuentaContable.setBanco(bdao.getById(ccj.getIdBanco()));
-						cuentaContable.setCuenta(cdao.getById(ccj.getIdCuenta()));
-						cuentaContable.setAnalizable("");
-					}
-					comdao.update(cuentaContable);
-					*/
+					 * cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
+					 * cuentaContable.setCodigo(ccj.getCodigo());
+					 * cuentaContable.setDescripcion(ccj.getDescripcion());
+					 * cuentaContable.setAnalisis(ccj.isAnalisis()); //
+					 * cuentaContable.setImputable(ccj.isImputable());
+					 * cuentaContable.setImputable(true);
+					 * cuentaContable.setConciliacion(ccj.isConciliacion());
+					 * cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+					 * cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta())); if
+					 * (ccj.isAnalisis().equals(true)) {
+					 * cuentaContable.setAnalizable(ccj.getAnalizable());
+					 * cuentaContable.setBanco(null); cuentaContable.setCuenta(null); } if
+					 * (ccj.isConciliacion().equals(true)) {
+					 * cuentaContable.setBanco(bdao.getById(ccj.getIdBanco()));
+					 * cuentaContable.setCuenta(cdao.getById(ccj.getIdCuenta()));
+					 * cuentaContable.setAnalizable(""); } comdao.update(cuentaContable);
+					 */
 					return Constantes.MENSAJE_REST_OK;
 				}
 			} else {
@@ -179,27 +210,25 @@ public class ComprobanteContableRD {
 		ComprobanteContable c = comdao.getById(bj.getId());
 		ComprobanteContableJson ccJson = new ComprobanteContableJson();
 		/*
-		ccJson.setId(cuentaContable.getId());
-		ccJson.setCodigo(cuentaContable.getCodigo());
-		ccJson.setGlosaGeneral(cuentaContable.getGlosaGeneral());
-		ccJson.setDescripcion(cuentaContable.getDescripcion());
-		ccJson.setAnalisis(cuentaContable.isAnalisis());
-		ccJson.setConciliacion(cuentaContable.isConciliacion());
-		if(cuentaContable.isAnalisis().equals(true)) {
-			ccJson.setAnalizable(cuentaContable.getAnalizable());	
-		}
-		if(cuentaContable.isConciliacion().equals(true)) {
-			ccJson.setIdBanco(cuentaContable.getBanco().getId());
-			ccJson.setIdCuenta(cuentaContable.getCuenta().getId());
-		}
-		ccJson.setConciliacion(cuentaContable.isConciliacion());
-		ccJson.setImputable(cuentaContable.isImputable());
-		ccJson.setIdClaseCuenta(cuentaContable.getClaseCuenta().getId());
-		ccJson.setIdGrupoCuenta(cuentaContable.getGrupoCuenta().getId());
-*/
+		 * ccJson.setId(cuentaContable.getId());
+		 * ccJson.setCodigo(cuentaContable.getCodigo());
+		 * ccJson.setGlosaGeneral(cuentaContable.getGlosaGeneral());
+		 * ccJson.setDescripcion(cuentaContable.getDescripcion());
+		 * ccJson.setAnalisis(cuentaContable.isAnalisis());
+		 * ccJson.setConciliacion(cuentaContable.isConciliacion());
+		 * if(cuentaContable.isAnalisis().equals(true)) {
+		 * ccJson.setAnalizable(cuentaContable.getAnalizable()); }
+		 * if(cuentaContable.isConciliacion().equals(true)) {
+		 * ccJson.setIdBanco(cuentaContable.getBanco().getId());
+		 * ccJson.setIdCuenta(cuentaContable.getCuenta().getId()); }
+		 * ccJson.setConciliacion(cuentaContable.isConciliacion());
+		 * ccJson.setImputable(cuentaContable.isImputable());
+		 * ccJson.setIdClaseCuenta(cuentaContable.getClaseCuenta().getId());
+		 * ccJson.setIdGrupoCuenta(cuentaContable.getGrupoCuenta().getId());
+		 */
 		return ccJson;
 	}
-	
+
 	/**
 	 * metodo elimina una comprobante contable
 	 * 
@@ -216,8 +245,8 @@ public class ComprobanteContableRD {
 			return e.getMessage();
 		}
 	}
-	
+
 	public Long getMaxNumero() {
-		return comdao.getMaxNumero();	
+		return comdao.getMaxNumero();
 	}
 }

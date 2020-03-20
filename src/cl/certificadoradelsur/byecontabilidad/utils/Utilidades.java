@@ -96,13 +96,25 @@ public class Utilidades {
 	 * @return fecha en string
 	 * @throws ParseException
 	 */
-	public static Timestamp convertidorFecha(String fecha) throws ParseException {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	public static Timestamp convertidorFechaSinHora(String fecha) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = dateFormat.parse(fecha);
 		return new java.sql.Timestamp(date.getTime());
 	}
 
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 	
+	/**
+	 * funcion que convierte un  String a timestamp 
+	 * 
+	 * @param fecha
+	 * @return fecha en string
+	 * @throws ParseException
+	 */
+	public static Timestamp convertidorFecha(String fecha) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date date = dateFormat.parse(fecha);
+		return new java.sql.Timestamp(date.getTime());
+	} 
+	
 	/**
 	 * funcion que convierte un  String a timestamp 2
 	 * 

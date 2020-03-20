@@ -78,18 +78,18 @@
 						placeholder="Ingrese Número" required="required" class="on" />
 				</div>
 				<div class="col-sm-1">
-					<label>Fecha</label>
-				</div>
-				<div class="col-sm-3">
-					<input type="date" id="fechaComprobante" name="fecha" class="in"
-						required="required" />
-				</div>
-				<div class="col-sm-1">
 					<label>Glosa</label>
 				</div>
 				<div class="col-sm-3">
-					<input type="text" id="glosaTransaccion" name="glosaTransaccion"
+					<input type="text" id="glosaGeneral" name="glosaGeneral"
 						placeholder="Ingrese glosa general" required="required" class="on" />
+				</div>
+				<div class="col-sm-1">
+					<label>Fecha</label>
+				</div>
+				<div class="col-sm-3">
+					<input type="date" id="fecha" name="fecha" class="in"
+						required="required" />
 				</div>
 				</div>
 				
@@ -200,13 +200,6 @@
 						pattern="^[0-9]+" />
 				</div>
 				<div class="col-sm-1">
-					<label>Fecha</label>
-				</div>
-				<div class="col-sm-3">
-					<input type="date" id="fecha" name="fecha"
-						required="required" />
-				</div>
-				<div class="col-sm-1">
 					<label>Estado</label>
 				</div>
 				<div class="col-3">
@@ -264,9 +257,10 @@
 						var varIdBanco;
 						var varIdCuenta;
 						var varCodigo;
-						var varDescripcion;
+						var varIdEmpresa;
 						var glosa;
 						var cliente;
+						var varIdCuentaContable;
 
 					var submitJson = {
 						idUsuario : document.getElementById("idUsuario").value}
@@ -276,12 +270,14 @@
 											for (var i = 0; i < res.length; i++) {
 												str += "<option value="+res[i].id+"/"+res[i].analisis+"/"
 												+res[i].conciliacion+"/"+res[i].idBanco+"/"
-												+res[i].idCuenta+"/"+res[i].codigo+ "/"+res[i].descripcion+">" 
+												+res[i].idCuenta+"/"+res[i].codigo+ "/"+res[i].idEmpresa+">" 
 												+res[i].glosaGeneral+"</option>";
 											//alert(res[i].codigo);
 											}
 
 					document.getElementById("cuentaContable").innerHTML = str;
+					var idCuentaContable = document.getElementById("cuentaContable").value.split("/");
+					varIdCuentaContable = idCuentaContable[0];
 					var analisis = document.getElementById("cuentaContable").value.split("/");
 					varAnalisis = analisis[1];
 					var coinciliacion = document.getElementById("cuentaContable").value.split("/");
@@ -292,8 +288,8 @@
 					varIdCuenta = cuenta[4]; 
 					var codigo = document.getElementById("cuentaContable").value.split("/");
 					varCodigo = codigo[5]; 
-					var descripcion = document.getElementById("cuentaContable").value.split("/");
-					varDescripcion = descripcion[6]; 
+					var idEmpresa = document.getElementById("cuentaContable").value.split("/");
+					varIdEmpresa = idEmpresa[6]; 
 					}, "json");
 						
 					
@@ -322,11 +318,6 @@
 										{
 											field : 'descripcion',
 											title : 'Descripción',
-											width : 160
-										},
-										{
-											field : 'numCuenta',
-											title : 'Cuenta',
 											width : 160
 										},
 										{
@@ -385,6 +376,16 @@
 											width : 160
 										},
 										{
+											field : 'numCuenta',
+											title : 'CUENTA',
+											width : 160
+										},
+										{
+											field : 'idCuentaContable',
+											title : 'CUENTACONTABLE',
+											width : 160
+										},
+										{
 											width : 100,
 											title : 'Eliminar',
 											tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
@@ -402,6 +403,8 @@
 	
 
 	$('#cuentaContable').on('change',function() {
+		                var idCuentaContable = document.getElementById("cuentaContable").value.split("/");
+		                varIdCuentaContable = idCuentaContable[0];
 						var analisis = document.getElementById("cuentaContable").value.split("/");
 						varAnalisis = analisis[1];
 						var coinciliacion = document.getElementById("cuentaContable").value.split("/");
@@ -412,8 +415,8 @@
 						varIdCuenta = cuenta[4];
 						var codigo = document.getElementById("cuentaContable").value.split("/");
 						varCodigo = codigo[5]; 
-						var descripcion = document.getElementById("cuentaContable").value.split("/");
-						varDescripcion = descripcion[6]; 
+						var idEmpresa = document.getElementById("cuentaContable").value.split("/");
+						varIdEmpresa = idEmpresa[6]; 
 
 						if (varAnalisis == 'true' && varConciliacion == 'false') {
 							$('#analisable').collapse('show');
@@ -513,7 +516,6 @@
 				'descripcion':$('#cuentaContable option:selected').text(),
 				'debe': debe,
 				'haber': haber,	
-			//	'numComprobante' : document.getElementById("numComprobante").value,
 				'numDocumento' : document.getElementById("numDocumento").value,
 				'glosa' : glosa,
 				'monto' : document.getElementById("monto").value,
@@ -524,8 +526,10 @@
 				'idCuenta' : document.getElementById("cuenta").value,
 				'numCuenta' : $('#cuenta option:selected').text(),
 				'idCliente' : cliente,
+				'idEmpresa' : varIdEmpresa,
 				'idUsuario' : document.getElementById("idUsuario").value,
-				'numComprobante' : document.getElementById("numero").value
+				'numComprobante' : document.getElementById("numero").value,
+				'idCuentaContable': varIdCuentaContable
 			})
 			limpiaAdd();
 		}
@@ -536,13 +540,13 @@
 			document.getElementById("glosaConciliacion").value = "";
 			document.getElementById("glosaAnalisis").value = "";
 			document.getElementById("monto").value = "";
-			document.getElementById("fecha").value = "";
+			//document.getElementById("fecha").value = "";
 		}
 
 		function Save() {
-			if (varAnalisis == 'false' && varConciliacion == 'true'){ 
-				 alert(document.getElementById("banco").value + document.getElementById("cuenta").value)
-				 }
+//			if (varAnalisis == 'false' && varConciliacion == 'true'){ 
+//				 alert(document.getElementById("banco").value + document.getElementById("cuenta").value)
+//				 }
 			var bool = $('.on').toArray().some(function(el) {
 				return $(el).val().length < 1
 			});
@@ -553,41 +557,70 @@
 			}
 			var list = grid.getAll(true)
 			var submitJson = {
+				numero : document.getElementById("numero").value,
 				glosaGeneral : document.getElementById("glosaGeneral").value,
-				fechaComprobante : document.getElementById("fecha").value,
-				numTransaccion : document.getElementById("numTransaccion").value,
-				glosaTransaccion : document.getElementById("glosaTransaccion").value,
+				fecha : document.getElementById("fecha").value,
 				movimientos : list.map(function(value) {
 					return {
 						id : value.ID,
-						numComprobante : value.numComprobante,
-						numDocumento : value.numDocumento,
+						codigo : value.codigo,
+						descripcion : value.descripcion,
 						glosa : value.glosa,
-						monto : value.monto,
+						monto:value.monto==''?0:value.monto,
 						tipoMovimiento : value.tipoMovimiento,
 						tipoDocumento : value.tipoDocumento,
 						estado : value.estado,
 						fecha : value.fecha,
-						idCuenta : value.idCuenta,
-						idUsuario : document.getElementById("idUsuario").value
+						idCuenta : value.idCuenta==''?0:value.idCuenta,
+						numComprobante : value.numComprobante==''?0:value.numComprobante,
+						debe : value.debe==''?0:value.debe,
+					   	haber: value.haber==''?0:value.haber,
+					    numDocumento : value.numdocumento==''?0:value.numdocumento,
+					    idUsuario : value.idUsuario==''?0:value.idUsuario,
+					    idCliente : value.idCliente==''?0:value.idCliente,
+					    numCuenta : value.numCuenta==''?0:value.numCuenta,
+					    idCuentaContable: value.idCuentaContable==''?0:value.idCuentaContable
 					}
-				})
+					
+				}),
+				cuentasContables : list.map(function(value) {
+						return {
+							id : value.ID,
+							codigo : value.codigo,
+							descripcion : value.descripcion,
+							glosa : value.glosa,
+							monto:value.monto==''?0:value.monto,
+							tipoMovimiento : value.tipoMovimiento,
+							tipoDocumento : value.tipoDocumento,
+							estado : value.estado,
+							fecha : value.fecha,
+							idCuenta : value.idCuenta==''?0:value.idCuenta,
+							numComprobante : value.numComprobante==''?0:value.numComprobante,
+							debe : value.debe==''?0:value.debe,
+						   	haber: value.haber==''?0:value.haber,
+						    numDocumento : value.numdocumento==''?0:value.numdocumento,
+						    idUsuario : value.idUsuario==''?0:value.idUsuario,
+						    idCliente : value.idCliente==''?0:value.idCliente,
+						    numCuenta : value.numCuenta==''?0:value.numCuenta,
+						    idCuentaContable: value.idCuentaContable==''?0:value.idCuentaContable			    						
+						}
+				})		
 
 			}
 
-			$.post('/conciliacionBancaria/rest-services/private/transaccion/add',
+			$.post('/byeContabilidad/rest-services/private/comprobanteContable/add',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('Se guardo exitosamente la transacción');
+					alert('Se guardo exitosamente el comprobante contable');
 					grid.reload();
-					limpiaT();
+				//|	limpiaT();
 					location.href = "index.jsp";
 				} else {
 					alert(data);
 				}
 
 			}).fail(function(jqxhr, settings, ex) {
-				alert('No se pudo guardar la Transacción ' + ex);
+				alert('No se pudo guardar el comprobante contable ' + ex);
 			});
 
 		}

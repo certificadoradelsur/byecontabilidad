@@ -2,15 +2,18 @@ package cl.certificadoradelsur.byecontabilidad.entities;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -24,12 +27,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "comprobante_contable")
 @SequenceGenerator(name = "seq_comprobante_contable", sequenceName = "seq_comprobante_contable")
-@NamedQueries({
-		@NamedQuery(name = "ComprobanteContable.getAll", query = "SELECT c FROM ComprobanteContable c "),
+@NamedQueries({ @NamedQuery(name = "ComprobanteContable.getAll", query = "SELECT c FROM ComprobanteContable c "),
 		@NamedQuery(name = "ComprobanteContable.countAll", query = "SELECT count(c.id) FROM ComprobanteContable c "),
 		@NamedQuery(name = "ComprobanteContable.getByNumero", query = "SELECT c FROM ComprobanteContable c where  c.numero= :numero"),
-		@NamedQuery(name = "ComprobanteContable.getMaxNumero", query = "SELECT MAX(c.numero) FROM ComprobanteContable c")
-})
+		@NamedQuery(name = "ComprobanteContable.getMaxNumero", query = "SELECT MAX(c.numero) FROM ComprobanteContable c") })
 
 public class ComprobanteContable implements Serializable {
 
@@ -38,8 +39,8 @@ public class ComprobanteContable implements Serializable {
 	private Long numero;
 	private String glosaGeneral;
 	private Timestamp fecha;
-	private String tipo;
-	private CuentaContable cuentaContable;
+	private List<CuentaContable> cuentasContables;
+	private List<Movimiento> movimientos;
 	private Long debe;
 	private Long haber;
 
@@ -52,6 +53,7 @@ public class ComprobanteContable implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	@Column(name = "numero", nullable = false)
 	public Long getNumero() {
 		return numero;
@@ -70,7 +72,7 @@ public class ComprobanteContable implements Serializable {
 		this.glosaGeneral = glosaGeneral;
 	}
 
-	@Column(name = "fecha", nullable = false)
+	@Column(name = "fecha", nullable = true)
 	public Timestamp getFecha() {
 		return fecha;
 	}
@@ -79,23 +81,13 @@ public class ComprobanteContable implements Serializable {
 		this.fecha = fecha;
 	}
 
-	@Column(name = "tipo", nullable = false)
-	public String getTipo() {
-		return tipo;
+	@OneToMany(mappedBy = "comprobanteContable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public List<CuentaContable> getCuentasContables() {
+		return cuentasContables;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "id_cuenta_contable", nullable = true)
-	public CuentaContable getCuentaContable() {
-		return cuentaContable;
-	}
-
-	public void setCuentaContable(CuentaContable cuentaContable) {
-		this.cuentaContable = cuentaContable;
+	public void setCuentasContables(List<CuentaContable> cuentasContables) {
+		this.cuentasContables = cuentasContables;
 	}
 
 	@Column(name = "debe", nullable = true)
@@ -106,6 +98,7 @@ public class ComprobanteContable implements Serializable {
 	public void setDebe(Long debe) {
 		this.debe = debe;
 	}
+
 	@Column(name = "haber", nullable = true)
 	public Long getHaber() {
 		return haber;
@@ -114,8 +107,14 @@ public class ComprobanteContable implements Serializable {
 	public void setHaber(Long haber) {
 		this.haber = haber;
 	}
-	
-	
-	
+
+	@OneToMany(mappedBy = "comprobanteContable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public List<Movimiento> getMovimientos() {
+		return movimientos;
+	}
+
+	public void setMovimientos(List<Movimiento> movimientos) {
+		this.movimientos = movimientos;
+	}
 
 }

@@ -25,6 +25,8 @@ public class CuentaContableJson {
 	private String idUsuario;
 	private Long idEmpresa;
 	private String razonSocialEmpresa;
+	private Long idCuentaContable;
+	
 	
 	public Long getId() {
 		return id;
@@ -160,6 +162,14 @@ public class CuentaContableJson {
 
 	public void setRazonSocialEmpresa(String razonSocialEmpresa) {
 		this.razonSocialEmpresa = razonSocialEmpresa;
+	}
+
+	public Long getIdCuentaContable() {
+		return idCuentaContable;
+	}
+
+	public void setIdCuentaContable(Long idCuentaContable) {
+		this.idCuentaContable = idCuentaContable;
 	}
 
 	
