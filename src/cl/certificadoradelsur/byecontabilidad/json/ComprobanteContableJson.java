@@ -22,6 +22,8 @@ public class ComprobanteContableJson {
 	private String glosa;
 	private Long numDocumento;
 	private String tipoDocumento;
+	private Long idEmpresa;
+	private String idUsuario;
 	List<MovimientoJson> movimientos;
 	List<CuentaContableJson> cuentasContables;
 
@@ -109,5 +111,18 @@ public class ComprobanteContableJson {
 	public void setCuentasContables(List<CuentaContableJson> cuentasContables) {
 		this.cuentasContables = cuentasContables;
 	}
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
 	
 }

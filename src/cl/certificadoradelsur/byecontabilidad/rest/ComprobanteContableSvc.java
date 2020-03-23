@@ -38,11 +38,7 @@ public interface ComprobanteContableSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin
-			//, @QueryParam("glosaGeneral") String glosaGeneral
-			//, @QueryParam("idClaseCuenta") Long idClaseCuenta
-			//, @QueryParam("idGrupoCuenta") Long idGrupoCuenta
-			);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,@QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idUsuario") String idUsuario);
 	
 	/**
 	 * Funcion para modificar un comprobante Contable

@@ -260,7 +260,7 @@ public class CuentaContableRD {
 				cj.setIdEmpresa(c.get(i).getEmpresa().getId());
 				cj.setConciliacion(c.get(i).isConciliacion());
 				cj.setCodigo(c.get(i).getCodigo());
-				if(c.get(i).isConciliacion()) {
+				if(c.get(i).isConciliacion().equals(true)) {
 				cj.setIdBanco(c.get(i).getBanco().getId());
 				cj.setIdCuenta(c.get(i).getCuenta().getId());
 				}
@@ -275,7 +275,41 @@ public class CuentaContableRD {
 
 	}
 	
-	public Long getByCodigo() {
-		return cuentadao.getByCodigo();	
+	public Long getMaxCodigo() {
+		return cuentadao.getMaxCodigo();	
+	}
+	
+	/**
+	 * funcion que busca cuenta por idEmpresa
+	 * @param idBanco
+	 * @return
+	 */
+	public List<CuentaContableJson> getByIdEmpresa(CuentaContableJson ccj) {
+
+		List<CuentaContableJson> lcj = new ArrayList<>();
+		try {
+
+			List<CuentaContable> c = cuentadao.getByIdEmpresa(ccj.getIdEmpresa(), udao.getById(ccj.getIdUsuario()).getOficinaContable().getId());
+			for (int i = 0; i < c.size(); i++) {	
+			CuentaContableJson cj = new CuentaContableJson();
+				cj.setId(c.get(i).getId());
+				cj.setGlosaGeneral(c.get(i).getGlosaGeneral());
+				cj.setDescripcion(c.get(i).getDescripcion());
+				cj.setIdEmpresa(c.get(i).getEmpresa().getId());
+				cj.setConciliacion(c.get(i).isConciliacion());
+				cj.setCodigo(c.get(i).getCodigo());
+				if(c.get(i).isConciliacion().equals(true)) {
+				cj.setIdBanco(c.get(i).getBanco().getId());
+				cj.setIdCuenta(c.get(i).getCuenta().getId());
+				}
+				cj.setAnalisis(c.get(i).isAnalisis());
+				lcj.add(cj);
+			}
+			return lcj;
+		} catch (Exception e) {
+			log.error("No se pudo obtener la lista de cuentas contables ", e);
+			return lcj;
+		}
+
 	}
 }

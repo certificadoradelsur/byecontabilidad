@@ -177,20 +177,20 @@
 	}
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar el usuario?')) {
+		if (confirm('¿Esta seguro desea desactivar el cliente?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
 			$.post('/byeContabilidad/rest-services/private/cliente/delete',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('Cliente eliminado correctamente');
+					alert('Cliente inactivo');
 					grid.reload();
 				} else {
-					alert('Error al eliminar cliente');
+					alert('Error al desactivar cliente');
 				}
 			}).fail(function() {
-				alert('Error al eliminar cliente');
+				alert('Error al desactivar cliente');
 			});
 		}
 	}

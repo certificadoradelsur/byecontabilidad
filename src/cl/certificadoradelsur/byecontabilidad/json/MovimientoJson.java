@@ -30,7 +30,6 @@ public class MovimientoJson {
 	private Long idCuentaContable;
 	private String fechaI;
 	private String fechaF;
-
 	
 	
 	public String getFechaI() {

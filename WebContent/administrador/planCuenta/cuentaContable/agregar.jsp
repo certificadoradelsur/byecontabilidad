@@ -180,7 +180,7 @@
 		$("#banco").select2({width:'200'});
 		$("#empresa").select2({width:'200'});
 		$("#cuenta").select2({width:'200'});
-		codigo();
+      	codigo();
 		
 		 $('#analisis').on('change', function(){
 
@@ -398,7 +398,7 @@
 
 	
 	function codigo() {
-		$.post('/byeContabilidad/rest-services/private/cuentaContable/getByCodigo')
+		$.post('/byeContabilidad/rest-services/private/cuentaContable/getMaxCodigo')
 				.done(function(data) {
 					document.getElementById("codigo").value = data + 1;
 				}).fail(function(jqxhr, settings, ex) {

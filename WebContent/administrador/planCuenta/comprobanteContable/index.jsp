@@ -59,17 +59,42 @@
 				<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
 		<br>
+<div class="form-group">
+				<div class="col-1"></div>
+				<input type="text" id="filtro" name="filtro"
+					placeholder="Filtrar por glosa" />
+				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+			</div>
+			<div class="table-responsive">
+				<table id="grid"></table>
+			</div>
 
-		<div class="form-group">
-			<div class="col-1"></div>
-			<input type="text" id="filtro" name="filtro"
-				placeholder="Filtrar por número de cuenta" />
-			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+
+               <div class="container">
+				<!-- Trigger the modal with a button -->
+				<button hidden="true" type="button" class="btn btn-info btn-lg"
+					id="modal" data-toggle="modal" data-target="#myModal">Open
+					Modal</button>
+				<!-- Modal -->
+				<div class="modal fade bd-example-modal-xl" id="myModal" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalCenterTitle">Movimientos</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close" id="modalclose">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="table-responsive">
+								<table id="grid2"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="table-responsive">
-			<table id="grid"></table>
-		</div>
-	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
@@ -78,54 +103,53 @@
 			.ready(
 					function() {
 						tablaP();
-// 						grid = $('#grid')
-// 								.grid(
-// 										{
-// 											primaryKey : 'ID',
-// 											dataSource : '/conciliacionBancaria/rest-services/private//getAll'
-// 													,
-// 											autoLoad : false,
-// 											columns : [
-// 													{
-// 														field : 'id',
-// 														title : 'Identificador',
-// 														width : 100,
-// 														hidden : true
+						grid = $('#grid')
+								.grid(
+										{
+											primaryKey : 'ID',
+											dataSource : "/byeContabilidad/rest-services/private/comprobanteContable/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
+											autoLoad : false,
+											columns : [
+													{
+														field : 'id',
+														title : 'Identificador',
+														width : 100,
+														hidden : true
 
-// 													},
-// 													{
-// 														field : 'numTransaccion',
-// 														title : 'N° Transacción',
-// 														width : 140
-// 													},
+													},
+													{
+														field : 'numero',
+														title : 'N° Comprobante',
+														width : 140
+													},
 
-// 													{
-// 														field : 'glosaTransaccion',
-// 														title : 'Glosa',
-// 														sortable : true
-// 													},
-// 													{
-// 														width : 100,
-// 														title : 'Ver más',
-// 														tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
-// 														align : 'center',
-// 														events : {
-// 															'click' : ver
-// 														}
-// 													},
-// 													{
-// 														width : 100,
-// 														title : 'Eliminar',
-// 														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-// 														align : 'center',
-// 														events : {
-// 															'click' : eliminar
-// 														}
-// 													}, ],
-// 											pager : {
-// 												limit : 10
-// 											}
-// 										});
+													{
+														field : 'glosaGeneral',
+														title : 'Glosa',
+														sortable : true
+													},
+													{
+														width : 100,
+														title : 'Ver más',
+														tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
+														align : 'center',
+														events : {
+															'click' : ver
+														}
+													},
+													{
+														width : 100,
+														title : 'Eliminar',
+														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+														align : 'center',
+														events : {
+															'click' : eliminar
+														}
+													}, ],
+											pager : {
+												limit : 10
+											}
+										});
 
 					});
 
@@ -142,7 +166,7 @@
 			}
 			$
 					.post(
-							'/conciliacionBancaria/rest-services/private/movimiento/eliminarMovimientosTransaccion',
+							'/byeContabilidad/rest-services/private/movimiento/eliminarMovimientosTransaccion',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
 							('Transacción eliminada correctamente');
@@ -158,11 +182,11 @@
 	}
 
 	function tablaP() {
-		gridTransaccion = $('#grid2')
+		gridComprobante = $('#grid2')
 				.grid(
 						{
 							primaryKey : 'ID',
-							dataSource : '/conciliacionBancaria/rest-services/private/movimiento/getAllM',
+							dataSource : '/byeContabilidad/rest-services/private/movimiento/getAllM',
 
 							autoLoad : false,
 							columns : [
@@ -233,11 +257,11 @@
 			}
 			$
 					.post(
-							'/conciliacionBancaria/rest-services/private/movimiento/delete',
+							'/byeContabilidad/rest-services/private/movimiento/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
 							alert('Movimiento eliminado correctamente');
-							gridTransaccion.reload();
+							gridComprobante.reload();
 							//document.getElementById('modalclose').click(); 
 						} else {
 							alert(data);
@@ -249,7 +273,7 @@
 	}
 
 	function ver(x) {
-		gridTransaccion.reload({
+		gridComprobante.reload({
 			id : x.data.record.id
 		});
 		 document.getElementById('modal').click(); 
@@ -257,7 +281,7 @@
 
 	$('#buscar').on('click', function() {
 		grid.reload({
-			glosaTransaccion : $('#filtro').val(),
+			glosaGeneral : $('#filtro').val(),
 		});
 		clear();
 	});

@@ -34,16 +34,15 @@ public class ComprobanteContableDAO {
 	 * 
 	 * @return el total de Comprobantes Contables
 	 */
-	public Long countAll(
-		//	String nombre
-			) {
+	public Long countAll(String glosaGeneral, Long idOficinaContable) {
 		Query query = em.createNamedQuery("ComprobanteContable.countAll");
-	//	if (nombre.trim().equalsIgnoreCase("")) {
-	//		query.setParameter("ignoreNombre", true);
-	//	} else {
-	//		query.setParameter("ignoreNombre", false);
-	//	}
-	//	query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
+		if (glosaGeneral.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreGlosaGeneral", true);
+		} else {
+			query.setParameter("ignoreGlosaGeneral", false);
+		}
+		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		return (Long) query.getSingleResult();
 	}
 
@@ -57,16 +56,15 @@ public class ComprobanteContableDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<ComprobanteContable> getAll(Integer inicio, Integer fin 
-			//,String nombre
-			) {
+	public List<ComprobanteContable> getAll(Integer inicio, Integer fin,String glosaGeneral, Long idOficinaContable) {
 		Query query = em.createNamedQuery("ComprobanteContable.getAll");
-		//if (nombre.trim().equalsIgnoreCase("")) {
-		//	query.setParameter("ignoreNombre", true);
-		//} else {
-		//	query.setParameter("ignoreNombre", false);
-		//}
-		//query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
+		if (glosaGeneral.trim().equalsIgnoreCase("")) {
+			query.setParameter("ignoreGlosaGeneral", true);
+		} else {
+			query.setParameter("ignoreGlosaGeneral", false);
+		}
+		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

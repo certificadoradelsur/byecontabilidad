@@ -12,7 +12,6 @@ import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
-import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ComprobanteContableJson;
@@ -55,10 +54,11 @@ public class ComprobanteContableRD {
 					c.setGlosaGeneral(ccj.getGlosaGeneral());
 					c.setNumero(ccj.getNumero());
 					c.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
-					List<CuentaContable> cuentasContables = new ArrayList<>();
-					for (int i = 0; i < ccj.getCuentasContables().size(); i++) {
-						cuentasContables.add(cuentadao.getById(ccj.getCuentasContables().get(i).getIdCuentaContable()));
-					}
+					c.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+//					List<CuentaContable> cuentasContables = new ArrayList<>();
+//					for (int i = 0; i < ccj.getCuentasContables().size(); i++) {
+//						cuentasContables.add(cuentadao.getById(ccj.getCuentasContables().get(i).getIdCuentaContable()));
+//					}
 					List<Movimiento> movimientos = new ArrayList<>();
 					for (int i = 0; i < ccj.getMovimientos().size(); i++) {
 						Movimiento movimiento = new Movimiento();
@@ -77,12 +77,19 @@ public class ComprobanteContableRD {
 							movimiento.setEmpresa(edao.getById(cuentadao
 									.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).getEmpresa().getId()));
 							movimiento.setUsuario(udao.getById(ccj.getMovimientos().get(i).getIdUsuario()));
-							movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
+							if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isConciliacion()
+									.equals(true)) {
+								movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
+							}
+							movimiento.setCuentaContable(
+									cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()));
 							movimiento.setEliminado(false);
 							movimiento.setComprobanteContable(c);
 							movimientos.add(movimiento);
 						}
 					}
+//					c.setCuentasContables(cuentasContables);
+					c.setMovimientos(movimientos);
 					comdao.guardar(c);
 					return Constantes.MENSAJE_REST_OK;
 				}
@@ -101,16 +108,12 @@ public class ComprobanteContableRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(
-	// String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta
-	) {
+	public Long countAll(String glosaGeneral, String idUsuario) {
 		try {
-			// if (glosaGeneral == null) {
-			// glosaGeneral = "";
-			// }
-			return comdao.countAll(
-			// glosaGeneral, idClaseCuenta, idGrupoCuenta
-			);
+			if (glosaGeneral == null) {
+				glosaGeneral = "";
+			}
+			return comdao.countAll(glosaGeneral, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de comprobantes contables ", e);
 			return 0L;
@@ -124,9 +127,7 @@ public class ComprobanteContableRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<ComprobanteContableJson> getAll(Integer page, Integer limit
-	// , String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta
-	) {
+	public List<ComprobanteContableJson> getAll(Integer page, Integer limit, String glosaGeneral, String idUsuario) {
 		List<ComprobanteContableJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -135,18 +136,16 @@ public class ComprobanteContableRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-			// if (glosaGeneral == null) {
-			// glosaGeneral = "";
-			// }
-			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit
-			// , glosaGeneral, idClaseCuenta, idGrupoCuenta
-			);
+			if (glosaGeneral == null) {
+				glosaGeneral = "";
+			}
+			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit, glosaGeneral, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lcc.size(); i++) {
 				ComprobanteContableJson ccj = new ComprobanteContableJson();
 				ccj.setId(lcc.get(i).getId());
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
+				ccj.setNumero(lcc.get(i).getNumero());
 				ccj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion(lcc.get(i).getFecha()));
-				ccj.setGlosaGeneralCuentaContable(cuentadao.getById(ccj.getIdCuentaContable()).getDescripcion());
 				lcj.add(ccj);
 			}
 

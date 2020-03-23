@@ -88,8 +88,18 @@ public interface CuentaContableSvc {
 	 * @return max codigo
 	 */
 	@POST
-	@Path("/getByCodigo")
+	@Path("/getMaxCodigo")
 	@Produces("application/json")
-	Response getByCodigo();
+	Response getMaxCodigo();
+	
+	/**
+     * funcion que obtiene las cuentas
+     * @param datos
+     * @return cuentas que seran mostrados en el select
+     */
+	@POST
+	@Path("/getByIdEmpresa")
+	@Produces("application/json")
+	Response getByIdEmpresa(String datos);
 	
 }

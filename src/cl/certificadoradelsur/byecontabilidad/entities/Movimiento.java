@@ -27,8 +27,8 @@ import javax.persistence.Table;
 @NamedQueries({
 		@NamedQuery(name = "Movimiento.getAll", query = "SELECT m FROM Movimiento m where m.eliminado = false "),
 		@NamedQuery(name = "Movimiento.countAll", query = "SELECT count(m.id) FROM Movimiento m where m.eliminado = false"),
-		@NamedQuery(name = "Movimiento.countAllM", query = "SELECT count(m.id) FROM Movimiento m where m.eliminado = false and  (true = :ignoreId or m.transaccion.id=:id)"),
-		@NamedQuery(name = "Movimiento.getAllM", query = "SELECT  m FROM Movimiento m where m.eliminado = false and m.transaccion.id=:id"),
+		@NamedQuery(name = "Movimiento.countAllM", query = "SELECT count(m.id) FROM Movimiento m where m.eliminado = false and  (true = :ignoreId or m.comprobanteContable.id=:id)"),
+		@NamedQuery(name = "Movimiento.getAllM", query = "SELECT  m FROM Movimiento m where m.eliminado = false and m.comprobanteContable.id=:id"),
 		@NamedQuery(name = "Movimiento.countAllResumen", query = "SELECT count(m.id) FROM Movimiento m where m.eliminado = false and m.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or m.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or m.cuenta.banco.id=:idBanco)"),
 		@NamedQuery(name = "Movimiento.getByIdCuenta", query = "SELECT m FROM Movimiento m where  m.cuenta.id= :idCuenta"),
 		@NamedQuery(name = "Movimiento.getByIdTransaccion", query = "SELECT m FROM Movimiento m where  m.transaccion.id= :idTransaccion"),
@@ -52,6 +52,7 @@ public class Movimiento implements Serializable {
 	private Cuenta cuenta;
 	private Transaccion transaccion;
 	private ComprobanteContable comprobanteContable;
+	private CuentaContable cuentaContable;
 	private Empresa empresa;
 	private Usuario usuario;
 
@@ -184,6 +185,17 @@ public class Movimiento implements Serializable {
 
 	public void setComprobanteContable(ComprobanteContable comprobanteContable) {
 		this.comprobanteContable = comprobanteContable;
+	}
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "id_cuenta_contable", nullable = true)
+	public CuentaContable getCuentaContable() {
+		return cuentaContable;
+	}
+
+	public void setCuentaContable(CuentaContable cuentaContable) {
+		this.cuentaContable = cuentaContable;
 	}
 
 	@ManyToOne

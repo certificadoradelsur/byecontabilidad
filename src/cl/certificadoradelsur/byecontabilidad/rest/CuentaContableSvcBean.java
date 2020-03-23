@@ -71,15 +71,25 @@ public class CuentaContableSvcBean implements CuentaContableSvc {
 	public Response getLista(String datos) {
 		Gson gson = new GsonBuilder().create();
 		CuentaContableJson ccj = gson.fromJson(datos, CuentaContableJson.class);
-		List<CuentaContableJson> lbj = cuentard.getAllLista(ccj);
-		String json = gson.toJson(lbj, new TypeToken<List<CuentaContableJson>>() {}.getType());
+		List<CuentaContableJson> lcj = cuentard.getAllLista(ccj);
+		String json = gson.toJson(lcj, new TypeToken<List<CuentaContableJson>>() {}.getType());
 		return Response.ok(json).build();
 	}
 	
 	@Override
-	public Response getByCodigo() {
-		Long respuesta = cuentard.getByCodigo();
+	public Response getMaxCodigo() {
+		Long respuesta = cuentard.getMaxCodigo();
 		return Response.ok(respuesta).build();
+	}
+	
+	@Override
+	public Response getByIdEmpresa(String datos) {
+		Gson gson = new GsonBuilder().create();
+		CuentaContableJson cj = gson.fromJson(datos, CuentaContableJson.class);
+		List<CuentaContableJson> lcj = cuentard.getByIdEmpresa(cj);
+		String json = gson.toJson(lcj, new TypeToken<List<CuentaContableJson>>() {}.getType());
+		return Response.ok(json).build();
+		
 	}
 
 }

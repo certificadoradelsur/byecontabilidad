@@ -6,7 +6,6 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
 import cl.certificadoradelsur.byecontabilidad.json.ComprobanteContableJson;
 import cl.certificadoradelsur.byecontabilidad.restdao.ComprobanteContableRD;
 
@@ -32,17 +31,11 @@ public class ComprobanteContableSvcBean implements ComprobanteContableSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin
-			//, String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta
-			) {
+	public Response list(Integer inicio, Integer fin,String glosaGeneral, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<ComprobanteContableJson> lccj = comrd.getAll(inicio, fin
-				//,glosaGeneral, idClaseCuenta, idGrupoCuenta
-				);
+		List<ComprobanteContableJson> lccj = comrd.getAll(inicio, fin,glosaGeneral, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<ComprobanteContableJson>>() {
-		}.getType()) + ", \"total\": " + comrd.countAll(
-				//glosaGeneral , idClaseCuenta,idGrupoCuenta
-				) + "}";
+		}.getType()) + ", \"total\": " + comrd.countAll(glosaGeneral , idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 

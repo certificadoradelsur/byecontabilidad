@@ -50,6 +50,7 @@ public class MovimientoRD {
 	@Inject
 	private NoConciliadoDAO ncdao;
 
+
 	/**
 	 * funcion que almacena
 	 * 
@@ -249,8 +250,13 @@ public class MovimientoRD {
 				mj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion((lm.get(i).getFecha())).substring(0, 10));
 				mj.setTipoDocumento(lm.get(i).getTipoDocumento());
 				mj.setTipoMovimiento(lm.get(i).getTipoMovimiento());
-				mj.setNumCuenta(lm.get(i).getCuenta().getNumCuenta());
-				mj.setNombreBanco(lm.get(i).getCuenta().getBanco().getNombre());
+				if (lm.get(i).getCuentaContable().isConciliacion().equals(true)) {
+					mj.setNumCuenta(lm.get(i).getCuenta().getNumCuenta());
+					mj.setNombreBanco(lm.get(i).getCuenta().getBanco().getNombre());
+				}else {
+					mj.setNumCuenta("");
+					mj.setNombreBanco("");	
+				}
 				lmj.add(mj);
 			}
 		} catch (Exception e) {
@@ -271,9 +277,9 @@ public class MovimientoRD {
 					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco());
 			List<Cartola> lc = cdao.getAllLista(Utilidades.convertidorFecha(mj.getFechaI()),
 					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco());
-					 
-			if(lm.isEmpty() && lc.isEmpty()) {
-			 return Constantes.MENSAJE_REST_FAIL;
+
+			if (lm.isEmpty() && lc.isEmpty()) {
+				return Constantes.MENSAJE_REST_FAIL;
 			}
 			cb.conciliar(lm, lc);
 			return Constantes.MENSAJE_REST_OK;

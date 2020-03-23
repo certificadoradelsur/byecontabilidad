@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,8 +29,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "comprobante_contable")
 @SequenceGenerator(name = "seq_comprobante_contable", sequenceName = "seq_comprobante_contable")
-@NamedQueries({ @NamedQuery(name = "ComprobanteContable.getAll", query = "SELECT c FROM ComprobanteContable c "),
-		@NamedQuery(name = "ComprobanteContable.countAll", query = "SELECT count(c.id) FROM ComprobanteContable c "),
+@NamedQueries({ @NamedQuery(name = "ComprobanteContable.getAll", query = "SELECT c FROM ComprobanteContable c where c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),
+		@NamedQuery(name = "ComprobanteContable.countAll", query = "SELECT count(c.id) FROM ComprobanteContable c where c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),
 		@NamedQuery(name = "ComprobanteContable.getByNumero", query = "SELECT c FROM ComprobanteContable c where  c.numero= :numero"),
 		@NamedQuery(name = "ComprobanteContable.getMaxNumero", query = "SELECT MAX(c.numero) FROM ComprobanteContable c") })
 
@@ -39,11 +41,9 @@ public class ComprobanteContable implements Serializable {
 	private Long numero;
 	private String glosaGeneral;
 	private Timestamp fecha;
-	private List<CuentaContable> cuentasContables;
 	private List<Movimiento> movimientos;
-	private Long debe;
-	private Long haber;
-
+	private Empresa empresa;
+ 
 	@Id
 	@GeneratedValue(generator = "seq_comprobante_contable", strategy = GenerationType.AUTO)
 	public Long getId() {
@@ -81,31 +81,14 @@ public class ComprobanteContable implements Serializable {
 		this.fecha = fecha;
 	}
 
-	@OneToMany(mappedBy = "comprobanteContable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	public List<CuentaContable> getCuentasContables() {
-		return cuentasContables;
+	@ManyToOne
+	@JoinColumn(name = "id_empresa", nullable = true)
+	public Empresa getEmpresa() {
+		return empresa;
 	}
 
-	public void setCuentasContables(List<CuentaContable> cuentasContables) {
-		this.cuentasContables = cuentasContables;
-	}
-
-	@Column(name = "debe", nullable = true)
-	public Long getDebe() {
-		return debe;
-	}
-
-	public void setDebe(Long debe) {
-		this.debe = debe;
-	}
-
-	@Column(name = "haber", nullable = true)
-	public Long getHaber() {
-		return haber;
-	}
-
-	public void setHaber(Long haber) {
-		this.haber = haber;
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 	@OneToMany(mappedBy = "comprobanteContable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
