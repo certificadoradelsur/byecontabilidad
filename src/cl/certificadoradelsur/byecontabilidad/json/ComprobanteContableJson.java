@@ -24,6 +24,7 @@ public class ComprobanteContableJson {
 	private String tipoDocumento;
 	private Long idEmpresa;
 	private String idUsuario;
+	private String nombreEmpresa;
 	List<MovimientoJson> movimientos;
 	List<CuentaContableJson> cuentasContables;
 
@@ -32,6 +33,12 @@ public class ComprobanteContableJson {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
 	}
 	public Long getNumero() {
 		return numero;

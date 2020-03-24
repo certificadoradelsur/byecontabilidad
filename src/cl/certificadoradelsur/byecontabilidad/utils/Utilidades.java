@@ -142,6 +142,18 @@ public class Utilidades {
 	}
 	
 	/**
+	 * funcion que ordena la fecha dd-mm-aaaa
+	 * 
+	 * @param fecha
+	 * @return fecha ordenada
+	 */
+	public static String timestamAStringSinHora(Timestamp fecha) {
+		Date fech = fecha;
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		return formatter.format(fech);
+	}
+	
+	/**
 	 * Funcion para procesar archivo
 	 * @param path
 	 * @param input

@@ -52,25 +52,36 @@
 			<form name="formulario" id="formulario">
 				<div
 					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Modificar empresa</h1>
+					<h1 class="h2">Modificar comprobante</h1>
 				</div>
 				<div class="container">
 					<div class="form-group">
 						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Dirección
-						</label> <input type="text" id="direccion" name="direccion" class="in"
-							placeholder="Ingrese Dirección" required="required" />
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Número</label>
+						<input type="number" id="numero" name="numero" class="in"
+							placeholder="Ingrese Número"/>
+					</div>
+					<div class="form-group">
+						<div class="col-1"></div>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Glosa</label>
+						<input type="text" id="glosaGeneral" name="glosaGeneral" class="in"
+							placeholder="Ingrese glosa general" />
+					</div>
+					<div class="form-group">
+						<div class="col-1"></div>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Fecha</label>
+						<input type="date" id="fecha" name="fecha" class="in" />
 					</div>
 					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp;&nbsp; Empresa</label>
+						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
+							Empresa</label>
 						<div class="col-3">
 							<select class="browser-default custom-select" id="empresa">
 							</select>
 						</div>
 					</div>
-
-					<br> <br>
+					<br>
+					<br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -85,38 +96,25 @@
 			</form>
 		</div>
 	</div>
-		<input type="hidden" name="idUsuario" id="idUsuario"
+	
+	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
-
-	$("#empresa").select2();
-	var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value
-		}
-	$.post('/byeContabilidad/rest-services/private/empresa/getLista',
-			JSON.stringify(submitJson),
-			function(res, code) {
-				var str;
-				for (var i = 0, len = res.length; i < len; i++) {
-					str += "<option value="+res[i].id+">" + res[i].razonSocial
-							+ "</option>";
-				}
-				document.getElementById("empresa").innerHTML = str;
-			}, "json");
+	$("#empresa").select2({width : '200'});	
 	
-	var submitjson = {codigo:"<%=request.getParameter("id")%>" ,};
-						$.post('/byeContabilidad/rest-services/private/sucursal/getById',
+	var submitjson = {id:"<%=request.getParameter("id")%>" ,};	
+						$.post('/byeContabilidad/rest-services/private/comprobanteContable/getById',
 										JSON.stringify(submitjson)).done(function(data) {
-											document.getElementById("direccion").value = data.direccion;
+											document.getElementById("numero").value = data.numero;
+											document.getElementById("glosaGeneral").value = data.glosaGeneral;
+											document.getElementById("fecha").value = data.fecha;
 											document.getElementById("empresa").value = data.idEmpresa;
+											cargaEmpresa(data.idEmpresa)
 										}).fail(function(jqxhr, settings, ex) {
-											alert('No se pudo modificar la sucursal '
+											alert('No se pudo modificar el comprobante contable '
 													+ ex);});
-						
-						$("#empresa").select2();
-								
 					});
 
 	function modificar() {
@@ -129,11 +127,13 @@ $(document).ready(function () {
 			return;
 		}
 		var submitJson = {
-			codigo : <%=request.getParameter("id")%>,
-			direccion : document.getElementById("direccion").value,
-			idEmpresa : document.getElementById("empresa").value,
+			id : <%=request.getParameter("id")%> ,	
+			numero : document.getElementById("numero").value,
+			glosaGeneral : document.getElementById("glosaGeneral").value,
+			fecha : document.getElementById("fecha").value,
+			idEmpresa : document.getElementById("empresa").value
 		}
-		$.post('/byeContabilidad/rest-services/private/sucursal/update',
+		$.post('/byeContabilidad/rest-services/private/comprobanteContable/update',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
 				alert('Se guardaron los cambios');
@@ -146,6 +146,31 @@ $(document).ready(function () {
 		});
 	}
 
+	function cargaEmpresa(idEmpresa) {
+		
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value
+				}
+				$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								if (idEmpresa == res[i].id) {
+									str += "<option value="+res[i].id+" selected>"
+											+ res[i].razonSocial + "</option>";
+
+								} else {
+								str += "<option value="+res[i].id+">" + res[i].razonSocial
+										+ "</option>";
+							 }
+							}
+							document.getElementById("empresa").innerHTML = str;
+						}, "json");	 	 
+ 	   }
+
+
+
+	
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);

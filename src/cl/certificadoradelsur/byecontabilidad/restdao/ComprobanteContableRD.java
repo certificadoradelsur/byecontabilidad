@@ -145,10 +145,10 @@ public class ComprobanteContableRD {
 				ccj.setId(lcc.get(i).getId());
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
 				ccj.setNumero(lcc.get(i).getNumero());
-				ccj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion(lcc.get(i).getFecha()));
+				ccj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion(lcc.get(i).getFecha()).substring(0,10));
+				ccj.setNombreEmpresa(lcc.get(i).getEmpresa().getRazonSocial());
 				lcj.add(ccj);
 			}
-
 		} catch (Exception e) {
 			log.error("No se puede obtener la lista de comprobantes contables ", e);
 		}
@@ -165,28 +165,22 @@ public class ComprobanteContableRD {
 		try {
 			ComprobanteContable c = comdao.getById(ccj.getId());
 			if (comdao.getByNumero(ccj.getNumero()) == null
-					|| comdao.getByNumero(ccj.getNumero()).getNumero() == c.getNumero()) {
+					|| comdao.getByNumero(ccj.getNumero()).getNumero().equals(c.getNumero())) {
 				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
-					/*
-					 * cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
-					 * cuentaContable.setCodigo(ccj.getCodigo());
-					 * cuentaContable.setDescripcion(ccj.getDescripcion());
-					 * cuentaContable.setAnalisis(ccj.isAnalisis()); //
-					 * cuentaContable.setImputable(ccj.isImputable());
-					 * cuentaContable.setImputable(true);
-					 * cuentaContable.setConciliacion(ccj.isConciliacion());
-					 * cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-					 * cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta())); if
-					 * (ccj.isAnalisis().equals(true)) {
-					 * cuentaContable.setAnalizable(ccj.getAnalizable());
-					 * cuentaContable.setBanco(null); cuentaContable.setCuenta(null); } if
-					 * (ccj.isConciliacion().equals(true)) {
-					 * cuentaContable.setBanco(bdao.getById(ccj.getIdBanco()));
-					 * cuentaContable.setCuenta(cdao.getById(ccj.getIdCuenta()));
-					 * cuentaContable.setAnalizable(""); } comdao.update(cuentaContable);
-					 */
+					c.setNumero(ccj.getNumero());
+					c.setGlosaGeneral(ccj.getGlosaGeneral());
+					c.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
+					c.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+					
+					for (int i = 0; i < c.getMovimientos().size(); i++) {
+						Movimiento m = c.getMovimientos().get(i);
+						m.setNumComprobante(ccj.getNumero());
+						m.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
+						m.setEmpresa(edao.getById(ccj.getIdEmpresa()));						
+					}
+					comdao.update(c);
 					return Constantes.MENSAJE_REST_OK;
 				}
 			} else {
@@ -201,30 +195,18 @@ public class ComprobanteContableRD {
 
 	/**
 	 * metodo obtener una cuenta contable
-	 * 
+	 *  
 	 * @param id de cuenta contable
 	 * @return mensaje de exito o error
 	 */
 	public ComprobanteContableJson getById(ComprobanteContableJson bj) {
 		ComprobanteContable c = comdao.getById(bj.getId());
 		ComprobanteContableJson ccJson = new ComprobanteContableJson();
-		/*
-		 * ccJson.setId(cuentaContable.getId());
-		 * ccJson.setCodigo(cuentaContable.getCodigo());
-		 * ccJson.setGlosaGeneral(cuentaContable.getGlosaGeneral());
-		 * ccJson.setDescripcion(cuentaContable.getDescripcion());
-		 * ccJson.setAnalisis(cuentaContable.isAnalisis());
-		 * ccJson.setConciliacion(cuentaContable.isConciliacion());
-		 * if(cuentaContable.isAnalisis().equals(true)) {
-		 * ccJson.setAnalizable(cuentaContable.getAnalizable()); }
-		 * if(cuentaContable.isConciliacion().equals(true)) {
-		 * ccJson.setIdBanco(cuentaContable.getBanco().getId());
-		 * ccJson.setIdCuenta(cuentaContable.getCuenta().getId()); }
-		 * ccJson.setConciliacion(cuentaContable.isConciliacion());
-		 * ccJson.setImputable(cuentaContable.isImputable());
-		 * ccJson.setIdClaseCuenta(cuentaContable.getClaseCuenta().getId());
-		 * ccJson.setIdGrupoCuenta(cuentaContable.getGrupoCuenta().getId());
-		 */
+		ccJson.setId(c.getId());
+		ccJson.setNumero(c.getNumero());
+		ccJson.setGlosaGeneral(c.getGlosaGeneral());
+		ccJson.setFecha(c.getFecha().toString().substring(0,10));
+		ccJson.setIdEmpresa(c.getEmpresa().getId());                       
 		return ccJson;
 	}
 

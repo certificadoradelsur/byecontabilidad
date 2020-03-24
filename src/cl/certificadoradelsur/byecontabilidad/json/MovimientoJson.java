@@ -30,8 +30,36 @@ public class MovimientoJson {
 	private Long idCuentaContable;
 	private String fechaI;
 	private String fechaF;
+	private Long idComprobanteContable;
+	private Long idEmpresa;
+	private String conciliacion;
+	private String analisis;
 	
 	
+	public String getConciliacion() {
+		return conciliacion;
+	}
+	public void setConciliacion(String conciliacion) {
+		this.conciliacion = conciliacion;
+	}
+	public String getAnalisis() {
+		return analisis;
+	}
+	public void setAnalisis(String analisis) {
+		this.analisis = analisis;
+	}
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
+	public Long getIdComprobanteContable() {
+		return idComprobanteContable;
+	}
+	public void setIdComprobanteContable(Long idComprobanteContable) {
+		this.idComprobanteContable = idComprobanteContable;
+	}
 	public String getFechaI() {
 		return fechaI;
 	}

@@ -129,12 +129,31 @@
 														sortable : true
 													},
 													{
+														field : 'fecha',
+														title : 'Fecha',
+														sortable : true
+													},
+													{
+														field : 'nombreEmpresa',
+														title : 'Empresa',
+														sortable : true
+													},													
+													{
 														width : 100,
 														title : 'Ver más',
 														tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
 														align : 'center',
 														events : {
 															'click' : ver
+														}
+													},
+													{
+														width : 100,
+														title : 'Modificar',
+														tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+														align : 'center',
+														events : {
+															'click' : modificar
 														}
 													},
 													{
@@ -236,6 +255,15 @@
 										sortable : true
 									},
 									{
+										width : 100,
+										title : 'Modificar',
+										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+										align : 'center',
+										events : {
+											'click' : modificarMovimiento
+										}
+									},
+									{
 										width : 80,
 										title : 'Eliminar',
 										tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
@@ -285,6 +313,20 @@
 		});
 		clear();
 	});
+	
+	function modificar(e) {
+		document.getElementById("id").value = e.data.record.id;
+		document.getElementById("formulario").action = 'modificar.jsp';
+		document.getElementById("formulario").method = 'POST';
+		document.getElementById("formulario").submit();
+	}
+	
+	function modificarMovimiento(e) {
+		document.getElementById("id").value = e.data.record.id;
+		document.getElementById("formulario").action = 'modificarMovimiento.jsp';
+		document.getElementById("formulario").method = 'POST';
+		document.getElementById("formulario").submit();
+	}
 
 	function clear() {
 		document.getElementById("filtro").value = "";

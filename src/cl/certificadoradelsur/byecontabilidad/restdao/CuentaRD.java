@@ -204,7 +204,6 @@ public class CuentaRD {
 
 		List<CuentaJson> lcj = new ArrayList<>();
 		try {
-
 			List<Cuenta> b = cdao.getByIdBanco(bj.getIdBanco(),udao.getById(bj.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < b.size(); i++) {
 				CuentaJson bjj = new CuentaJson();

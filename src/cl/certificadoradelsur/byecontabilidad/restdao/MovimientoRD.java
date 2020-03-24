@@ -111,6 +111,38 @@ public class MovimientoRD {
 		}
 
 	}
+	
+	/**
+	 * metodo obtener un movimiento
+	 *  
+	 * @param id movimiento
+	 * @return  json
+	 */
+	public MovimientoJson getById(MovimientoJson mj) {
+		Movimiento m = mdao.getById(mj.getId());
+		MovimientoJson ccJson = new MovimientoJson();
+		ccJson.setId(m.getId());
+		ccJson.setFecha(m.getFecha().toString().substring(0,10));
+		ccJson.setNumComprobante(m.getNumComprobante());
+		ccJson.setGlosa(m.getGlosa());
+		ccJson.setTipoMovimiento(m.getTipoMovimiento());
+		ccJson.setTipoDocumento(m.getTipoDocumento());
+		ccJson.setEstado(m.getEstado());
+		ccJson.setMonto(m.getMonto()); 
+		ccJson.setEliminado(m.isEliminado());
+		ccJson.setAnalisis(m.getCuentaContable().isAnalisis().toString());
+		ccJson.setConciliacion(m.getCuentaContable().isConciliacion().toString());
+		if(m.getCuentaContable().isConciliacion().equals(true)) {
+		ccJson.setIdBanco(m.getCuenta().getBanco().getId());
+		ccJson.setIdCuenta(m.getCuenta().getId());
+		ccJson.setNumDocumento(m.getNumDocumento());
+		}
+		ccJson.setIdComprobanteContable(m.getComprobanteContable().getId());
+		ccJson.setIdCuentaContable(m.getCuentaContable().getId());
+		ccJson.setIdEmpresa(m.getEmpresa().getId());
+		ccJson.setIdUsuario(m.getUsuario().getId());
+		return ccJson;
+	}
 
 	/**
 	 * Cuenta el total de las filas

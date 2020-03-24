@@ -223,8 +223,7 @@
 							document.getElementById("empresa").value = data.idEmpresa;
 							
 							if (document.getElementById("analisis").checked){
-								document.getElementById("conciliacion").disabled=true;
-								cargaAnalizable(data.analizable)	
+								document.getElementById("conciliacion").disabled=true;	
 							}
 							if (document.getElementById("conciliacion").checked){
 								$('#collapse2').collapse('show');
@@ -252,9 +251,7 @@
 	}	
 
 	
-	function cargaAnalizable(analizable){
-		document.getElementById("analizable").value = analizable;
-	}
+
 	
      
     function cargoBanco(){
@@ -269,7 +266,8 @@
 					}, "json");
 		 
 			var submitJson = {
-					idBanco : document.getElementById("banco").value
+					idBanco : document.getElementById("banco").value,
+					idUsuario : document.getElementById("idUsuario").value
 				}
 
 				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
@@ -308,7 +306,8 @@
 	function cargaCuenta(idCuenta){
 		
 		var submitJson = {
-				idBanco : document.getElementById("banco").value
+				idBanco : document.getElementById("banco").value,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 							JSON.stringify(submitJson),
@@ -355,7 +354,9 @@
 
 	function cargaDes(id) {
 		var submitJson = {
-			idGrupoCuenta : document.getElementById("grupoCuenta").value
+			idGrupoCuenta : document.getElementById("grupoCuenta").value,
+			idUsuario : document.getElementById("idUsuario").value
+			
 		}
 		$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
 						JSON.stringify(submitJson),
@@ -378,7 +379,8 @@
 	$('#banco').on('change',
 			function() {
 				var submitJson = {
-					idBanco : document.getElementById("banco").value
+					idBanco : document.getElementById("banco").value,
+					idUsuario : document.getElementById("idUsuario").value
 				}
 
 				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
@@ -421,7 +423,8 @@
 	$('#grupoCuenta').on('change',
 					function() {
 						var submitJson = {
-							idGrupoCuenta : document.getElementById("grupoCuenta").value
+							idGrupoCuenta : document.getElementById("grupoCuenta").value,
+							idUsuario : document.getElementById("idUsuario").value
 						}
 
 						$
@@ -460,7 +463,8 @@
 
 	function buscaClasificacion() {
 		var submitJson = {
-			idGrupoCuenta : document.getElementById("grupoCuenta").value
+			idGrupoCuenta : document.getElementById("grupoCuenta").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 
 		$

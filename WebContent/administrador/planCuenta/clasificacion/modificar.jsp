@@ -101,11 +101,14 @@
 			</form>
 		</div>
 	</div>
+		<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#claseCuenta").select2(),
 	$("#grupoCuenta").select2();
+	$("#empresa").select2();
 	
 	$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
 			function(res, code) {

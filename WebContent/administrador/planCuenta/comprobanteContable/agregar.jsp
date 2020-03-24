@@ -307,8 +307,6 @@
 														+ "</option>";
 											}
 											document.getElementById("empresa").innerHTML = str;
-// 											cargaEmpresa(document
-// 													.getElementById("empresa").value);
 										}, "json");
 
 						$
@@ -360,62 +358,62 @@
 													{
 														field : 'estado',
 														title : 'ESTADO',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'tipoMovimiento',
 														title : 'TIPO MOVIMIENTO',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'tipoDocumento',
 														title : 'TIPO DOCUMENTO',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'numDocumento',
 														title : 'NUMERO DOCUMENTO',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'fecha',
 														title : 'FECHA',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'idUsuario',
 														title : 'USER',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'monto',
 														title : 'MONTO',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'idCliente',
 														title : 'CLIENTE',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'numCuenta',
 														title : 'CUENTA',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														field : 'idCuentaContable',
 														title : 'CUENTACONTABLE',
-														width : 160, 
-														hidden: true
+														width : 160,
+														hidden : true
 													},
 													{
 														width : 100,
@@ -579,6 +577,11 @@
 			return $(el).val().length < 1
 		});
 
+		if ($('#empresa option:selected').text() == 'Seleccione empresa') {
+			alert("Debe seleccionar una cuenta contable");
+			return;
+		}
+
 		if ($('#cuentaContable option:selected').text() == 'Seleccione cuenta') {
 			alert("Debe seleccionar una cuenta contable");
 			return;
@@ -638,7 +641,6 @@
 		})
 		$("#empresa").prop("disabled", true);
 		$("#fecha").prop("disabled", true);
-		//document.getElementById("empresa").disabled; 
 		limpiaAdd();
 	}
 
@@ -648,17 +650,13 @@
 		document.getElementById("glosaConciliacion").value = "";
 		document.getElementById("glosaAnalisis").value = "";
 		document.getElementById("monto").value = "";
-		//document.getElementById("fecha").value = "";
 	}
 
 	function Save() {
-		//			if (varAnalisis == 'false' && varConciliacion == 'true'){ 
-		//				 alert(document.getElementById("banco").value + document.getElementById("cuenta").value)
-		//				 }
 		var bool = $('.on').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
-		
+
 		if (bool) {
 			alert("Todos los campos deben estar llenos");
 			return;
@@ -695,29 +693,6 @@
 				}
 
 			}),
-		// 				cuentasContables : list.map(function(value) {
-		// 						return {
-		// 							id : value.ID,
-		// 							codigo : value.codigo,
-		// 							descripcion : value.descripcion,
-		// 							glosa : value.glosa,
-		// 							monto:value.monto==''?0:value.monto,
-		// 							tipoMovimiento : value.tipoMovimiento,
-		// 							tipoDocumento : value.tipoDocumento,
-		// 							estado : value.estado,
-		// 							fecha : value.fecha,
-		// 							idCuenta : value.idCuenta==''?0:value.idCuenta,
-		// 							numComprobante : value.numComprobante==''?0:value.numComprobante,
-		// 							debe : value.debe==''?0:value.debe,
-		// 						   	haber: value.haber==''?0:value.haber,
-		// 						    numDocumento : value.numDocumento==''?0:value.numDocumento,
-		// 						    idUsuario : value.idUsuario==''?0:value.idUsuario,
-		// 						    idCliente : value.idCliente==''?0:value.idCliente,
-		// 						    numCuenta : value.numCuenta==''?0:value.numCuenta,
-		// 						    idCuentaContable: value.idCuentaContable==''?0:value.idCuentaContable			    						
-		// 						}
-		// 				})		
-
 		}
 
 		$
@@ -729,7 +704,6 @@
 							if (data == 'OK') {
 								alert('Se guardo exitosamente el comprobante contable');
 								grid.reload();
-								//|	limpiaT();
 								location.href = "index.jsp";
 							} else {
 								alert(data);
@@ -746,58 +720,6 @@
 			grid.removeRow(e.data.id)
 		}
 	}
-
-// 	function cargaEmpresa(idEmpresa) {
-// 		var submitJson = {
-
-// 			idUsuario : document.getElementById("idUsuario").value,
-// 			idEmpresa : document.getElementById("empresa").value
-// 		}
-
-// 		$
-// 				.post(
-// 						'/byeContabilidad/rest-services/private/cuentaContable/getByIdEmpresa',
-// 						JSON.stringify(submitJson),
-// 						function(res, code) {
-// 							var str = "<option>Seleccione cuenta</option>";
-// 							for (var i = 0; i < res.length; i++) {
-// 								str += "<option value="+res[i].id+"/"+res[i].analisis+"/"
-// 			+res[i].conciliacion+"/"+res[i].idBanco+"/"
-// 			+res[i].idCuenta+"/"+res[i].codigo+ "/"+res[i].idEmpresa+">"
-// 										+ res[i].glosaGeneral + "</option>";
-// 							}
-
-// 							document.getElementById("cuentaContable").innerHTML = str;
-// 							var idCuentaContable = document
-// 									.getElementById("cuentaContable").value
-// 									.split("/");
-// 							varIdCuentaContable = idCuentaContable[0];
-// 							var analisis = document
-// 									.getElementById("cuentaContable").value
-// 									.split("/");
-// 							varAnalisis = analisis[1];
-// 							var coinciliacion = document
-// 									.getElementById("cuentaContable").value
-// 									.split("/");
-// 							varConciliacion = coinciliacion[2];
-// 							var banco = document
-// 									.getElementById("cuentaContable").value
-// 									.split("/");
-// 							varIdBanco = banco[3];
-// 							var cuenta = document
-// 									.getElementById("cuentaContable").value
-// 									.split("/");
-// 							varIdCuenta = cuenta[4];
-// 							var codigo = document
-// 									.getElementById("cuentaContable").value
-// 									.split("/");
-// 							varCodigo = codigo[5];
-// 							var idEmpresa = document
-// 									.getElementById("cuentaContable").value
-// 									.split("/");
-// 							varIdEmpresa = idEmpresa[6];
-// 						}, "json");
-// 	}
 
 	function cargaCuenta(idCuenta) {
 
