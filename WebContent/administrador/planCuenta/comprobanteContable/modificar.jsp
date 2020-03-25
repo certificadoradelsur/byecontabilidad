@@ -76,7 +76,7 @@
 						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
 							Empresa</label>
 						<div class="col-3">
-							<select class="browser-default custom-select" id="empresa">
+							<select class="browser-default custom-select" id="empresa" disabled>
 							</select>
 						</div>
 					</div>

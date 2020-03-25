@@ -56,7 +56,8 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+       	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 
 			<li class="nav-item"><a class="color nav-link"
@@ -65,16 +66,27 @@
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/sucursal/index.jsp" style="color: white;"><img
 					src="../images/sucur.ico" alt="Icono" /> Sucursal</a></li>
+			<li class="nav-item"><a class="color nav-link"
+				href="../administrador/planCuenta/cuenta/index.jsp" style="color: white;"><img
+					src="../images/banco.ico" alt="Icono" /> Cuenta Banco</a></li>
 			 <li class="nav-item"><a class="color nav-link"
-				href="../administrador/planCuenta/usuario/index.jsp" style="color: white;"><img
-					src="../images/user.ico" alt="Icono" /> Usuarios</a></li>		
+				href="../administrador/planCuenta/cliente/index.jsp" style="color: white;"><img
+					src="../images/cliente.ico" alt="Icono" /> Cliente</a></li>		
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/clasificacion/index.jsp" style="color: white;"><img
 					src="../images/clasi.ico" alt="Icono" /> Clasificación</a></li>
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/cuentaContable/index.jsp" style="color: white;"><img
-					src="../images/conta.ico" alt="Icono" /> Cuenta</a></li>
+					src="../images/conta.ico" alt="Icono" /> Cuenta Contable</a></li>
+			<li class="nav-item"><a class="color nav-link"
+				href="../administrador/planCuenta/comprobanteContable/index.jsp" style="color: white;"><img
+					src="../images/reporte.ico" alt="Icono" /> Comprobante Contable</a></li>		
+			<li class="nav-item"><a class="color nav-link"
+				href="../administrador/planCuenta/usuario/index.jsp" style="color: white;"><img
+					src="../images/user.ico" alt="Icono" /> Usuarios</a></li>				
 		</ul>
+
+
 
 
 		<a style="padding-left: 0; color: white;"

@@ -247,15 +247,12 @@ $(document).ready(function () {
 											document.getElementById("monto").value = data.monto;
 											document.getElementById("banco").value = data.idBanco;
 											document.getElementById("cuenta").value = data.idCuenta;
-											document
-													.getElementById("tipoMovimiento").value = data.tipoMovimiento;
-											document
-													.getElementById("numDocumento").value = data.numDocumento;
+											document.getElementById("tipoMovimiento").value = data.tipoMovimiento;
+											document.getElementById("numDocumento").value = data.numDocumento;
 											document.getElementById("estado").value = data.estado;
 											document.getElementById("fecha").value = data.fecha;
 
-											cargaEmpresa(data.idEmpresa,
-													data.idCuentaContable);
+											cargaEmpresa(data.idEmpresa,data.idCuentaContable);
 											cargaCliente(data.idCliente);
 											
 											if (data.analisis == 'true' && data.conciliacion == 'false') {
@@ -275,7 +272,7 @@ $(document).ready(function () {
 												$('#conciliacion2').collapse('show');
 												$('#conciliacion3').collapse('show');
 												document.getElementById("glosaConciliacion").value = data.glosa;
-												cargaBanco(varIdBanco, varIdCuenta);
+												cargaBanco(data.idBanco, data.idCuenta);
 											} else if (data.analisis == 'false'
 													&& data.conciliacion == 'false') {
 												$('#sin').collapse('show');
@@ -355,33 +352,19 @@ $(document).ready(function () {
 							}
 
 							document.getElementById("cuentaContable").innerHTML = str;
-							var idCuentaContable = document
-									.getElementById("cuentaContable").value
-									.split("/");
+							var idCuentaContable = document.getElementById("cuentaContable").value.split("/");
 							varIdCuentaContable = idCuentaContable[0];
-							var analisis = document
-									.getElementById("cuentaContable").value
-									.split("/");
+							var analisis = document.getElementById("cuentaContable").value.split("/");
 							varAnalisis = analisis[1];
-							var coinciliacion = document
-									.getElementById("cuentaContable").value
-									.split("/");
+							var coinciliacion = document.getElementById("cuentaContable").value.split("/");
 							varConciliacion = coinciliacion[2];
-							var banco = document
-									.getElementById("cuentaContable").value
-									.split("/");
+							var banco = document.getElementById("cuentaContable").value.split("/");
 							varIdBanco = banco[3];
-							var cuenta = document
-									.getElementById("cuentaContable").value
-									.split("/");
+							var cuenta = document.getElementById("cuentaContable").value.split("/");
 							varIdCuenta = cuenta[4];
-							var codigo = document
-									.getElementById("cuentaContable").value
-									.split("/");
+							var codigo = document.getElementById("cuentaContable").value.split("/");
 							varCodigo = codigo[5];
-							var idEmpresa = document
-									.getElementById("cuentaContable").value
-									.split("/");
+							var idEmpresa = document.getElementById("cuentaContable").value.split("/");
 							varIdEmpresa = idEmpresa[6];
 						}, "json");
 
@@ -409,34 +392,21 @@ $(document).ready(function () {
 		}, "json");
 	}
 
-	$('#cuentaContable')
-			.on(
-					'change',
+	$('#cuentaContable') .on( 'change',
 					function() {
-						var idCuentaContable = document
-								.getElementById("cuentaContable").value
-								.split("/");
+						var idCuentaContable = document .getElementById("cuentaContable").value.split("/");
 						varIdCuentaContable = idCuentaContable[0];
-						var analisis = document
-								.getElementById("cuentaContable").value
-								.split("/");
+						var analisis = document .getElementById("cuentaContable").value.split("/");
 						varAnalisis = analisis[1];
-						var coinciliacion = document
-								.getElementById("cuentaContable").value
-								.split("/");
+						var coinciliacion = document.getElementById("cuentaContable").value.split("/");
 						varConciliacion = coinciliacion[2];
-						var banco = document.getElementById("cuentaContable").value
-								.split("/");
+						var banco = document.getElementById("cuentaContable").value.split("/");
 						varIdBanco = banco[3];
-						var cuenta = document.getElementById("cuentaContable").value
-								.split("/");
+						var cuenta = document.getElementById("cuentaContable").value.split("/");
 						varIdCuenta = cuenta[4];
-						var codigo = document.getElementById("cuentaContable").value
-								.split("/");
+						var codigo = document.getElementById("cuentaContable").value.split("/");
 						varCodigo = codigo[5];
-						var idEmpresa = document
-								.getElementById("cuentaContable").value
-								.split("/");
+						var idEmpresa = document.getElementById("cuentaContable").value.split("/");
 						varIdEmpresa = idEmpresa[6];
 
 						if (varAnalisis == 'true' && varConciliacion == 'false') {
@@ -524,16 +494,32 @@ $(document).ready(function () {
 			alert("Los campos deben estar llenos");
 			return;
 		}
+		
+		if (varAnalisis == 'true' && varConciliacion == 'false') {
+			glosa = document.getElementById("glosaAnalisis").value,
+					cliente = document.getElementById("cliente").value
+		} else if (varAnalisis == 'false' && varConciliacion == 'true') {
+			glosa = document.getElementById("glosaConciliacion").value,
+					cliente = ""
+		} else if (varAnalisis == 'false' && varConciliacion == 'false') {
+			glosa = document.getElementById("glosaSin").value, cliente = ""
+		}
 		var submitJson = {
 			id : <%=request.getParameter("id")%> ,
-		//numero : document.getElementById("numero").value,
-		//glosaGeneral : document.getElementById("glosaGeneral").value,
-		//fecha : document.getElementById("fecha").value,
-		//idEmpresa : document.getElementById("empresa").value
+			glosa : glosa,
+			monto : document.getElementById("monto").value == '' ? 0 : document.getElementById("monto").value,
+			tipoMovimiento : document.getElementById("tipoMovimiento").value,
+			tipoDocumento : document.getElementById("tipoDocumento").value,
+			estado : document.getElementById("estado").value,
+			idCuenta : document.getElementById("cuenta").value == '' ? 0 : document.getElementById("cuenta").value,
+			numDocumento : document.getElementById("numDocumento").value,
+			idUsuario : document.getElementById("idUsuario").value == '' ? 0 : document.getElementById("idUsuario").value,
+			idCuentaContable : varIdCuentaContable == '' ? 0 : varIdCuentaContable
+ 
 		}
 		$
 				.post(
-						'/byeContabilidad/rest-services/private/comprobanteContable/update',
+						'/byeContabilidad/rest-services/private/movimiento/update',
 						JSON.stringify(submitJson)).done(function(data) {
 					if (data == 'OK') {
 						alert('Se guardaron los cambios');

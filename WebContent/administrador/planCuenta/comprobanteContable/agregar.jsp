@@ -679,12 +679,10 @@
 					estado : value.estado,
 					fecha : value.fecha,
 					idCuenta : value.idCuenta == '' ? 0 : value.idCuenta,
-					numComprobante : value.numComprobante == '' ? 0
-							: value.numComprobante,
+					numComprobante : value.numComprobante,
 					debe : value.debe == '' ? 0 : value.debe,
 					haber : value.haber == '' ? 0 : value.haber,
-					numDocumento : value.numDocumento == '' ? 0
-							: value.numDocumento,
+					numDocumento : value.numDocumento,
 					idUsuario : value.idUsuario == '' ? 0 : value.idUsuario,
 					idCliente : value.idCliente == '' ? 0 : value.idCliente,
 					numCuenta : value.numCuenta == '' ? 0 : value.numCuenta,

@@ -221,6 +221,7 @@ $(document).ready(function() {
 			id : <%=request.getParameter("id")%>,
 			idClaseCuenta : document.getElementById("claseCuenta").value,	
 			idGrupoCuenta : document.getElementById("grupoCuenta").value,
+			idEmpresa : document.getElementById("empresa").value,
 			nombre : document.getElementById("nombre").value
 		}
 

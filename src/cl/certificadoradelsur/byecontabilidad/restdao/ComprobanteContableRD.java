@@ -55,10 +55,6 @@ public class ComprobanteContableRD {
 					c.setNumero(ccj.getNumero());
 					c.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
 					c.setEmpresa(edao.getById(ccj.getIdEmpresa()));
-//					List<CuentaContable> cuentasContables = new ArrayList<>();
-//					for (int i = 0; i < ccj.getCuentasContables().size(); i++) {
-//						cuentasContables.add(cuentadao.getById(ccj.getCuentasContables().get(i).getIdCuentaContable()));
-//					}
 					List<Movimiento> movimientos = new ArrayList<>();
 					for (int i = 0; i < ccj.getMovimientos().size(); i++) {
 						Movimiento movimiento = new Movimiento();
@@ -172,13 +168,11 @@ public class ComprobanteContableRD {
 					c.setNumero(ccj.getNumero());
 					c.setGlosaGeneral(ccj.getGlosaGeneral());
 					c.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
-					c.setEmpresa(edao.getById(ccj.getIdEmpresa()));
 					
 					for (int i = 0; i < c.getMovimientos().size(); i++) {
 						Movimiento m = c.getMovimientos().get(i);
 						m.setNumComprobante(ccj.getNumero());
-						m.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
-						m.setEmpresa(edao.getById(ccj.getIdEmpresa()));						
+						m.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));					
 					}
 					comdao.update(c);
 					return Constantes.MENSAJE_REST_OK;

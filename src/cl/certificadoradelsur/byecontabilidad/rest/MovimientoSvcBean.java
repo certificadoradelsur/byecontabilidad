@@ -45,8 +45,7 @@ public class MovimientoSvcBean implements MovimientoSvc {
 	public Response update(String datos) {
 		Gson gson = new GsonBuilder().create();
 		MovimientoJson mj = gson.fromJson(datos, MovimientoJson.class);
-		String respuesta = gson.toJson(
-				//mrd.update(mj),
+		String respuesta = gson.toJson(mrd.update(mj),
 				new TypeToken<String>() {
 		}.getType());
 		return Response.ok(respuesta).build();

@@ -179,10 +179,11 @@
 		$("#descripcion").select2();
 		$("#banco").select2({width:'200'});
 		$("#empresa").select2({width:'200'});
-		//$("#cuenta").select2({width:'200'});
+		$("#cuenta").select2({width:'200'});
 		
-
-						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
+	                    var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value}
+						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',JSON.stringify(submitJson),
 								function(res, code) {
 									var str;
 									for (var i = 0, len = res.length; i < len; i++) {
@@ -255,7 +256,12 @@
 	
      
     function cargoBanco(){
+		var submitJson = {
+				idBanco : document.getElementById("banco").value,
+				idUsuario : document.getElementById("idUsuario").value
+			}
 		 $.post('/byeContabilidad/rest-services/private/banco/getLista',
+					JSON.stringify(submitJson),
 					function(res, code) {
 						var str;
 						for (var i = 0, len = res.length; i < len; i++) {
@@ -273,7 +279,7 @@
 				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 								JSON.stringify(submitJson),
 								function(res, code) {
-									var str;
+					             var str="<option>Seleccione cuenta</option>";
 
 									for (var i = 0, len = res.length; i < len; i++) {
 									str += "<option value="+res[i].id+">"
@@ -285,7 +291,11 @@
 	 }
      
     function cargaBanco(idBanco,idCuenta){
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value
+			}
 		 	$.post('/byeContabilidad/rest-services/private/banco/getLista',
+					JSON.stringify(submitJson),
 					function(res, code) {
 						var str;
 						for (var i = 0, len = res.length; i < len; i++) {
@@ -330,7 +340,8 @@
 
 	function cargaselect(id, descripcion) {
 		var submitJson = {
-			idClaseCuenta : document.getElementById("claseCuenta").value
+			idClaseCuenta : document.getElementById("claseCuenta").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		
 		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
@@ -400,12 +411,11 @@
 	$('#claseCuenta').on('change',
 					function() {
 						var submitJson = {
-							idClaseCuenta : document.getElementById("claseCuenta").value
+							idClaseCuenta : document.getElementById("claseCuenta").value,
+							idUsuario : document.getElementById("idUsuario").value
 						}
 
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+						$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
 										JSON.stringify(submitJson),
 										function(res, code) {
 											var str;
@@ -445,7 +455,8 @@
 
 	function buscaGrupo() {
 		var submitJson = {
-			idClaseCuenta : document.getElementById("claseCuenta").value
+			idClaseCuenta : document.getElementById("claseCuenta").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		
 		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
@@ -467,9 +478,7 @@
 			idUsuario : document.getElementById("idUsuario").value
 		}
 
-		$
-				.post(
-						'/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
+		$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
 						JSON.stringify(submitJson),
 						function(res, code) {
 							var str;
@@ -486,22 +495,29 @@
 			return $(el).val().length < 1
 		});
 
+     	if (document.getElementById("conciliacion").checked) {
+			if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+				alert("Debe seleccionar cuenta");
+				return;
+			}
+		}
+
 		if (bool) {
 			alert("Los campos deben estar llenos");
 			return;
 		}
-		
-		if(document.getElementById("conciliacion").checked){
-			if(document.getElementById("cuenta").value==""){
+
+		if (document.getElementById("conciliacion").checked) {
+			if (document.getElementById("cuenta").value == "") {
 				alert('No existe cuenta asociada al banco');
 				return;
 			}
 		}
 
-
-	if (document.getElementById("analisis").checked) {
+		if (document.getElementById("analisis").checked) {
 			var submitJson = {
-				id : <%=request.getParameter("id")%> ,
+				id :
+<%=request.getParameter("id")%> ,
 				codigo : document.getElementById("codigo").value,
 				idClaseCuenta : document.getElementById("claseCuenta").value,
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
@@ -512,7 +528,7 @@
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
 			}
-		} else {
+		} else if (document.getElementById("conciliacion").checked) {
 
 			var submitJson = {
 				id : <%=request.getParameter("id")%> ,
@@ -525,7 +541,20 @@
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
 				idBanco : document.getElementById("banco").value,
-				idCuenta : document.getElementById("cuenta").value
+				idEmpresa : document.getElementById("empresa").value, 
+				idCuenta : document.getElementById("cuenta").value == '' ? 0 : document.getElementById("cuenta").value
+			}
+		}else {
+			var submitJson = {
+					id : <%=request.getParameter("id")%> ,
+					codigo : document.getElementById("codigo").value,
+					idClaseCuenta : document.getElementById("claseCuenta").value,
+					idGrupoCuenta : document.getElementById("grupoCuenta").value,
+					glosaGeneral : document.getElementById("glosa").value,
+					descripcion : document.getElementById("descripcion").value,
+					idEmpresa : document.getElementById("empresa").value,
+					analisis : document.getElementById("analisis").checked,
+					conciliacion : document.getElementById("conciliacion").checked,
 			}
 		}
 

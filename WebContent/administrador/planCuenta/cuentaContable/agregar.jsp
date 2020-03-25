@@ -255,8 +255,7 @@
 								$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 												JSON.stringify(submitJson),
 												function(res, code) {
-													var str;
-
+									               var str = "<option>Seleccione cuenta</option>";
 													for (var i = 0, len = res.length; i < len; i++) {
 													str += "<option value="+res[i].id+">"
 																+ res[i].numCuenta
@@ -354,6 +353,11 @@
 
 		if (bool) {
 			alert("Todos los campos deben estar llenos");
+			return;
+		}
+		
+		if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+			alert("Debe seleccionar una cuenta");
 			return;
 		}
 		

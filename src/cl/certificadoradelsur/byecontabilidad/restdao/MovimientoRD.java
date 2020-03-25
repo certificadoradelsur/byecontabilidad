@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import cl.certificadoradelsur.byecontabilidad.conciliacion.ConciliacionBancaria;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
@@ -45,6 +46,8 @@ public class MovimientoRD {
 	private ConciliacionBancaria cb;
 	@Inject
 	private TransaccionDAO tdao;
+	@Inject
+	private CuentaContableDAO cuentaCondao;
 	@Inject
 	private ConciliacionDAO condao;
 	@Inject
@@ -320,7 +323,39 @@ public class MovimientoRD {
 			return e.getMessage();
 		}
 	}
-
+ 
+	/**
+	 * metodo que modifica movimineto
+	 * 
+	 * @param pj json de movimientoJson
+	 * @return mensaje de exito o error
+	 */
+	public String update(MovimientoJson mj) {
+		try {
+			Movimiento m = mdao.getById(mj.getId());
+				if (Utilidades.containsScripting(mj.getGlosa()).compareTo(true) == 0) {
+					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+				} else {
+					m.setCuentaContable(cuentaCondao.getById(mj.getIdCuentaContable()));
+					m.setTipoMovimiento(mj.getTipoMovimiento());
+					m.setTipoDocumento(mj.getTipoDocumento());
+					m.setMonto(mj.getMonto());
+					m.setGlosa(mj.getGlosa());
+					if(cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(false)) {
+						m.setCuenta(null);
+					} else if(cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(true)) {
+					m.setCuenta(cuentadao.getById(mj.getIdCuenta()));
+					}
+					m.setNumDocumento(mj.getNumDocumento());
+					m.setEstado(mj.isEstado());
+					}
+					mdao.update(m);
+					return Constantes.MENSAJE_REST_OK;		
+		} catch (Exception e) {
+			log.error("No se pudo modificar el movimiento");
+			return e.getMessage();
+		}
+	}
 	/**
 	 * Funcion que elimina transaccion y movimientos relacionados a dicha
 	 * transaccion
