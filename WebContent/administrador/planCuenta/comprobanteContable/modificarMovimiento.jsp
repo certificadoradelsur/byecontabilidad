@@ -512,7 +512,7 @@ $(document).ready(function () {
 			tipoDocumento : document.getElementById("tipoDocumento").value,
 			estado : document.getElementById("estado").value,
 			idCuenta : document.getElementById("cuenta").value == '' ? 0 : document.getElementById("cuenta").value,
-			numDocumento : document.getElementById("numDocumento").value,
+			numDocumento :document.getElementById("numDocumento").value == '' ? 0 : document.getElementById("numDocumento").value,
 			idUsuario : document.getElementById("idUsuario").value == '' ? 0 : document.getElementById("idUsuario").value,
 			idCuentaContable : varIdCuentaContable == '' ? 0 : varIdCuentaContable
  

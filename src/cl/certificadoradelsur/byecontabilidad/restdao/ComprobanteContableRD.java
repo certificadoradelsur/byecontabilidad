@@ -7,9 +7,11 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
@@ -37,6 +39,10 @@ public class ComprobanteContableRD {
 	private CuentaDAO cdao;
 	@Inject
 	private UsuarioDAO udao;
+	@Inject
+	private ConciliacionDAO condao;
+	@Inject
+	private NoConciliadoDAO ncdao;
 
 	/**
 	 * funcion que almacena
@@ -135,13 +141,14 @@ public class ComprobanteContableRD {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit, glosaGeneral, udao.getById(idUsuario).getOficinaContable().getId());
+			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit, glosaGeneral,
+					udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lcc.size(); i++) {
 				ComprobanteContableJson ccj = new ComprobanteContableJson();
 				ccj.setId(lcc.get(i).getId());
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
 				ccj.setNumero(lcc.get(i).getNumero());
-				ccj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion(lcc.get(i).getFecha()).substring(0,10));
+				ccj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion(lcc.get(i).getFecha()).substring(0, 10));
 				ccj.setNombreEmpresa(lcc.get(i).getEmpresa().getRazonSocial());
 				lcj.add(ccj);
 			}
@@ -160,22 +167,26 @@ public class ComprobanteContableRD {
 	public String update(ComprobanteContableJson ccj) {
 		try {
 			ComprobanteContable c = comdao.getById(ccj.getId());
-			if (comdao.getByNumero(ccj.getNumero()) == null
-					|| comdao.getByNumero(ccj.getNumero()).getNumero().equals(c.getNumero())) {
-				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
-					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
-				} else {
-					c.setNumero(ccj.getNumero());
-					c.setGlosaGeneral(ccj.getGlosaGeneral());
-					c.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
-					
-					for (int i = 0; i < c.getMovimientos().size(); i++) {
-						Movimiento m = c.getMovimientos().get(i);
-						m.setNumComprobante(ccj.getNumero());
-						m.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));					
+			if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
+				if (comdao.getByNumero(ccj.getNumero()) == null
+						|| comdao.getByNumero(ccj.getNumero()).getNumero().equals(c.getNumero())) {
+					if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
+						throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+					} else {
+						c.setNumero(ccj.getNumero());
+						c.setGlosaGeneral(ccj.getGlosaGeneral());
+						c.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
+
+						for (int i = 0; i < c.getMovimientos().size(); i++) {
+							Movimiento m = c.getMovimientos().get(i);
+							m.setNumComprobante(ccj.getNumero());
+							m.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
+						}
+						comdao.update(c);
+						return Constantes.MENSAJE_REST_OK;
 					}
-					comdao.update(c);
-					return Constantes.MENSAJE_REST_OK;
+				} else {
+					return "No se puede modificar el comprobante contable, ya que esta en uso por el proceso de conciliacíon";
 				}
 			} else {
 				return "El codigo ingresado, ya se encuentra registrado";
@@ -189,7 +200,7 @@ public class ComprobanteContableRD {
 
 	/**
 	 * metodo obtener una cuenta contable
-	 *  
+	 * 
 	 * @param id de cuenta contable
 	 * @return mensaje de exito o error
 	 */
@@ -199,8 +210,8 @@ public class ComprobanteContableRD {
 		ccJson.setId(c.getId());
 		ccJson.setNumero(c.getNumero());
 		ccJson.setGlosaGeneral(c.getGlosaGeneral());
-		ccJson.setFecha(c.getFecha().toString().substring(0,10));
-		ccJson.setIdEmpresa(c.getEmpresa().getId());                       
+		ccJson.setFecha(c.getFecha().toString().substring(0, 10));
+		ccJson.setIdEmpresa(c.getEmpresa().getId());
 		return ccJson;
 	}
 

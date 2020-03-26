@@ -178,23 +178,23 @@
 	
 	
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la transacción? Perdera todos los movimientos contenidos en ella')) {
+		if (confirm('¿Esta seguro desea eliminar la el comprobante? Perdera todos los movimientos contenidos en el')) {
 			var submitJson = {
 				id : x.data.record.id,
 				idTransaccion : x.data.record.id
 			}
 			$
 					.post(
-							'/byeContabilidad/rest-services/private/movimiento/eliminarMovimientosTransaccion',
+							'/byeContabilidad/rest-services/private/movimiento/eliminarMovimientosComprobante',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
-							('Transacción eliminada correctamente');
+							('Comprobante contable eliminado correctamente');
 							grid.reload();
 						} else {
 							alert(data);
 						}
 					}).fail(function() {
-						alert('Error al eliminar la Transacción');
+						alert('Error al eliminar el comprobante contable');
 					});
 		}
 			
@@ -217,45 +217,45 @@
 									{
 										field : 'glosa',
 										title : 'Glosa',
-										sortable : true
+										width : 140
 									},
 									{
 										field : 'monto',
 										title : 'Monto',
-										sortable : true
+										width : 140
 									},
 									{
 										field : 'fecha',
 										title : 'Fecha',
-										sortable : true
+										width : 140
 									},
 									{
 										field : 'nombreBanco',
 										title : 'Banco',
-										sortable : true
+										width : 140
 									},
 									{
 										field : 'numCuenta',
 										title : 'N° Cuenta',
-										sortable : true
+										width : 140
 									},
 									{
 										field : 'tipoMovimiento',
 										title : 'Movimiento',
-										sortable : true
+										width : 140
 									},
 									{
 										field : 'numDocumento',
 										title : 'N° Documento',
-										sortable : true
+										width : 140
 									},
 									{
 										field : 'tipoDocumento',
 										title : 'Documento',
-										sortable : true
+										width : 140
 									},
 									{
-										width : 100,
+										width : 80,
 										title : 'Modificar',
 										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
 										align : 'center',

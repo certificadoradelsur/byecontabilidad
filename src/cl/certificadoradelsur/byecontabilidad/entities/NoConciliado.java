@@ -30,6 +30,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "NoConciliado.getNoConciliadoMonto", query = "SELECT  c FROM NoConciliado c where c.eliminado = false and c.movimiento.monto= :monto"),
 		@NamedQuery(name = "NoConciliado.countAllMNC", query = "SELECT count(c.id) FROM NoConciliado c where c.eliminado = false and c.movimiento.monto= :monto"),
 		@NamedQuery(name = "NoConciliado.getByIdTransaccion", query = "SELECT c FROM NoConciliado c where  c.movimiento.transaccion.id= :idTransaccion"),
+		@NamedQuery(name = "NoConciliado.getByIdComprobante", query = "SELECT c FROM NoConciliado c where  c.movimiento.comprobanteContable.id= :idComprobante"),
 		@NamedQuery(name = "NoConciliado.getByIdReporteBancoCuenta", query = "SELECT c FROM NoConciliado c where c.eliminado = false and c.movimiento.fecha between :fechaInicial and :fechaFinal and c.movimiento.cuenta.banco.id= :idBanco and c.movimiento.cuenta.id= :idCuenta") })
 
 public class NoConciliado implements Serializable {

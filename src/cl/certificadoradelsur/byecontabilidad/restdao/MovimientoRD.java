@@ -9,16 +9,16 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.conciliacion.ConciliacionBancaria;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
-import cl.certificadoradelsur.byecontabilidad.dao.TransaccionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Cartola;
+import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
-import cl.certificadoradelsur.byecontabilidad.entities.Transaccion;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.MovimientoJson;
 import cl.certificadoradelsur.byecontabilidad.json.TransaccionJson;
@@ -45,13 +45,13 @@ public class MovimientoRD {
 	@Inject
 	private ConciliacionBancaria cb;
 	@Inject
-	private TransaccionDAO tdao;
-	@Inject
 	private CuentaContableDAO cuentaCondao;
 	@Inject
 	private ConciliacionDAO condao;
 	@Inject
 	private NoConciliadoDAO ncdao;
+	@Inject
+	private ComprobanteContableDAO comdao;
 
 
 	/**
@@ -92,7 +92,7 @@ public class MovimientoRD {
 	}
 
 	/**
-	 * Funcion modifica movimiento
+	 * Funcion elimina movimiento
 	 * 
 	 * @param pj json de movimiento
 	 * @return mensaje de exito o error
@@ -333,6 +333,8 @@ public class MovimientoRD {
 	public String update(MovimientoJson mj) {
 		try {
 			Movimiento m = mdao.getById(mj.getId());
+			if (condao.getByIdComprobante(m.getComprobanteContable().getId()) == null
+					&& ncdao.getByIdComprobante(m.getComprobanteContable().getId())== null) {
 				if (Utilidades.containsScripting(mj.getGlosa()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
@@ -350,10 +352,13 @@ public class MovimientoRD {
 					m.setEstado(mj.isEstado());
 					}
 					mdao.update(m);
-					return Constantes.MENSAJE_REST_OK;		
+					return Constantes.MENSAJE_REST_OK;	
+			} else {
+				return "No se puede modificar el movimiento, ya que esta en uso por el proceso de conciliacíon";
+			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar el movimiento");
-			return e.getMessage();
+			return e.getMessage();		
 		}
 	}
 	/**
@@ -365,17 +370,17 @@ public class MovimientoRD {
 	 */
 	public String delete(MovimientoJson mj) {
 
-		if (condao.getByIdTransaccion(mj.getIdTransaccion()) == null
-				&& ncdao.getByIdTransaccion(mj.getIdTransaccion()) == null) {
-			List<Movimiento> lm = mdao.getByIdTransaccion(mj.getIdTransaccion());
+		if (condao.getByIdComprobante(mj.getIdComprobanteContable()) == null
+				&& ncdao.getByIdComprobante(mj.getIdComprobanteContable()) == null) {
+			List<Movimiento> lm = mdao.getByIdComprobante(mj.getIdComprobanteContable());
 			for (int i = 0; i < lm.size(); i++) {
 				mdao.eliminar(lm.get(i));
 			}
-			Transaccion transaccion = tdao.getById(mj.getId());
-			tdao.eliminar(transaccion);
+			ComprobanteContable c =comdao.getById(mj.getId());
+			comdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} else {
-			return "No se puede eliminar la transaccion, ya que esta en uso por el proceso de conciliacíon";
+			return "No se puede eliminar el comprobante, ya que esta en uso por el proceso de conciliacíon";
 		}
 
 	}

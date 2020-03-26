@@ -682,7 +682,7 @@
 					numComprobante : value.numComprobante,
 					debe : value.debe == '' ? 0 : value.debe,
 					haber : value.haber == '' ? 0 : value.haber,
-					numDocumento : value.numDocumento,
+					numDocumento : value.numDocumento == '' ? 0 :value.numDocumento,
 					idUsuario : value.idUsuario == '' ? 0 : value.idUsuario,
 					idCliente : value.idCliente == '' ? 0 : value.idCliente,
 					numCuenta : value.numCuenta == '' ? 0 : value.numCuenta,

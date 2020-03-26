@@ -98,7 +98,7 @@ public class MovimientoSvcBean implements MovimientoSvc {
 	}
 
 	@Override
-	public Response eliminarMovimientosTransaccion(String datos) {
+	public Response eliminarMovimientosComprobante(String datos) {
 		Gson gson = new GsonBuilder().create();
 		MovimientoJson mj = gson.fromJson(datos, MovimientoJson.class);
 		String respuesta = gson.toJson(mrd.delete(mj), new TypeToken<String>() {

@@ -216,5 +216,24 @@ public class NoConciliadoDAO {
 			return null;
 		}
 	}
+	
+	/**
+	 * busca NoConciliado por idComprobante
+	 * 
+	 * @param idComprobante
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public NoConciliado getByIdComprobante(Long idComprobante) {
+		Query query = em.createNamedQuery("NoConciliado.getByIdComprobante");
+		try {
+			query.setParameter("idComprobante", idComprobante);
+			query.setMaxResults(1);
+			return (NoConciliado) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 
 }

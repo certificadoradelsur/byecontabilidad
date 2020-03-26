@@ -145,6 +145,21 @@ public class MovimientoDAO {
 		query.setParameter("idTransaccion", idTransaccion);
 		return query.getResultList();
 	}
+	
+	/**
+	 * funcion que busca movimientos por idComprobante
+	 * 
+	 * @param idComprobante
+	 * @return lista de movimientos
+	 */
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public List<Movimiento> getByIdComprobante(Long idComprobante) {
+		Query query = em.createNamedQuery("Movimiento.getByIdComprobante");
+		query.setParameter("idComprobante", idComprobante);
+		return query.getResultList();
+	}
+	
 
 	/**
 	 * Funcion que cuenta la cantidad de movimientos

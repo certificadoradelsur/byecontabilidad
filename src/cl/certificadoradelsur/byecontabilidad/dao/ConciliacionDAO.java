@@ -183,6 +183,25 @@ public class ConciliacionDAO {
 			return null;
 		}
 	}
+	
+	/**
+	 * busca conciliacion por idComprobante
+	 * 
+	 * @param idComprobante
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Conciliacion getByIdComprobante(Long idComprobante) {
+		Query query = em.createNamedQuery("Conciliacion.idComprobante");
+		try {
+			query.setParameter("idComprobante", idComprobante);
+			query.setMaxResults(1);
+			return (Conciliacion) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 
 	/**
 	 * Funcion que obtiene datos desde BD para alimentar los reportes

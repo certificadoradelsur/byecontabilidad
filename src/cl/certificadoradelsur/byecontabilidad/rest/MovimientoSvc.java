@@ -91,9 +91,9 @@ public interface MovimientoSvc {
 	 * @return
 	 */
 	@POST
-	@Path("/eliminarMovimientosTransaccion")
+	@Path("/eliminarMovimientosComprobante")
 	@Produces("application/json")
-	Response eliminarMovimientosTransaccion(String datos);
+	Response eliminarMovimientosComprobante(String datos);
 
 	/**
 	 * Funcion para traer todos los Movimientos
