@@ -34,6 +34,7 @@ public class MovimientoJson {
 	private Long idEmpresa;
 	private String conciliacion;
 	private String analisis;
+	private Long idCliente;
 	
 	
 	public String getConciliacion() {
@@ -53,6 +54,12 @@ public class MovimientoJson {
 	}
 	public void setIdEmpresa(Long idEmpresa) {
 		this.idEmpresa = idEmpresa;
+	}	
+	public Long getIdCliente() {
+		return idCliente;
+	}
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 	public Long getIdComprobanteContable() {
 		return idComprobanteContable;

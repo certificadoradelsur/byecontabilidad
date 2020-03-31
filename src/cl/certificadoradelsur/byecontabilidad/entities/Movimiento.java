@@ -55,6 +55,7 @@ public class Movimiento implements Serializable {
 	private ComprobanteContable comprobanteContable;
 	private CuentaContable cuentaContable;
 	private Empresa empresa;
+	private Cliente cliente;
 	private Usuario usuario;
 
 	@Id
@@ -209,4 +210,15 @@ public class Movimiento implements Serializable {
 		this.cuenta = cuenta;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "id_cliente", nullable = true)
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	
 }

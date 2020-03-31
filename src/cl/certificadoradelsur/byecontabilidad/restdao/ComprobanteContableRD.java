@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
@@ -43,6 +44,8 @@ public class ComprobanteContableRD {
 	private ConciliacionDAO condao;
 	@Inject
 	private NoConciliadoDAO ncdao;
+	@Inject
+	private ClienteDAO clientedao;
 
 	/**
 	 * funcion que almacena
@@ -82,6 +85,10 @@ public class ComprobanteContableRD {
 							if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isConciliacion()
 									.equals(true)) {
 								movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
+							}
+							if(cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
+									.equals(true)) {
+								movimiento.setCliente(clientedao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
 							}
 							movimiento.setCuentaContable(
 									cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()));

@@ -237,9 +237,8 @@ $(document).ready(function () {
 	
 	
 	var submitjson = {id:"<%=request.getParameter("id")%> " };
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/movimiento/getById',
+						
+	                            $ .post('/byeContabilidad/rest-services/private/movimiento/getById',
 										JSON.stringify(submitjson))
 								.done(
 										function(data) {

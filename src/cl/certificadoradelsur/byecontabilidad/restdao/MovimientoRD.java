@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.conciliacion.ConciliacionBancaria;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
@@ -52,6 +53,8 @@ public class MovimientoRD {
 	private NoConciliadoDAO ncdao;
 	@Inject
 	private ComprobanteContableDAO comdao;
+	@Inject
+	private ClienteDAO clidao;
 
 
 	/**
@@ -139,6 +142,9 @@ public class MovimientoRD {
 		ccJson.setIdBanco(m.getCuenta().getBanco().getId());
 		ccJson.setIdCuenta(m.getCuenta().getId());
 		ccJson.setNumDocumento(m.getNumDocumento());
+		}
+		if(m.getCuentaContable().isAnalisis().equals(true)) {
+		ccJson.setIdCliente(m.getCliente().getId());	
 		}
 		ccJson.setIdComprobanteContable(m.getComprobanteContable().getId());
 		ccJson.setIdCuentaContable(m.getCuentaContable().getId());
@@ -347,6 +353,11 @@ public class MovimientoRD {
 						m.setCuenta(null);
 					} else if(cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(true)) {
 					m.setCuenta(cuentadao.getById(mj.getIdCuenta()));
+					}
+					if(cuentaCondao.getById(mj.getIdCuentaContable()).isAnalisis().equals(false)) {
+						m.setCliente(null);
+					}else if(cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(true)) {
+					m.setCliente(clidao.getById(mj.getIdCliente()));	
 					}
 					m.setNumDocumento(mj.getNumDocumento());
 					m.setEstado(mj.isEstado());

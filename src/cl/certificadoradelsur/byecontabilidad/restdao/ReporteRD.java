@@ -326,6 +326,8 @@ public class ReporteRD {
 						Row rowMovimiento = sheetDiario.createRow(rowNum++);
 						rowMovimiento.createCell(0).setCellValue(listaMovimiento.get(l).getCuentaContable().getCodigo());
 						rowMovimiento.createCell(1).setCellValue(listaMovimiento.get(l).getCuentaContable().getGlosaGeneral());
+						rowMovimiento.createCell(3).setCellValue(listaMovimiento.get(l).getTipoDocumento());
+					//	rowMovimiento.createCell(4).setCellValue(listaMovimiento.get(l).getCuentaContable().getCliente);
 						rowMovimiento.createCell(5).setCellValue(listaMovimiento.get(l).getGlosa());
 							
 							
