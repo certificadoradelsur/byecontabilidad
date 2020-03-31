@@ -25,11 +25,20 @@ public class ReporteSvcBean implements ReporteSvc   {
 		InputStream file = rrd.getByIdReporteBancoCuenta(fechaDesde, fechaHasta, idBanco,idCuenta);
 		ResponseBuilder response = Response.ok((Object) file);
 		
-		response.header("Content-Disposition", "attachment; filename=Reporte"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFecha(fechaDesde)).substring(0, 10)+"a"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFecha(fechaHasta)).substring(0, 10)+".xlsx");		
+		response.header("Content-Disposition", "attachment; filename=Reporte"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaDesde)).substring(0, 10)+"a"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaHasta)).substring(0, 10)+".xlsx");		
 
 		return response.build();
 	}
 	
+	@Override
+	public Response getLibroDiario(String fechaDesde, String fechaHasta, String idUsuario) throws ParseException {
+		InputStream file = rrd.getLibroDiario(fechaDesde, fechaHasta, idUsuario);
+		ResponseBuilder response = Response.ok((Object) file);
+		
+		response.header("Content-Disposition", "attachment; filename=Reporte"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaDesde)).substring(0, 10)+"a"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaHasta)).substring(0, 10)+".xlsx");		
+
+		return response.build();
+	}
 
 
 }

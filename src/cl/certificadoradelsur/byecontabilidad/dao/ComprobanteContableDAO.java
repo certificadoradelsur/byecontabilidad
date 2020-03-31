@@ -1,5 +1,6 @@
 package cl.certificadoradelsur.byecontabilidad.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -7,7 +8,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 
 /**
@@ -30,7 +30,7 @@ public class ComprobanteContableDAO {
 	}
 
 	/**
-	 * Funcion que cuenta la cantidad de Comprobantes Contables 
+	 * Funcion que cuenta la cantidad de Comprobantes Contables
 	 * 
 	 * @return el total de Comprobantes Contables
 	 */
@@ -56,7 +56,7 @@ public class ComprobanteContableDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<ComprobanteContable> getAll(Integer inicio, Integer fin,String glosaGeneral, Long idOficinaContable) {
+	public List<ComprobanteContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Long idOficinaContable) {
 		Query query = em.createNamedQuery("ComprobanteContable.getAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -110,7 +110,7 @@ public class ComprobanteContableDAO {
 		Query query = em.createNamedQuery("ComprobanteContable.getAllLista");
 		return query.getResultList();
 	}
-	
+
 	/**
 	 * Funcion que trae el numero más alto
 	 * 
@@ -120,9 +120,10 @@ public class ComprobanteContableDAO {
 		Query query = em.createNamedQuery("ComprobanteContable.getMaxNumero");
 		return (Long) query.getSingleResult();
 	}
-	
+
 	/**
 	 * busca Comprobante Contable por numero
+	 * 
 	 * @param numero
 	 * @return
 	 */
@@ -136,5 +137,21 @@ public class ComprobanteContableDAO {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Funcion que obtiene datos desde BD para alimentar los reportes
+	 * 
+	 * @param fechaInicial
+	 * @param fechaFinal
+	 * @return lista comporbantes contables
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ComprobanteContable> getLibroDiario(Timestamp fechaInicial, Timestamp fechaFinal,Long idOficinaContable) {
+		Query query = em.createNamedQuery("ComprobanteContable.getLibroDiario");
+		query.setParameter("fechaInicial", fechaInicial);
+		query.setParameter("fechaFinal", fechaFinal);
+		query.setParameter("idOficinaContable", idOficinaContable);
+		return query.getResultList();
 	}
 }

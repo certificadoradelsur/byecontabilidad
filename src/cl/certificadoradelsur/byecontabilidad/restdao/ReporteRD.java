@@ -15,12 +15,17 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Conciliacion;
+import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
 import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
@@ -52,7 +57,20 @@ public class ReporteRD {
 	private BancoDAO bdao;
 	@Inject
 	private CuentaDAO cuentadao;
+	@Inject
+	private ComprobanteContableDAO comprobantedao;
+	@Inject
+	private UsuarioDAO udao;
+	@Inject
+	private MovimientoDAO movimientodao;
 
+	/**
+	 * @param fechaDesde
+	 * @param fechaHasta
+	 * @param idBanco
+	 * @param idCuenta
+	 * @return
+	 */
 	public InputStream getByIdReporteBancoCuenta(String fechaDesde, String fechaHasta, Long idBanco, Long idCuenta) {
 		XSSFWorkbook workbook = null;
 		try {
@@ -60,17 +78,9 @@ public class ReporteRD {
 
 			Sheet sheetInforme = workbook.createSheet("Informe");
 
-			// Sheet sheetResumen = workbook.createSheet("Resumen");
 			Sheet sheetConciliacion = workbook.createSheet("Conciliacion");
 			Sheet sheetNoConciliado = workbook.createSheet("No conciliado empresa");
 			Sheet sheetNoConciliadoCartola = workbook.createSheet("No conciliado banco");
-
-			/*
-			 * String[] titulosResumen = { "N° MOVIMIENTOS", "N° CARTOLAS",
-			 * "N° MOVIMIENTO NO CONCILIADOS", "MONTO MOVIMIENTOS NO CONCILIADOS",
-			 * "N° CARTOLAS NO CONCILIADAS","MONTO CARTOLAS NO CONCILIADAS",
-			 * "N° CONCILIADOS", "FECHA INICIAL", "FECHA FINAL" };
-			 */
 
 			String[] titulosConciliacion = { "N° MOVIMIENTO", "MONTO MOVIMIENTO", "FECHA MOVIMIENTO", "N° CARTOLA",
 					"N° DOCUMENTO", "MONTO CARTOLA", "FECHA CARTOLA", "DETALLE CARTOLA", "FECHA CONCILIACIÓN" };
@@ -78,12 +88,7 @@ public class ReporteRD {
 					"FECHA MOVIMIENTO" };
 			String[] titulosNoConciliadoCartola = { "N° CARTOLA", "DESCRIPCIÓN", "MONTO", "TIPO MOVIMIENTO",
 					"N° DOCUMENTO", "FECHA CARTOLA" };
-			/*
-			 * Row headerRowResumen = sheetResumen.createRow(0);
-			 * 
-			 * for (int i = 0; i < titulosResumen.length; i++) { Cell cell =
-			 * headerRowResumen.createCell(i); cell.setCellValue(titulosResumen[i]); }
-			 */
+
 
 			Row headerRowConciliacion = sheetConciliacion.createRow(0);
 
@@ -211,31 +216,14 @@ public class ReporteRD {
 
 			}
 
-			/*
-			 * Row rowResumen =sheetResumen.createRow(1);
-			 * rowResumen.createCell(0).setCellValue(mdao.countAllResumen(fechaInicial,
-			 * fechaFinal,idCuenta,idBanco));
-			 * rowResumen.createCell(1).setCellValue(cartdao.countAll(fechaInicial,
-			 * fechaFinal, idCuenta, idBanco));
-			 * rowResumen.createCell(2).setCellValue(ncdao.countAll(fechaInicial,
-			 * fechaFinal, idCuenta, idBanco));
-			 * rowResumen.createCell(3).setCellValue(montoNoConciliado);
-			 * rowResumen.createCell(4).setCellValue(nccdao.countAll(fechaInicial,
-			 * fechaFinal, idCuenta, idBanco));
-			 * rowResumen.createCell(5).setCellValue(montoNoConciliadoCartola);
-			 * rowResumen.createCell(6).setCellValue(cdao.countAllResumen(fechaInicial,
-			 * fechaFinal)); rowResumen.createCell(7).setCellValue(Utilidades.
-			 * strToTsDDMMYYYYHHmmssConGuion(fechaInicial).substring(0,10));
-			 * rowResumen.createCell(8).setCellValue(Utilidades.
-			 * strToTsDDMMYYYYHHmmssConGuion(fechaFinal).substring(0,10));
-			 */
-
 			Long saldoContable = (long) cuentadao.getById(idCuenta).getSaldoInicial();
 
 			Long saldoBanco = saldoContable + montoNoConciliadoSuma + montoNoConciliadoCartolaSuma
 					- (montoNoConciliadoCartolaResta + montoNoConciliadoResta);
 
-			Long numEmp = (long) 1;
+			
+			
+			Long numEmp = cuentadao.getById(idCuenta).getEmpresa().getId();
 			Row rowInforme = sheetInforme.createRow(0);
 			rowInforme.createCell(0).setCellValue("EMPRESA:");
 			rowInforme.createCell(1).setCellValue(edao.getById(numEmp).getRazonSocial());
@@ -248,10 +236,6 @@ public class ReporteRD {
 			rowInforme2.createCell(0).setCellValue("GIRO:");
 			rowInforme2.createCell(1).setCellValue(edao.getById(numEmp).getGiro());
 
-	//		Row rowInforme3 = sheetInforme.createRow(3);
-	//		rowInforme3.createCell(0).setCellValue("DIRECCION:");
-	//		rowInforme3.createCell(1).setCellValue(edao.getById(numEmp).getDireccion());
-
 			Row rowInforme5 = sheetInforme.createRow(5);
 			rowInforme5.createCell(0).setCellValue("BANCO:");
 			rowInforme5.createCell(1).setCellValue(bdao.getById(idBanco).getNombre());
@@ -259,37 +243,6 @@ public class ReporteRD {
 			Row rowInforme6 = sheetInforme.createRow(6);
 			rowInforme6.createCell(0).setCellValue("CUENTA:");
 			rowInforme6.createCell(1).setCellValue(cuentadao.getById(idCuenta).getNumCuenta());
-
-
-			/*
-			 * Row rowInforme6 = sheetInforme.createRow(6);
-			 * rowInforme6.createCell(0).setCellValue("N° MOVIMIENTOS:");
-			 * rowInforme6.createCell(1).setCellValue(mdao.countAllResumen(fechaInicial,
-			 * fechaFinal, idCuenta, idBanco));
-			 * 
-			 * Row rowInforme7 = sheetInforme.createRow(7);
-			 * rowInforme7.createCell(0).setCellValue("N° CARTOLAS:");
-			 * rowInforme7.createCell(1).setCellValue(cartdao.countAll(fechaInicial,
-			 * fechaFinal, idCuenta, idBanco));
-			 * 
-			 * 
-			 * Row rowInforme6 = sheetInforme.createRow(6);
-			 * rowInforme6.createCell(0).setCellValue("N° MOVIMIENTO NO CONCILIADOS:");
-			 * rowInforme6.createCell(1).setCellValue(ncdao.countAll(fechaInicial,
-			 * fechaFinal, idCuenta, idBanco));
-			 */
-			/*
-			 * Row rowInforme8 = sheetInforme.createRow(8);
-			 * rowInforme8.createCell(0).setCellValue("N° CARTOLAS NO CONCILIADAS:");
-			 * rowInforme8.createCell(1).setCellValue(nccdao.countAll(fechaInicial,
-			 * fechaFinal, idCuenta, idBanco));
-			 */
-			/*
-			 * Row rowInforme11 = sheetInforme.createRow(11);
-			 * rowInforme11.createCell(0).setCellValue("N° CONCILIADOS: ");
-			 * rowInforme11.createCell(1).setCellValue(cdao.countAllResumen(fechaInicial,
-			 * fechaFinal));
-			 */
 
 			Row rowInforme8 = sheetInforme.createRow(8);
 			rowInforme8.createCell(0).setCellValue("SALDO CONTABLE:");
@@ -322,6 +275,64 @@ public class ReporteRD {
 			rowInforme15.createCell(1)
 					.setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(new Timestamp(System.currentTimeMillis())));
 
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			workbook.write(bos);
+			return new ByteArrayInputStream(bos.toByteArray());
+
+		} catch (Exception e) {
+			log.error("Problemas al generar el reporte ", e);
+			return null;
+		} finally {
+			if (workbook != null) {
+				try {
+					workbook.close();
+				} catch (IOException e) {
+					log.error("No se pudo cerrar el workbook", e);
+				}
+			}
+		}
+	}
+	
+	public InputStream getLibroDiario(String fechaDesde, String fechaHasta, String idUsuario) {
+		XSSFWorkbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook();
+
+			Sheet sheetDiario = workbook.createSheet("Libro diario");
+//			Sheet sheetMayor = workbook.createSheet("Libro mayor");
+//			Sheet sheetGeneral = workbook.createSheet("Balance general");
+//			Sheet sheetClasificado = workbook.createSheet("Balance clasificado");
+
+			
+			String[] titulosDiario = { "Cuenta", "Descripción", "C.R", "T.D", "Número RUT", "Glosa", "Debe", "Haber"};
+			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
+			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			List<ComprobanteContable> listaComprobante = comprobantedao.getLibroDiario(fechaInicial, fechaFinal, udao.getById(idUsuario).getOficinaContable().getId());
+			
+			int rowNum = 0;
+			for  (int i=0;i< listaComprobante.size(); i++) {
+				List<Movimiento> listaMovimiento = movimientodao.getByIdComprobante(listaComprobante.get(i).getId());	
+				Row rowComprobante = sheetDiario.createRow(rowNum++);
+				rowComprobante.createCell(0).setCellValue("N° de Comprobante");
+				rowComprobante.createCell(1).setCellValue(listaComprobante.get(i).getNumero().toString());
+				rowComprobante.createCell(2).setCellValue("Fecha");
+				rowComprobante.createCell(3).setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(listaComprobante.get(i).getFecha()).substring(0,10));				
+					Row headerRowDiario = sheetDiario.createRow(rowNum++);
+					for (int k = 0; k < titulosDiario.length; k++) {
+						Cell cell2 = headerRowDiario.createCell(k);
+						cell2.setCellValue(titulosDiario[k]);
+					}
+						for  (int l=0;l< listaMovimiento.size(); l++) {
+						Row rowMovimiento = sheetDiario.createRow(rowNum++);
+						rowMovimiento.createCell(0).setCellValue(listaMovimiento.get(l).getCuentaContable().getCodigo());
+						rowMovimiento.createCell(1).setCellValue(listaMovimiento.get(l).getCuentaContable().getGlosaGeneral());
+						rowMovimiento.createCell(5).setCellValue(listaMovimiento.get(l).getGlosa());
+							
+							
+						}
+						
+				}
+			
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);
 			return new ByteArrayInputStream(bos.toByteArray());

@@ -15,7 +15,8 @@ import javax.ws.rs.core.Response;
 public interface ReporteSvc {
 
 	/**
-	 * Funcion que alimenta con datos necesarios para realizar reporte
+	 * Funcion que alimenta con datos necesarios para realizar reporte conciliación
+	 * 
 	 * @param fechaDesde
 	 * @param fechaHasta
 	 * @param idBanco
@@ -26,9 +27,23 @@ public interface ReporteSvc {
 	@GET
 	@Path("/getByIdReporteBancoCuenta")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	Response getByIdReporteBancoCuenta(@QueryParam("fechaDesde") String fechaDesde, 
-										@QueryParam("fechaHasta") String fechaHasta,
-										@QueryParam("idBanco") Long idBanco,
-										@QueryParam("idCuenta") Long idCuenta) throws ParseException;	
+	Response getByIdReporteBancoCuenta(@QueryParam("fechaDesde") String fechaDesde,
+			@QueryParam("fechaHasta") String fechaHasta, @QueryParam("idBanco") Long idBanco,
+			@QueryParam("idCuenta") Long idCuenta) throws ParseException;
+
+	/**
+	 * Funcion que provee con datos necesarios para realizar reporte libro diario
+	 * 
+	 * @param fechaDesde
+	 * @param fechaHasta
+	 * @return
+	 * @throws ParseException
+	 */
+	@GET
+	@Path("/getLibroDiario")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	Response getLibroDiario(@QueryParam("fechaDesde") String fechaDesde,
+			@QueryParam("fechaHasta") String fechaHasta,
+	        @QueryParam("idUsuario") String idUsuario) throws ParseException;
 
 }

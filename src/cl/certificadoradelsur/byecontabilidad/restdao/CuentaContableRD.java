@@ -64,7 +64,6 @@ public class CuentaContableRD {
 					cuentaContable.setCodigo(ccj.getCodigo());
 					cuentaContable.setDescripcion(ccj.getDescripcion());
 					cuentaContable.setAnalisis(ccj.isAnalisis());
-					// cuentaContable.setImputable(ccj.isImputable());
 					cuentaContable.setImputable(true);
 					cuentaContable.setConciliacion(ccj.isConciliacion());
 					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
@@ -160,7 +159,7 @@ public class CuentaContableRD {
 		try {
 			CuentaContable cuentaContable = cuentadao.getById(ccj.getId());
 			if (cuentadao.getByCodigo(ccj.getCodigo()) == null
-					|| cuentadao.getByCodigo(ccj.getCodigo()).getCodigo() == cuentaContable.getCodigo()) {
+					|| cuentadao.getByCodigo(ccj.getCodigo()).getCodigo().equals(cuentaContable.getCodigo())) {
 				if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
 						|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
@@ -169,7 +168,6 @@ public class CuentaContableRD {
 					cuentaContable.setCodigo(ccj.getCodigo());
 					cuentaContable.setDescripcion(ccj.getDescripcion());
 					cuentaContable.setAnalisis(ccj.isAnalisis());
-					// cuentaContable.setImputable(ccj.isImputable());
 					cuentaContable.setImputable(true);
 					cuentaContable.setConciliacion(ccj.isConciliacion());
 					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));

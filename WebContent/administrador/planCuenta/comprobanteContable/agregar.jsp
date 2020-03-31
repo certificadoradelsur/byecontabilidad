@@ -578,7 +578,7 @@
 		});
 
 		if ($('#empresa option:selected').text() == 'Seleccione empresa') {
-			alert("Debe seleccionar una cuenta contable");
+			alert("Debe seleccionar una empresa");
 			return;
 		}
 

@@ -33,7 +33,9 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Conciliacion.getByIdTransaccion", query = "SELECT c FROM Conciliacion c where  c.movimiento.transaccion.id= :idTransaccion"),
 		@NamedQuery(name = "Conciliacion.idComprobante", query = "SELECT c FROM Conciliacion c where  c.movimiento.comprobanteContable.id= :idComprobante"),
 		@NamedQuery(name = "Conciliacion.countAllResumen", query = "SELECT count(c.id) FROM Conciliacion c where c.eliminado = false and c.movimiento.fecha between :fechaI and :fechaF"),
-		@NamedQuery(name = "Conciliacion.getByIdReporteBancoCuenta", query = "SELECT c FROM Conciliacion c where c.eliminado = false and c.movimiento.fecha between :fechaInicial and :fechaFinal and c.cartola.banco.id= :idBanco and c.cartola.cuenta.id= :idCuenta") })
+		@NamedQuery(name = "Conciliacion.getByIdReporteBancoCuenta", query = "SELECT c FROM Conciliacion c where c.eliminado = false and c.movimiento.fecha between :fechaInicial and :fechaFinal and c.cartola.banco.id= :idBanco and c.cartola.cuenta.id= :idCuenta") 
+		
+})
 
 
 
