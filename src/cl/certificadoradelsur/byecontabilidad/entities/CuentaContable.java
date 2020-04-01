@@ -48,6 +48,7 @@ public class CuentaContable implements Serializable {
 	private Cuenta cuenta;
 	private Banco banco;
 	private Empresa empresa;
+	private Sucursal sucursal;
 	private ComprobanteContable comprobanteContable;
 
 	@Id
@@ -172,6 +173,16 @@ public class CuentaContable implements Serializable {
 
 	public void setComprobanteContable(ComprobanteContable comprobanteContable) {
 		this.comprobanteContable = comprobanteContable;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_sucursal", nullable = true)
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
 	}
 	
 	

@@ -66,5 +66,14 @@ public class SucursalSvcBean implements SucursalSvc {
 	}
 	
 
+	@Override
+	public Response getByIdEmpresa(String datos) {
+		Gson gson = new GsonBuilder().create();
+		SucursalJson cj = gson.fromJson(datos, SucursalJson.class);
+		List<SucursalJson> lcj = sucrd.getByIdEmpresa(cj);
+		String json = gson.toJson(lcj, new TypeToken<List<SucursalJson>>() {}.getType());
+		return Response.ok(json).build();
+		
+	}
 
 }

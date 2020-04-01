@@ -35,7 +35,7 @@ public class ReporteSvcBean implements ReporteSvc   {
 		InputStream file = rrd.getLibroDiario(fechaDesde, fechaHasta, idUsuario);
 		ResponseBuilder response = Response.ok((Object) file);
 		
-		response.header("Content-Disposition", "attachment; filename=Reporte"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaDesde)).substring(0, 10)+"a"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaHasta)).substring(0, 10)+".xlsx");		
+		response.header("Content-Disposition", "attachment; filename=LibroDiario"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaDesde)).substring(0, 10)+"a"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaHasta)).substring(0, 10)+".xlsx");		
 
 		return response.build();
 	}

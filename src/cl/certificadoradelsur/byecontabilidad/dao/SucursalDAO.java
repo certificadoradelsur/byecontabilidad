@@ -110,4 +110,17 @@ public class SucursalDAO {
 		em.remove(s);
 
 	}
+	
+	/**
+	 * Obtiene una lista de sucursales segun la empresa seleccionada
+	 * 
+	 * @return lista de sucursales
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Sucursal> getByIdEmpresa(Long idEmpresa, Long idOficinaContable) {
+		Query query = em.createNamedQuery("Sucursal.getByIdEmpresa");
+		query.setParameter("idEmpresa", idEmpresa);
+		query.setParameter("idOficinaContable", idOficinaContable);
+		return query.getResultList();
+	}
 }

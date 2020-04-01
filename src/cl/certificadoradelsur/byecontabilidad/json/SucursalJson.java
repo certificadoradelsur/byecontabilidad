@@ -12,6 +12,7 @@ public class SucursalJson {
 	private String direccion;
 	private Long idEmpresa;
 	private String nombreEmpresa;
+	private String idUsuario;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -37,8 +38,12 @@ public class SucursalJson {
 	public void setNombreEmpresa(String nombreEmpresa) {
 		this.nombreEmpresa = nombreEmpresa;
 	}
-	
-	
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
 
 
 }

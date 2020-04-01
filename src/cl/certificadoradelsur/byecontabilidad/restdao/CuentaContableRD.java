@@ -13,6 +13,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.SucursalDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
@@ -45,6 +46,8 @@ public class CuentaContableRD {
 	private UsuarioDAO udao;
 	@Inject
 	private EmpresaDAO edao;
+	@Inject
+	private SucursalDAO sudao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -69,6 +72,7 @@ public class CuentaContableRD {
 					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
 					cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
 					cuentaContable.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+					cuentaContable.setSucursal(sudao.getById(ccj.getIdSucursal()));
 					if (ccj.isConciliacion().equals(true)) {
 						cuentaContable.setBanco(bdao.getById(ccj.getIdBanco()));
 						cuentaContable.setCuenta(cdao.getById(ccj.getIdCuenta()));
@@ -173,6 +177,7 @@ public class CuentaContableRD {
 					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
 					cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
 					cuentaContable.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+					cuentaContable.setSucursal(sudao.getById(ccj.getIdSucursal()));
 					if (ccj.isAnalisis().equals(true)) {
 						cuentaContable.setBanco(null);
 						cuentaContable.setCuenta(null);
@@ -210,6 +215,7 @@ public class CuentaContableRD {
 		ccJson.setAnalisis(cuentaContable.isAnalisis());
 		ccJson.setConciliacion(cuentaContable.isConciliacion());
 		ccJson.setIdEmpresa(cuentaContable.getEmpresa().getId());
+		ccJson.setIdSucursal(cuentaContable.getSucursal().getCodigo());
 		if(cuentaContable.isConciliacion().equals(true)) {
 			ccJson.setIdBanco(cuentaContable.getBanco().getId());
 			ccJson.setIdCuenta(cuentaContable.getCuenta().getId());

@@ -30,7 +30,6 @@ import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
 import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
-
 /**
  * Clase que hace el nexo entre los servicios rest y el patron dao
  * 
@@ -40,11 +39,10 @@ import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 public class ReporteRD {
 	private static Logger log = Logger.getLogger(ReporteRD.class);
 	/*
-	@Inject
-	private MovimientoDAO mdao;
-	@Inject
-	private CartolaDAO cartdao;
-	*/
+	 * @Inject private MovimientoDAO mdao;
+	 * 
+	 * @Inject private CartolaDAO cartdao;
+	 */
 	@Inject
 	private ConciliacionDAO cdao;
 	@Inject
@@ -88,7 +86,6 @@ public class ReporteRD {
 					"FECHA MOVIMIENTO" };
 			String[] titulosNoConciliadoCartola = { "N° CARTOLA", "DESCRIPCIÓN", "MONTO", "TIPO MOVIMIENTO",
 					"N° DOCUMENTO", "FECHA CARTOLA" };
-
 
 			Row headerRowConciliacion = sheetConciliacion.createRow(0);
 
@@ -221,8 +218,6 @@ public class ReporteRD {
 			Long saldoBanco = saldoContable + montoNoConciliadoSuma + montoNoConciliadoCartolaSuma
 					- (montoNoConciliadoCartolaResta + montoNoConciliadoResta);
 
-			
-			
 			Long numEmp = cuentadao.getById(idCuenta).getEmpresa().getId();
 			Row rowInforme = sheetInforme.createRow(0);
 			rowInforme.createCell(0).setCellValue("EMPRESA:");
@@ -239,7 +234,7 @@ public class ReporteRD {
 			Row rowInforme5 = sheetInforme.createRow(5);
 			rowInforme5.createCell(0).setCellValue("BANCO:");
 			rowInforme5.createCell(1).setCellValue(bdao.getById(idBanco).getNombre());
-			
+
 			Row rowInforme6 = sheetInforme.createRow(6);
 			rowInforme6.createCell(0).setCellValue("CUENTA:");
 			rowInforme6.createCell(1).setCellValue(cuentadao.getById(idCuenta).getNumCuenta());
@@ -269,7 +264,7 @@ public class ReporteRD {
 			rowInforme13.createCell(0).setCellValue("FECHA FINAL:");
 			rowInforme13.createCell(1)
 					.setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(fechaFinal).substring(0, 10));
-			
+
 			Row rowInforme15 = sheetInforme.createRow(15);
 			rowInforme15.createCell(0).setCellValue("FECHA ELABORACIÓN INFORME:");
 			rowInforme15.createCell(1)
@@ -292,7 +287,7 @@ public class ReporteRD {
 			}
 		}
 	}
-	
+
 	public InputStream getLibroDiario(String fechaDesde, String fechaHasta, String idUsuario) {
 		XSSFWorkbook workbook = null;
 		try {
@@ -303,38 +298,52 @@ public class ReporteRD {
 //			Sheet sheetGeneral = workbook.createSheet("Balance general");
 //			Sheet sheetClasificado = workbook.createSheet("Balance clasificado");
 
-			
-			String[] titulosDiario = { "Cuenta", "Descripción", "C.R", "T.D", "Número RUT", "Glosa", "Debe", "Haber"};
+			String[] titulosDiario = { "Cuenta", "Descripción", "C.R", "T.D", "Número RUT", "Glosa", "Debe", "Haber" };
 			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
 			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
-			List<ComprobanteContable> listaComprobante = comprobantedao.getLibroDiario(fechaInicial, fechaFinal, udao.getById(idUsuario).getOficinaContable().getId());
-			
+			List<ComprobanteContable> listaComprobante = comprobantedao.getLibroDiario(fechaInicial, fechaFinal,
+					udao.getById(idUsuario).getOficinaContable().getId());
+
 			int rowNum = 0;
-			for  (int i=0;i< listaComprobante.size(); i++) {
-				List<Movimiento> listaMovimiento = movimientodao.getByIdComprobante(listaComprobante.get(i).getId());	
+			for (int i = 0; i < listaComprobante.size(); i++) {
+				List<Movimiento> listaMovimiento = movimientodao.getByIdComprobante(listaComprobante.get(i).getId());
 				Row rowComprobante = sheetDiario.createRow(rowNum++);
 				rowComprobante.createCell(0).setCellValue("N° de Comprobante");
 				rowComprobante.createCell(1).setCellValue(listaComprobante.get(i).getNumero().toString());
 				rowComprobante.createCell(2).setCellValue("Fecha");
-				rowComprobante.createCell(3).setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(listaComprobante.get(i).getFecha()).substring(0,10));				
-					Row headerRowDiario = sheetDiario.createRow(rowNum++);
-					for (int k = 0; k < titulosDiario.length; k++) {
-						Cell cell2 = headerRowDiario.createCell(k);
-						cell2.setCellValue(titulosDiario[k]);
-					}
-						for  (int l=0;l< listaMovimiento.size(); l++) {
-						Row rowMovimiento = sheetDiario.createRow(rowNum++);
-						rowMovimiento.createCell(0).setCellValue(listaMovimiento.get(l).getCuentaContable().getCodigo());
-						rowMovimiento.createCell(1).setCellValue(listaMovimiento.get(l).getCuentaContable().getGlosaGeneral());
-						rowMovimiento.createCell(3).setCellValue(listaMovimiento.get(l).getTipoDocumento());
-					//	rowMovimiento.createCell(4).setCellValue(listaMovimiento.get(l).getCuentaContable().getCliente);
-						rowMovimiento.createCell(5).setCellValue(listaMovimiento.get(l).getGlosa());
-							
-							
-						}
-						
+				rowComprobante.createCell(3).setCellValue(
+						Utilidades.strToTsDDMMYYYYHHmmssConGuion(listaComprobante.get(i).getFecha()).substring(0, 10));
+				Row headerRowDiario = sheetDiario.createRow(rowNum++);
+				for (int k = 0; k < titulosDiario.length; k++) {
+					Cell cell2 = headerRowDiario.createCell(k);
+					cell2.setCellValue(titulosDiario[k]);
 				}
-			
+				for (int l = 0; l < listaMovimiento.size(); l++) {
+					Row rowMovimiento = sheetDiario.createRow(rowNum++);
+					rowMovimiento.createCell(0).setCellValue(listaMovimiento.get(l).getCuentaContable().getCodigo());
+					rowMovimiento.createCell(1)
+							.setCellValue(listaMovimiento.get(l).getCuentaContable().getGlosaGeneral());
+					rowMovimiento.createCell(2).setCellValue(listaMovimiento.get(l).getCuentaContable().getSucursal().getDireccion());
+					rowMovimiento.createCell(3).setCellValue(listaMovimiento.get(l).getTipoDocumento());
+					if (listaMovimiento.get(l).getCuentaContable().isAnalisis().equals(true)) {
+						rowMovimiento.createCell(4).setCellValue(listaMovimiento.get(l).getCliente().getRut());
+					} else {
+						rowMovimiento.createCell(4).setCellValue("");
+					}
+					rowMovimiento.createCell(5).setCellValue(listaMovimiento.get(l).getGlosa());
+
+					if (listaMovimiento.get(l).getTipoMovimiento().equals("INGRESO")
+							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE INGRESO")) {
+						rowMovimiento.createCell(6).setCellValue(listaMovimiento.get(l).getMonto());
+					} else if (listaMovimiento.get(l).getTipoMovimiento().equals("EGRESO")
+							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE EGRESO")) {
+						rowMovimiento.createCell(7).setCellValue(listaMovimiento.get(l).getMonto());
+					}
+
+				}
+
+			}
+
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);
 			return new ByteArrayInputStream(bos.toByteArray());

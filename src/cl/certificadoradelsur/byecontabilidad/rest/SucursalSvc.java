@@ -73,7 +73,15 @@ public interface SucursalSvc {
 	@Produces("application/json")
 	Response eliminar(String datos);
 		
-
+    /**
+     * funcion que obtiene sucursales por id empresa
+     * @param datos
+     * @return sucursal que seran mostrados en el select
+     */
+	@POST
+	@Path("/getByIdEmpresa")
+	@Produces("application/json")
+	Response getByIdEmpresa(String datos);
 
 
 	

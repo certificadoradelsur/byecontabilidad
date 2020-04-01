@@ -641,6 +641,7 @@
 		})
 		$("#empresa").prop("disabled", true);
 		$("#fecha").prop("disabled", true);
+		$("#glosaGeneral").prop("disabled", true);
 		limpiaAdd();
 	}
 

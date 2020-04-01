@@ -88,7 +88,7 @@ public class ComprobanteContableRD {
 							}
 							if(cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
 									.equals(true)) {
-								movimiento.setCliente(clientedao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
+								movimiento.setCliente(clientedao.getById(ccj.getMovimientos().get(i).getIdCliente()));
 							}
 							movimiento.setCuentaContable(
 									cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()));

@@ -89,6 +89,14 @@
 						</div>
 					</div>
 				<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Sucursal</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="sucursal">
+							</select>
+						</div>
+					</div>
+				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp;&nbsp; Clase Cuenta</label>
 					<div class="col-3">
@@ -180,6 +188,7 @@
 		$("#banco").select2({width:'200'});
 		$("#empresa").select2({width:'200'});
 		$("#cuenta").select2({width:'200'});
+		$("#sucursal").select2({width:'200'});
       	codigo();
 		
 		 $('#analisis').on('change', function(){
@@ -241,7 +250,12 @@
 											+ "</option>";
 								}
 								document.getElementById("empresa").innerHTML = str;
-							}, "json");	 	 
+								cargaSucursal(document.getElementById("empresa").value);
+							}, "json");	 	
+			
+			
+	 
+
  })
 					
 			$('#banco').on('change',
@@ -263,7 +277,28 @@
 													}
 													document.getElementById("cuenta").innerHTML = str;
 												}, "json");
-							}); 				
+							}); 	
+	
+	$('#empresa').on('change',
+			function() {
+				var submitJson = { 
+
+					    idUsuario : document.getElementById("idUsuario").value,
+						idEmpresa : document.getElementById("empresa").value
+				}
+
+				$.post('/byeContabilidad/rest-services/private/sucursal/getByIdEmpresa',
+								JSON.stringify(submitJson),
+								function(res, code) {
+					               var str = "<option>Seleccione sucursal</option>";
+									for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].codigo+">"
+												+ res[i].direccion
+												+ "</option>";
+									}
+									document.getElementById("sucursal").innerHTML = str;
+								}, "json");
+			}); 
 					
 
 	$('#claseCuenta').on('change',function() {
@@ -327,6 +362,25 @@
 				}, "json");
 	}
 	
+	function cargaSucursal(idEmpresa){
+		var submitJson = { 
+
+			    idUsuario : document.getElementById("idUsuario").value,
+				idEmpresa : idEmpresa
+		}
+
+		$.post('/byeContabilidad/rest-services/private/sucursal/getByIdEmpresa',
+						JSON.stringify(submitJson),
+						function(res, code) {
+			               var str = "<option>Seleccione sucursal</option>";
+							for (var i = 0, len = res.length; i < len; i++) {
+							str += "<option value="+res[i].codigo+">"
+										+ res[i].direccion
+										+ "</option>";
+							}
+							document.getElementById("sucursal").innerHTML = str;
+						}, "json");	
+	}
 	function buscaClasificacion (){
 		var submitJson = {
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
@@ -356,12 +410,18 @@
 			return;
 		}
 		
-		if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
-			alert("Debe seleccionar una cuenta");
+
+		
+		if ($('#sucursal option:selected').text() == 'Seleccione sucursal') {
+			alert("Debe seleccionar una sucursal");
 			return;
 		}
 		
 		if(document.getElementById("conciliacion").checked){
+			if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+				alert("Debe seleccionar una cuenta");
+				return;
+			}
 			if(document.getElementById("cuenta").value==""){
 				alert('No existe cuenta asociada al banco');
 				return;
@@ -378,8 +438,10 @@
 			analisis : document.getElementById("analisis").checked,
 			conciliacion : document.getElementById("conciliacion").checked,
 			idBanco : document.getElementById("banco").value,
-		    idCuenta : document.getElementById("cuenta").value,
-		    idEmpresa : document.getElementById("empresa").value
+		    idCuenta : document.getElementById("cuenta").value=='Seleccione cuenta' ? 0 : document.getElementById("cuenta").value,
+		    idEmpresa : document.getElementById("empresa").value,
+		    idSucursal : document.getElementById("sucursal").value=='Seleccione sucursal' ? 0 : document.getElementById("sucursal").value 
+		  
 		}
 
 		$.post('/byeContabilidad/rest-services/private/cuentaContable/add',

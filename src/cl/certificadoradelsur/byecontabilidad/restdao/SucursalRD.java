@@ -160,5 +160,28 @@ public class SucursalRD {
 			return e.getMessage();
 		}
 	}
-		
+	
+	/**
+	 * funcion que busca sucursal por idEmpresa
+	 * @param idEmpresa
+	 * @return
+	 */
+	public List<SucursalJson> getByIdEmpresa(SucursalJson sj) {
+
+		List<SucursalJson> lcj = new ArrayList<>();
+		try {
+			List<Sucursal> s = sudao.getByIdEmpresa(sj.getIdEmpresa(),udao.getById(sj.getIdUsuario()).getOficinaContable().getId());
+			for (int i = 0; i < s.size(); i++) {
+				SucursalJson bjj = new SucursalJson();
+				bjj.setCodigo(s.get(i).getCodigo());
+				bjj.setDireccion(s.get(i).getDireccion());
+				lcj.add(bjj);
+			}
+			return lcj;
+		} catch (Exception e) {
+			log.error("No se pudo obtener la lista de cuenta ", e);
+			return lcj;
+		}
+
+	}
 }

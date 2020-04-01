@@ -81,12 +81,20 @@
 						placeholder="Ingrese Glosa" required="required" />
 				</div>
 				<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp;&nbsp; Empresa</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="empresa">
-							</select>
-						</div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp;&nbsp; Empresa</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="empresa">
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp;&nbsp; Sucursal</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="sucursal">
+						</select>
+					</div>
 				</div>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
@@ -180,6 +188,7 @@
 		$("#banco").select2({width:'200'});
 		$("#empresa").select2({width:'200'});
 		$("#cuenta").select2({width:'200'});
+		$("#sucursal").select2({width:'200'});
 		
 	                    var submitJson = {
 								idUsuario : document.getElementById("idUsuario").value}
@@ -194,18 +203,7 @@
 									busca ();								
 								}, "json");	
 						
-						var submitJson = {
-								idUsuario : document.getElementById("idUsuario").value}
-								
-								$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">" + res[i].razonSocial
-														+ "</option>";
-											}
-											document.getElementById("empresa").innerHTML = str;
-										}, "json");	 	 
+	 
 					});
 	
  	
@@ -221,7 +219,9 @@
 							//document.getElementById("imputable").checked = data.imputable;
 							document.getElementById("descripcion").value = data.descripcion;
 							document.getElementById("claseCuenta").value = data.idClaseCuenta;
-							document.getElementById("empresa").value = data.idEmpresa;
+							//document.getElementById("empresa").value = data.idEmpresa;
+
+							cargaEmpresa(data.idEmpresa,data.idSucursal);
 							
 							if (document.getElementById("analisis").checked){
 								document.getElementById("conciliacion").disabled=true;	
@@ -239,6 +239,7 @@
 									cargaBanco(data.idBanco,data.idCuenta);	
 								}
 
+								
 							}
 							cargaselect(data.idGrupoCuenta,data.descripcion );
 
@@ -249,11 +250,56 @@
 				.fail(function(jqxhr, settings, ex) {
 							alert('No se pudo modificar la clasificación '+ ex);
 						});
+
 	}	
 
-	
+	function cargaEmpresa(idEmpresa, idSucursal){
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value
+				}				
+				$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								if (idEmpresa == res[i].id) {
+									str += "<option value="+res[i].id+" selected>"
+											+ res[i].razonSocial + "</option>";
+								}else{
+
+								str += "<option value="+res[i].id+">" + res[i].razonSocial
+										+ "</option>";
+							}
+								}
+							
+							document.getElementById("empresa").innerHTML = str;
+							cargaSucursal(idEmpresa, idSucursal);
+						}, "json");	 
+	}
+				
 
 	
+    function cargaSucursal(idEmpresa,idSucursal){
+    	var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value,
+				idEmpresa : idEmpresa
+			}
+		 	$.post('/byeContabilidad/rest-services/private/sucursal/getByIdEmpresa',
+					JSON.stringify(submitJson),
+					function(res, code) {
+						var str;
+						for (var i = 0, len = res.length; i < len; i++) {
+							if (idSucursal == res[i].codigo) {
+								str += "<option value="+res[i].codigo+" selected>"
+										+ res[i].direccion + "</option>";
+
+							} else {
+								str += "<option value="+res[i].codigo+">"
+										+ res[i].direccion + "</option>";
+							}
+						}
+						document.getElementById("sucursal").innerHTML = str;
+					}, "json");
+	 }
      
     function cargoBanco(){
 		var submitJson = {
@@ -313,6 +359,31 @@
 					}, "json");
 	 } 
 	 
+ 
+
+	$('#empresa').on('change',
+			function() {
+				var submitJson = { 
+
+					    idUsuario : document.getElementById("idUsuario").value,
+						idEmpresa : document.getElementById("empresa").value
+				}
+
+				$.post('/byeContabilidad/rest-services/private/sucursal/getByIdEmpresa',
+								JSON.stringify(submitJson),
+								function(res, code) {
+					               var str = "<option>Seleccione sucursal</option>";
+									for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].codigo+">"
+												+ res[i].direccion
+												+ "</option>";
+									}
+									document.getElementById("sucursal").innerHTML = str;
+								}, "json");
+			}); 
+					
+
+    
 	function cargaCuenta(idCuenta){
 		
 		var submitJson = {
@@ -322,7 +393,7 @@
 			$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 							JSON.stringify(submitJson),
 							function(res, code) {
-								var str ;
+			                    var str = "<option>Seleccione cuenta</option>";
 								for (var i = 0, len = res.length; i < len; i++) {
 									if (idCuenta == res[i].id) {
 										str += "<option value="+res[i].id+" selected>"
@@ -397,7 +468,7 @@
 				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 								JSON.stringify(submitJson),
 								function(res, code) {
-									var str;
+					            var str = "<option>Seleccione cuenta</option>";
 
 									for (var i = 0, len = res.length; i < len; i++) {
 									str += "<option value="+res[i].id+">"
@@ -513,11 +584,15 @@
 				return;
 			}
 		}
+		
+		if ($('#sucursal option:selected').text() == 'Seleccione sucursal') {
+			alert("Debe seleccionar una sucursal");
+			return;
+		}
 
 		if (document.getElementById("analisis").checked) {
 			var submitJson = {
-				id :
-<%=request.getParameter("id")%> ,
+					id :<%=request.getParameter("id")%> ,
 				codigo : document.getElementById("codigo").value,
 				idClaseCuenta : document.getElementById("claseCuenta").value,
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
@@ -527,6 +602,7 @@
 				//imputable:document.getElementById("imputable").checked,
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
+				idSucursal : document.getElementById("sucursal").value
 			}
 		} else if (document.getElementById("conciliacion").checked) {
 
@@ -542,7 +618,8 @@
 				conciliacion : document.getElementById("conciliacion").checked,
 				idBanco : document.getElementById("banco").value,
 				idEmpresa : document.getElementById("empresa").value, 
-				idCuenta : document.getElementById("cuenta").value == '' ? 0 : document.getElementById("cuenta").value
+				idCuenta : document.getElementById("cuenta").value == '' ? 0 : document.getElementById("cuenta").value,
+				idSucursal : document.getElementById("sucursal").value
 			}
 		}else {
 			var submitJson = {
@@ -555,6 +632,7 @@
 					idEmpresa : document.getElementById("empresa").value,
 					analisis : document.getElementById("analisis").checked,
 					conciliacion : document.getElementById("conciliacion").checked,
+					idSucursal : document.getElementById("sucursal").value
 			}
 		}
 
