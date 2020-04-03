@@ -13,4 +13,4 @@ insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (10,'Gastos fuera d
 
 insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (11, 'Ingresos Explotación',4);
 insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (12, 'Financiero',4);
-insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (13, 'Otros ',4),
+insert into grupo_cuenta (id, nombre,id_clase_cuenta) values (13, 'Otros ',4);

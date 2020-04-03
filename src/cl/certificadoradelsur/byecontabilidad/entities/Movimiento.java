@@ -33,8 +33,8 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Movimiento.getByIdCuenta", query = "SELECT m FROM Movimiento m where  m.cuenta.id= :idCuenta"),
 		@NamedQuery(name = "Movimiento.getByIdTransaccion", query = "SELECT m FROM Movimiento m where  m.transaccion.id= :idTransaccion"),
 		@NamedQuery(name = "Movimiento.getByIdComprobante", query = "SELECT m FROM Movimiento m where  m.comprobanteContable.id= :idComprobante"),
-		@NamedQuery(name = "Movimiento.getAllFecha", query = "SELECT m  from Movimiento m where m.cuenta.banco.id = :idBanco and m.fecha between :fechaI and :fechaF  ")
-
+		@NamedQuery(name = "Movimiento.getAllFecha", query = "SELECT m  from Movimiento m where m.cuenta.banco.id = :idBanco and m.fecha between :fechaI and :fechaF  "),
+		@NamedQuery(name = "Movimiento.getByMovEntreCuentas", query = "SELECT M FROM Movimiento m where m.cuentaContable.codigo between :inicialMayor and :finalMayor and m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable ORDER BY m.cuentaContable.id")
 })
 
 public class Movimiento implements Serializable {
@@ -188,8 +188,7 @@ public class Movimiento implements Serializable {
 	public void setComprobanteContable(ComprobanteContable comprobanteContable) {
 		this.comprobanteContable = comprobanteContable;
 	}
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_cuenta_contable", nullable = true)
 	public CuentaContable getCuentaContable() {
@@ -220,5 +219,4 @@ public class Movimiento implements Serializable {
 		this.cliente = cliente;
 	}
 
-	
 }

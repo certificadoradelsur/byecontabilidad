@@ -20,7 +20,6 @@ import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
-
 /**
  * Clase utilitaria
  * 
@@ -90,7 +89,7 @@ public class Utilidades {
 	}
 
 	/**
-	 * funcion que convierte un  String a timestamp 
+	 * funcion que convierte un String a timestamp
 	 * 
 	 * @param fecha
 	 * @return fecha en string
@@ -103,7 +102,7 @@ public class Utilidades {
 	}
 
 	/**
-	 * funcion que convierte un  String a timestamp 
+	 * funcion que convierte un String a timestamp
 	 * 
 	 * @param fecha
 	 * @return fecha en string
@@ -113,10 +112,10 @@ public class Utilidades {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date date = dateFormat.parse(fecha);
 		return new java.sql.Timestamp(date.getTime());
-	} 
-	
+	}
+
 	/**
-	 * funcion que convierte un  String a timestamp 2
+	 * funcion que convierte un String a timestamp 2
 	 * 
 	 * @param fecha
 	 * @return fecha en string
@@ -127,8 +126,7 @@ public class Utilidades {
 		Date date = dateFormat.parse(fecha);
 		return new java.sql.Timestamp(date.getTime());
 	}
-	
-	
+
 	/**
 	 * funcion que ordena la fecha dd-mm-aaaa hh:mm
 	 * 
@@ -140,7 +138,7 @@ public class Utilidades {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 		return formatter.format(fech);
 	}
-	
+
 	/**
 	 * funcion que ordena la fecha dd-mm-aaaa
 	 * 
@@ -152,9 +150,10 @@ public class Utilidades {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		return formatter.format(fech);
 	}
-	
+
 	/**
 	 * Funcion para procesar archivo
+	 * 
 	 * @param path
 	 * @param input
 	 * @return
@@ -221,81 +220,139 @@ public class Utilidades {
 		}
 		return "unknown";
 	}
-	
-	
-	
-
-
-	
 
 	/*
-	 * Funcion que saca la fecha actual y la devuelve con hora 00:00 y primer dia del mes
+	 * Funcion que saca la fecha actual y la devuelve con hora 00:00 y primer dia
+	 * del mes
 	 */
 	public static Timestamp fechaActualDesdeFiltro() throws ParseException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-	String fecha= timestamp.toString().substring(0, 7);
-	fecha += "-01 00:00:00";
+		String fecha = timestamp.toString().substring(0, 7);
+		fecha += "-01 00:00:00";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 Date date = dateFormat.parse(fecha);
-		 return new java.sql.Timestamp(date.getTime());
+		Date date = dateFormat.parse(fecha);
+		return new java.sql.Timestamp(date.getTime());
 	}
-	
+
 	/*
 	 * Funcion que saca la fecha actual y la devuelve con hora 23:559:59 y día 31
 	 */
 	public static Timestamp fechaActualHastaFiltro() throws ParseException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-	String fecha= timestamp.toString().substring(0, 07);
-	fecha += "-31 23:59:59";
+		String fecha = timestamp.toString().substring(0, 07);
+		fecha += "-31 23:59:59";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 Date date = dateFormat.parse(fecha);
-		 return new java.sql.Timestamp(date.getTime());
+		Date date = dateFormat.parse(fecha);
+		return new java.sql.Timestamp(date.getTime());
 	}
-	
-	
-	
+
 	/*
 	 * Funcion que saca la fecha actual y la devuelve con hora 00:00
 	 */
 	public static Timestamp fechaActualDesde() throws ParseException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-	String fecha= timestamp.toString().substring(0, 10);
-	fecha += " 00:00:00";
+		String fecha = timestamp.toString().substring(0, 10);
+		fecha += " 00:00:00";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 Date date = dateFormat.parse(fecha);
-		 return new java.sql.Timestamp(date.getTime());
+		Date date = dateFormat.parse(fecha);
+		return new java.sql.Timestamp(date.getTime());
 	}
-	
+
 	/*
 	 * Funcion que saca la fecha actual y la devuelve con hora 23:559:59
 	 */
 	public static Timestamp fechaActualHasta() throws ParseException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-	String fecha= timestamp.toString().substring(0, 10);
-	fecha += " 23:59:59";
+		String fecha = timestamp.toString().substring(0, 10);
+		fecha += " 23:59:59";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 Date date = dateFormat.parse(fecha);
-		 return new java.sql.Timestamp(date.getTime());
+		Date date = dateFormat.parse(fecha);
+		return new java.sql.Timestamp(date.getTime());
 	}
-	
+
 	/*
-	 * Funcion que recibe la fecha como string y la devuelve como timestamp con hora 00:00:00 
+	 * Funcion que recibe la fecha como string y la devuelve como timestamp con hora
+	 * 00:00:00
 	 */
-	public static Timestamp fechaDesde(String fecha) throws ParseException {	
-	fecha =fecha.substring(0, 10)+" 00:00:00";
+	public static Timestamp fechaDesde(String fecha) throws ParseException {
+		fecha = fecha.substring(0, 10) + " 00:00:00";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 Date date = dateFormat.parse(fecha);
-		 return new java.sql.Timestamp(date.getTime());
+		Date date = dateFormat.parse(fecha);
+		return new java.sql.Timestamp(date.getTime());
 	}
-	
-	
+
 	/*
-	 * Funcion que recibe la fecha como string y la devuelve como timestamp con hora 23:59:59 
+	 * Funcion que recibe la fecha como string y la devuelve como timestamp con hora
+	 * 23:59:59
 	 */
-	public static Timestamp fechaHasta(String fecha) throws ParseException {	
-	fecha =fecha.substring(0, 10)+" 23:59:59";
+	public static Timestamp fechaHasta(String fecha) throws ParseException {
+		fecha = fecha.substring(0, 10) + " 23:59:59";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		 Date date = dateFormat.parse(fecha);
-		 return new java.sql.Timestamp(date.getTime());
+		Date date = dateFormat.parse(fecha);
+		return new java.sql.Timestamp(date.getTime());
+	}
+
+	/**
+	 * Funcion que recive  mes y lo devuelve escrito
+	 * @param month
+	 * @return String
+	 */
+	public static String mes(String month) {
+		String result;
+		switch (month) {
+		case "01": {
+			result = "Enero";
+			break;
+		}
+		case "02": {
+			result = "Febrero";
+			break;
+		}
+		case "03": {
+			result = "Marzo";
+			break;
+		}
+		case "04": {
+			result = "Abril";
+			break;
+		}
+		case "05": {
+			result = "Mayo";
+			break;
+		}
+		case "06": {
+			result = "Junio";
+			break;
+		}
+		case "07": {
+			result = "Julio";
+			break;
+		}
+		case "08": {
+			result = "Agosto";
+			break;
+		}
+		case "09": {
+			result = "Septiembre";
+			break;
+		}
+		case "10": {
+			result = "Octubre";
+			break;
+		}
+		case "11": {
+			result = "Noviembre";
+			break;
+		}
+		case "12": {
+			result = "Diciembre";
+			break;
+		}
+		default: {
+			result = "Error";
+			break;
+		}
+		}
+		return result;
 	}
 }

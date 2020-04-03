@@ -48,31 +48,33 @@
 
 </head>
 <body>
-<%@ include file = "../../../complementos/nav.jsp" %>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
-			<form name="formulario" id="formulario">
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Reportes</h1>
-				</div>
-				<input type="hidden" name="id" id="id" />
-			</form>
+		<form name="formulario" id="formulario">
+			<div
+				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+				<h1 class="h2">Reportes</h1>
+			</div>
+			<input type="hidden" name="id" id="id" />
+		</form>
 
-			<div class="form-group">
+		<div class="card border-secondary mb-3">
+			<div class="card-header">Libro diario</div>
+			<div class="card-body text-secondary">
 				<div class="form-row">
 					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label for="desde">&nbsp;&nbsp;Desde</label>
 						</div>
 						<input type="date" id="filtro1" name="filtro1"
-							placeholder="Filtrar por fecha" class="form-control" />
+						 class="form-control" class="in"/>
 					</div>
 					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label for="hasta">&nbsp; &nbsp;Hasta</label>
 						</div>
 						<input type="date" id="filtro2" name="filtro2"
-							class="form-control" />
+							class="form-control" class="in" />
 					</div>
 					<div class="form-group col-md-2">
 						<div class="form-row">
@@ -83,8 +85,59 @@
 				</div>
 			</div>
 		</div>
+	
 
 
+	<div class="card border-secondary mb-3">
+		<div class="card-header">Libro mayor</div>
+		<div class="card-body text-secondary">
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="desde">&nbsp;&nbsp;Desde</label>
+					</div>
+					<input type="date" id="filtro1Mayor" name="filtro1Mayor"
+						 class="form-control" class="in"/>
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="hasta">&nbsp; &nbsp;Hasta</label>
+					</div>
+					<input type="date" id="filtro2Mayor" name="filtro2Mayor" 
+					class="form-control" class="in"/>
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="desde">&nbsp;&nbsp;Inicial</label>
+					</div>
+					<input type="number" id="inicialMayor" name="inicialMayor"
+						placeholder="Ingrese N° Cuenta" class="form-control" min="1"
+						pattern="^[0-9]+" class="in"/>
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="hasta">&nbsp; &nbsp;Final</label>
+					</div>
+					<input type="number" id="finalMayor" name="finalMayor"
+					placeholder="Ingrese N° Cuenta"  class="form-control" min="1"
+						pattern="^[0-9]+" class="in" />
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label>&nbsp;</label>
+					</div>
+					<button type="button" class="btn btn-primary" onclick="reporteMayor()">Generar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
@@ -97,6 +150,11 @@
 					});
 
 	function reporte() {
+		if(document.getElementById('filtro1').value==""||document.getElementById('filtro2').value==""){
+			alert('No pueden haber campos vacios');
+			return;	
+		}
+		
 		var fechaDesde = new Date(document.getElementById('filtro1').value);
 		var fechaHasta = new Date(document.getElementById('filtro2').value);
 		if (fechaDesde > fechaHasta) {
@@ -109,14 +167,45 @@
 				+ "&fechaHasta="
 				+ document.getElementById('filtro2').value
 				+"&idUsuario="
-				+ document.getElementById('idUsuario').value;
+				+ document.getElementById('idUsuario').value
 
 	}
 
+	function reporteMayor() {
+		if(document.getElementById('filtro1Mayor').value==""||document.getElementById('filtro2Mayor').value==""
+				||document.getElementById('inicialMayor').value==""||document.getElementById('finalMayor').value==""){
+			alert('No pueden haber campos vacios');
+			return;	
+		}
+		var fechaDesde = new Date(document.getElementById('filtro1Mayor').value);
+		var fechaHasta = new Date(document.getElementById('filtro2Mayor').value);
+		if (fechaDesde > fechaHasta) {
+			alert('Fecha Inicial no debe ser mayor que fecha final');
+			return;
+		}
+		
+		var inicialMayor = document.getElementById('inicialMayor').value;
+		var finalMayor = document.getElementById('finalMayor').value;
+		if(inicialMayor>finalMayor){
+			alert('La cuenta inicial no debe ser mayor a la cuenta final');
+			return;
+		}
+
+		location.href = "/byeContabilidad/rest-services/private/reporte/getLibroMayor?fechaDesde="
+				+ document.getElementById('filtro1Mayor').value
+				+ "&fechaHasta="
+				+ document.getElementById('filtro2Mayor').value
+				+"&inicialMayor="
+				+ document.getElementById('inicialMayor').value
+				+"&finalMayor="
+				+ document.getElementById('finalMayor').value
+				+"&idUsuario="
+				+ document.getElementById('idUsuario').value
+	}
+	
 	//	back.addEventListener("click", function() {
 	//		window.history.back();
 	//	}, false);
 
-	$("#banco").trigger('change');
 </script>
 </html>

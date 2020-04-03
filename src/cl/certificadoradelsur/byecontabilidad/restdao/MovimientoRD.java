@@ -356,7 +356,7 @@ public class MovimientoRD {
 					}
 					if(cuentaCondao.getById(mj.getIdCuentaContable()).isAnalisis().equals(false)) {
 						m.setCliente(null);
-					}else if(cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(true)) {
+					}else if(cuentaCondao.getById(mj.getIdCuentaContable()).isAnalisis().equals(true)) {
 					m.setCliente(clidao.getById(mj.getIdCliente()));	
 					}
 					m.setNumDocumento(mj.getNumDocumento());

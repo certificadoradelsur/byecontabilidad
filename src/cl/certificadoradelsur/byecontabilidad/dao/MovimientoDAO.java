@@ -145,7 +145,7 @@ public class MovimientoDAO {
 		query.setParameter("idTransaccion", idTransaccion);
 		return query.getResultList();
 	}
-	
+
 	/**
 	 * funcion que busca movimientos por idComprobante
 	 * 
@@ -159,12 +159,14 @@ public class MovimientoDAO {
 		query.setParameter("idComprobante", idComprobante);
 		return query.getResultList();
 	}
-	
 
 	/**
 	 * Funcion que cuenta la cantidad de movimientos
-	 * 
-	 * @return el total de movimientos
+	 * @param fechaInicial
+	 * @param fechaFinal
+	 * @param idCuenta
+	 * @param idBanco
+	 * @return
 	 */
 	public Long countAllResumen(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco) {
 		Query query = em.createNamedQuery("Movimiento.countAllResumen");
@@ -218,6 +220,29 @@ public class MovimientoDAO {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	/**
+	 * funcion para obtener una lista de Movimientos entre entre cuentas y fechas
+	 * 
+	 * @param fechaInicial
+	 * @param fechaFinal
+	 * @param inicialMayor
+	 * @param finalMayor
+	 * @param idOficinaContable
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public List<Movimiento> getByMovEntreCuentas(Timestamp fechaInicial, Timestamp fechaFinal, Long inicialMayor,
+			Long finalMayor, Long idOficinaContable) {
+		Query query = em.createNamedQuery("Movimiento.getByMovEntreCuentas");
+		query.setParameter("fechaInicial", fechaInicial);
+		query.setParameter("fechaFinal", fechaFinal);
+		query.setParameter("inicialMayor", inicialMayor);
+		query.setParameter("finalMayor", finalMayor);
+		query.setParameter("idOficinaContable", idOficinaContable);
+		return query.getResultList();
 	}
 
 }

@@ -42,8 +42,25 @@ public interface ReporteSvc {
 	@GET
 	@Path("/getLibroDiario")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	Response getLibroDiario(@QueryParam("fechaDesde") String fechaDesde,
-			@QueryParam("fechaHasta") String fechaHasta,
-	        @QueryParam("idUsuario") String idUsuario) throws ParseException;
+	Response getLibroDiario(@QueryParam("fechaDesde") String fechaDesde, @QueryParam("fechaHasta") String fechaHasta,
+			@QueryParam("idUsuario") String idUsuario) throws ParseException;
+
+	/**
+	 * Funcion que provee con datos necesarios para realizar reporte libro mayor
+	 * 
+	 * @param fechaDesde
+	 * @param fechaHasta
+	 * @param inicialMayor
+	 * @param finalMayor
+	 * @param idUsuario
+	 * @return
+	 * @throws ParseException
+	 */
+	@GET
+	@Path("/getLibroMayor")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	Response getLibroMayor(@QueryParam("fechaDesde") String fechaDesde, @QueryParam("fechaHasta") String fechaHasta,
+			@QueryParam("inicialMayor") Long inicialMayor, @QueryParam("finalMayor") Long finalMayor,
+			@QueryParam("idUsuario") String idUsuario) throws ParseException;
 
 }

@@ -40,5 +40,13 @@ public class ReporteSvcBean implements ReporteSvc   {
 		return response.build();
 	}
 
+	@Override
+	public Response getLibroMayor(String fechaDesde, String fechaHasta,Long inicialMayor,Long finalMayor, String idUsuario) throws ParseException {
+		InputStream file = rrd.getLibroMayor(fechaDesde, fechaHasta,inicialMayor,finalMayor, idUsuario);
+		ResponseBuilder response = Response.ok((Object) file);
+		
+		response.header("Content-Disposition", "attachment; filename=LibroMayor"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaDesde)).substring(0, 10)+"a"+Utilidades.strToTsDDMMYYYYHHmmssConGuion(Utilidades.convertidorFechaSinHora(fechaHasta)).substring(0, 10)+".xlsx");		
 
+		return response.build();
+	}
 }
