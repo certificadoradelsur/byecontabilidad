@@ -80,7 +80,10 @@
 					src="../images/conta.ico" alt="Icono" /> Cuenta Contable</a></li>
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/comprobanteContable/index.jsp" style="color: white;"><img
-					src="../images/reporte.ico" alt="Icono" /> Comprobante Contable</a></li>		
+					src="../images/reporte.ico" alt="Icono" /> Comprobante Contable</a></li>
+			<li class="nav-item"><a class="color nav-link"
+				href="../administrador/planCuenta/reporte/index.jsp" style="color: white;"><img
+					src="../images/informe.ico" alt="Icono" /> Reportes</a></li>		
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/usuario/index.jsp" style="color: white;"><img
 					src="../images/user.ico" alt="Icono" /> Usuarios</a></li>				

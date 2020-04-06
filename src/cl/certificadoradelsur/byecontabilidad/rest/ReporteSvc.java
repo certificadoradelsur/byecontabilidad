@@ -63,4 +63,38 @@ public interface ReporteSvc {
 			@QueryParam("inicialMayor") Long inicialMayor, @QueryParam("finalMayor") Long finalMayor,
 			@QueryParam("idUsuario") String idUsuario) throws ParseException;
 
+	/**
+	 * Funcion que provee con datos necesarios para realizar reporte balance general
+	 * 
+	 * @param fechaDesde
+	 * @param fechaHasta
+	 * @param anio
+	 * @param idUsuario
+	 * @return
+	 * @throws ParseException
+	 */
+	@GET
+	@Path("/getBalanceGeneral")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	Response getBalanceGeneral(@QueryParam("fechaDesde") String fechaDesde, @QueryParam("fechaHasta") String fechaHasta,
+			@QueryParam("anio") String anio, @QueryParam("idUsuario") String idUsuario) throws ParseException;
+
+	/**
+	 * Funcion que provee con datos necesarios para realizar reporte balance
+	 * clasificado
+	 * 
+	 * @param fechaDesde
+	 * @param fechaHasta
+	 * @param anio
+	 * @param idUsuario
+	 * @return
+	 * @throws ParseException
+	 */
+	@GET
+	@Path("/getBalanceClasificado")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	Response getBalanceClasificado(@QueryParam("fechaDesde") String fechaDesde,
+			@QueryParam("fechaHasta") String fechaHasta, @QueryParam("anio") String anio,
+			@QueryParam("idUsuario") String idUsuario) throws ParseException;
+
 }

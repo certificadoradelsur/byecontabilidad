@@ -144,6 +144,7 @@ public class ComprobanteContableDAO {
 	 * 
 	 * @param fechaInicial
 	 * @param fechaFinal
+	 * @param idOficinaContable
 	 * @return lista comporbantes contables
 	 */
 	@SuppressWarnings("unchecked")
