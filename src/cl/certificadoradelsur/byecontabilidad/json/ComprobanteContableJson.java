@@ -25,6 +25,7 @@ public class ComprobanteContableJson {
 	private Long idEmpresa;
 	private String idUsuario;
 	private String nombreEmpresa;
+	private Boolean borrador;
 	List<MovimientoJson> movimientos;
 	List<CuentaContableJson> cuentasContables;
 
@@ -130,6 +131,11 @@ public class ComprobanteContableJson {
 	public void setIdUsuario(String idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-
-	
+	public Boolean isBorrador() {
+		return borrador;
+	}
+	public void setBorrador(Boolean borrador) {
+		this.borrador = borrador;
+	}
+		
 }

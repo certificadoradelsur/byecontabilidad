@@ -64,6 +64,7 @@ public class ComprobanteContableRD {
 					c.setNumero(ccj.getNumero());
 					c.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
 					c.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+					c.setBorrador(ccj.isBorrador());
 					List<Movimiento> movimientos = new ArrayList<>();
 					for (int i = 0; i < ccj.getMovimientos().size(); i++) {
 						Movimiento movimiento = new Movimiento();
@@ -157,6 +158,7 @@ public class ComprobanteContableRD {
 				ccj.setNumero(lcc.get(i).getNumero());
 				ccj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion(lcc.get(i).getFecha()).substring(0, 10));
 				ccj.setNombreEmpresa(lcc.get(i).getEmpresa().getRazonSocial());
+				ccj.setBorrador(lcc.get(i).isBorrador());
 				lcj.add(ccj);
 			}
 		} catch (Exception e) {
@@ -183,6 +185,7 @@ public class ComprobanteContableRD {
 						c.setNumero(ccj.getNumero());
 						c.setGlosaGeneral(ccj.getGlosaGeneral());
 						c.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
+						c.setBorrador(ccj.isBorrador());
 
 						for (int i = 0; i < c.getMovimientos().size(); i++) {
 							Movimiento m = c.getMovimientos().get(i);
@@ -219,6 +222,8 @@ public class ComprobanteContableRD {
 		ccJson.setGlosaGeneral(c.getGlosaGeneral());
 		ccJson.setFecha(c.getFecha().toString().substring(0, 10));
 		ccJson.setIdEmpresa(c.getEmpresa().getId());
+		ccJson.setNombreEmpresa(edao.getById(c.getEmpresa().getId()).getRazonSocial());
+		ccJson.setBorrador(c.isBorrador());
 		return ccJson;
 	}
 

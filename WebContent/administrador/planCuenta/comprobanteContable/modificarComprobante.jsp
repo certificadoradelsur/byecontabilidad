@@ -63,7 +63,7 @@
 		<form name="formulario" id="formulario">
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-				<h1 class="h2">Agregar comprobante contable</h1>
+				<h1 class="h2">Modificar comprobante contable</h1>
 			</div>
 
 			<div class="card border-secondary mb-3">
@@ -136,8 +136,8 @@
 				<div class="col-sm-1">
 					<label>&nbsp;Tipo</label>
 				</div>
-				<div class="col-sm-3">&nbsp;
-					<select class="browser-default custom-select" id="tipoSin"
+				<div class="col-sm-3">
+					&nbsp; <select class="browser-default custom-select" id="tipoSin"
 						required="required">
 						<option value="DEBE">Debe</option>
 						<option value="HABER">Haber</option>
@@ -156,8 +156,8 @@
 				<div class="col-sm-1">
 					<label>&nbsp;Glosa</label>
 				</div>
-				<div class="col-sm-3">&nbsp;
-					<input type="text" id="glosaAnalisis" name="glosaAnalisis"
+				<div class="col-sm-3">
+					&nbsp; <input type="text" id="glosaAnalisis" name="glosaAnalisis"
 						placeholder="Ingrese glosa" required="required" />
 				</div>
 				<div class="col-sm-1">
@@ -306,8 +306,27 @@
 
 	$(document).ready(function() {
 		
+		var submitjson = {id:"<%=request.getParameter("id")%>",};
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/comprobanteContable/getById',
+										JSON.stringify(submitjson))
+								.done(
+										function(data) {
+											document.getElementById("numero").value = data.numero;
+											document
+													.getElementById("glosaGeneral").value = data.glosaGeneral;
+											document.getElementById("fecha").value = data.fecha;
+											document.getElementById("empresa").value = data.idEmpresa;
+											cargaEmpresa(data.idEmpresa)
+										})
+								.fail(
+										function(jqxhr, settings, ex) {
+											alert('No se pudo modificar el comprobante contable '
+													+ ex);
+										});
+
 						setWidths();
-						numero();
 						var varAnalisis;
 						var varConciliacion;
 						var varIdBanco;
@@ -375,12 +394,12 @@
 													{
 														field : 'debe',
 														title : 'Debe',
-														width : 160 
+														width : 160
 													},
 													{
 														field : 'haber',
 														title : 'Haber',
-														width : 160 
+														width : 160
 													},
 													{
 														field : 'estado',
@@ -595,6 +614,83 @@
 				}, "json");
 	}
 
+	function cargaEmpresa(idEmpresa, idCuentaContable) {
+
+		var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value
+		}
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista', JSON
+				.stringify(submitJson), function(res, code) {
+			var str;
+			for (var i = 0, len = res.length; i < len; i++) {
+				if (idEmpresa == res[i].id) {
+					str += "<option value="+res[i].id+" selected>"
+							+ res[i].razonSocial + "</option>";
+
+				} else {
+					str += "<option value="+res[i].id+">" + res[i].razonSocial
+							+ "</option>";
+				}
+			}
+			cargaCuentaContable(idEmpresa, idCuentaContable);
+			document.getElementById("empresa").innerHTML = str;
+			$("#empresa").prop("disabled", true);
+		}, "json");
+	}
+
+	function cargaCuentaContable(idEmpresa) {
+
+		var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value,
+			idEmpresa : idEmpresa
+		}
+
+		$
+				.post(
+						'/byeContabilidad/rest-services/private/cuentaContable/getByIdEmpresa',
+						JSON.stringify(submitJson),
+						function(res, code) {
+							var str = "<option>Seleccione cuenta</option>";
+							for (var i = 0; i < res.length; i++) {
+								str += "<option value="+res[i].id+"/"+res[i].analisis+"/"
++res[i].conciliacion+"/"+res[i].idBanco+"/"
++res[i].idCuenta+"/"+res[i].codigo+ "/"+res[i].idEmpresa+">"
+										+ res[i].glosaGeneral + "</option>";
+							}
+
+							document.getElementById("cuentaContable").innerHTML = str;
+							var idCuentaContable = document
+									.getElementById("cuentaContable").value
+									.split("/");
+							varIdCuentaContable = idCuentaContable[0];
+							var analisis = document
+									.getElementById("cuentaContable").value
+									.split("/");
+							varAnalisis = analisis[1];
+							var coinciliacion = document
+									.getElementById("cuentaContable").value
+									.split("/");
+							varConciliacion = coinciliacion[2];
+							var banco = document
+									.getElementById("cuentaContable").value
+									.split("/");
+							varIdBanco = banco[3];
+							var cuenta = document
+									.getElementById("cuentaContable").value
+									.split("/");
+							varIdCuenta = cuenta[4];
+							var codigo = document
+									.getElementById("cuentaContable").value
+									.split("/");
+							varCodigo = codigo[5];
+							var idEmpresa = document
+									.getElementById("cuentaContable").value
+									.split("/");
+							varIdEmpresa = idEmpresa[6];
+						}, "json");
+
+	}
+
 	function Add() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
@@ -613,8 +709,6 @@
 			alert("Todos los campos deben estar llenos");
 			return;
 		}
-		
-
 
 		var debe;
 		var haber;
@@ -649,7 +743,7 @@
 					.getElementById("tipoSin").value, cliente = ""
 			if ($('#tipoSin option:selected').text() == 'Debe') {
 				debe = document.getElementById("monto").value
-		} else if ($('#tipoSin option:selected').text() == 'Haber') {
+			} else if ($('#tipoSin option:selected').text() == 'Haber') {
 				haber = document.getElementById("monto").value
 			}
 		}
@@ -674,7 +768,7 @@
 			'idEmpresa' : varIdEmpresa,
 			'idUsuario' : document.getElementById("idUsuario").value,
 			'numComprobante' : document.getElementById("numero").value,
-			'idCuentaContable' : varIdCuentaContable			
+			'idCuentaContable' : varIdCuentaContable
 		})
 		$("#empresa").prop("disabled", true);
 		$("#fecha").prop("disabled", true);
@@ -687,7 +781,7 @@
 		document.getElementById("glosaSin").value = "";
 		document.getElementById("glosaConciliacion").value = "";
 		document.getElementById("glosaAnalisis").value = "";
-	//	document.getElementById("monto").value = "";
+		//	document.getElementById("monto").value = "";
 	}
 
 	function Save() {
@@ -700,17 +794,17 @@
 			return;
 		}
 
-		var sDebe=0;
-		var sHaber=0;
-		
-		grid.getAll().forEach(function(item, index){
-			  if(item.debe!=""){
-			    sDebe=sDebe+parseInt(item.debe);
-			  }else if(item.haber!=""){
-			    sHaber=sHaber+parseInt(item.haber);
-			  }
+		var sDebe = 0;
+		var sHaber = 0;
+
+		grid.getAll().forEach(function(item, index) {
+			if (item.debe != "") {
+				sDebe = sDebe + parseInt(item.debe);
+			} else if (item.haber != "") {
+				sHaber = sHaber + parseInt(item.haber);
+			}
 		})
-				
+
 		if (sDebe != sHaber) {
 			if (confirm('El comprobante esta descuadrado. ¿desea guardar igualmente?')) {
 				var list = grid.getAll(true)
@@ -746,7 +840,7 @@
 									: value.numCuenta,
 							idCuentaContable : value.idCuentaContable == '' ? 0
 									: value.idCuentaContable
-							
+
 						}
 
 					}),
@@ -841,16 +935,6 @@
 					}
 					document.getElementById("cuenta").innerHTML = str;
 				}, "json");
-	}
-
-	function numero() {
-		$
-				.post(
-						'/byeContabilidad/rest-services/private/comprobanteContable/getMaxNumero')
-				.done(function(data) {
-					document.getElementById("numero").value = data + 1;
-				}).fail(function(jqxhr, settings, ex) {
-				});
 	}
 
 	var tipoDocumentoIngreso = [ {

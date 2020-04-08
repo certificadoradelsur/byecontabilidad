@@ -46,6 +46,7 @@ public class ComprobanteContable implements Serializable {
 	private Timestamp fecha;
 	private List<Movimiento> movimientos;
 	private Empresa empresa;
+	private Boolean borrador;
  
 	@Id
 	@GeneratedValue(generator = "seq_comprobante_contable", strategy = GenerationType.AUTO)
@@ -103,4 +104,13 @@ public class ComprobanteContable implements Serializable {
 		this.movimientos = movimientos;
 	}
 
+	public Boolean isBorrador() {
+		return borrador;
+	}
+
+	public void setBorrador(Boolean borrador) {
+		this.borrador = borrador;
+	}
+
+    
 }

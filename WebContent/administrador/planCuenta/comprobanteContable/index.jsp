@@ -48,53 +48,106 @@
 
 </head>
 <body>
-<%@ include file = "../../../complementos/nav.jsp" %>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
-		<form name="formulario" id="formulario"><input type="hidden" name="id" id="id" /></form>
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de comprobantes contable</h1>
-				</div>
-				<div>
-				<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
+		<form name="formulario" id="formulario">
+			<input type="hidden" name="id" id="id" />
+		</form>
+		<div
+			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+			<h1 class="h2">Lista de comprobantes contable</h1>
+		</div>
+		<div>
+			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
 		<br>
-<div class="form-group">
-				<div class="col-1"></div>
-				<input type="text" id="filtro" name="filtro"
-					placeholder="Filtrar por glosa" />
-				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
-			</div>
-			<div class="table-responsive">
-				<table id="grid"></table>
-			</div>
+		<div class="form-group">
+			<div class="col-1"></div>
+			<input type="text" id="filtro" name="filtro"
+				placeholder="Filtrar por glosa" />
+			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+		</div>
+		<div class="table-responsive">
+			<table id="grid"></table>
+		</div>
 
 
-               <div class="container">
-				<!-- Trigger the modal with a button -->
-				<button hidden="true" type="button" class="btn btn-info btn-lg"
-					id="modal" data-toggle="modal" data-target="#myModal">Open
-					Modal</button>
-				<!-- Modal -->
-				<div class="modal fade bd-example-modal-xl" id="myModal" tabindex="-1" role="dialog"
-					aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-					<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalCenterTitle">Movimientos</h5>
-								<button type="button" class="close" data-dismiss="modal"
-									aria-label="Close" id="modalclose">
-									<span aria-hidden="true">&times;</span>
-								</button>
+		<div class="container">
+			<!-- Trigger the modal with a button -->
+			<button hidden="true" type="button" class="btn btn-info btn-lg"
+				id="modal" data-toggle="modal" data-target="#myModal">Open
+				Modal</button>
+			<!-- Modal -->
+			<div class="modal fade bd-example-modal-xl" id="myModal"
+				tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-xl modal-dialog-centered"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalCenterTitle">Comprobante
+								contable</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close" id="modalclose">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+
+							<div class="row">
+									<div class="col-sm-1">
+									<input type="text" id="idComprobante" hidden=true />
+								</div>
+								<div class="col-sm-9"></div>
+								<div class="col-sm-2">
+									<button type="button" class="btn btn-primary" onclick="modificarComprobante()">Modificar</button>
+								</div>
 							</div>
-							<div class="table-responsive">
-								<table id="grid2"></table>
+							<div class="row">
+								<div class="col-sm-1"></div>
+								<div class="col-sm-1">
+									<label>Número</label>
+								</div>
+								<div class="col-sm-3">
+									<input type="text" id="numero" readonly />
+								</div>
+								<div class="col-sm-1">
+									<label>Glosa</label>
+								</div>
+								<div class="col-sm-3">
+									<input type="text" id="glosaGeneral" readonly />
+								</div>
 							</div>
+							<br>
+							<div class="row">
+								<div class="col-sm-1"></div>
+								<div class="col-sm-1">
+									<label>Fecha</label>
+								</div>
+								<div class="col-sm-3">
+									<input type="date" id="fecha" readonly />
+								</div>
+								<div class="col-sm-1">
+									<label>Empresa</label>
+								</div>
+								<div class="col-sm-3">
+									<input type="text" id="empresa" readonly />
+								</div>
+							</div>
+						</div>
+
+						<br>
+						<h6 class="modal-title" id="exampleModalCenterTitle">&nbsp;&nbsp;&nbsp;Movimientos</h6>
+						<br>
+						<div class="table-responsive">
+							<table id="grid2"></table>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
@@ -107,7 +160,10 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/comprobanteContable/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
+											dataSource : "/byeContabilidad/rest-services/private/comprobanteContable/getAll?idUsuario="
+													+ document
+															.getElementById('idUsuario').value
+													+ "",
 											autoLoad : false,
 											columns : [
 													{
@@ -137,7 +193,7 @@
 														field : 'nombreEmpresa',
 														title : 'Empresa',
 														sortable : true
-													},													
+													},
 													{
 														width : 100,
 														title : 'Ver más',
@@ -175,8 +231,7 @@
 	function agregar() {
 		location.href = "agregar.jsp";
 	}
-	
-	
+
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la el comprobante? Perdera todos los movimientos contenidos en el')) {
 			var submitJson = {
@@ -197,7 +252,7 @@
 						alert('Error al eliminar el comprobante contable');
 					});
 		}
-			
+
 	}
 
 	function tablaP() {
@@ -209,11 +264,11 @@
 
 							autoLoad : false,
 							columns : [
-								{
-									field : 'numComprobante',
-									title : 'Comprobante',
-									sortable : true
-								},
+									{
+										field : 'numComprobante',
+										title : 'Comprobante',
+										sortable : true
+									},
 									{
 										field : 'glosa',
 										title : 'Glosa',
@@ -283,28 +338,49 @@
 			var submitJson = {
 				id : x.data.record.id
 			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/movimiento/delete',
-							JSON.stringify(submitJson)).done(function(data) {
-						if (data == 'OK') {
-							alert('Movimiento eliminado correctamente');
-							gridComprobante.reload();
-							//document.getElementById('modalclose').click(); 
-						} else {
-							alert(data);
-						}
-					}).fail(function() {
-						alert('Error al eliminar el movimiento');
-					});
+			$.post('/byeContabilidad/rest-services/private/movimiento/delete',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('Movimiento eliminado correctamente');
+					gridComprobante.reload();
+					//document.getElementById('modalclose').click(); 
+				} else {
+					alert(data);
+				}
+			}).fail(function() {
+				alert('Error al eliminar el movimiento');
+			});
 		}
 	}
 
 	function ver(x) {
+
+		var submitjson = {
+			id : x.data.record.id
+		};
+		
+		$
+				.post(
+						'/byeContabilidad/rest-services/private/comprobanteContable/getById',
+						JSON.stringify(submitjson))
+				.done(
+						function(data) {
+							document.getElementById("idComprobante").value = data.id;
+							document.getElementById("numero").value = data.numero;
+							document.getElementById("glosaGeneral").value = data.glosaGeneral;
+							document.getElementById("fecha").value = data.fecha;
+							document.getElementById("empresa").value = data.nombreEmpresa;
+						})
+				.fail(
+						function(jqxhr, settings, ex) {
+							alert('No se pudo cargar el comprobante contable '
+									+ ex);
+						});
+
 		gridComprobante.reload({
 			id : x.data.record.id
 		});
-		 document.getElementById('modal').click(); 
+		document.getElementById('modal').click();
 	}
 
 	$('#buscar').on('click', function() {
@@ -314,13 +390,20 @@
 		clear();
 	});
 	
+	function modificarComprobante(e) {
+		document.getElementById("id").value = document.getElementById("idComprobante").value;
+		document.getElementById("formulario").action = 'modificarComprobante.jsp';
+		document.getElementById("formulario").method = 'POST';
+		document.getElementById("formulario").submit();
+	}
+	
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.id;
 		document.getElementById("formulario").action = 'modificar.jsp';
 		document.getElementById("formulario").method = 'POST';
 		document.getElementById("formulario").submit();
 	}
-	
+
 	function modificarMovimiento(e) {
 		document.getElementById("id").value = e.data.record.id;
 		document.getElementById("formulario").action = 'modificarMovimiento.jsp';
