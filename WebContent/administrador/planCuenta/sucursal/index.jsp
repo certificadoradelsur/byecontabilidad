@@ -56,83 +56,119 @@
 			<h1 class="h2">Lista de sucursales</h1>
 		</div>
 		<div>
-				<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
+			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
 		<br>
 		<div class="form-group">
-			<div class="col-1"></div>
-			<input type="text" id="filtro" name="filtro"
-				placeholder="Filtrar por empresa" />
-			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				</div>
+				<div class="form-group col-md-3">
+					<div class="form-row clo md 3">
+						<label>&nbsp;</label>			
+					</div>
+					<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table" id="grid"></table>
+			</div>
 		</div>
-		<div class="table-responsive">
-			<table class="table" id="grid"></table>
 		</div>
-	</div>
-	<input type="hidden" name="idUsuario" id="idUsuario"
-		value=<%=request.getUserPrincipal().getName()%> />
-
-
+		<input type="hidden" name="idUsuario" id="idUsuario"
+			value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
 	$(document)
 			.ready(
 					function() {
-
-						grid = $('#grid')
-								.grid(
-										{
-											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/sucursal/getAll?idUsuario='
-													+ document
-															.getElementById('idUsuario').value,
-											autoLoad : false,
-											columns : [
-													{
-														field : 'codigo',
-														title : 'Código',
-														hidden: true
-
-													},
-													{
-														field : 'direccion',
-														title : 'Dirección',
-														width : 200
-
-													},
-													{
-														field : 'nombreEmpresa',
-														title : 'Empresa',
-														width : 200
-													},
-													{
-														width : 100,
-														title : 'Modificar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
-														align : 'center',
-														events : {
-															'click' : modificar
-														}
-													},
-													{
-														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-														align : 'center',
-														events : {
-															'click' : eliminar
-														}
-													}, ],
-											pager : {
-												limit : 10
-											}
-										});
+						$("#empresa").select2({
+							width : '180'
+						});
+						
+						cargaTabla();
+						
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value
+							}
+							$
+									.post(
+											'/byeContabilidad/rest-services/private/empresa/getLista',
+											JSON.stringify(submitJson),
+											function(res, code) {
+												var str ;
+												for (var i = 0, len = res.length; i < len; i++) {
+													str += "<option value="+res[i].id+">"
+															+ res[i].razonSocial
+															+ "</option>";
+												}
+												document.getElementById("empresa").innerHTML = str;
+												grid.reload({
+													idEmpresa : $('#empresa').val()
+												});
+											}, "json");
+						
 					});
 
 	function agregar() {
 		location.href = "agregar.jsp";
 	}
 
+	function cargaTabla(){
+		grid = $('#grid')
+		.grid(
+				{
+					primaryKey : 'ID',
+					dataSource : '/byeContabilidad/rest-services/private/sucursal/getAll?idUsuario='
+							+ document
+									.getElementById('idUsuario').value,
+					autoLoad : false,
+					columns : [
+							{
+								field : 'codigo',
+								title : 'Código',
+								hidden : true
+
+							},
+							{
+								field : 'direccion',
+								title : 'Dirección',
+								width : 200
+
+							},
+							{
+								field : 'nombreEmpresa',
+								title : 'Empresa',
+								width : 200
+							},
+							{
+								width : 100,
+								title : 'Modificar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+								align : 'center',
+								events : {
+									'click' : modificar
+								}
+							},
+							{
+								width : 100,
+								title : 'Eliminar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+								align : 'center',
+								events : {
+									'click' : eliminar
+								}
+							}, ],
+					pager : {
+						limit : 10
+					}
+				});
+	}
+	
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.codigo;
 		document.getElementById("formulario").action = 'modificar.jsp';
@@ -140,38 +176,31 @@
 		document.getElementById("formulario").submit();
 	}
 
-
-
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la sucursal?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/sucursal/delete',
-							JSON.stringify(submitJson)).done(function(data) {
-						if (data == 'OK') {
-							alert('Sucursal eliminada correctamente');
-							grid.reload();
-						} else {
-							alert('Error al eliminar la sucursal');
-						}
-					}).fail(function() {
-						alert('Error al eliminar la sucursal');
-					});
+			$.post('/byeContabilidad/rest-services/private/sucursal/delete',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('Sucursal eliminada correctamente');
+					grid.reload();
+				} else {
+					alert('Error al eliminar la sucursal');
+				}
+			}).fail(function() {
+				alert('Error al eliminar la sucursal');
+			});
 		}
 	}
-	
+
 	$('#buscar').on('click', function() {
 		grid.reload({
-			nombreEmpresa : $('#filtro').val(),
+			idEmpresa : $('#empresa').val(),
 		});
-		clear();
 	});
 
-	function clear() {
-		document.getElementById("filtro").value = "";
-	}
+
 </script>
 </html>

@@ -62,13 +62,30 @@
 
 		<br>
 		<div class="form-group">
-			<div class="col-1"></div>
-			<input type="text" id="filtro" name="filtro"
-				placeholder="Filtrar por rut" />
-			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
-		</div>
-		<div class="table-responsive">
-			<table class="table" id="grid"></table>
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="numCuenta">&nbsp;&nbsp;Rut</label>
+					</div>
+					<input type="text" id="filtro" name="filtro"
+						placeholder="Filtrar por rut" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				</div>
+				<div class="form-group col-md-3">
+					<div class="form-row clo md 3">
+						<label>&nbsp;</label>
+					</div>
+					<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+				</div>
+				<div class="table-responsive">
+					<table class="table" id="grid"></table>
+				</div>
+			</div>
 		</div>
 	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
@@ -80,12 +97,38 @@
 	$(document)
 			.ready(
 					function() {
-
+						$("#empresa").select2({
+							width : '180'
+						});
+						
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value
+							}
+							$
+									.post(
+											'/byeContabilidad/rest-services/private/empresa/getLista',
+											JSON.stringify(submitJson),
+											function(res, code) {
+												var str ;
+												for (var i = 0, len = res.length; i < len; i++) {
+													str += "<option value="+res[i].id+">"
+															+ res[i].razonSocial
+															+ "</option>";
+												}
+												document.getElementById("empresa").innerHTML = str;
+												grid.reload({
+													rut : $('#filtro').val(),
+													idEmpresa : $('#empresa').val()
+												});
+											}, "json");
 						grid = $('#grid')
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/cliente/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
+											dataSource : "/byeContabilidad/rest-services/private/cliente/getAll?idUsuario="
+													+ document
+															.getElementById('idUsuario').value
+													+ "",
 											autoLoad : false,
 											columns : [
 													{
@@ -198,6 +241,7 @@
 	$('#buscar').on('click', function() {
 		grid.reload({
 			rut : $('#filtro').val(),
+			idEmpresa : $('#empresa').val()
 		});
 		clear();
 	});

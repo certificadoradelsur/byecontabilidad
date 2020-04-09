@@ -61,14 +61,31 @@
 		<br>
 
 		<div class="form-group">
-			<div class="col-1"></div>
-			<input type="text" id="filtro" name="filtro"
-				placeholder="Filtrar por número de cuenta" />
+					<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="numCuenta">&nbsp;&nbsp;N° Cuenta</label>
+					</div>
+				<input type="text" id="filtro" name="filtro"
+				placeholder="Número de cuenta" class="form-control"/>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				</div>
+				<div class="form-group col-md-3">
+					<div class="form-row clo md 3">
+						<label>&nbsp;</label>			
+				</div>
 			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 		</div>
 		<div class="table-responsive">
 			<table id="grid"></table>
 		</div>
+	</div>
+	</div>
 	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
@@ -77,69 +94,99 @@
 	$(document)
 			.ready(
 					function() {
+						$("#empresa").select2({
+							width : '180'
+						});
+						
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value
+							}
+							$
+									.post(
+											'/byeContabilidad/rest-services/private/empresa/getLista',
+											JSON.stringify(submitJson),
+											function(res, code) {
+												var str ;
+												for (var i = 0, len = res.length; i < len; i++) {
+													str += "<option value="+res[i].id+">"
+															+ res[i].razonSocial
+															+ "</option>";
+												}
+												document.getElementById("empresa").innerHTML = str;
+												busca();
 
-						grid = $('#grid')
-								.grid(
-										{
-											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/cuenta/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
-											autoLoad : false,
-											columns : [
-													{
-														field : 'id',
-														title : 'Identificador',
-														width : 100,
-														hidden : true
-
-													},
-													{
-														field : 'nombreBanco',
-														title : 'Banco',
-														width : 200
-													},
-													{
-														field : 'numCuenta',
-														title : 'N° cuenta',
-														width : 200
-													},
-													{
-														field : 'nombreEjecutivo',
-														title : 'Ejecutivo',
-														width : 200,
-													},
-													{
-														field : 'saldoInicial',
-														title : 'Saldo',
-														width : 200
-													},
-													
-													{
-														width : 100,
-														title : 'Modificar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
-														align : 'center',
-														events : {
-															'click' : modificar
-														}
-													},
-													
-													{
-														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-														align : 'center',
-														events : {
-															'click' : eliminar
-														}
-													}
-													, ],
-											pager : {
-												limit : 10
-											}
-										});
-						grid.reload({numCuenta: $('#numCuenta').val()});
+											}, "json");
+						
+						cargaTabla();
 					});
 
+	function cargaTabla(){
+		grid = $('#grid')
+		.grid(
+				{
+					primaryKey : 'ID',
+					dataSource : "/byeContabilidad/rest-services/private/cuenta/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
+					autoLoad : false,
+					columns : [
+							{
+								field : 'id',
+								title : 'Identificador',
+								width : 100,
+								hidden : true
+
+							},
+							{
+								field : 'nombreBanco',
+								title : 'Banco',
+								width : 160
+							},
+							{
+								field : 'razonSocialEmpresa',
+								title : 'Empresa',
+								width : 160
+							},
+							{
+								field : 'numCuenta',
+								title : 'N° cuenta',
+								width : 160
+							},
+							{
+								field : 'nombreEjecutivo',
+								title : 'Ejecutivo',
+								width : 160
+							},
+							{
+								field : 'saldoInicial',
+								title : 'Saldo',
+								width : 160
+							},
+							
+							{
+								width : 100,
+								title : 'Modificar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+								align : 'center',
+								events : {
+									'click' : modificar
+								}
+							},
+							
+							{
+								width : 100,
+								title : 'Eliminar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+								align : 'center',
+								events : {
+									'click' : eliminar
+								}
+							}
+							, ],
+					pager : {
+						limit : 10
+					}
+				});
+	}
+	
 	function agregar() {
 		location.href = "agregar.jsp";
 	}
@@ -170,9 +217,18 @@
 		}
 	}
 	
+	function busca(){
+		grid.reload({
+			numCuenta : $('#filtro').val(),
+			idEmpresa : $('#empresa').val(),
+		});
+		clear();
+	}
+	
 	$('#buscar').on('click', function() {
 		grid.reload({
 			numCuenta : $('#filtro').val(),
+			idEmpresa : $('#empresa').val(),
 		});
 		clear();
 	});

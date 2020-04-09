@@ -25,8 +25,8 @@ import javax.persistence.Table;
 @Table(name = "Sucursal")
 @SequenceGenerator(name = "seq_sucursal", sequenceName = "seq_sucursal")
 @NamedQueries({
-		@NamedQuery(name = "Sucursal.getAll", query = "SELECT s FROM Sucursal s  where s.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreNombreEmpresa or upper(s.empresa.razonSocial) like :nombreEmpresa)"),
-		@NamedQuery(name = "Sucursal.countAll", query = "SELECT count(s.codigo) FROM Sucursal s where s.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreNombreEmpresa or upper(s.empresa.razonSocial) like :nombreEmpresa)"),
+		@NamedQuery(name = "Sucursal.getAll", query = "SELECT s FROM Sucursal s  where s.empresa.oficinaContable.id =:idOficinaContable and s.empresa.id =:idEmpresa"),
+		@NamedQuery(name = "Sucursal.countAll", query = "SELECT count(s.codigo) FROM Sucursal s where s.empresa.oficinaContable.id =:idOficinaContable and s.empresa.id =:idEmpresa"),
 		@NamedQuery(name = "Sucursal.getAllLista", query = "SELECT s FROM Sucursal s where s.empresa.oficinaContable.id =:idOficinaContable"),
         @NamedQuery(name = "Sucursal.getByIdEmpresa", query = "SELECT s FROM Sucursal s  where s.empresa.oficinaContable.id =:idOficinaContable  and  s.empresa.id=:idEmpresa ") 
 		})

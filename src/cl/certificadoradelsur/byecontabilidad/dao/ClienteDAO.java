@@ -34,7 +34,7 @@ public class ClienteDAO {
 	 * 
 	 * @return el total de Clientes
 	 */
-	public Long countAll(String rut, Long idOficinaContable) {
+	public Long countAll(String rut,Long idEmpresa, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Cliente.countAll");
 		if (rut.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreRut", true);
@@ -43,6 +43,7 @@ public class ClienteDAO {
 		}
 		query.setParameter("rut", "%" + rut.toUpperCase() + "%");
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return (Long) query.getSingleResult();
 	}
 
@@ -56,7 +57,7 @@ public class ClienteDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Cliente> getAll(Integer inicio, Integer fin, String rut, Long idOficinaContable) {
+	public List<Cliente> getAll(Integer inicio, Integer fin, String rut,Long idEmpresa, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Cliente.getAll");
 		if (rut.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreRut", true);
@@ -65,6 +66,7 @@ public class ClienteDAO {
 		}
 		query.setParameter("rut", "%" + rut.toUpperCase() + "%");
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

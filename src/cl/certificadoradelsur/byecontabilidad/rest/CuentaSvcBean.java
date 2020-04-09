@@ -34,11 +34,11 @@ public class CuentaSvcBean implements CuentaSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin , String numCuenta, String idUsuario) {
+	public Response list(Integer inicio, Integer fin , String numCuenta, Long idEmpresa, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<CuentaJson> lbj = crd.getAll(inicio, fin, numCuenta,idUsuario);
+		List<CuentaJson> lbj = crd.getAll(inicio, fin, numCuenta,idEmpresa,idUsuario);
 		String json = "{\"records\": " + gson.toJson(lbj, new TypeToken<List<CuentaJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll(numCuenta, idUsuario) + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(numCuenta,idEmpresa, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 

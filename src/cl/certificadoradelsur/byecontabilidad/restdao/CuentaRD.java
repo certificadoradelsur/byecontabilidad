@@ -77,12 +77,12 @@ public class CuentaRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String numCuenta, String idUsuario) {
+	public Long countAll(String numCuenta,Long idEmpresa, String idUsuario) {
 		try {
 			if (numCuenta == null) {
 				numCuenta = "";
 			}
-			return cdao.countAll(numCuenta, udao.getById(idUsuario).getOficinaContable().getId());
+			return cdao.countAll(numCuenta,idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cuentas ", e);
 			return 0L;
@@ -96,7 +96,7 @@ public class CuentaRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de cuentas
 	 */
-	public List<CuentaJson> getAll(Integer page, Integer limit, String numCuenta, String idUsuario) {
+	public List<CuentaJson> getAll(Integer page, Integer limit, String numCuenta,Long idEmpresa, String idUsuario) {
 		List<CuentaJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -108,7 +108,7 @@ public class CuentaRD {
 			if (numCuenta == null) {
 				numCuenta = "";
 			}
-			List<Cuenta> lc = cdao.getAll(inicio, limit, numCuenta, udao.getById(idUsuario).getOficinaContable().getId());
+			List<Cuenta> lc = cdao.getAll(inicio, limit, numCuenta,idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lc.size(); i++) {
 				CuentaJson cj = new CuentaJson();
 				cj.setId(lc.get(i).getId());

@@ -35,14 +35,9 @@ public class SucursalDAO {
 	 * 
 	 * @return el total de Sucursales
 	 */
-	public Long countAll(String nombreEmpresa, Long idOficinaContable) {
+	public Long countAll(Long idEmpresa, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Sucursal.countAll");
-		if (nombreEmpresa.trim().equalsIgnoreCase("")) {
-			query.setParameter("ignoreNombreEmpresa", true);
-		} else {
-			query.setParameter("ignoreNombreEmpresa", false);
-		}
-		query.setParameter("nombreEmpresa", "%" + nombreEmpresa.toUpperCase() + "%");
+		query.setParameter("idEmpresa",idEmpresa);
 		query.setParameter("idOficinaContable", idOficinaContable);
 
 		return (Long) query.getSingleResult();
@@ -56,14 +51,9 @@ public class SucursalDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Sucursal> getAll(Integer inicio, Integer fin, String nombreEmpresa, Long idOficinaContable) {
+	public List<Sucursal> getAll(Integer inicio, Integer fin, Long idEmpresa, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Sucursal.getAll");
-		if (nombreEmpresa.trim().equalsIgnoreCase("")) {
-			query.setParameter("ignoreNombreEmpresa", true);
-		} else {
-			query.setParameter("ignoreNombreEmpresa", false);
-		}
-		query.setParameter("nombreEmpresa", "%" + nombreEmpresa.toUpperCase() + "%");
+		query.setParameter("idEmpresa",idEmpresa);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);

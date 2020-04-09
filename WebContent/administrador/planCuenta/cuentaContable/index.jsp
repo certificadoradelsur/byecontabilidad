@@ -235,10 +235,10 @@
 	}
 	
 	$('#buscar').on('click', function() {
-		if($('#filtro').val()==''){
-			alert('Debe ingresar una glosa');
-			return
-		}
+//		if($('#filtro').val()==''){
+//			alert('Debe ingresar una glosa');
+//			return
+//		}
 		grid.reload({
 			glosaGeneral : $('#filtro').val(),
 			idClaseCuenta : $('#claseCuenta').val(),

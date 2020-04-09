@@ -59,12 +59,10 @@ public class SucursalRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String nombreEmpresa, String idUsuario) {
+	public Long countAll(Long idEmpresa, String idUsuario) {
 		try {
-			if(nombreEmpresa==null) {
-				nombreEmpresa="";
-			}
-			return sudao.countAll(nombreEmpresa,udao.getById(idUsuario).getOficinaContable().getId());
+
+			return sudao.countAll(idEmpresa,udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de sucursal ", e);
 			return 0L;
@@ -78,7 +76,7 @@ public class SucursalRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<SucursalJson> getAll(Integer page, Integer limit, String nombreEmpresa, String idUsuario) {
+	public List<SucursalJson> getAll(Integer page, Integer limit, Long idEmpresa, String idUsuario) {
 		List<SucursalJson> lsj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -88,10 +86,7 @@ public class SucursalRD {
 				inicio = (page * limit) - limit;
 			}
 
-			if(nombreEmpresa==null) {
-				nombreEmpresa="";
-			}
-			List<Sucursal> ls = sudao.getAll(inicio, limit, nombreEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
+			List<Sucursal> ls = sudao.getAll(inicio, limit, idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < ls.size(); i++) {
 				SucursalJson sj = new SucursalJson();
 				sj.setCodigo(ls.get(i).getCodigo());

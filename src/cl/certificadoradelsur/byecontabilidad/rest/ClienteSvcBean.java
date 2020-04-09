@@ -34,11 +34,11 @@ public class ClienteSvcBean implements ClienteSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String rut, String idUsuario) {
+	public Response list(Integer inicio, Integer fin, String rut,Long idEmpresa, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<ClienteJson> lcj = crd.getAll(inicio, fin, rut, idUsuario);
+		List<ClienteJson> lcj = crd.getAll(inicio, fin, rut,idEmpresa, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lcj, new TypeToken<List<ClienteJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll(rut, idUsuario) + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(rut,idEmpresa, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 

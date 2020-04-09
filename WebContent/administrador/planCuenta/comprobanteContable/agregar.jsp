@@ -302,6 +302,13 @@
 		$("#tipoSin").select2({
 			width : '200'
 		});
+		
+        $("#glosaGeneral").keyup(function () {
+            var value = $(this).val();
+            $("#glosaAnalisis").val(value);
+            $("#glosaSin").val(value);
+            $("#glosaConciliacion").val(value);
+        });
 	}
 
 	$(document).ready(function() {
@@ -320,6 +327,16 @@
 						var tipo;
 						var documento;
 
+						
+						
+						var now = new Date();
+
+					    var day = ("0" + now.getDate()).slice(-2);
+					    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+					    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+					    $("#fecha").val(today);
+					    
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
@@ -351,6 +368,8 @@
 											document.getElementById("cliente").innerHTML = str;
 
 										}, "json");
+						
+
 
 						grid = $('#grid')
 								.grid(
@@ -459,6 +478,8 @@
 
 					});
 
+
+	
 	$('#empresa')
 			.on(
 					'change',

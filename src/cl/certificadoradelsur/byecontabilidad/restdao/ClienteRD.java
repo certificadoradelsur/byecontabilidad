@@ -72,13 +72,13 @@ public class ClienteRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String rut, String idUsuario) {
+	public Long countAll(String rut,Long idEmpresa, String idUsuario) {
 		try {
 			if(rut==null) {
 				rut="";
 			}
 
-			return clidao.countAll(rut, udao.getById(idUsuario).getOficinaContable().getId());
+			return clidao.countAll(rut,idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cliente ", e);
 			return 0L;
@@ -92,7 +92,7 @@ public class ClienteRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<ClienteJson> getAll(Integer page, Integer limit, String rut, String idUsuario) {
+	public List<ClienteJson> getAll(Integer page, Integer limit, String rut, Long idEmpresa,String idUsuario) {
 		List<ClienteJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -104,7 +104,7 @@ public class ClienteRD {
 			if(rut==null) {
 				rut="";
 			}
-			List<Cliente> lc = clidao.getAll(inicio, limit, rut, udao.getById(idUsuario).getOficinaContable().getId());
+			List<Cliente> lc = clidao.getAll(inicio, limit, rut,idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lc.size(); i++) {
 				ClienteJson cj = new ClienteJson();
 				cj.setId(lc.get(i).getId());

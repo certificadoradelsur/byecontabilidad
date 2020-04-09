@@ -29,7 +29,6 @@ public interface ClienteSvc {
 	@Produces("application/json")
 	Response add(String datos);
 
-
 	/**
 	 * Funcion para traer todas los clientes
 	 * 
@@ -39,8 +38,9 @@ public interface ClienteSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("rut") String rut, @QueryParam("idUsuario") String idUsuario);
-	
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("rut") String rut,
+			@QueryParam("idEmpresa") Long idEmpresa, @QueryParam("idUsuario") String idUsuario);
+
 	/**
 	 * Funcion para modificar un cliente
 	 * 
@@ -73,15 +73,16 @@ public interface ClienteSvc {
 	@Path("/delete")
 	@Produces("application/json")
 	Response eliminar(String datos);
-	
-    /**
-     * funcion que obtiene los clientes
-     * @param datos
-     * @return clientes que seran mostrados en el select
-     */
+
+	/**
+	 * funcion que obtiene los clientes
+	 * 
+	 * @param datos
+	 * @return clientes que seran mostrados en el select
+	 */
 	@POST
 	@Path("/getLista")
 	@Produces("application/json")
 	Response getLista(String datos);
-		
+
 }
