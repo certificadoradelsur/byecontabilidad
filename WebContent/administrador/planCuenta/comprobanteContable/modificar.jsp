@@ -73,7 +73,7 @@
 						<input type="date" id="fecha" name="fecha" class="in" />
 					</div>
 					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
+						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;&nbsp;
 							Empresa</label>
 						<div class="col-3">
 							<select class="browser-default custom-select" id="empresa" disabled>

@@ -87,6 +87,15 @@ public class MovimientoSvcBean implements MovimientoSvc {
 		}.getType()) + ", \"total\": " + mrd.countAllM(id) + "}";
 		return Response.ok(json).build();
 	}
+	
+	@Override
+	public Response getMovById(Integer inicio, Integer fin, Long id) {
+		Gson gson = new GsonBuilder().create();
+		List<MovimientoJson> lmj = mrd.getMovById(inicio, fin, id);
+		String json = "{\"records\": " + gson.toJson(lmj, new TypeToken<List<MovimientoJson>>() {
+		}.getType()) + ", \"total\": " + mrd.countAllM(id) + "}";
+		return Response.ok(json).build();
+	}
 
 	@Override
 	public Response listTotalMovimientos(String datos) {

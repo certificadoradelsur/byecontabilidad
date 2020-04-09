@@ -182,17 +182,23 @@
 													{
 														field : 'glosaGeneral',
 														title : 'Glosa',
-														sortable : true
+														sortable : true,
+														width : 140
 													},
 													{
 														field : 'fecha',
 														title : 'Fecha',
-														sortable : true
+														width : 140
 													},
 													{
 														field : 'nombreEmpresa',
 														title : 'Empresa',
-														sortable : true
+														width : 160
+													},
+													{
+														field : 'borrador',
+														title : 'Borrador',
+														width : 140
 													},
 													{
 														width : 100,
@@ -204,8 +210,8 @@
 														}
 													},
 													{
-														width : 100,
-														title : 'Modificar',
+														width : 160,
+														title : 'Modificar encabezado',
 														tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
 														align : 'center',
 														events : {
@@ -309,15 +315,15 @@
 										title : 'Documento',
 										width : 140
 									},
-									{
-										width : 80,
-										title : 'Modificar',
-										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
-										align : 'center',
-										events : {
-											'click' : modificarMovimiento
-										}
-									},
+// 									{
+// 										width : 160,
+// 										title : 'Modificar movimiento',
+// 										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+// 										align : 'center',
+// 										events : {
+// 											'click' : modificarMovimiento
+// 										}
+// 									},
 									{
 										width : 80,
 										title : 'Eliminar',

@@ -35,6 +35,10 @@ public class MovimientoJson {
 	private String conciliacion;
 	private String analisis;
 	private Long idCliente;
+	private Long codigo;
+	private String descripcion;
+	private Long debe;
+	private Long haber;
 	
 	
 	public String getConciliacion() {
@@ -194,5 +198,30 @@ public class MovimientoJson {
 	public void setIdCuentaContable(Long idCuentaContable) {
 		this.idCuentaContable = idCuentaContable;
 	}
+	public Long getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
+	}
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	public Long getDebe() {
+		return debe;
+	}
+	public void setDebe(Long debe) {
+		this.debe = debe;
+	}
+	public Long getHaber() {
+		return haber;
+	}
+	public void setHaber(Long haber) {
+		this.haber = haber;
+	}
+	
 	
 }

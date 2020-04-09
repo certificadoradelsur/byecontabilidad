@@ -50,6 +50,17 @@ public interface ComprobanteContableSvc {
 	@Path("/update")
 	@Produces("application/json")
 	Response update(String datos);
+	
+	/**
+	 * Funcion para modificar un comprobante Contable
+	 * 
+	 * @param id
+	 * @return Mensaje de exito o error
+	 */
+	@POST
+	@Path("/modificar")
+	@Produces("application/json")
+	Response modificar(String datos);
 
 	/**
 	 * Funcion para buscar comprobante Contable por id

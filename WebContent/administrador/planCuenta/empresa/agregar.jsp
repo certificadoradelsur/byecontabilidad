@@ -46,7 +46,7 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav.jsp" %>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
@@ -63,9 +63,9 @@
 					</div>
 					<div class="form-group">
 						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Razon social</label>
-						<input type="text" id="razonSocial" name="razonSocial" class="in"
-							placeholder="Ingrese razon social" required="required" />
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Razon
+							social</label> <input type="text" id="razonSocial" name="razonSocial"
+							class="in" placeholder="Ingrese razon social" required="required" />
 					</div>
 					<div class="form-group">
 						<div class="col-1"></div>
@@ -73,8 +73,7 @@
 						<input type="text" id="giro" name="giro" class="in"
 							placeholder="Ingrese giro" required="required" />
 					</div>
-					<br>
-					<br>
+					<br> <br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -93,11 +92,33 @@
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-$(document).ready(function() {
-	
+	$(document).ready(function() {
 
-})
+	})
 
+	document.getElementById('rut')
+			.addEventListener(
+					'input',
+					function(evt) {
+						let value = this.value.replace(/\./g, '').replace('-',
+								'');
+
+						if (value.match(/^(\d{2})(\d{3}){2}(\w{1})$/)) {
+							value = value.replace(
+									/^(\d{2})(\d{3})(\d{3})(\w{1})$/,
+									'$1.$2.$3-$4');
+						} else if (value.match(/^(\d)(\d{3}){2}(\w{0,1})$/)) {
+							value = value.replace(
+									/^(\d)(\d{3})(\d{3})(\w{0,1})$/,
+									'$1.$2.$3-$4');
+						} else if (value.match(/^(\d)(\d{3})(\d{0,2})$/)) {
+							value = value.replace(/^(\d)(\d{3})(\d{0,2})$/,
+									'$1.$2.$3');
+						} else if (value.match(/^(\d)(\d{0,2})$/)) {
+							value = value.replace(/^(\d)(\d{0,2})$/, '$1.$2');
+						}
+						this.value = value;
+					});
 
 	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {
@@ -109,15 +130,13 @@ $(document).ready(function() {
 			return;
 		}
 
-		
 		var submitJson = {
-			rut : document.getElementById("rut").value,	
-			razonSocial :document.getElementById("razonSocial").value,
-			giro:document.getElementById("giro").value,
+			rut : document.getElementById("rut").value,
+			razonSocial : document.getElementById("razonSocial").value,
+			giro : document.getElementById("giro").value,
 			idUsuario : document.getElementById("idUsuario").value
 		}
 
-		
 		$.post('/byeContabilidad/rest-services/private/empresa/add',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
@@ -131,12 +150,9 @@ $(document).ready(function() {
 			alert('No se pudo guardar la empresa ' + ex);
 		});
 	}
-	
-
 
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
-
 </script>
 </html>

@@ -12,6 +12,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
@@ -46,6 +47,8 @@ public class ComprobanteContableRD {
 	private NoConciliadoDAO ncdao;
 	@Inject
 	private ClienteDAO clientedao;
+	@Inject
+	private MovimientoDAO mdao;
 
 	/**
 	 * funcion que almacena
@@ -168,7 +171,7 @@ public class ComprobanteContableRD {
 	}
 
 	/**
-	 * metodo que modifica la comprobante contable
+	 * metodo que modifica el encabezado de un comprobante contable
 	 * 
 	 * @param pj json de cuentaContableJson
 	 * @return mensaje de exito o error
@@ -208,6 +211,84 @@ public class ComprobanteContableRD {
 		}
 	}
 
+	/**
+	 * metodo que modifica un comprobante contable
+	 * 
+	 * @param pj json de cuentaContableJson
+	 * @return mensaje de exito o error
+	 */
+	public String modificar(ComprobanteContableJson ccj) {
+		try {			
+			if (condao.getByIdComprobante(ccj.getId()) == null
+					&& ncdao.getByIdComprobante(ccj.getId()) == null) {
+				List<Movimiento> lm = mdao.getByIdComprobante(ccj.getId());
+				for (int i = 0; i < lm.size(); i++) {
+					mdao.eliminar(lm.get(i));
+				}			
+			} else {
+				return "No se puede eliminar el comprobante, ya que esta en uso por el proceso de conciliacíon";
+			}
+			ComprobanteContable c = comdao.getById(ccj.getId());
+				if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
+				if (comdao.getByNumero(ccj.getNumero()) == null
+						|| comdao.getByNumero(ccj.getNumero()).getNumero().equals(c.getNumero())) {
+					if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
+						throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+					} else {
+						c.setGlosaGeneral(ccj.getGlosaGeneral());
+						c.setNumero(ccj.getNumero());
+						c.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
+						c.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+						c.setBorrador(ccj.isBorrador());
+						List<Movimiento> movimientos = new ArrayList<>();
+						for (int i = 0; i < ccj.getMovimientos().size(); i++) {
+							Movimiento movimiento = new Movimiento();
+							if (Utilidades.containsScripting(ccj.getMovimientos().get(i).getGlosa()).compareTo(true) == 0) {
+								throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+							} else {
+								movimiento.setGlosa(ccj.getMovimientos().get(i).getGlosa());
+								movimiento.setMonto(ccj.getMovimientos().get(i).getMonto());
+								movimiento.setTipoMovimiento(ccj.getMovimientos().get(i).getTipoMovimiento());
+								movimiento.setTipoDocumento(ccj.getMovimientos().get(i).getTipoDocumento());
+								movimiento.setNumComprobante(ccj.getMovimientos().get(i).getNumComprobante());
+								movimiento.setNumDocumento(ccj.getMovimientos().get(i).getNumDocumento());
+								movimiento.setEstado(ccj.getMovimientos().get(i).isEstado());
+								movimiento.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
+								movimiento.setEmpresa(edao.getById(cuentadao
+										.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).getEmpresa().getId()));
+								movimiento.setUsuario(udao.getById(ccj.getMovimientos().get(i).getIdUsuario()));
+								if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isConciliacion()
+										.equals(true)) {
+									movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
+								}
+								if(cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
+										.equals(true)) {
+									movimiento.setCliente(clientedao.getById(ccj.getMovimientos().get(i).getIdCliente()));
+								}
+								movimiento.setCuentaContable(
+										cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()));
+								movimiento.setEliminado(false);
+								movimiento.setComprobanteContable(c);
+								movimientos.add(movimiento);
+							}
+						}
+						c.setMovimientos(movimientos);
+						comdao.update(c);
+						return Constantes.MENSAJE_REST_OK;
+					}
+				} else {
+					return "No se puede modificar el comprobante contable, ya que esta en uso por el proceso de conciliacíon";
+				}
+			} else {
+				return "El codigo ingresado, ya se encuentra registrado";
+			}
+
+		} catch (Exception e) {
+			log.error("No se pudo modificar la cuenta contable");
+			return e.getMessage();
+		}
+	}
+	
 	/**
 	 * metodo obtener una cuenta contable
 	 * 

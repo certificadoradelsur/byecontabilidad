@@ -107,6 +107,20 @@ public interface MovimientoSvc {
 	Response listM(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("id") Long id);
 
 	/**
+	 * funcion que trae todos los movimientos relacionados al id del comprobante
+	 * 
+	 * @param inicio
+	 * @param fin
+	 * @param id
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getMovById")
+	Response getMovById(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
+			@QueryParam("id") Long id);
+
+	/**
 	 * Funcion para traer todos los Movimientos entre fechas
 	 * 
 	 * @param

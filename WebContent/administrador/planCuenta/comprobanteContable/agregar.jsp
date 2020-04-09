@@ -318,6 +318,7 @@
 						var cliente;
 						var varIdCuentaContable;
 						var tipo;
+						var documento;
 
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
@@ -467,7 +468,7 @@
 							idUsuario : document.getElementById("idUsuario").value,
 							idEmpresa : document.getElementById("empresa").value
 						}
-
+						
 						$
 								.post(
 										'/byeContabilidad/rest-services/private/cuentaContable/getByIdEmpresa',
@@ -546,6 +547,8 @@
 								.split("/");
 						varIdEmpresa = idEmpresa[6];
 
+						
+						
 						if (varAnalisis == 'true' && varConciliacion == 'false') {
 							$('#analisable').collapse('show');
 							$('#sin').collapse('hide');
@@ -622,6 +625,7 @@
 		if (varAnalisis == 'true' && varConciliacion == 'false') {
 			glosa = document.getElementById("glosaAnalisis").value,
 					cliente = document.getElementById("cliente").value,
+					documento = "",
 					tipo = document.getElementById("tipoAnalisis").value
 			if ($('#tipoAnalisis option:selected').text() == 'Debe') {
 				debe = document.getElementById("monto").value
@@ -631,6 +635,7 @@
 		} else if (varAnalisis == 'false' && varConciliacion == 'true') {
 			glosa = document.getElementById("glosaConciliacion").value,
 					tipo = document.getElementById("tipoMovimiento").value,
+					documento = document.getElementById("tipoDocumento").value,
 					cliente = ""
 			if ($('#tipoMovimiento option:selected').text() == 'Ingreso') {
 				debe = document.getElementById("monto").value
@@ -645,8 +650,9 @@
 				}
 			}
 		} else if (varAnalisis == 'false' && varConciliacion == 'false') {
-			glosa = document.getElementById("glosaSin").value, tipo = document
-					.getElementById("tipoSin").value, cliente = ""
+			glosa = document.getElementById("glosaSin").value,
+			documento = "",
+			tipo = document.getElementById("tipoSin").value, cliente = ""
 			if ($('#tipoSin option:selected').text() == 'Debe') {
 				debe = document.getElementById("monto").value
 		} else if ($('#tipoSin option:selected').text() == 'Haber') {
@@ -665,7 +671,7 @@
 			'glosa' : glosa,
 			'monto' : document.getElementById("monto").value,
 			'tipoMovimiento' : tipo,
-			'tipoDocumento' : document.getElementById("tipoDocumento").value,
+			'tipoDocumento' : documento,
 			'estado' : document.getElementById("estado").value,
 			'fecha' : document.getElementById("fecha").value,
 			'idCuenta' : document.getElementById("cuenta").value,
@@ -684,9 +690,9 @@
 
 	function limpiaAdd() {
 		document.getElementById("numDocumento").value = "";
-		document.getElementById("glosaSin").value = "";
-		document.getElementById("glosaConciliacion").value = "";
-		document.getElementById("glosaAnalisis").value = "";
+		document.getElementById("glosaSin").value = document.getElementById("glosaConciliacion").value;
+		document.getElementById("glosaConciliacion").value = document.getElementById("glosaConciliacion").value;
+		document.getElementById("glosaAnalisis").value = document.getElementById("glosaConciliacion").value;
 	//	document.getElementById("monto").value = "";
 	}
 
@@ -712,7 +718,7 @@
 		})
 				
 		if (sDebe != sHaber) {
-			if (confirm('El comprobante esta descuadrado. ¿desea guardar igualmente?')) {
+			if (confirm('El comprobante esta descuadrado. ¿Desea guardar de igual manera?')) {
 				var list = grid.getAll(true)
 				var submitJson = {
 					numero : document.getElementById("numero").value,
@@ -909,6 +915,11 @@
 			break;
 		}
 	})
+	
+	back.addEventListener("click", function() {
+		window.history.back();
+	}, false);
+	
 	$("#tipoMovimiento").trigger('change');
 </script>
 </html>

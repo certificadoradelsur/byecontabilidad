@@ -258,7 +258,7 @@ public class MovimientoRD {
 	}
 
 	/**
-	 * Funcion que retorna el total de movimientos en json
+	 * Funcion que retorna el total de movimientos por id (modal)
 	 * 
 	 * @param page  numero de pagina
 	 * @param limit largo de la pagina
@@ -295,6 +295,71 @@ public class MovimientoRD {
 					mj.setNumCuenta(lm.get(i).getCuenta().getNumCuenta());
 					mj.setNombreBanco(lm.get(i).getCuenta().getBanco().getNombre());
 				}else {
+					mj.setNumCuenta("");
+					mj.setNombreBanco("");	
+				}
+				lmj.add(mj);
+			}
+		} catch (Exception e) {
+			log.error("No se puede obtener la lista de movimientos ", e);
+		}
+		return lmj;
+	}
+	
+	/**
+	 * Funcion que trae los movimientos por id comprobante contable
+	 * @param page
+	 * @param limit
+	 * @param id
+	 * @return
+	 */
+
+	public List<MovimientoJson> getMovById(Integer page, Integer limit, Long id) {
+		List<MovimientoJson> lmj = new ArrayList<>();
+		try {
+			Integer inicio = 0;
+			if (page.compareTo(1) == 0) {
+				inicio = 0;
+			} else {
+				inicio = (page * limit) - limit;
+			}
+
+			if (id == null) {
+				return lmj;
+			}
+			List<Movimiento> lm = mdao.getAllM(inicio, limit, id);
+			for (int i = 0; i < lm.size(); i++) {
+				MovimientoJson mj = new MovimientoJson();
+				mj.setId(lm.get(i).getId());
+				mj.setCodigo(cuentaCondao.getById(lm.get(i).getCuentaContable().getId()).getCodigo());
+				mj.setDescripcion(cuentaCondao.getById(lm.get(i).getCuentaContable().getId()).getGlosaGeneral());
+				mj.setGlosa(lm.get(i).getGlosa());
+				mj.setEstado(lm.get(i).getEstado());
+				mj.setMonto(lm.get(i).getMonto());
+				mj.setNumDocumento(lm.get(i).getNumDocumento());
+				mj.setNumComprobante(lm.get(i).getNumComprobante());
+				mj.setEliminado(lm.get(i).isEliminado());
+				mj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion((lm.get(i).getFecha())).substring(0, 10));
+				mj.setTipoDocumento(lm.get(i).getTipoDocumento());
+				mj.setTipoMovimiento(lm.get(i).getTipoMovimiento());
+				mj.setIdCuentaContable(lm.get(i).getCuentaContable().getId());
+				mj.setIdUsuario(lm.get(i).getUsuario().getId());
+				if (lm.get(i).getTipoMovimiento().equals("INGRESO")||lm.get(i).getTipoMovimiento().equals("DEBE")) {
+				mj.setDebe(lm.get(i).getMonto());	
+				} else if(lm.get(i).getTipoMovimiento().equals("EGRESO")||lm.get(i).getTipoMovimiento().equals("HABER")) {
+				mj.setHaber(lm.get(i).getMonto());	
+				} else if (lm.get(i).getTipoMovimiento().equals("TRASPASO")) {
+					if(lm.get(i).getTipoDocumento().equals("AJUSTE INGRESO")) {
+						mj.setDebe(lm.get(i).getMonto());
+					}else if(lm.get(i).getTipoDocumento().equals("AJUSTE EGRESO")) {
+						mj.setHaber(lm.get(i).getMonto());
+					}
+				}
+				if (lm.get(i).getCuentaContable().isConciliacion().equals(true)) {
+					mj.setNumCuenta(lm.get(i).getCuenta().getNumCuenta());
+					mj.setNombreBanco(lm.get(i).getCuenta().getBanco().getNombre());
+				}else if (lm.get(i).getCuentaContable().isAnalisis().equals(true)){
+					mj.setIdCliente(lm.get(i).getCliente().getId());
 					mj.setNumCuenta("");
 					mj.setNombreBanco("");	
 				}
