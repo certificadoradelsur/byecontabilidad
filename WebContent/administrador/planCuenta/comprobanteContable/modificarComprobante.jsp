@@ -850,9 +850,7 @@
 			if (confirm('El comprobante esta descuadrado. ¿desea guardar igualmente?')) {
 				var list = grid.getAll(true)
 				var submitJson = {
-					id :
-<%=request.getParameter("id")%>
-	,
+					id : <%=request.getParameter("id")%> ,
 					numero : document.getElementById("numero").value,
 					glosaGeneral : document.getElementById("glosaGeneral").value,
 					fecha : document.getElementById("fecha").value,
@@ -915,9 +913,7 @@
 		} else {
 			var list = grid.getAll(true)
 			var submitJson = {
-				id :
-<%=request.getParameter("id")%>
-	,
+				id : <%=request.getParameter("id")%>,
 				numero : document.getElementById("numero").value,
 				glosaGeneral : document.getElementById("glosaGeneral").value,
 				fecha : document.getElementById("fecha").value,
