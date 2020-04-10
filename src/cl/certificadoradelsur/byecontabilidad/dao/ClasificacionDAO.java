@@ -35,15 +35,28 @@ public class ClasificacionDAO {
 	 * 
 	 * @return el total de Clasificacion
 	 */
-	public Long countAll(String nombre, Long idOficinaContable) {
+	public Long countAll(String nombre, Long idClaseCuenta,
+			Long idGrupoCuenta, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Clasificacion.countAll");
 		if (nombre.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreNombre", true);
 		} else {
 			query.setParameter("ignoreNombre", false);
 		}
+		if (idClaseCuenta == null) {
+			query.setParameter("ignoreIdClaseCuenta", true);
+		} else {
+			query.setParameter("ignoreIdClaseCuenta", false);
+		}
+		if (idGrupoCuenta == null) {
+			query.setParameter("ignoreIdGrupoCuenta", true);
+		} else {
+			query.setParameter("ignoreIdGrupoCuenta", false);
+		}
 		query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idClaseCuenta", idClaseCuenta);
+		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		return (Long) query.getSingleResult();
 	}
 
@@ -56,15 +69,28 @@ public class ClasificacionDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Clasificacion> getAll(Integer inicio, Integer fin, String nombre, Long idOficinaContable) {
+	public List<Clasificacion> getAll(Integer inicio, Integer fin, String nombre, Long idClaseCuenta,
+			Long idGrupoCuenta, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Clasificacion.getAll");
 		if (nombre.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreNombre", true);
 		} else {
 			query.setParameter("ignoreNombre", false);
 		}
+		if (idClaseCuenta == null) {
+			query.setParameter("ignoreIdClaseCuenta", true);
+		} else {
+			query.setParameter("ignoreIdClaseCuenta", false);
+		}
+		if (idGrupoCuenta == null) {
+			query.setParameter("ignoreIdGrupoCuenta", true);
+		} else {
+			query.setParameter("ignoreIdGrupoCuenta", false);
+		}
 		query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idClaseCuenta", idClaseCuenta);
+		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

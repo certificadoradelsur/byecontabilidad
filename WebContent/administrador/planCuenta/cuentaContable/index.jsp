@@ -119,6 +119,7 @@
 												+ "</option>";
 									}
 									document.getElementById("claseCuenta").innerHTML = str;	
+
 								}, "json");
 						
 						grid = $('#grid')

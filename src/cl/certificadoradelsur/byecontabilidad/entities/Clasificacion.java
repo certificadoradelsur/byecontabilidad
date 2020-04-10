@@ -25,8 +25,8 @@ import javax.persistence.Table;
 @Table(name = "clasificacion")
 @SequenceGenerator(name = "seq_clasificacion", sequenceName = "seq_clasificacion")
 @NamedQueries({
-		@NamedQuery(name = "Clasificacion.getAll", query = "SELECT c FROM Clasificacion c where c.empresa.oficinaContable.id=:idOficinaContable and (true = :ignoreNombre or upper(c.nombre) like :nombre)"),
-		@NamedQuery(name = "Clasificacion.countAll", query = "SELECT count(c.id) FROM Clasificacion c where c.empresa.oficinaContable.id=:idOficinaContable and (true = :ignoreNombre or upper(c.nombre)  like :nombre)"),
+		@NamedQuery(name = "Clasificacion.getAll", query = "SELECT c FROM Clasificacion c where (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) and c.empresa.oficinaContable.id=:idOficinaContable and (true = :ignoreNombre or upper(c.nombre) like :nombre )"),
+		@NamedQuery(name = "Clasificacion.countAll", query = "SELECT count(c.id) FROM Clasificacion c where (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) and c.empresa.oficinaContable.id=:idOficinaContable and (true = :ignoreNombre or upper(c.nombre)  like :nombre )"),
 		@NamedQuery(name = "Clasificacion.getByIdGrupoCuenta", query = "SELECT c FROM Clasificacion c  where c.empresa.oficinaContable.id=:idOficinaContable and c.grupoCuenta.id=:idGrupoCuenta")})
 
 public class Clasificacion implements Serializable {

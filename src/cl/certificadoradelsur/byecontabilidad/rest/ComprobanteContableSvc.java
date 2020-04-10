@@ -38,8 +38,10 @@ public interface ComprobanteContableSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,@QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idUsuario") String idUsuario);
-	
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
+			@QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("fechaDesde") String fechaDesde,
+			@QueryParam("fechaHasta") String fechaHasta, @QueryParam("idUsuario") String idUsuario);
+
 	/**
 	 * Funcion para modificar un comprobante Contable
 	 * 
@@ -50,7 +52,7 @@ public interface ComprobanteContableSvc {
 	@Path("/update")
 	@Produces("application/json")
 	Response update(String datos);
-	
+
 	/**
 	 * Funcion para modificar un comprobante Contable
 	 * 
@@ -83,15 +85,15 @@ public interface ComprobanteContableSvc {
 	@Path("/delete")
 	@Produces("application/json")
 	Response eliminar(String datos);
-		
+
 	/**
 	 * Funcion para buscar el codigo más grande de cuenta contable
+	 * 
 	 * @return max codigo
 	 */
 	@POST
 	@Path("/getMaxNumero")
 	@Produces("application/json")
 	Response getMaxNumero();
-	
-	
+
 }

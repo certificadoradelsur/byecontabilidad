@@ -9,7 +9,6 @@ import com.google.gson.reflect.TypeToken;
 import cl.certificadoradelsur.byecontabilidad.json.ComprobanteContableJson;
 import cl.certificadoradelsur.byecontabilidad.restdao.ComprobanteContableRD;
 
-
 /**
  * Clase que implementa la interfaz CuentaContableSvc
  * 
@@ -31,11 +30,12 @@ public class ComprobanteContableSvcBean implements ComprobanteContableSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin,String glosaGeneral, String idUsuario) {
+	public Response list(Integer inicio, Integer fin, String glosaGeneral, String fechaDesde, String fechaHasta,
+			String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<ComprobanteContableJson> lccj = comrd.getAll(inicio, fin,glosaGeneral, idUsuario);
+		List<ComprobanteContableJson> lccj = comrd.getAll(inicio, fin, glosaGeneral, fechaDesde, fechaHasta, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<ComprobanteContableJson>>() {
-		}.getType()) + ", \"total\": " + comrd.countAll(glosaGeneral , idUsuario) + "}";
+		}.getType()) + ", \"total\": " + comrd.countAll(glosaGeneral,fechaDesde, fechaHasta, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -47,7 +47,7 @@ public class ComprobanteContableSvcBean implements ComprobanteContableSvc {
 		}.getType());
 		return Response.ok(respuesta).build();
 	}
-	
+
 	@Override
 	public Response modificar(String datos) {
 		Gson gson = new GsonBuilder().create();
@@ -74,7 +74,6 @@ public class ComprobanteContableSvcBean implements ComprobanteContableSvc {
 		}.getType());
 		return Response.ok(respuesta).build();
 	}
-	
 
 	@Override
 	public Response getMaxNumero() {

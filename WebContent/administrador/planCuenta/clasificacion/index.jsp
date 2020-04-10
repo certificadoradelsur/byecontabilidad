@@ -59,19 +59,44 @@
 		<div>
 			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
-
-		<br>
+<br>
 		<div class="form-group">
-			<div class="col-1"></div>
-			<input type="text" id="filtro" name="filtro"
-				placeholder="Filtrar por nombre" />
-			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
-		</div>
-		<div class="table-responsive">
-			<table class="table" id="grid"></table>
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="glosa">&nbsp;&nbsp;Nombre</label>
+					</div>
+					<input type="text" id="filtro" name="filtro"
+						placeholder="Filtrar por nombre" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<label for="claseCuenta">&nbsp;Clase cuenta</label> <select
+						class="browser-default custom-select" id="claseCuenta"
+						required="required" class="form-control">
+						<option value="1">Activo</option>
+					</select>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="grupoCuenta">&nbsp;Grupo cuenta</label> <select
+						class="browser-default custom-select" id="grupoCuenta"
+						required="required">
+						<option value="1">Activo circulante</option>
+						<option value="2">Activo fijo</option>
+						<option value="3">Otros activos</option>
+					</select>
+				</div>
+				<div class="form-group col-md-3">
+					<div class="form-row clo md 3">
+						<label>&nbsp;</label>
+					</div>
+					<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+				</div>
+				<div class="table-responsive">
+					<table class="table" id="grid"></table>
+				</div>
+			</div>
 		</div>
 	</div>
-
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 
@@ -81,12 +106,28 @@
 	$(document)
 			.ready(
 					function() {
-
+						$("#claseCuenta").select2(),
+						$("#grupoCuenta").select2();
+						
+						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
+								function(res, code) {
+									var str;
+									for (var i = 0, len = res.length; i < len; i++) {
+										str += "<option value="+res[i].id+">"
+												+ res[i].nombre
+												+ "</option>";
+									}
+									document.getElementById("claseCuenta").innerHTML = str;	
+								}, "json");
+						
 						grid = $('#grid')
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/clasificacion/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
+											dataSource : "/byeContabilidad/rest-services/private/clasificacion/getAll?idUsuario="
+													+ document
+															.getElementById('idUsuario').value
+													+ "",
 											autoLoad : false,
 											columns : [
 													{
@@ -138,13 +179,34 @@
 		location.href = "agregar.jsp";
 	}
 
+	$('#claseCuenta').on('change',function() {
+		var submitJson = {
+			idClaseCuenta : document.getElementById("claseCuenta").value
+		}
+
+		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+						JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+">"
+										+ res[i].nombre
+										+ "</option>";
+							}
+							document
+									.getElementById("grupoCuenta").innerHTML = str;
+							var submitJson = {
+									idGrupoCuenta : document.getElementById("grupoCuenta").value
+								}
+						}, "json");
+	});
+	
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.id;
 		document.getElementById("formulario").action = 'modificar.jsp';
 		document.getElementById("formulario").method = 'POST';
 		document.getElementById("formulario").submit();
 	}
-
 
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la clasificación?')) {
@@ -166,10 +228,12 @@
 					});
 		}
 	}
-	
+
 	$('#buscar').on('click', function() {
 		grid.reload({
 			nombre : $('#filtro').val(),
+			idClaseCuenta : $('#claseCuenta').val(),
+			idGrupoCuenta : $('#grupoCuenta').val()
 		});
 		clear();
 	});

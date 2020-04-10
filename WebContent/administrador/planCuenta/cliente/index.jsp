@@ -59,7 +59,6 @@
 		<div>
 			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
-
 		<br>
 		<div class="form-group">
 			<div class="form-row">

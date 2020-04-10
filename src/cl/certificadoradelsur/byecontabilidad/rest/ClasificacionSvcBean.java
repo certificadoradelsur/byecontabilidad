@@ -29,11 +29,12 @@ public class ClasificacionSvcBean implements ClasificacionSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String nombre,String idUsuario) {
+	public Response list(Integer inicio, Integer fin, String nombre, Long idClaseCuenta, Long idGrupoCuenta,
+			String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<ClasificacionJson> lccj = clard.getAll(inicio, fin, nombre, idUsuario);
+		List<ClasificacionJson> lccj = clard.getAll(inicio, fin, nombre, idClaseCuenta, idGrupoCuenta,idUsuario);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<ClasificacionJson>>() {
-		}.getType()) + ", \"total\": " + clard.countAll(nombre, idUsuario) + "}";
+		}.getType()) + ", \"total\": " + clard.countAll(nombre, idClaseCuenta, idGrupoCuenta, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -63,15 +64,16 @@ public class ClasificacionSvcBean implements ClasificacionSvc {
 		}.getType());
 		return Response.ok(respuesta).build();
 	}
-	
+
 	@Override
 	public Response getByIdGrupoCuenta(String datos) {
 		Gson gson = new GsonBuilder().create();
 		ClasificacionJson cj = gson.fromJson(datos, ClasificacionJson.class);
 		List<ClasificacionJson> lcj = clard.getByIdGrupoCuenta(cj);
-		String json = gson.toJson(lcj, new TypeToken<List<ClasificacionJson>>() {}.getType());
+		String json = gson.toJson(lcj, new TypeToken<List<ClasificacionJson>>() {
+		}.getType());
 		return Response.ok(json).build();
-		
+
 	}
 
 }

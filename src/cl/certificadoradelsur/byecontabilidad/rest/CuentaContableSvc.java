@@ -38,8 +38,10 @@ public interface CuentaContableSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idClaseCuenta") Long idClaseCuenta, @QueryParam("idGrupoCuenta") Long idGrupoCuenta, @QueryParam("idUsuario") String idUsuario);
-	
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
+			@QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("idClaseCuenta") Long idClaseCuenta,
+			@QueryParam("idGrupoCuenta") Long idGrupoCuenta, @QueryParam("idUsuario") String idUsuario);
+
 	/**
 	 * Funcion para modificar una Cuenta
 	 * 
@@ -72,12 +74,13 @@ public interface CuentaContableSvc {
 	@Path("/delete")
 	@Produces("application/json")
 	Response eliminar(String datos);
-		
-    /**
-     * funcion que obtiene los cuenta contable
-     * @param datos
-     * @return cuetna contable que seran mostrados en el select
-     */
+
+	/**
+	 * funcion que obtiene los cuenta contable
+	 * 
+	 * @param datos
+	 * @return cuetna contable que seran mostrados en el select
+	 */
 	@POST
 	@Path("/getLista")
 	@Produces("application/json")
@@ -85,21 +88,23 @@ public interface CuentaContableSvc {
 
 	/**
 	 * Funcion para buscar el codigo más grande de cuenta contable
+	 * 
 	 * @return max codigo
 	 */
 	@POST
 	@Path("/getMaxCodigo")
 	@Produces("application/json")
 	Response getMaxCodigo();
-	
+
 	/**
-     * funcion que obtiene las cuentas
-     * @param datos
-     * @return cuentas que seran mostrados en el select
-     */
+	 * funcion que obtiene las cuentas
+	 * 
+	 * @param datos
+	 * @return cuentas que seran mostrados en el select
+	 */
 	@POST
 	@Path("/getByIdEmpresa")
 	@Produces("application/json")
 	Response getByIdEmpresa(String datos);
-	
+
 }

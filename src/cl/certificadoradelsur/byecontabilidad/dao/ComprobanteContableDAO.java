@@ -34,7 +34,7 @@ public class ComprobanteContableDAO {
 	 * 
 	 * @return el total de Comprobantes Contables
 	 */
-	public Long countAll(String glosaGeneral, Long idOficinaContable) {
+	public Long countAll(String glosaGeneral, Timestamp fechaInicial, Timestamp fechaFinal, Long idOficinaContable) {
 		Query query = em.createNamedQuery("ComprobanteContable.countAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -42,6 +42,8 @@ public class ComprobanteContableDAO {
 			query.setParameter("ignoreGlosaGeneral", false);
 		}
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
+		query.setParameter("fechaInicial", fechaInicial);
+		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return (Long) query.getSingleResult();
 	}
@@ -56,7 +58,8 @@ public class ComprobanteContableDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<ComprobanteContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Long idOficinaContable) {
+	public List<ComprobanteContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Timestamp fechaInicial,
+			Timestamp fechaFinal, Long idOficinaContable) {
 		Query query = em.createNamedQuery("ComprobanteContable.getAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -64,6 +67,8 @@ public class ComprobanteContableDAO {
 			query.setParameter("ignoreGlosaGeneral", false);
 		}
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
+		query.setParameter("fechaInicial", fechaInicial);
+		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
@@ -148,7 +153,8 @@ public class ComprobanteContableDAO {
 	 * @return lista comporbantes contables
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ComprobanteContable> getLibroDiario(Timestamp fechaInicial, Timestamp fechaFinal,Long idOficinaContable) {
+	public List<ComprobanteContable> getLibroDiario(Timestamp fechaInicial, Timestamp fechaFinal,
+			Long idOficinaContable) {
 		Query query = em.createNamedQuery("ComprobanteContable.getLibroDiario");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);

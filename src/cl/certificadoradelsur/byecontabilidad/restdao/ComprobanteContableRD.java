@@ -1,5 +1,6 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -90,7 +91,7 @@ public class ComprobanteContableRD {
 									.equals(true)) {
 								movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
 							}
-							if(cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
+							if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
 									.equals(true)) {
 								movimiento.setCliente(clientedao.getById(ccj.getMovimientos().get(i).getIdCliente()));
 							}
@@ -121,12 +122,15 @@ public class ComprobanteContableRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String glosaGeneral, String idUsuario) {
+	public Long countAll(String glosaGeneral, String fechaDesde, String fechaHasta, String idUsuario) {
 		try {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			return comdao.countAll(glosaGeneral, udao.getById(idUsuario).getOficinaContable().getId());
+			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
+			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			return comdao.countAll(glosaGeneral, fechaInicial,fechaFinal,
+					udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de comprobantes contables ", e);
 			return 0L;
@@ -140,7 +144,8 @@ public class ComprobanteContableRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<ComprobanteContableJson> getAll(Integer page, Integer limit, String glosaGeneral, String idUsuario) {
+	public List<ComprobanteContableJson> getAll(Integer page, Integer limit, String glosaGeneral, String fechaDesde,
+			String fechaHasta, String idUsuario) {
 		List<ComprobanteContableJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -152,7 +157,9 @@ public class ComprobanteContableRD {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit, glosaGeneral,
+			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
+			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit, glosaGeneral, fechaInicial,fechaFinal,
 					udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lcc.size(); i++) {
 				ComprobanteContableJson ccj = new ComprobanteContableJson();
@@ -218,18 +225,17 @@ public class ComprobanteContableRD {
 	 * @return mensaje de exito o error
 	 */
 	public String modificar(ComprobanteContableJson ccj) {
-		try {			
-			if (condao.getByIdComprobante(ccj.getId()) == null
-					&& ncdao.getByIdComprobante(ccj.getId()) == null) {
+		try {
+			if (condao.getByIdComprobante(ccj.getId()) == null && ncdao.getByIdComprobante(ccj.getId()) == null) {
 				List<Movimiento> lm = mdao.getByIdComprobante(ccj.getId());
 				for (int i = 0; i < lm.size(); i++) {
 					mdao.eliminar(lm.get(i));
-				}			
+				}
 			} else {
 				return "No se puede eliminar el comprobante, ya que esta en uso por el proceso de conciliacíon";
 			}
 			ComprobanteContable c = comdao.getById(ccj.getId());
-				if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
+			if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
 				if (comdao.getByNumero(ccj.getNumero()) == null
 						|| comdao.getByNumero(ccj.getNumero()).getNumero().equals(c.getNumero())) {
 					if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
@@ -243,7 +249,8 @@ public class ComprobanteContableRD {
 						List<Movimiento> movimientos = new ArrayList<>();
 						for (int i = 0; i < ccj.getMovimientos().size(); i++) {
 							Movimiento movimiento = new Movimiento();
-							if (Utilidades.containsScripting(ccj.getMovimientos().get(i).getGlosa()).compareTo(true) == 0) {
+							if (Utilidades.containsScripting(ccj.getMovimientos().get(i).getGlosa())
+									.compareTo(true) == 0) {
 								throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 							} else {
 								movimiento.setGlosa(ccj.getMovimientos().get(i).getGlosa());
@@ -254,16 +261,18 @@ public class ComprobanteContableRD {
 								movimiento.setNumDocumento(ccj.getMovimientos().get(i).getNumDocumento());
 								movimiento.setEstado(ccj.getMovimientos().get(i).isEstado());
 								movimiento.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
-								movimiento.setEmpresa(edao.getById(cuentadao
-										.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).getEmpresa().getId()));
+								movimiento.setEmpresa(edao
+										.getById(cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable())
+												.getEmpresa().getId()));
 								movimiento.setUsuario(udao.getById(ccj.getMovimientos().get(i).getIdUsuario()));
-								if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isConciliacion()
-										.equals(true)) {
+								if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable())
+										.isConciliacion().equals(true)) {
 									movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
 								}
-								if(cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
+								if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
 										.equals(true)) {
-									movimiento.setCliente(clientedao.getById(ccj.getMovimientos().get(i).getIdCliente()));
+									movimiento
+											.setCliente(clientedao.getById(ccj.getMovimientos().get(i).getIdCliente()));
 								}
 								movimiento.setCuentaContable(
 										cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()));
@@ -288,7 +297,7 @@ public class ComprobanteContableRD {
 			return e.getMessage();
 		}
 	}
-	
+
 	/**
 	 * metodo obtener una cuenta contable
 	 * 

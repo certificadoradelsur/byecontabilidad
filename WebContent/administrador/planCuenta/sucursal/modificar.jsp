@@ -92,33 +92,42 @@
 $(document).ready(function () {
 
 	$("#empresa").select2();
-	var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value
-		}
-	$.post('/byeContabilidad/rest-services/private/empresa/getLista',
-			JSON.stringify(submitJson),
-			function(res, code) {
-				var str;
-				for (var i = 0, len = res.length; i < len; i++) {
-					str += "<option value="+res[i].id+">" + res[i].razonSocial
-							+ "</option>";
-				}
-				document.getElementById("empresa").innerHTML = str;
-			}, "json");
+
 	
 	var submitjson = {codigo:"<%=request.getParameter("id")%>" ,};
 						$.post('/byeContabilidad/rest-services/private/sucursal/getById',
 										JSON.stringify(submitjson)).done(function(data) {
 											document.getElementById("direccion").value = data.direccion;
-											document.getElementById("empresa").value = data.idEmpresa;
+											cargaEmpresa(data.idEmpresa);
 										}).fail(function(jqxhr, settings, ex) {
 											alert('No se pudo modificar la sucursal '
 													+ ex);});
-						
-						$("#empresa").select2();
+					
 								
 					});
 
+	function cargaEmpresa(idEmpresa){
+		
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value
+				}
+				$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								if (idEmpresa == res[i].id) {
+									str += "<option value="+res[i].id+" selected>"
+											+ res[i].razonSocial + "</option>";
+
+								} else {
+								str += "<option value="+res[i].id+">" + res[i].razonSocial
+										+ "</option>";
+							 }
+							}
+							document.getElementById("empresa").innerHTML = str;
+						}, "json");	
+	}
+	
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1

@@ -68,12 +68,13 @@ public class ClasificacionRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String nombre, String idUsuario) {
+	public Long countAll(String nombre, Long idClaseCuenta,
+			Long idGrupoCuenta, String idUsuario) {
 		try {
 			if(nombre==null) {
 				nombre="";
 			}
-			return cladao.countAll(nombre, udao.getById(idUsuario).getOficinaContable().getId());
+			return cladao.countAll(nombre, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de clasificacines ", e);
 			return 0L;
@@ -87,7 +88,8 @@ public class ClasificacionRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de clasificaciones
 	 */
-	public List<ClasificacionJson> getAll(Integer page, Integer limit, String nombre, String idUsuario) {
+	public List<ClasificacionJson> getAll(Integer page, Integer limit, String nombre, Long idClaseCuenta,
+			Long idGrupoCuenta, String idUsuario) {
 		List<ClasificacionJson> lbj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -99,7 +101,7 @@ public class ClasificacionRD {
 			if(nombre==null) {
 				nombre="";
 			}
-			List<Clasificacion> lcc = cladao.getAll(inicio, limit, nombre, udao.getById(idUsuario).getOficinaContable().getId());
+			List<Clasificacion> lcc = cladao.getAll(inicio, limit, nombre, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lcc.size(); i++) {
 				ClasificacionJson ccj = new ClasificacionJson();
 				ccj.setId(lcc.get(i).getId());

@@ -62,15 +62,39 @@
 		</div>
 		<br>
 		<div class="form-group">
-			<div class="col-1"></div>
-			<input type="text" id="filtro" name="filtro"
-				placeholder="Filtrar por glosa" />
-			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
-		</div>
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="glosa">&nbsp;&nbsp;Glosa</label>
+					</div>
+					<input type="text" id="filtro" name="filtro"
+						placeholder="Filtrar por glosa" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+						<div class="form-row">
+							<label for="desde">&nbsp;&nbsp;Desde</label>
+						</div>
+						<input type="date" id="desde" name="desde"
+							class="form-control" class="in" />
+					</div>
+					<div class="form-group col-md-2">
+						<div class="form-row">
+							<label for="hasta">&nbsp; &nbsp;Hasta</label>
+						</div>
+						<input type="date" id="hasta" name="hasta"
+							class="form-control" class="in" />
+					</div>
+				<div class="form-group col-md-3">
+					<div class="form-row clo md 3">
+						<label>&nbsp;</label>
+					</div>
+					<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+				</div>
 		<div class="table-responsive">
 			<table id="grid"></table>
-		</div>
-
+		</div> 
+    </div>
+    </div>
 
 		<div class="container">
 			<!-- Trigger the modal with a button -->
@@ -155,85 +179,108 @@
 	$(document)
 			.ready(
 					function() {
-						tablaP();
-						grid = $('#grid')
-								.grid(
-										{
-											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/comprobanteContable/getAll?idUsuario="
-													+ document
-															.getElementById('idUsuario').value
-													+ "",
-											autoLoad : false,
-											columns : [
-													{
-														field : 'id',
-														title : 'Identificador',
-														width : 100,
-														hidden : true
-
-													},
-													{
-														field : 'numero',
-														title : 'N° Comprobante',
-														width : 140
-													},
-
-													{
-														field : 'glosaGeneral',
-														title : 'Glosa',
-														sortable : true,
-														width : 140
-													},
-													{
-														field : 'fecha',
-														title : 'Fecha',
-														width : 140
-													},
-													{
-														field : 'nombreEmpresa',
-														title : 'Empresa',
-														width : 160
-													},
-													{
-														field : 'borrador',
-														title : 'Borrador',
-														width : 140
-													},
-													{
-														width : 100,
-														title : 'Ver más',
-														tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
-														align : 'center',
-														events : {
-															'click' : ver
-														}
-													},
-													{
-														width : 160,
-														title : 'Modificar encabezado',
-														tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
-														align : 'center',
-														events : {
-															'click' : modificar
-														}
-													},
-													{
-														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-														align : 'center',
-														events : {
-															'click' : eliminar
-														}
-													}, ],
-											pager : {
-												limit : 10
-											}
-										});
-
+						tablaP();	
+						
+						fecha();
+						
 					});
 
+	function fecha(){
+		var now = new Date();
+	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	    var today = now.getFullYear()+"-"+(month)+"-"+("01") ;
+	    $("#desde").val(today);
+	    
+		var now = new Date();  
+	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	    var dia =new Date(now.getFullYear() || new Date().getFullYear(), month, 0).getDate();
+	    var today2 = now.getFullYear()+"-"+(month)+"-"+(dia) ;
+	    $("#hasta").val(today2);
+	    cargaTabla();
+	}
+	function cargaTabla(){
+		grid = $('#grid')
+		.grid(
+				{
+					primaryKey : 'ID',
+					dataSource : "/byeContabilidad/rest-services/private/comprobanteContable/getAll?idUsuario="
+							+ document
+									.getElementById('idUsuario').value
+							+ "",
+					autoLoad : false,
+					columns : [
+							{
+								field : 'id',
+								title : 'Identificador',
+								width : 100,
+								hidden : true
+
+							},
+							{
+								field : 'numero',
+								title : 'N° Comprobante',
+								width : 140
+							},
+
+							{
+								field : 'glosaGeneral',
+								title : 'Glosa',
+								sortable : true,
+								width : 140
+							},
+							{
+								field : 'fecha',
+								title : 'Fecha',
+								width : 140
+							},
+							{
+								field : 'nombreEmpresa',
+								title : 'Empresa',
+								width : 160
+							},
+							{
+								field : 'borrador',
+								title : 'Borrador',
+								width : 140
+							},
+							{
+								width : 100,
+								title : 'Ver más',
+								tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
+								align : 'center',
+								events : {
+									'click' : ver
+								}
+							},
+							{
+								width : 160,
+								title : 'Modificar encabezado',
+								tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+								align : 'center',
+								events : {
+									'click' : modificar
+								}
+							},
+							{
+								width : 100,
+								title : 'Eliminar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+								align : 'center',
+								events : {
+									'click' : eliminar
+								}
+							}, ],
+					pager : {
+						limit : 10
+					}
+				});
+		grid.reload({
+			glosaGeneral : $('#filtro').val(),
+			fechaDesde : $('#desde').val(),
+			fechaHasta :$('#hasta').val()
+		});
+	}
+	
 	function agregar() {
 		location.href = "agregar.jsp";
 	}
@@ -390,8 +437,15 @@
 	}
 
 	$('#buscar').on('click', function() {
+		var fechaDesde = new Date(document.getElementById('desde').value);
+		var fechaHasta = new Date(document.getElementById('hasta').value);
+		if (fechaDesde > fechaHasta) {
+			alert('Fecha Inicial no debe ser mayor que fecha final');
+			return;}
 		grid.reload({
 			glosaGeneral : $('#filtro').val(),
+			fechaDesde : $('#desde').val(),
+			fechaHasta :$('#hasta').val()
 		});
 		clear();
 	});
