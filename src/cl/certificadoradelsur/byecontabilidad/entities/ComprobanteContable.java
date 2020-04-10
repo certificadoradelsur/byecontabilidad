@@ -33,7 +33,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "ComprobanteContable.countAll", query = "SELECT count(c.id) FROM ComprobanteContable c where c.fecha between :fechaInicial and :fechaFinal and  c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),
 		@NamedQuery(name = "ComprobanteContable.getByNumero", query = "SELECT c FROM ComprobanteContable c where  c.numero= :numero"),
 		@NamedQuery(name = "ComprobanteContable.getMaxNumero", query = "SELECT MAX(c.numero) FROM ComprobanteContable c"), 
-        @NamedQuery(name = "ComprobanteContable.getLibroDiario", query = "SELECT c FROM ComprobanteContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.fecha between :fechaInicial and :fechaFinal") 
+        @NamedQuery(name = "ComprobanteContable.getLibroDiario", query = "SELECT c FROM ComprobanteContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.borrador = false and c.fecha between :fechaInicial and :fechaFinal") 
 })
 
 
@@ -104,6 +104,7 @@ public class ComprobanteContable implements Serializable {
 		this.movimientos = movimientos;
 	}
 
+	@Column(name = "borrador", nullable = false)
 	public Boolean isBorrador() {
 		return borrador;
 	}

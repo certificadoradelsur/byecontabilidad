@@ -337,10 +337,12 @@ public class ReporteRD {
 					rowMovimiento.createCell(5).setCellValue(listaMovimiento.get(l).getGlosa());
 
 					if (listaMovimiento.get(l).getTipoMovimiento().equals("INGRESO")
-							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE INGRESO")) {
+							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE INGRESO")||
+							listaMovimiento.get(l).getTipoMovimiento().equals("DEBE")) {
 						rowMovimiento.createCell(6).setCellValue(listaMovimiento.get(l).getMonto());
 					} else if (listaMovimiento.get(l).getTipoMovimiento().equals("EGRESO")
-							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE EGRESO")) {
+							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE EGRESO")
+							|| listaMovimiento.get(l).getTipoMovimiento().equals("HABER")) {
 						rowMovimiento.createCell(7).setCellValue(listaMovimiento.get(l).getMonto());
 					}
 
@@ -410,21 +412,24 @@ public class ReporteRD {
 					rowMovimiento.createCell(4).setCellValue(mov.getTipoDocumento());
 					rowMovimiento.createCell(5).setCellValue(mov.getNumDocumento());
 					rowMovimiento.createCell(6).setCellValue(mov.getGlosa());
-					if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
+					if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")|| mov.getTipoMovimiento().equals("DEBE")) {
 						rowMovimiento.createCell(7).setCellValue(mov.getMonto());
 						debitoA = debitoA + mov.getMonto();
 					} else if (mov.getTipoMovimiento().equals("EGRESO")
-							|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
+							|| mov.getTipoDocumento().equals("AJUSTE EGRESO")
+							|| mov.getTipoMovimiento().equals("HABER")) {
 						rowMovimiento.createCell(8).setCellValue(mov.getMonto());
 						creditoA = creditoA + mov.getMonto();
 					}
 					if (acumulador.equals(0L)) {
 						if (mov.getTipoMovimiento().equals("INGRESO")
-								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
+								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")
+								|| mov.getTipoMovimiento().equals("DEBE")) {
 							acumulador = acumulador + (mov.getMonto());
 
 						} else if (mov.getTipoMovimiento().equals("EGRESO")
-								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
+								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")
+								|| mov.getTipoMovimiento().equals("HABER")) {
 							acumulador = acumulador - (mov.getMonto());
 
 						}
@@ -432,12 +437,14 @@ public class ReporteRD {
 
 					} else {
 						if (mov.getTipoMovimiento().equals("INGRESO")
-								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
+								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")
+								|| mov.getTipoMovimiento().equals("DEBE")) {
 							acumulador = acumulador + (mov.getMonto());
 
 							rowMovimiento.createCell(9).setCellValue(acumulador);
 						} else if (mov.getTipoMovimiento().equals("EGRESO")
-								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
+								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")
+								|| mov.getTipoMovimiento().equals("HABER")) {
 							acumulador = acumulador - (mov.getMonto());
 							rowMovimiento.createCell(9).setCellValue(acumulador);
 						}
