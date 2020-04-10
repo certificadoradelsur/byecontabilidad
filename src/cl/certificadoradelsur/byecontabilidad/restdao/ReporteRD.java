@@ -309,7 +309,7 @@ public class ReporteRD {
 
 			int rowNum = 0;
 			for (int i = 0; i < listaComprobante.size(); i++) {
-				List<Movimiento> listaMovimiento = movimientodao.getByIdComprobante(listaComprobante.get(i).getId());
+				List<Movimiento> listaMovimiento = movimientodao.getByIdComprobanteReporte(listaComprobante.get(i).getId());
 				Row rowComprobante = sheetDiario.createRow(rowNum++);
 				rowComprobante.createCell(0).setCellValue("N° de Comprobante");
 				rowComprobante.createCell(1).setCellValue(listaComprobante.get(i).getNumero().toString());

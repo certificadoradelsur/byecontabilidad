@@ -71,22 +71,39 @@ public class MovimientoDAO {
 	}
 
 	/**
-	 * Funcion que trae todos los movimientos relacionados a una transaccion
+	 * Funcion que trae todos los movimientos
 	 * 
 	 * @param inicio
 	 * @param fin
-	 * @param id_transaccion
+	 * @param idComprobante
 	 * @return Lista de Movimiento
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Movimiento> getAllM(Integer inicio, Integer fin, Long id) {
+	public List<Movimiento> getAllM(Long id) {
+		Query query = em.createNamedQuery("Movimiento.getAllM");
+		query.setParameter("id", id);
+		return query.getResultList();
+	}
+	
+	/**
+	 * Funcion que trae todos los movimientos relacionados a un comprobante
+	 * 
+	 * @param inicio
+	 * @param fin
+	 * @param idComprobante
+	 * @return Lista de Movimiento
+	 */
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public List<Movimiento> getAllMov(Integer inicio, Integer fin, Long id) {
 		Query query = em.createNamedQuery("Movimiento.getAllM");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		query.setParameter("id", id);
 		return query.getResultList();
 	}
+	
 
 	/**
 	 * funcion que actualiza datos de Movimiento
@@ -156,6 +173,20 @@ public class MovimientoDAO {
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Movimiento> getByIdComprobante(Long idComprobante) {
 		Query query = em.createNamedQuery("Movimiento.getByIdComprobante");
+		query.setParameter("idComprobante", idComprobante);
+		return query.getResultList();
+	}
+	
+	/**
+	 * funcion que busca movimientos por idComprobante PARA REPORTE
+	 * 
+	 * @param idComprobante
+	 * @return lista de movimientos
+	 */
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public List<Movimiento> getByIdComprobanteReporte(Long idComprobante) {
+		Query query = em.createNamedQuery("Movimiento.getByIdComprobanteReporte");
 		query.setParameter("idComprobante", idComprobante);
 		return query.getResultList();
 	}

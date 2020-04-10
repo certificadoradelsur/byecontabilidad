@@ -778,6 +778,23 @@
 
 					}),
 				}
+				$.post('/byeContabilidad/rest-services/private/comprobanteContable/add',
+						JSON.stringify(submitJson))
+				.done(
+						function(data) {
+							if (data == 'OK') {
+								alert('Se guardo exitosamente el comprobante contable');
+								grid.reload();
+								location.href = "index.jsp";
+							} else {
+								alert(data);
+							}
+
+						}).fail(function(jqxhr, settings, ex) {
+					alert('No se pudo guardar el comprobante contable ' + ex);
+				});
+			}else{
+				return;
 			}
 		} else {
 			var list = grid.getAll(true)
@@ -818,26 +835,22 @@
 
 						}),
 			}
+			$.post('/byeContabilidad/rest-services/private/comprobanteContable/add',
+					JSON.stringify(submitJson))
+			.done(
+					function(data) {
+						if (data == 'OK') {
+							alert('Se guardo exitosamente el comprobante contable');
+							grid.reload();
+							location.href = "index.jsp";
+						} else {
+							alert(data);
+						}
 
-		}
-
-		$
-				.post(
-						'/byeContabilidad/rest-services/private/comprobanteContable/add',
-						JSON.stringify(submitJson))
-				.done(
-						function(data) {
-							if (data == 'OK') {
-								alert('Se guardo exitosamente el comprobante contable');
-								grid.reload();
-								location.href = "index.jsp";
-							} else {
-								alert(data);
-							}
-
-						}).fail(function(jqxhr, settings, ex) {
-					alert('No se pudo guardar el comprobante contable ' + ex);
-				});
+					}).fail(function(jqxhr, settings, ex) {
+				alert('No se pudo guardar el comprobante contable ' + ex);
+			});
+		}	
 
 	}
 

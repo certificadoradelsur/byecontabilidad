@@ -114,11 +114,10 @@ public interface MovimientoSvc {
 	 * @param id
 	 * @return
 	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@POST
 	@Path("/getMovById")
-	Response getMovById(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
-			@QueryParam("id") Long id);
+	@Produces("application/json")
+	Response getMovById(String datos);
 
 	/**
 	 * Funcion para traer todos los Movimientos entre fechas

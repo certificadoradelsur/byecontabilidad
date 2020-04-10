@@ -278,7 +278,7 @@ public class MovimientoRD {
 			if (id == null) {
 				return lmj;
 			}
-			List<Movimiento> lm = mdao.getAllM(inicio, limit, id);
+			List<Movimiento> lm = mdao.getAllMov(inicio, limit, id);
 			for (int i = 0; i < lm.size(); i++) {
 				MovimientoJson mj = new MovimientoJson();
 				mj.setId(lm.get(i).getId());
@@ -314,20 +314,11 @@ public class MovimientoRD {
 	 * @return
 	 */
 
-	public List<MovimientoJson> getMovById(Integer page, Integer limit, Long id) {
+	public List<MovimientoJson> getMovById(MovimientoJson mjj) {
 		List<MovimientoJson> lmj = new ArrayList<>();
 		try {
-			Integer inicio = 0;
-			if (page.compareTo(1) == 0) {
-				inicio = 0;
-			} else {
-				inicio = (page * limit) - limit;
-			}
 
-			if (id == null) {
-				return lmj;
-			}
-			List<Movimiento> lm = mdao.getAllM(inicio, limit, id);
+			List<Movimiento> lm = mdao.getAllM(mjj.getId());
 			for (int i = 0; i < lm.size(); i++) {
 				MovimientoJson mj = new MovimientoJson();
 				mj.setId(lm.get(i).getId());

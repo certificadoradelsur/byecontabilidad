@@ -306,7 +306,7 @@
 
 	$(document).ready(function() {
 		
-		var submitjson = {id:"<%=request.getParameter("id")%>",};
+		var submitjson = {id:"<%=request.getParameter("id")%> " };
 						$
 								.post(
 										'/byeContabilidad/rest-services/private/comprobanteContable/getById',
@@ -327,8 +327,6 @@
 										});
 
 						setWidths();
-						tabla();
-						llenaTabla();
 						var varAnalisis;
 						var varConciliacion;
 						var varIdBanco;
@@ -372,124 +370,149 @@
 											document.getElementById("cliente").innerHTML = str;
 
 										}, "json");
-						
-					});
-	
-	function llenaTabla(){
-		var submitjson = {
-				id: <%=request.getParameter("id")%>
-			};
-		grid.reload({
-			id : <%=request.getParameter("id")%>
-		});
 
+						grid = $('#grid')
+								.grid(
+										{
+											primaryKey : 'ID',
+											dataSource : [],
+											columns : [
+													{
+														field : 'codigo',
+														title : 'Codigo',
+														width : 100
+													},
+													{
+														field : 'descripcion',
+														title : 'Descripción',
+														width : 160
+													},
+													{
+														field : 'glosa',
+														title : 'Glosa',
+														width : 160
+													},
+													{
+														field : 'debe',
+														title : 'Debe',
+														width : 160
+													},
+													{
+														field : 'haber',
+														title : 'Haber',
+														width : 160
+													},
+													{
+														field : 'estado',
+														title : 'ESTADO',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'tipoMovimiento',
+														title : 'TIPO MOVIMIENTO',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'tipoDocumento',
+														title : 'TIPO DOCUMENTO',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'numDocumento',
+														title : 'NUMERO DOCUMENTO',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'fecha',
+														title : 'FECHA',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'idUsuario',
+														title : 'USER',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'monto',
+														title : 'MONTO',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'idCliente',
+														title : 'CLIENTE',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'numCuenta',
+														title : 'CUENTA',
+														width : 160,
+														hidden : true
+													},
+													{
+														field : 'idCuentaContable',
+														title : 'CUENTACONTABLE',
+														width : 160,
+														hidden : true
+													},
+													{
+														width : 100,
+														title : 'Eliminar',
+														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+														align : 'center',
+														events : {
+															'click' : Remove
+														}
+													}, ],
+											pager : {
+												limit : 100
+											}
+
+										});
+
+						tabla();
+
+					});
+
+	function tabla() {
+
+		var submitJson = {
+			id : <%=request.getParameter("id")%>
 	}
-	
-	function tabla(){
-		grid = $('#grid')
-		.grid(
-				{
-					primaryKey : 'ID',
-					dataSource : '/byeContabilidad/rest-services/private/movimiento/getMovById',
-					columns : [
-							{
-								field : 'codigo',
-								title : 'Codigo',
-								width : 100
-							},
-							{
-								field : 'descripcion',
-								title : 'Descripción',
-								width : 160
-							},
-							{
-								field : 'glosa',
-								title : 'Glosa',
-								width : 160
-							},
-							{
-								field : 'debe',
-								title : 'Debe',
-								width : 160
-							},
-							{
-								field : 'haber',
-								title : 'Haber',
-								width : 160
-							},
-							{
-								field : 'estado',
-								title : 'ESTADO',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'tipoMovimiento',
-								title : 'TIPO MOVIMIENTO',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'tipoDocumento',
-								title : 'TIPO DOCUMENTO',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'numDocumento',
-								title : 'NUMERO DOCUMENTO',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'fecha',
-								title : 'FECHA',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'idUsuario',
-								title : 'USER',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'monto',
-								title : 'MONTO',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'idCliente',
-								title : 'CLIENTE',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'numCuenta',
-								title : 'CUENTA',
-								width : 160,
-								hidden : true
-							},
-							{
-								field : 'idCuentaContable',
-								title : 'CUENTACONTABLE',
-								width : 160,
-								hidden : true
-							},
-							{
-								width : 100,
-								title : 'Eliminar',
-								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-								align : 'center',
-								events : {
-									'click' : Remove
-								}
-							}, ],
-					pager : {
-						limit : 100
+
+		$.post('/byeContabilidad/rest-services/private/movimiento/getMovById',
+				JSON.stringify(submitJson), function(res, code) {
+					for (var i = 0, len = res.length; i < len; i++) {
+						grid.addRow({
+							'ID' : grid.count(true) + 1,
+							'codigo' : res[i].codigo,
+							'descripcion' : res[i].descripcion,
+							'debe' : res[i].debe,
+							'haber' : res[i].haber,
+							'numDocumento' : res[i].numDocumento,
+							'glosa' : res[i].glosa,
+							'monto' : res[i].monto,
+							'tipoMovimiento' : res[i].tipoMovimiento,
+							'tipoDocumento' : res[i].tipoDocumento,
+							'estado' : res[i].estado,
+							'fecha' : res[i].fecha,
+							'idCuenta' : res[i].idCuenta,
+							'numCuenta' : res[i].numCuenta,
+							'idCliente' : res[i].idCliente,
+							'idEmpresa' : res[i].idEmpresa,
+							'idUsuario' : res[i].idUsuario,
+							'numComprobante' : res[i].numComprobante,
+							'idCuentaContable' : res[i].idCuentaContable,
+						})
 					}
-				});
+				}, "json");
 	}
 
 	$('#empresa')
@@ -541,7 +564,8 @@
 											var codigo = document
 													.getElementById("cuentaContable").value
 													.split("/");
-											varCodigo = codigo[5];60120
+											varCodigo = codigo[5];
+											60120
 											var idEmpresa = document
 													.getElementById("cuentaContable").value
 													.split("/");
@@ -731,8 +755,8 @@
 		if (varAnalisis == 'true' && varConciliacion == 'false') {
 			glosa = document.getElementById("glosaAnalisis").value,
 					cliente = document.getElementById("cliente").value,
-					documento = "",
-					tipo = document.getElementById("tipoAnalisis").value
+					documento = "", tipo = document
+							.getElementById("tipoAnalisis").value
 			if ($('#tipoAnalisis option:selected').text() == 'Debe') {
 				debe = document.getElementById("monto").value
 			} else if ($('#tipoAnalisis option:selected').text() == 'Haber') {
@@ -756,8 +780,7 @@
 				}
 			}
 		} else if (varAnalisis == 'false' && varConciliacion == 'false') {
-			glosa = document.getElementById("glosaSin").value,
-			documento = "";
+			glosa = document.getElementById("glosaSin").value, documento = "";
 			tipo = document.getElementById("tipoSin").value, cliente = ""
 			if ($('#tipoSin option:selected').text() == 'Debe') {
 				debe = document.getElementById("monto").value
@@ -827,7 +850,9 @@
 			if (confirm('El comprobante esta descuadrado. ¿desea guardar igualmente?')) {
 				var list = grid.getAll(true)
 				var submitJson = {
-					id: <%=request.getParameter("id")%>,
+					id :
+<%=request.getParameter("id")%>
+	,
 					numero : document.getElementById("numero").value,
 					glosaGeneral : document.getElementById("glosaGeneral").value,
 					fecha : document.getElementById("fecha").value,
@@ -864,11 +889,35 @@
 
 					}),
 				}
+				$
+						.post(
+								'/byeContabilidad/rest-services/private/comprobanteContable/modificar',
+								JSON.stringify(submitJson))
+						.done(
+								function(data) {
+									if (data == 'OK') {
+										alert('Se modifico exitosamente el comprobante contable');
+										grid.reload();
+										location.href = "index.jsp";
+									} else {
+										alert(data);
+									}
+
+								})
+						.fail(
+								function(jqxhr, settings, ex) {
+									alert('No se pudo guardar el comprobante contable '
+											+ ex);
+								});
+			} else {
+				return;
 			}
 		} else {
 			var list = grid.getAll(true)
 			var submitJson = {
-				id: <%=request.getParameter("id")%>,
+				id :
+<%=request.getParameter("id")%>
+	,
 				numero : document.getElementById("numero").value,
 				glosaGeneral : document.getElementById("glosaGeneral").value,
 				fecha : document.getElementById("fecha").value,
@@ -906,48 +955,53 @@
 						}),
 			}
 
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/comprobanteContable/modificar',
+							JSON.stringify(submitJson))
+					.done(
+							function(data) {
+								if (data == 'OK') {
+									alert('Se modifico exitosamente el comprobante contable');
+									grid.reload();
+									location.href = "index.jsp";
+								} else {
+									alert(data);
+								}
+
+							})
+					.fail(
+							function(jqxhr, settings, ex) {
+								alert('No se pudo guardar el comprobante contable '
+										+ ex);
+							});
+
 		}
-
-		$
-				.post(
-						'/byeContabilidad/rest-services/private/comprobanteContable/modificar',
-						JSON.stringify(submitJson))
-				.done(
-						function(data) {
-							if (data == 'OK') {
-								alert('Se modifico exitosamente el comprobante contable');
-								grid.reload();
-								location.href = "index.jsp";
-							} else {
-								alert(data);
-							}
-
-						}).fail(function(jqxhr, settings, ex) {
-					alert('No se pudo guardar el comprobante contable ' + ex);
-				});
-
 	}
 
 	function Remove(x) {
-		if (confirm('El movimiento se eliminara definitivamente ¿Esta seguro desea eliminar el movimiento?')) {
-			var submitJson = {
-				id : x.data.record.id
-			}
-			$.post('/byeContabilidad/rest-services/private/movimiento/delete',
-					JSON.stringify(submitJson)).done(function(data) {
-				if (data == 'OK') {
-					alert('Movimiento eliminado correctamente');
-					grid.reload();
-					//document.getElementById('modalclose').click(); 
-				} else {
-					alert(data);
-				}
-			}).fail(function() {
-				alert('Error al eliminar el movimiento');
-			});
+		if (confirm('¿Seguro que quiere descartar el movimiento?')) {
+			grid.removeRow(x.data.id);
 		}
+
+		// 		if (confirm('El movimiento se eliminara definitivamente ¿Esta seguro desea eliminar el movimiento?')) {
+		// 			var submitJson = {
+		// 				id : x.data.record.id
+		// 			}
+		// 			$.post('/byeContabilidad/rest-services/private/movimiento/delete',
+		// 					JSON.stringify(submitJson)).done(function(data) {
+		// 				if (data == 'OK') {
+		// 					alert('Movimiento eliminado correctamente');
+		// 					grid.reload();
+		// 					//document.getElementById('modalclose').click(); 
+		// 				} else {
+		// 					alert(data);
+		// 				}
+		// 			}).fail(function() {
+		// 				alert('Error al eliminar el movimiento');
+		// 			});
+		// 		}
 	}
-	
 
 	function cargaCuenta(idCuenta) {
 
@@ -1028,7 +1082,7 @@
 			break;
 		}
 	})
-	
+
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
