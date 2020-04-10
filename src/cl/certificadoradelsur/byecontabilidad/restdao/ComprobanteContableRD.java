@@ -205,8 +205,6 @@ public class ComprobanteContableRD {
 						c.setNumero(ccj.getNumero());
 						c.setGlosaGeneral(ccj.getGlosaGeneral());
 						c.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
-						c.setBorrador(ccj.isBorrador());
-
 						for (int i = 0; i < c.getMovimientos().size(); i++) {
 							Movimiento m = c.getMovimientos().get(i);
 							m.setNumComprobante(ccj.getNumero());

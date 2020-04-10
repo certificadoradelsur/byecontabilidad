@@ -104,7 +104,7 @@ public class ComprobanteContable implements Serializable {
 		this.movimientos = movimientos;
 	}
 
-	@Column(name = "borrador", nullable = false)
+	@Column(name = "borrador", nullable = true)
 	public Boolean isBorrador() {
 		return borrador;
 	}
