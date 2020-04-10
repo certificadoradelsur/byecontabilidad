@@ -796,9 +796,9 @@
 
 	function limpiaAdd() {
 		document.getElementById("numDocumento").value = "";
-		document.getElementById("glosaSin").value = "";
-		document.getElementById("glosaConciliacion").value = "";
-		document.getElementById("glosaAnalisis").value = "";
+		//document.getElementById("glosaSin").value = "";
+		//document.getElementById("glosaConciliacion").value = "";
+		//document.getElementById("glosaAnalisis").value = "";
 		//	document.getElementById("monto").value = "";
 	}
 
@@ -928,11 +928,26 @@
 
 	}
 
-	function Remove(e) {
-		if (confirm('¿Seguro que quiere descartar el movimiento?')) {
-			grid.removeRow(e.data.id)
+	function Remove(x) {
+		if (confirm('El movimiento se eliminara definitivamente ¿Esta seguro desea eliminar el movimiento?')) {
+			var submitJson = {
+				id : x.data.record.id
+			}
+			$.post('/byeContabilidad/rest-services/private/movimiento/delete',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('Movimiento eliminado correctamente');
+					grid.reload();
+					//document.getElementById('modalclose').click(); 
+				} else {
+					alert(data);
+				}
+			}).fail(function() {
+				alert('Error al eliminar el movimiento');
+			});
 		}
 	}
+	
 
 	function cargaCuenta(idCuenta) {
 

@@ -711,9 +711,9 @@
 
 	function limpiaAdd() {
 		document.getElementById("numDocumento").value = "";
-		document.getElementById("glosaSin").value = document.getElementById("glosaConciliacion").value;
-		document.getElementById("glosaConciliacion").value = document.getElementById("glosaConciliacion").value;
-		document.getElementById("glosaAnalisis").value = document.getElementById("glosaConciliacion").value;
+	//	document.getElementById("glosaSin").value = document.getElementById("glosaConciliacion").value;
+	//	document.getElementById("glosaConciliacion").value = document.getElementById("glosaConciliacion").value;
+	//	document.getElementById("glosaAnalisis").value = document.getElementById("glosaConciliacion").value;
 	//	document.getElementById("monto").value = "";
 	}
 

@@ -198,6 +198,7 @@
 	    $("#hasta").val(today2);
 	    cargaTabla();
 	}
+	
 	function cargaTabla(){
 		grid = $('#grid')
 		.grid(
@@ -274,6 +275,10 @@
 						limit : 10
 					}
 				});
+		busca();
+	}
+	
+	function busca(){
 		grid.reload({
 			glosaGeneral : $('#filtro').val(),
 			fechaDesde : $('#desde').val(),

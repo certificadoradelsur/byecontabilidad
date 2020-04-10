@@ -127,8 +127,13 @@ public class ComprobanteContableRD {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
-			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
+			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
+			
+			if (fechaDesde!=null || fechaHasta!=null) {
+				fechaInicial = Utilidades.fechaDesde(fechaDesde);
+				fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			} 
 			return comdao.countAll(glosaGeneral, fechaInicial,fechaFinal,
 					udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
@@ -157,8 +162,13 @@ public class ComprobanteContableRD {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
-			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
+			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
+			
+			if (fechaDesde!=null || fechaHasta!=null) {
+				fechaInicial = Utilidades.fechaDesde(fechaDesde);
+				fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			} 
 			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit, glosaGeneral, fechaInicial,fechaFinal,
 					udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lcc.size(); i++) {
