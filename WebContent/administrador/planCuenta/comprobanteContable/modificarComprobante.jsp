@@ -815,6 +815,35 @@
 		$("#fecha").prop("disabled", true);
 		$("#glosaGeneral").prop("disabled", true);
 		limpiaAdd();
+		var sDebe=0;
+		var sHaber=0;
+		
+		grid.getAll().forEach(function(item, index){
+			  if(item.debe!=""){
+			    sDebe=sDebe+parseInt(item.debe);
+			  }else if(item.haber!=""){
+			    sHaber=sHaber+parseInt(item.haber);
+			  }
+		})
+				
+		if (sHaber > sDebe) {
+// 			if($('#tipoAnalisis option:selected').text() == 'Debe'|| 
+// 					$('#tipoMovimiento option:selected').text() == 'Ingreso'||
+// 					$('#tipoMovimiento option:selected').text() == 'Traspaso'&&
+// 					$('#tipoDocumento option:selected').text() == 'Ajuste Ingreso (+)'){
+				var newMonto=sHaber-sDebe;
+				document.getElementById("monto").value = newMonto;	
+//			}
+		} else if(sDebe > sHaber){
+// 			if($('#tipoAnalisis option:selected').text() == 'Haber'||
+// 					$('#tipoMovimiento option:selected').text() == 'Egreso'||
+// 					$('#tipoMovimiento option:selected').text() == 'Traspaso'&&
+// 					$('#tipoDocumento option:selected').text() == 'Ajuste Egreso (-)'){
+				var newMonto=sDebe-sHaber;
+				document.getElementById("monto").value = newMonto;
+
+//			}
+		}
 	}
 
 	function limpiaAdd() {
@@ -822,7 +851,7 @@
 		//document.getElementById("glosaSin").value = "";
 		//document.getElementById("glosaConciliacion").value = "";
 		//document.getElementById("glosaAnalisis").value = "";
-		//	document.getElementById("monto").value = "";
+		document.getElementById("monto").value = "";
 	}
 
 	function Modificar() {

@@ -309,6 +309,8 @@ public class ReporteRD {
 
 			int rowNum = 0;
 			for (int i = 0; i < listaComprobante.size(); i++) {
+				Long debeA = 0L;
+				Long haberA = 0L;
 				List<Movimiento> listaMovimiento = movimientodao.getByIdComprobanteReporte(listaComprobante.get(i).getId());
 				Row rowComprobante = sheetDiario.createRow(rowNum++);
 				rowComprobante.createCell(0).setCellValue("N° de Comprobante");
@@ -340,14 +342,20 @@ public class ReporteRD {
 							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE INGRESO")||
 							listaMovimiento.get(l).getTipoMovimiento().equals("DEBE")) {
 						rowMovimiento.createCell(6).setCellValue(listaMovimiento.get(l).getMonto());
+						debeA=debeA+listaMovimiento.get(l).getMonto();
 					} else if (listaMovimiento.get(l).getTipoMovimiento().equals("EGRESO")
 							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE EGRESO")
 							|| listaMovimiento.get(l).getTipoMovimiento().equals("HABER")) {
 						rowMovimiento.createCell(7).setCellValue(listaMovimiento.get(l).getMonto());
+						haberA=haberA+listaMovimiento.get(l).getMonto();
 					}
 
 				}
 
+				Row rowAcumulado = sheetDiario.createRow(rowNum++);
+				rowAcumulado.createCell(0).setCellValue("Total comprobante N° "+ listaComprobante.get(i).getNumero().toString());
+				rowAcumulado.createCell(6).setCellValue(debeA);
+				rowAcumulado.createCell(7).setCellValue(haberA);		
 			}
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -390,6 +398,7 @@ public class ReporteRD {
 				Long acumulador = 0L;
 				Long debitoA = 0L;
 				Long creditoA = 0L;
+				String extra ="";
 
 				Row rowMayor = sheetMayor.createRow(rowNum++);
 				rowMayor.createCell(0).setCellValue(entry.getKey());
@@ -450,10 +459,15 @@ public class ReporteRD {
 						}
 					}
 				}
+				if(debitoA>creditoA) {
+					extra="DB";
+				}else if(creditoA>debitoA) {
+					extra="CR";
+				}
 				Row rowAcumulado = sheetMayor.createRow(rowNum++);
 				rowAcumulado.createCell(7).setCellValue(debitoA);
 				rowAcumulado.createCell(8).setCellValue(creditoA);
-				rowAcumulado.createCell(9).setCellValue(acumulador);
+				rowAcumulado.createCell(9).setCellValue(acumulador + " " + extra);
 			}
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
