@@ -629,105 +629,53 @@ public class ReporteRD {
 
 			Timestamp fechaInicial = Utilidades.convertidorFechaSinHora(anio + "-" + fechaDesde + "-01");
 			Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + fechaHasta + "-31");
-			List<CuentaContable> lc = cuentaContabledao.getLista(udao.getById(idUsuario).getOficinaContable().getId());
-
-			Long totalDebe = 0L;
-			Long totalHaber = 0L;
-			Long totalAcreedores = 0L;
-			Long totalDeudores = 0L;
-			Long totalActivos = 0L;
-			Long totalPasivos = 0L;
-			Long totalPerdida = 0L;
-			Long totalGanancia = 0L;
+			List<CuentaContable> lcc = cuentaContabledao.getLista(udao.getById(idUsuario).getOficinaContable().getId());
 
 			int rowNum = 0;
 			Row headerMayor = sheetClasificado.createRow(rowNum++);
-			headerMayor.createCell(2).setCellValue("SUMAS");
-			headerMayor.createCell(3).setCellValue("");
-			headerMayor.createCell(4).setCellValue("SALDOS");
-			headerMayor.createCell(5).setCellValue("");
-			headerMayor.createCell(6).setCellValue("INVENTARIOS");
-			headerMayor.createCell(7).setCellValue("");
-			headerMayor.createCell(8).setCellValue("RESULTADOS");
-			
-//			Row headerRowMayor = sheetGeneral.createRow(rowNum++);
-//			for (int k = 0; k < titulosGeneral.length; k++) {
-//				Cell cell2 = headerRowMayor.createCell(k);
-//				cell2.setCellValue(titulosGeneral[k]);
-//			}
+			headerMayor.createCell(2).setCellValue("ACTIVOS");
+			headerMayor.createCell(6).setCellValue("PASIVOS Y PATRIMONIO");
 
-			for (int l = 0; l < lc.size(); l++) {
-				List<Movimiento> mov = movimientodao.getBalanceGeneral(fechaInicial, fechaFinal, lc.get(l).getId(),
-						udao.getById(idUsuario).getOficinaContable().getId());
-				Long debitoA = 0L;
-				Long creditoA = 0L;
-				Long deudor = 0L;
-				Long acreedor = 0L;
-				Long activo = 0L;
-				Long pasivo = 0L;
-				Long perdida = 0L;
-				Long ganancia = 0L;
+//			List<Movimiento> listaMovimiento = movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, lcc.get(l).getId(),
+//						udao.getById(idUsuario).getOficinaContable().getId());
+//
+//				Map<String, List<Movimiento>> lc = listaMovimiento.stream()
+//						.collect(Collectors.groupingBy(m -> m.getCuentaContable().getDescripcion()));
+//				for (Map.Entry<String, List<Movimiento>> entry : lc.entrySet()) {
+//					Long acumulador = 0L;
+//					Long debitoA = 0L;
+//					Long creditoA = 0L;
+//					String extra = "";
+//
+//					Row rowMayor = sheetClasificado.createRow(rowNum++);
+//					rowMayor.createCell(0).setCellValue(entry.getKey());
+//					rowMayor.createCell(1).setCellValue(entry.getValue().get(0).getCuentaContable().getGlosaGeneral());
+//
+//					Row headerRowMayor = sheetClasificado.createRow(rowNum++);
+//					for (int k = 0; k < titulosMayor.length; k++) {
+//						Cell cell2 = headerRowMayor.createCell(k);
+//						cell2.setCellValue(titulosMayor[k]);
+//					}
+//
+//					for (Movimiento mov : entry.getValue()) {
+//						Row rowMovimiento = sheetClasificado.createRow(rowNum++);
+//						rowMovimiento.createCell(0)
+//								.setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(0, 2));
+//						rowMovimiento.createCell(1).setCellValue(
+//								Utilidades.mes((Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(3, 5))));
+//						rowMovimiento.createCell(2).setCellValue(mov.getComprobanteContable().getNumero().toString());
+//						rowMovimiento.createCell(3).setCellValue(mov.getTipoMovimiento());
+//						rowMovimiento.createCell(4).setCellValue(mov.getTipoDocumento());
+//						rowMovimiento.createCell(5).setCellValue(mov.getNumDocumento());
+//						rowMovimiento.createCell(6).setCellValue(mov.getGlosa());
+//						
+//					}
+//					Row rowAcumulado = sheetClasificado.createRow(rowNum++);
+//					rowAcumulado.createCell(7).setCellValue(debitoA);
+//					rowAcumulado.createCell(8).setCellValue(creditoA);
+//					rowAcumulado.createCell(9).setCellValue(acumulador + " " + extra);
+//				}
 
-				for (int i = 0; i < mov.size(); i++) {
-					if (mov.get(i).getTipoMovimiento().equals("INGRESO")
-							|| mov.get(i).getTipoDocumento().equals("AJUSTE INGRESO")
-							|| mov.get(i).getTipoMovimiento().equals("DEBE")) {
-						debitoA = debitoA + mov.get(i).getMonto();
-					} else if (mov.get(i).getTipoMovimiento().equals("EGRESO")
-							|| mov.get(i).getTipoDocumento().equals("AJUSTE EGRESO")
-							|| mov.get(i).getTipoMovimiento().equals("HABER")) {
-						creditoA = creditoA + mov.get(i).getMonto();
-					}
-
-				}
-
-				if (debitoA > creditoA) {
-					deudor = debitoA - creditoA;
-					if(lc.get(l).getClaseCuenta().getNombre().equals("Activo")) {
-						activo =  deudor;
-					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Perdida")) {
-						perdida = deudor;
-					}
-				} else if (creditoA > debitoA) {
-					acreedor = creditoA - debitoA;
-					if(lc.get(l).getClaseCuenta().getNombre().equals("Pasivo")) {
-						pasivo =  acreedor;
-					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Ganancia")) {
-						ganancia = acreedor;
-					}
-				}
-
-				Row rowMovimiento = sheetClasificado.createRow(rowNum++);
-				rowMovimiento.createCell(0).setCellValue(lc.get(l).getCodigo());
-				rowMovimiento.createCell(1).setCellValue(lc.get(l).getGlosaGeneral());
-				rowMovimiento.createCell(2).setCellValue(debitoA);
-				rowMovimiento.createCell(3).setCellValue(creditoA);
-				rowMovimiento.createCell(4).setCellValue(deudor);
-				rowMovimiento.createCell(5).setCellValue(acreedor);
-				rowMovimiento.createCell(6).setCellValue(activo);
-				rowMovimiento.createCell(7).setCellValue(pasivo);
-				rowMovimiento.createCell(8).setCellValue(perdida);
-				rowMovimiento.createCell(9).setCellValue(ganancia);
-				totalDebe = totalDebe + debitoA;
-				totalHaber = totalHaber + creditoA;
-				totalDeudores = totalDeudores + deudor;
-				totalAcreedores = totalAcreedores + acreedor;
-				totalPerdida = totalPerdida + perdida;
-				totalGanancia = totalGanancia + ganancia;
-				totalPasivos = totalPasivos + pasivo;
-				totalActivos = totalActivos + activo;
-
-			}
-			Row rowAcumulado = sheetClasificado.createRow(rowNum++);
-			rowAcumulado.createCell(0).setCellValue("Total acumulado");
-			rowAcumulado.createCell(2).setCellValue(totalDebe);
-			rowAcumulado.createCell(3).setCellValue(totalHaber);
-			rowAcumulado.createCell(4).setCellValue(totalDeudores);
-			rowAcumulado.createCell(5).setCellValue(totalAcreedores);
-			rowAcumulado.createCell(6).setCellValue(totalActivos);
-			rowAcumulado.createCell(7).setCellValue(totalPasivos);
-			rowAcumulado.createCell(8).setCellValue(totalPerdida);
-			rowAcumulado.createCell(9).setCellValue(totalGanancia);
 
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();

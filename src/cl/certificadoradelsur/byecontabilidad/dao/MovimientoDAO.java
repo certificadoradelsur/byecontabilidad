@@ -295,4 +295,22 @@ public class MovimientoDAO {
 		return query.getResultList();
 	}
 
+	/**
+	 * funcion para obtener una lista de Movimientos entre entre fechas
+	 * 
+	 * @param fechaInicial
+	 * @param fechaFinal
+	 * @param idOficinaContable
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public List<Movimiento> getBalanceClasificado(Timestamp fechaInicial, Timestamp fechaFinal,Long idCuentaContable, Long idOficinaContable) {
+		Query query = em.createNamedQuery("Movimiento.getBalanceClasificado");
+		query.setParameter("fechaInicial", fechaInicial);
+		query.setParameter("fechaFinal", fechaFinal);
+		query.setParameter("idCuentaContable", idCuentaContable);
+		query.setParameter("idOficinaContable", idOficinaContable);
+		return query.getResultList();
+	}
 }
