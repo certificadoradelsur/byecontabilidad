@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
@@ -29,6 +30,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Conciliacion;
+import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
@@ -311,7 +313,8 @@ public class ReporteRD {
 			for (int i = 0; i < listaComprobante.size(); i++) {
 				Long debeA = 0L;
 				Long haberA = 0L;
-				List<Movimiento> listaMovimiento = movimientodao.getByIdComprobanteReporte(listaComprobante.get(i).getId());
+				List<Movimiento> listaMovimiento = movimientodao
+						.getByIdComprobanteReporte(listaComprobante.get(i).getId());
 				Row rowComprobante = sheetDiario.createRow(rowNum++);
 				rowComprobante.createCell(0).setCellValue("N° de Comprobante");
 				rowComprobante.createCell(1).setCellValue(listaComprobante.get(i).getNumero().toString());
@@ -339,23 +342,24 @@ public class ReporteRD {
 					rowMovimiento.createCell(5).setCellValue(listaMovimiento.get(l).getGlosa());
 
 					if (listaMovimiento.get(l).getTipoMovimiento().equals("INGRESO")
-							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE INGRESO")||
-							listaMovimiento.get(l).getTipoMovimiento().equals("DEBE")) {
+							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE INGRESO")
+							|| listaMovimiento.get(l).getTipoMovimiento().equals("DEBE")) {
 						rowMovimiento.createCell(6).setCellValue(listaMovimiento.get(l).getMonto());
-						debeA=debeA+listaMovimiento.get(l).getMonto();
+						debeA = debeA + listaMovimiento.get(l).getMonto();
 					} else if (listaMovimiento.get(l).getTipoMovimiento().equals("EGRESO")
 							|| listaMovimiento.get(l).getTipoDocumento().equals("AJUSTE EGRESO")
 							|| listaMovimiento.get(l).getTipoMovimiento().equals("HABER")) {
 						rowMovimiento.createCell(7).setCellValue(listaMovimiento.get(l).getMonto());
-						haberA=haberA+listaMovimiento.get(l).getMonto();
+						haberA = haberA + listaMovimiento.get(l).getMonto();
 					}
 
 				}
 
 				Row rowAcumulado = sheetDiario.createRow(rowNum++);
-				rowAcumulado.createCell(0).setCellValue("Total comprobante N° "+ listaComprobante.get(i).getNumero().toString());
+				rowAcumulado.createCell(0)
+						.setCellValue("Total comprobante N° " + listaComprobante.get(i).getNumero().toString());
 				rowAcumulado.createCell(6).setCellValue(debeA);
-				rowAcumulado.createCell(7).setCellValue(haberA);		
+				rowAcumulado.createCell(7).setCellValue(haberA);
 			}
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -398,7 +402,7 @@ public class ReporteRD {
 				Long acumulador = 0L;
 				Long debitoA = 0L;
 				Long creditoA = 0L;
-				String extra ="";
+				String extra = "";
 
 				Row rowMayor = sheetMayor.createRow(rowNum++);
 				rowMayor.createCell(0).setCellValue(entry.getKey());
@@ -421,7 +425,8 @@ public class ReporteRD {
 					rowMovimiento.createCell(4).setCellValue(mov.getTipoDocumento());
 					rowMovimiento.createCell(5).setCellValue(mov.getNumDocumento());
 					rowMovimiento.createCell(6).setCellValue(mov.getGlosa());
-					if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")|| mov.getTipoMovimiento().equals("DEBE")) {
+					if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")
+							|| mov.getTipoMovimiento().equals("DEBE")) {
 						rowMovimiento.createCell(7).setCellValue(mov.getMonto());
 						debitoA = debitoA + mov.getMonto();
 					} else if (mov.getTipoMovimiento().equals("EGRESO")
@@ -431,8 +436,7 @@ public class ReporteRD {
 						creditoA = creditoA + mov.getMonto();
 					}
 					if (acumulador.equals(0L)) {
-						if (mov.getTipoMovimiento().equals("INGRESO")
-								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")
+						if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")
 								|| mov.getTipoMovimiento().equals("DEBE")) {
 							acumulador = acumulador + (mov.getMonto());
 
@@ -445,8 +449,7 @@ public class ReporteRD {
 						rowMovimiento.createCell(9).setCellValue(mov.getMonto());
 
 					} else {
-						if (mov.getTipoMovimiento().equals("INGRESO")
-								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")
+						if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")
 								|| mov.getTipoMovimiento().equals("DEBE")) {
 							acumulador = acumulador + (mov.getMonto());
 
@@ -459,10 +462,10 @@ public class ReporteRD {
 						}
 					}
 				}
-				if(debitoA>creditoA) {
-					extra="DB";
-				}else if(creditoA>debitoA) {
-					extra="CR";
+				if (debitoA > creditoA) {
+					extra = "DB";
+				} else if (creditoA > debitoA) {
+					extra = "CR";
 				}
 				Row rowAcumulado = sheetMayor.createRow(rowNum++);
 				rowAcumulado.createCell(7).setCellValue(debitoA);
@@ -497,78 +500,107 @@ public class ReporteRD {
 
 			String[] titulosGeneral = { "CUENTA", "", "DEBITO", "CREDITO", "DEUDOR", "ACREEDOR", "ACTIVOS", "PASIVOS",
 					"PERDIDA", "GANANCIA" };
-			Timestamp fechaInicial = Utilidades.convertidorFecha(anio + "-" + fechaDesde + "-" + 01);
-			Timestamp fechaFinal = Utilidades.convertidorFecha(anio + "-" + fechaHasta + "-" + 01);
-			List<Movimiento> listaMovimientos = movimientodao.getBalanceGeneral(fechaInicial, fechaFinal,
-					udao.getById(idUsuario).getOficinaContable().getId());
-//
-//			int rowNum = 0;
-//			Map<Long, List<Movimiento>> lc = listaMovimiento.stream()
-//					.collect(Collectors.groupingBy(m -> m.getCuentaContable().getCodigo()));
-//			for (Map.Entry<Long, List<Movimiento>> entry : lc.entrySet()) {
-//				Long acumulador = 0L;
-//				Long debitoA = 0L;
-//				Long creditoA = 0L;
-//
-//				Row rowMayor = sheetMayor.createRow(rowNum++);
-//				rowMayor.createCell(0).setCellValue(entry.getKey());
-//				rowMayor.createCell(1).setCellValue(entry.getValue().get(0).getCuentaContable().getGlosaGeneral());
-//
-//				Row headerRowMayor = sheetMayor.createRow(rowNum++);
-//				for (int k = 0; k < titulosMayor.length; k++) {
-//					Cell cell2 = headerRowMayor.createCell(k);
-//					cell2.setCellValue(titulosMayor[k]);
-//				}
-//
-//				for (Movimiento mov : entry.getValue()) {
-//					Row rowMovimiento = sheetMayor.createRow(rowNum++);
-//					rowMovimiento.createCell(0)
-//							.setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(0, 2));
-//					rowMovimiento.createCell(1).setCellValue(
-//							Utilidades.mes((Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(3, 5))));
-//					rowMovimiento.createCell(2).setCellValue(mov.getComprobanteContable().getNumero().toString());
-//					rowMovimiento.createCell(3).setCellValue(mov.getTipoMovimiento());
-//					rowMovimiento.createCell(4).setCellValue(mov.getTipoDocumento());
-//					rowMovimiento.createCell(5).setCellValue(mov.getNumDocumento());
-//					rowMovimiento.createCell(6).setCellValue(mov.getGlosa());
-//					if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
-//						rowMovimiento.createCell(7).setCellValue(mov.getMonto());
-//						debitoA = debitoA + mov.getMonto();
-//					} else if (mov.getTipoMovimiento().equals("EGRESO")
-//							|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
-//						rowMovimiento.createCell(8).setCellValue(mov.getMonto());
-//						creditoA = creditoA + mov.getMonto();
-//					}
-//					if (acumulador.equals(0L)) {
-//						if (mov.getTipoMovimiento().equals("INGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
-//							acumulador = acumulador + (mov.getMonto());
-//
-//						} else if (mov.getTipoMovimiento().equals("EGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
-//							acumulador = acumulador - (mov.getMonto());
-//
-//						}
-//						rowMovimiento.createCell(9).setCellValue(mov.getMonto());
-//
-//					} else {
-//						if (mov.getTipoMovimiento().equals("INGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
-//							acumulador = acumulador + (mov.getMonto());
-//
-//							rowMovimiento.createCell(9).setCellValue(acumulador);
-//						} else if (mov.getTipoMovimiento().equals("EGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
-//							acumulador = acumulador - (mov.getMonto());
-//							rowMovimiento.createCell(9).setCellValue(acumulador);
-//						}
-//					}
-//				}
-//				Row rowAcumulado = sheetMayor.createRow(rowNum++);
-//				rowAcumulado.createCell(7).setCellValue(debitoA);
-//				rowAcumulado.createCell(8).setCellValue(creditoA);
-//				rowAcumulado.createCell(9).setCellValue(acumulador);
-//			}
+			Timestamp fechaInicial = Utilidades.convertidorFechaSinHora(anio + "-" + fechaDesde + "-01");
+			Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + fechaHasta + "-31");
+			List<CuentaContable> lc = cuentaContabledao.getLista(udao.getById(idUsuario).getOficinaContable().getId());
+
+			Long totalDebe = 0L;
+			Long totalHaber = 0L;
+			Long totalAcreedores = 0L;
+			Long totalDeudores = 0L;
+			Long totalActivos = 0L;
+			Long totalPasivos = 0L;
+			Long totalPerdida = 0L;
+			Long totalGanancia = 0L;
+
+			int rowNum = 0;
+			Row headerMayor = sheetGeneral.createRow(rowNum++);
+			headerMayor.createCell(2).setCellValue("SUMAS");
+			headerMayor.createCell(3).setCellValue("");
+			headerMayor.createCell(4).setCellValue("SALDOS");
+			headerMayor.createCell(5).setCellValue("");
+			headerMayor.createCell(6).setCellValue("INVENTARIOS");
+			headerMayor.createCell(7).setCellValue("");
+			headerMayor.createCell(8).setCellValue("RESULTADOS");
+			
+			Row headerRowMayor = sheetGeneral.createRow(rowNum++);
+			for (int k = 0; k < titulosGeneral.length; k++) {
+				Cell cell2 = headerRowMayor.createCell(k);
+				cell2.setCellValue(titulosGeneral[k]);
+			}
+
+			for (int l = 0; l < lc.size(); l++) {
+				List<Movimiento> mov = movimientodao.getBalanceGeneral(fechaInicial, fechaFinal, lc.get(l).getId(),
+						udao.getById(idUsuario).getOficinaContable().getId());
+				Long debitoA = 0L;
+				Long creditoA = 0L;
+				Long deudor = 0L;
+				Long acreedor = 0L;
+				Long activo = 0L;
+				Long pasivo = 0L;
+				Long perdida = 0L;
+				Long ganancia = 0L;
+
+				for (int i = 0; i < mov.size(); i++) {
+					if (mov.get(i).getTipoMovimiento().equals("INGRESO")
+							|| mov.get(i).getTipoDocumento().equals("AJUSTE INGRESO")
+							|| mov.get(i).getTipoMovimiento().equals("DEBE")) {
+						debitoA = debitoA + mov.get(i).getMonto();
+					} else if (mov.get(i).getTipoMovimiento().equals("EGRESO")
+							|| mov.get(i).getTipoDocumento().equals("AJUSTE EGRESO")
+							|| mov.get(i).getTipoMovimiento().equals("HABER")) {
+						creditoA = creditoA + mov.get(i).getMonto();
+					}
+
+				}
+
+				if (debitoA > creditoA) {
+					deudor = debitoA - creditoA;
+					if(lc.get(l).getClaseCuenta().getNombre().equals("Activo")) {
+						activo =  deudor;
+					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Perdida")) {
+						perdida = deudor;
+					}
+				} else if (creditoA > debitoA) {
+					acreedor = creditoA - debitoA;
+					if(lc.get(l).getClaseCuenta().getNombre().equals("Pasivo")) {
+						pasivo =  acreedor;
+					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Ganancia")) {
+						ganancia = acreedor;
+					}
+				}
+
+				Row rowMovimiento = sheetGeneral.createRow(rowNum++);
+				rowMovimiento.createCell(0).setCellValue(lc.get(l).getCodigo());
+				rowMovimiento.createCell(1).setCellValue(lc.get(l).getGlosaGeneral());
+				rowMovimiento.createCell(2).setCellValue(debitoA);
+				rowMovimiento.createCell(3).setCellValue(creditoA);
+				rowMovimiento.createCell(4).setCellValue(deudor);
+				rowMovimiento.createCell(5).setCellValue(acreedor);
+				rowMovimiento.createCell(6).setCellValue(activo);
+				rowMovimiento.createCell(7).setCellValue(pasivo);
+				rowMovimiento.createCell(8).setCellValue(perdida);
+				rowMovimiento.createCell(9).setCellValue(ganancia);
+				totalDebe = totalDebe + debitoA;
+				totalHaber = totalHaber + creditoA;
+				totalDeudores = totalDeudores + deudor;
+				totalAcreedores = totalAcreedores + acreedor;
+				totalPerdida = totalPerdida + perdida;
+				totalGanancia = totalGanancia + ganancia;
+				totalPasivos = totalPasivos + pasivo;
+				totalActivos = totalActivos + activo;
+
+			}
+			Row rowAcumulado = sheetGeneral.createRow(rowNum++);
+			rowAcumulado.createCell(0).setCellValue("Total acumulado");
+			rowAcumulado.createCell(2).setCellValue(totalDebe);
+			rowAcumulado.createCell(3).setCellValue(totalHaber);
+			rowAcumulado.createCell(4).setCellValue(totalDeudores);
+			rowAcumulado.createCell(5).setCellValue(totalAcreedores);
+			rowAcumulado.createCell(6).setCellValue(totalActivos);
+			rowAcumulado.createCell(7).setCellValue(totalPasivos);
+			rowAcumulado.createCell(8).setCellValue(totalPerdida);
+			rowAcumulado.createCell(9).setCellValue(totalGanancia);
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);
@@ -595,78 +627,108 @@ public class ReporteRD {
 
 			Sheet sheetClasificado = workbook.createSheet("Balance clasificado");
 
-			Timestamp fechaInicial = Utilidades.convertidorFecha(anio + "-" + fechaDesde + "-" + 01);
-			Timestamp fechaFinal = Utilidades.convertidorFecha(anio + "-" + fechaHasta + "-" + 01);
-//			List<Movimiento> listaMovimiento = movimientodao.getByMovEntreCuentas(fechaInicial, fechaFinal,
-//					inicialMayor, finalMayor, udao.getById(idUsuario).getOficinaContable().getId());
-//
-//			int rowNum = 0;
-//			Map<Long, List<Movimiento>> lc = listaMovimiento.stream()
-//					.collect(Collectors.groupingBy(m -> m.getCuentaContable().getCodigo()));
-//			for (Map.Entry<Long, List<Movimiento>> entry : lc.entrySet()) {
-//				Long acumulador = 0L;
-//				Long debitoA = 0L;
-//				Long creditoA = 0L;
-//
-//				Row rowMayor = sheetMayor.createRow(rowNum++);
-//				rowMayor.createCell(0).setCellValue(entry.getKey());
-//				rowMayor.createCell(1).setCellValue(entry.getValue().get(0).getCuentaContable().getGlosaGeneral());
-//
-//				Row headerRowMayor = sheetMayor.createRow(rowNum++);
-//				for (int k = 0; k < titulosMayor.length; k++) {
-//					Cell cell2 = headerRowMayor.createCell(k);
-//					cell2.setCellValue(titulosMayor[k]);
-//				}
-//
-//				for (Movimiento mov : entry.getValue()) {
-//					Row rowMovimiento = sheetMayor.createRow(rowNum++);
-//					rowMovimiento.createCell(0)
-//							.setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(0, 2));
-//					rowMovimiento.createCell(1).setCellValue(
-//							Utilidades.mes((Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(3, 5))));
-//					rowMovimiento.createCell(2).setCellValue(mov.getComprobanteContable().getNumero().toString());
-//					rowMovimiento.createCell(3).setCellValue(mov.getTipoMovimiento());
-//					rowMovimiento.createCell(4).setCellValue(mov.getTipoDocumento());
-//					rowMovimiento.createCell(5).setCellValue(mov.getNumDocumento());
-//					rowMovimiento.createCell(6).setCellValue(mov.getGlosa());
-//					if (mov.getTipoMovimiento().equals("INGRESO") || mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
-//						rowMovimiento.createCell(7).setCellValue(mov.getMonto());
-//						debitoA = debitoA + mov.getMonto();
-//					} else if (mov.getTipoMovimiento().equals("EGRESO")
-//							|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
-//						rowMovimiento.createCell(8).setCellValue(mov.getMonto());
-//						creditoA = creditoA + mov.getMonto();
-//					}
-//					if (acumulador.equals(0L)) {
-//						if (mov.getTipoMovimiento().equals("INGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
-//							acumulador = acumulador + (mov.getMonto());
-//
-//						} else if (mov.getTipoMovimiento().equals("EGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
-//							acumulador = acumulador - (mov.getMonto());
-//
-//						}
-//						rowMovimiento.createCell(9).setCellValue(mov.getMonto());
-//
-//					} else {
-//						if (mov.getTipoMovimiento().equals("INGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE INGRESO")) {
-//							acumulador = acumulador + (mov.getMonto());
-//
-//							rowMovimiento.createCell(9).setCellValue(acumulador);
-//						} else if (mov.getTipoMovimiento().equals("EGRESO")
-//								|| mov.getTipoDocumento().equals("AJUSTE EGRESO")) {
-//							acumulador = acumulador - (mov.getMonto());
-//							rowMovimiento.createCell(9).setCellValue(acumulador);
-//						}
-//					}
-//				}
-//				Row rowAcumulado = sheetMayor.createRow(rowNum++);
-//				rowAcumulado.createCell(7).setCellValue(debitoA);
-//				rowAcumulado.createCell(8).setCellValue(creditoA);
-//				rowAcumulado.createCell(9).setCellValue(acumulador);
+			Timestamp fechaInicial = Utilidades.convertidorFechaSinHora(anio + "-" + fechaDesde + "-01");
+			Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + fechaHasta + "-31");
+			List<CuentaContable> lc = cuentaContabledao.getLista(udao.getById(idUsuario).getOficinaContable().getId());
+
+			Long totalDebe = 0L;
+			Long totalHaber = 0L;
+			Long totalAcreedores = 0L;
+			Long totalDeudores = 0L;
+			Long totalActivos = 0L;
+			Long totalPasivos = 0L;
+			Long totalPerdida = 0L;
+			Long totalGanancia = 0L;
+
+			int rowNum = 0;
+			Row headerMayor = sheetClasificado.createRow(rowNum++);
+			headerMayor.createCell(2).setCellValue("SUMAS");
+			headerMayor.createCell(3).setCellValue("");
+			headerMayor.createCell(4).setCellValue("SALDOS");
+			headerMayor.createCell(5).setCellValue("");
+			headerMayor.createCell(6).setCellValue("INVENTARIOS");
+			headerMayor.createCell(7).setCellValue("");
+			headerMayor.createCell(8).setCellValue("RESULTADOS");
+			
+//			Row headerRowMayor = sheetGeneral.createRow(rowNum++);
+//			for (int k = 0; k < titulosGeneral.length; k++) {
+//				Cell cell2 = headerRowMayor.createCell(k);
+//				cell2.setCellValue(titulosGeneral[k]);
 //			}
+
+			for (int l = 0; l < lc.size(); l++) {
+				List<Movimiento> mov = movimientodao.getBalanceGeneral(fechaInicial, fechaFinal, lc.get(l).getId(),
+						udao.getById(idUsuario).getOficinaContable().getId());
+				Long debitoA = 0L;
+				Long creditoA = 0L;
+				Long deudor = 0L;
+				Long acreedor = 0L;
+				Long activo = 0L;
+				Long pasivo = 0L;
+				Long perdida = 0L;
+				Long ganancia = 0L;
+
+				for (int i = 0; i < mov.size(); i++) {
+					if (mov.get(i).getTipoMovimiento().equals("INGRESO")
+							|| mov.get(i).getTipoDocumento().equals("AJUSTE INGRESO")
+							|| mov.get(i).getTipoMovimiento().equals("DEBE")) {
+						debitoA = debitoA + mov.get(i).getMonto();
+					} else if (mov.get(i).getTipoMovimiento().equals("EGRESO")
+							|| mov.get(i).getTipoDocumento().equals("AJUSTE EGRESO")
+							|| mov.get(i).getTipoMovimiento().equals("HABER")) {
+						creditoA = creditoA + mov.get(i).getMonto();
+					}
+
+				}
+
+				if (debitoA > creditoA) {
+					deudor = debitoA - creditoA;
+					if(lc.get(l).getClaseCuenta().getNombre().equals("Activo")) {
+						activo =  deudor;
+					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Perdida")) {
+						perdida = deudor;
+					}
+				} else if (creditoA > debitoA) {
+					acreedor = creditoA - debitoA;
+					if(lc.get(l).getClaseCuenta().getNombre().equals("Pasivo")) {
+						pasivo =  acreedor;
+					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Ganancia")) {
+						ganancia = acreedor;
+					}
+				}
+
+				Row rowMovimiento = sheetClasificado.createRow(rowNum++);
+				rowMovimiento.createCell(0).setCellValue(lc.get(l).getCodigo());
+				rowMovimiento.createCell(1).setCellValue(lc.get(l).getGlosaGeneral());
+				rowMovimiento.createCell(2).setCellValue(debitoA);
+				rowMovimiento.createCell(3).setCellValue(creditoA);
+				rowMovimiento.createCell(4).setCellValue(deudor);
+				rowMovimiento.createCell(5).setCellValue(acreedor);
+				rowMovimiento.createCell(6).setCellValue(activo);
+				rowMovimiento.createCell(7).setCellValue(pasivo);
+				rowMovimiento.createCell(8).setCellValue(perdida);
+				rowMovimiento.createCell(9).setCellValue(ganancia);
+				totalDebe = totalDebe + debitoA;
+				totalHaber = totalHaber + creditoA;
+				totalDeudores = totalDeudores + deudor;
+				totalAcreedores = totalAcreedores + acreedor;
+				totalPerdida = totalPerdida + perdida;
+				totalGanancia = totalGanancia + ganancia;
+				totalPasivos = totalPasivos + pasivo;
+				totalActivos = totalActivos + activo;
+
+			}
+			Row rowAcumulado = sheetClasificado.createRow(rowNum++);
+			rowAcumulado.createCell(0).setCellValue("Total acumulado");
+			rowAcumulado.createCell(2).setCellValue(totalDebe);
+			rowAcumulado.createCell(3).setCellValue(totalHaber);
+			rowAcumulado.createCell(4).setCellValue(totalDeudores);
+			rowAcumulado.createCell(5).setCellValue(totalAcreedores);
+			rowAcumulado.createCell(6).setCellValue(totalActivos);
+			rowAcumulado.createCell(7).setCellValue(totalPasivos);
+			rowAcumulado.createCell(8).setCellValue(totalPerdida);
+			rowAcumulado.createCell(9).setCellValue(totalGanancia);
+
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);

@@ -286,10 +286,11 @@ public class MovimientoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Movimiento> getBalanceGeneral(Timestamp fechaInicial, Timestamp fechaFinal, Long idOficinaContable) {
+	public List<Movimiento> getBalanceGeneral(Timestamp fechaInicial, Timestamp fechaFinal,Long idCuentaContable, Long idOficinaContable) {
 		Query query = em.createNamedQuery("Movimiento.getBalanceGeneral");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
+		query.setParameter("idCuentaContable", idCuentaContable);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}

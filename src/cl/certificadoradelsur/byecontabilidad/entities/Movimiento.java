@@ -36,7 +36,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Movimiento.getByIdComprobanteReporte", query = "SELECT m FROM Movimiento m where  m.comprobanteContable.id= :idComprobante and m.comprobanteContable.borrador=false"),
 		@NamedQuery(name = "Movimiento.getAllFecha", query = "SELECT m  from Movimiento m where m.cuenta.banco.id = :idBanco and m.fecha between :fechaI and :fechaF  "),
 		@NamedQuery(name = "Movimiento.getByMovEntreCuentas", query = "SELECT M FROM Movimiento m where m.cuentaContable.codigo between :inicialMayor and :finalMayor and m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.id"),
-		@NamedQuery(name = "Movimiento.getBalanceGeneral", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.codigo")
+		@NamedQuery(name = "Movimiento.getBalanceGeneral", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.cuentaContable.id= :idCuentaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.codigo")
 })
 
 public class Movimiento implements Serializable {
