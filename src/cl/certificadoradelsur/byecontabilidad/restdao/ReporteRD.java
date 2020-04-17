@@ -15,10 +15,10 @@ import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
@@ -28,9 +28,12 @@ import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.ClaseCuenta;
+import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Conciliacion;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
+import cl.certificadoradelsur.byecontabilidad.entities.GrupoCuenta;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
@@ -69,6 +72,8 @@ public class ReporteRD {
 	private UsuarioDAO udao;
 	@Inject
 	private MovimientoDAO movimientodao;
+	@Inject
+	private ClasificacionDAO clasificacionDAO;
 
 	/**
 	 * @param fechaDesde
@@ -522,7 +527,7 @@ public class ReporteRD {
 			headerMayor.createCell(6).setCellValue("INVENTARIOS");
 			headerMayor.createCell(7).setCellValue("");
 			headerMayor.createCell(8).setCellValue("RESULTADOS");
-			
+
 			Row headerRowMayor = sheetGeneral.createRow(rowNum++);
 			for (int k = 0; k < titulosGeneral.length; k++) {
 				Cell cell2 = headerRowMayor.createCell(k);
@@ -556,16 +561,16 @@ public class ReporteRD {
 
 				if (debitoA > creditoA) {
 					deudor = debitoA - creditoA;
-					if(lc.get(l).getClaseCuenta().getNombre().equals("Activo")) {
-						activo =  deudor;
-					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Perdida")) {
+					if (lc.get(l).getClaseCuenta().getNombre().equals("Activo")) {
+						activo = deudor;
+					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Perdida")) {
 						perdida = deudor;
 					}
 				} else if (creditoA > debitoA) {
 					acreedor = creditoA - debitoA;
-					if(lc.get(l).getClaseCuenta().getNombre().equals("Pasivo")) {
-						pasivo =  acreedor;
-					}else if(lc.get(l).getClaseCuenta().getNombre().equals("Ganancia")) {
+					if (lc.get(l).getClaseCuenta().getNombre().equals("Pasivo")) {
+						pasivo = acreedor;
+					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Ganancia")) {
 						ganancia = acreedor;
 					}
 				}
@@ -629,54 +634,73 @@ public class ReporteRD {
 
 			Timestamp fechaInicial = Utilidades.convertidorFechaSinHora(anio + "-" + fechaDesde + "-01");
 			Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + fechaHasta + "-31");
-			List<CuentaContable> lcc = cuentaContabledao.getLista(udao.getById(idUsuario).getOficinaContable().getId());
+			List<CuentaContable> cc = cuentaContabledao
+					.getBalance(udao.getById(idUsuario).getOficinaContable().getId());
 
 			int rowNum = 0;
-			Row headerMayor = sheetClasificado.createRow(rowNum++);
-			headerMayor.createCell(2).setCellValue("ACTIVOS");
-			headerMayor.createCell(6).setCellValue("PASIVOS Y PATRIMONIO");
+			Map<ClaseCuenta, List<CuentaContable>> mcc = cc.stream()
+					.collect(Collectors.groupingBy(CuentaContable::getClaseCuenta));
+			for (Map.Entry<ClaseCuenta, List<CuentaContable>> lcc : mcc.entrySet()) {
+				Long total = 0L;
+				Row row = sheetClasificado.createRow(rowNum++);
+			//	row.createCell(0).setCellValue("Clase Cuenta:");
+				row.createCell(1).setCellValue(lcc.getKey().getNombre());
 
-//			List<Movimiento> listaMovimiento = movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, lcc.get(l).getId(),
-//						udao.getById(idUsuario).getOficinaContable().getId());
-//
-//				Map<String, List<Movimiento>> lc = listaMovimiento.stream()
-//						.collect(Collectors.groupingBy(m -> m.getCuentaContable().getDescripcion()));
-//				for (Map.Entry<String, List<Movimiento>> entry : lc.entrySet()) {
-//					Long acumulador = 0L;
-//					Long debitoA = 0L;
-//					Long creditoA = 0L;
-//					String extra = "";
-//
-//					Row rowMayor = sheetClasificado.createRow(rowNum++);
-//					rowMayor.createCell(0).setCellValue(entry.getKey());
-//					rowMayor.createCell(1).setCellValue(entry.getValue().get(0).getCuentaContable().getGlosaGeneral());
-//
-//					Row headerRowMayor = sheetClasificado.createRow(rowNum++);
-//					for (int k = 0; k < titulosMayor.length; k++) {
-//						Cell cell2 = headerRowMayor.createCell(k);
-//						cell2.setCellValue(titulosMayor[k]);
-//					}
-//
-//					for (Movimiento mov : entry.getValue()) {
-//						Row rowMovimiento = sheetClasificado.createRow(rowNum++);
-//						rowMovimiento.createCell(0)
-//								.setCellValue(Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(0, 2));
-//						rowMovimiento.createCell(1).setCellValue(
-//								Utilidades.mes((Utilidades.strToTsDDMMYYYYHHmmssConGuion(mov.getFecha()).substring(3, 5))));
-//						rowMovimiento.createCell(2).setCellValue(mov.getComprobanteContable().getNumero().toString());
-//						rowMovimiento.createCell(3).setCellValue(mov.getTipoMovimiento());
-//						rowMovimiento.createCell(4).setCellValue(mov.getTipoDocumento());
-//						rowMovimiento.createCell(5).setCellValue(mov.getNumDocumento());
-//						rowMovimiento.createCell(6).setCellValue(mov.getGlosa());
-//						
-//					}
-//					Row rowAcumulado = sheetClasificado.createRow(rowNum++);
-//					rowAcumulado.createCell(7).setCellValue(debitoA);
-//					rowAcumulado.createCell(8).setCellValue(creditoA);
-//					rowAcumulado.createCell(9).setCellValue(acumulador + " " + extra);
-//				}
+				Map<GrupoCuenta, List<CuentaContable>> mgc = lcc.getValue().stream()
+						.collect(Collectors.groupingBy(CuentaContable::getGrupoCuenta));
 
+				for (Map.Entry<GrupoCuenta, List<CuentaContable>> lgc : mgc.entrySet()) {
+					Long acumulador=0L;
+					Row rowGc = sheetClasificado.createRow(rowNum++);
+			//		rowGc.createCell(0).setCellValue("Grupo Cuenta:");
+					rowGc.createCell(1).setCellValue(lgc.getKey().getNombre());
 
+					Map<Long, List<CuentaContable>> mc = lgc.getValue().stream()
+							.collect(Collectors.groupingBy(d -> Long.parseLong(d.getDescripcion())));
+
+					for (Map.Entry<Long, List<CuentaContable>> lc : mc.entrySet()) {
+
+						Row rowC = sheetClasificado.createRow(rowNum++);
+			//			rowC.createCell(0).setCellValue("Clasificación:");
+						rowC.createCell(1).setCellValue(clasificacionDAO.getById(lc.getKey()).getNombre());
+
+						for (CuentaContable cuentaContable : lc.getValue()) {
+							Row rowCC = sheetClasificado.createRow(rowNum++);
+							rowCC.createCell(0).setCellValue(cuentaContable.getCodigo());
+							rowCC.createCell(1).setCellValue(cuentaContable.getGlosaGeneral());
+							rowCC.createCell(2)
+									.setCellValue(movimientodao
+											.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
+													udao.getById(idUsuario).getOficinaContable().getId())
+											.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b));
+							acumulador = acumulador +movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
+											udao.getById(idUsuario).getOficinaContable().getId())
+									.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
+							total = total +movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
+									udao.getById(idUsuario).getOficinaContable().getId())
+							.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
+						}
+
+					}
+					Row rowAcu = sheetClasificado.createRow(rowNum++);
+					rowAcu.createCell(1).setCellValue("Total "+ lgc.getKey().getNombre());
+					rowAcu.createCell(2).setCellValue(acumulador);
+					
+					Row rowSalto = sheetClasificado.createRow(rowNum++);
+					rowSalto.createCell(1).setCellValue("");
+				}
+				Row rowTotal = sheetClasificado.createRow(rowNum++);
+				rowTotal.createCell(1).setCellValue("Total "+ lcc.getKey().getNombre());
+				rowTotal.createCell(2).setCellValue(total);
+				
+				Row rowSalto = sheetClasificado.createRow(rowNum++);
+				rowSalto.createCell(1).setCellValue("");
+				Row rowSalto2 = sheetClasificado.createRow(rowNum++);
+				rowSalto2.createCell(1).setCellValue("");
+			}
+			
+			
+			
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);

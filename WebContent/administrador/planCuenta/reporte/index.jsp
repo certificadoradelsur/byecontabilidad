@@ -371,13 +371,13 @@
 			return;
 		}
 
-// 		location.href = "/byeContabilidad/rest-services/private/reporte/getBalanceClasificado?fechaDesde="
-// 				+ document.getElementById('mesInicioClasificado').value
-// 				+ "&fechaHasta="
-// 				+ document.getElementById('mesFinalClasificado').value
-// 				+ "&anio="
-// 				+ document.getElementById('anioClasificado').value
-// 				+ "&idUsuario=" + document.getElementById('idUsuario').value
+		location.href = "/byeContabilidad/rest-services/private/reporte/getBalanceClasificado?fechaDesde="
+				+ document.getElementById('mesInicioClasificado').value
+				+ "&fechaHasta="
+				+ document.getElementById('mesFinalClasificado').value
+				+ "&anio="
+				+ document.getElementById('anioClasificado').value
+				+ "&idUsuario=" + document.getElementById('idUsuario').value
 	}
 
 </script>

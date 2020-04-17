@@ -37,8 +37,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Movimiento.getAllFecha", query = "SELECT m  from Movimiento m where m.cuenta.banco.id = :idBanco and m.fecha between :fechaI and :fechaF  "),
 		@NamedQuery(name = "Movimiento.getByMovEntreCuentas", query = "SELECT M FROM Movimiento m where m.cuentaContable.codigo between :inicialMayor and :finalMayor and m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.id"),
 		@NamedQuery(name = "Movimiento.getBalanceGeneral", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.cuentaContable.id= :idCuentaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.codigo"),
-		@NamedQuery(name = "Movimiento.getBalanceClasificado", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.cuentaContable.id= :idCuentaContable and m.comprobanteContable.borrador=false and m.cuentaContable.claseCuenta.id = 1 or m.cuentaContable.claseCuenta.id = 2")
-})
+		@NamedQuery(name = "Movimiento.getBalanceClasificado", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.cuentaContable.id= :idCuentaContable and m.comprobanteContable.borrador=false") })
 
 public class Movimiento implements Serializable {
 

@@ -152,6 +152,17 @@ public class CuentaContableDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
+	
+	/**
+	 * Obtiene todas las Cuentas Contables
+	 * @return la lista de Cuentas Contables
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CuentaContable> getBalance(Long idOficinaContable ) {
+		Query query=em.createNamedQuery("CuentaContable.getBalance");
+		query.setParameter("idOficinaContable", idOficinaContable);
+		return query.getResultList();
+	}
 
 	/**
 	 * Funcion que trae el codigo más alto
