@@ -668,19 +668,11 @@ public class ReporteRD {
 							Row rowCC = sheetClasificado.createRow(rowNum++);
 							rowCC.createCell(0).setCellValue(cuentaContable.getCodigo());
 							rowCC.createCell(1).setCellValue(cuentaContable.getGlosaGeneral());
-							rowCC.createCell(2)
-									.setCellValue(movimientodao
-											.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
-													udao.getById(idUsuario).getOficinaContable().getId())
-											.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b));
-							acumulador = acumulador + movimientodao
-									.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
-											udao.getById(idUsuario).getOficinaContable().getId())
-									.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
-							total = total + movimientodao
-									.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
-											udao.getById(idUsuario).getOficinaContable().getId())
-									.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
+							Long montoTotal =movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
+											udao.getById(idUsuario).getOficinaContable().getId()).stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
+							rowCC.createCell(2).setCellValue(montoTotal);
+							acumulador = acumulador + montoTotal;
+							total = total + montoTotal;
 						}
 
 					}

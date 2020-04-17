@@ -332,7 +332,7 @@
 						$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
 										JSON.stringify(submitJson),
 										function(res, code) {
-											var str="<option>Sin descripción</option>";                                           
+											var str;                                           
 											for (var i = 0, len = res.length; i < len; i++) {	
 												str += "<option value="+res[i].id+">"
 														+ res[i].nombre
@@ -390,7 +390,7 @@
 			$.post('/byeContabilidad/rest-services/private/clasificacion/getByIdGrupoCuenta',
 							JSON.stringify(submitJson),
 							function(res, code) {
-								var str="<option>Sin descripción</option>";
+								var str;
 								for (var i = 0, len = res.length; i < len; i++) {
 									str += "<option value="+res[i].id+">"
 											+ res[i].nombre
