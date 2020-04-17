@@ -33,7 +33,7 @@ public class CuentaContableDAO {
 	 * 
 	 * @return el total de CuentaContable
 	 */
-	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta,Long idOficinaContable) {
+	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta, Long idOficinaContable) {
 		Query query = em.createNamedQuery("CuentaContable.countAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -68,7 +68,7 @@ public class CuentaContableDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<CuentaContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Long idClaseCuenta,
-			Long idGrupoCuenta,Long idOficinaContable) {
+			Long idGrupoCuenta, Long idOficinaContable) {
 		Query query = em.createNamedQuery("CuentaContable.getAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -141,25 +141,27 @@ public class CuentaContableDAO {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Obtiene todas las Cuentas Contables
+	 * 
 	 * @return la lista de Cuentas Contables
 	 */
 	@SuppressWarnings("unchecked")
-	public List<CuentaContable> getLista(Long idOficinaContable ) {
-		Query query=em.createNamedQuery("CuentaContable.getAllLista");
+	public List<CuentaContable> getLista(Long idOficinaContable) {
+		Query query = em.createNamedQuery("CuentaContable.getAllLista");
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
-	
+
 	/**
 	 * Obtiene todas las Cuentas Contables
+	 * 
 	 * @return la lista de Cuentas Contables
 	 */
 	@SuppressWarnings("unchecked")
-	public List<CuentaContable> getBalance(Long idOficinaContable ) {
-		Query query=em.createNamedQuery("CuentaContable.getBalance");
+	public List<CuentaContable> getBalance(Long idOficinaContable) {
+		Query query = em.createNamedQuery("CuentaContable.getBalance");
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
@@ -173,8 +175,7 @@ public class CuentaContableDAO {
 		Query query = em.createNamedQuery("CuentaContable.maxCodigo");
 		return (Long) query.getSingleResult();
 	}
-	
-	
+
 	/**
 	 * Obtiene una lista de cuentas contables segun la empresa seleccionada
 	 * 
@@ -187,5 +188,5 @@ public class CuentaContableDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
-	
+
 }

@@ -643,16 +643,16 @@ public class ReporteRD {
 			for (Map.Entry<ClaseCuenta, List<CuentaContable>> lcc : mcc.entrySet()) {
 				Long total = 0L;
 				Row row = sheetClasificado.createRow(rowNum++);
-			//	row.createCell(0).setCellValue("Clase Cuenta:");
+				// row.createCell(0).setCellValue("Clase Cuenta:");
 				row.createCell(1).setCellValue(lcc.getKey().getNombre());
 
 				Map<GrupoCuenta, List<CuentaContable>> mgc = lcc.getValue().stream()
 						.collect(Collectors.groupingBy(CuentaContable::getGrupoCuenta));
 
 				for (Map.Entry<GrupoCuenta, List<CuentaContable>> lgc : mgc.entrySet()) {
-					Long acumulador=0L;
+					Long acumulador = 0L;
 					Row rowGc = sheetClasificado.createRow(rowNum++);
-			//		rowGc.createCell(0).setCellValue("Grupo Cuenta:");
+					// rowGc.createCell(0).setCellValue("Grupo Cuenta:");
 					rowGc.createCell(1).setCellValue(lgc.getKey().getNombre());
 
 					Map<Long, List<CuentaContable>> mc = lgc.getValue().stream()
@@ -661,7 +661,7 @@ public class ReporteRD {
 					for (Map.Entry<Long, List<CuentaContable>> lc : mc.entrySet()) {
 
 						Row rowC = sheetClasificado.createRow(rowNum++);
-			//			rowC.createCell(0).setCellValue("Clasificación:");
+						// rowC.createCell(0).setCellValue("Clasificación:");
 						rowC.createCell(1).setCellValue(clasificacionDAO.getById(lc.getKey()).getNombre());
 
 						for (CuentaContable cuentaContable : lc.getValue()) {
@@ -673,34 +673,33 @@ public class ReporteRD {
 											.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
 													udao.getById(idUsuario).getOficinaContable().getId())
 											.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b));
-							acumulador = acumulador +movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
+							acumulador = acumulador + movimientodao
+									.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
 											udao.getById(idUsuario).getOficinaContable().getId())
 									.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
-							total = total +movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
-									udao.getById(idUsuario).getOficinaContable().getId())
-							.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
+							total = total + movimientodao
+									.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
+											udao.getById(idUsuario).getOficinaContable().getId())
+									.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
 						}
 
 					}
 					Row rowAcu = sheetClasificado.createRow(rowNum++);
-					rowAcu.createCell(1).setCellValue("Total "+ lgc.getKey().getNombre());
+					rowAcu.createCell(1).setCellValue("Total " + lgc.getKey().getNombre());
 					rowAcu.createCell(2).setCellValue(acumulador);
-					
+
 					Row rowSalto = sheetClasificado.createRow(rowNum++);
 					rowSalto.createCell(1).setCellValue("");
 				}
 				Row rowTotal = sheetClasificado.createRow(rowNum++);
-				rowTotal.createCell(1).setCellValue("Total "+ lcc.getKey().getNombre());
+				rowTotal.createCell(1).setCellValue("Total " + lcc.getKey().getNombre());
 				rowTotal.createCell(2).setCellValue(total);
-				
+
 				Row rowSalto = sheetClasificado.createRow(rowNum++);
 				rowSalto.createCell(1).setCellValue("");
 				Row rowSalto2 = sheetClasificado.createRow(rowNum++);
 				rowSalto2.createCell(1).setCellValue("");
 			}
-			
-			
-			
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);

@@ -85,7 +85,7 @@ public class MovimientoDAO {
 		query.setParameter("id", id);
 		return query.getResultList();
 	}
-	
+
 	/**
 	 * Funcion que trae todos los movimientos relacionados a un comprobante
 	 * 
@@ -103,7 +103,6 @@ public class MovimientoDAO {
 		query.setParameter("id", id);
 		return query.getResultList();
 	}
-	
 
 	/**
 	 * funcion que actualiza datos de Movimiento
@@ -176,7 +175,7 @@ public class MovimientoDAO {
 		query.setParameter("idComprobante", idComprobante);
 		return query.getResultList();
 	}
-	
+
 	/**
 	 * funcion que busca movimientos por idComprobante PARA REPORTE
 	 * 
@@ -193,6 +192,7 @@ public class MovimientoDAO {
 
 	/**
 	 * Funcion que cuenta la cantidad de movimientos
+	 * 
 	 * @param fechaInicial
 	 * @param fechaFinal
 	 * @param idCuenta
@@ -275,9 +275,10 @@ public class MovimientoDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
-	
+
 	/**
-	 * funcion para obtener una lista de Movimientos entre entre fechas
+	 * funcion para obtener una lista de Movimientos entre entre fechas para balance
+	 * general
 	 * 
 	 * @param fechaInicial
 	 * @param fechaFinal
@@ -286,7 +287,8 @@ public class MovimientoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Movimiento> getBalanceGeneral(Timestamp fechaInicial, Timestamp fechaFinal,Long idCuentaContable, Long idOficinaContable) {
+	public List<Movimiento> getBalanceGeneral(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuentaContable,
+			Long idOficinaContable) {
 		Query query = em.createNamedQuery("Movimiento.getBalanceGeneral");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -296,7 +298,8 @@ public class MovimientoDAO {
 	}
 
 	/**
-	 * funcion para obtener una lista de Movimientos entre entre fechas
+	 * funcion para obtener una lista de Movimientos entre entre fechas para balance
+	 * clasificado (diferente query)
 	 * 
 	 * @param fechaInicial
 	 * @param fechaFinal
@@ -305,7 +308,8 @@ public class MovimientoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Movimiento> getBalanceClasificado(Timestamp fechaInicial, Timestamp fechaFinal,Long idCuentaContable, Long idOficinaContable) {
+	public List<Movimiento> getBalanceClasificado(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuentaContable,
+			Long idOficinaContable) {
 		Query query = em.createNamedQuery("Movimiento.getBalanceClasificado");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);

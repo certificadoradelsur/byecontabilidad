@@ -31,7 +31,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "CuentaContable.getAllLista", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable"),
 		@NamedQuery(name = "CuentaContable.maxCodigo", query = "SELECT MAX(c.codigo) FROM CuentaContable c "),
 		@NamedQuery(name = "CuentaContable.getByIdEmpresa", query = "SELECT c FROM CuentaContable c  where c.empresa.oficinaContable.id =:idOficinaContable  and  c.empresa.id=:idEmpresa"),
-		@NamedQuery(name = "CuentaContable.getBalance", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.claseCuenta.id <=2 and c.descripcion <> 'Sin descripción' ORDER BY c.claseCuenta.id ") })
+		@NamedQuery(name = "CuentaContable.getBalance", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.claseCuenta.id <=2 and c.descripcion <> 'Sin descripción'") })
 
 public class CuentaContable implements Serializable {
 
