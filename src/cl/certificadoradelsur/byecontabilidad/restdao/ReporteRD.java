@@ -565,12 +565,20 @@ public class ReporteRD {
 						activo = deudor;
 					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Perdida")) {
 						perdida = deudor;
+					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Pasivo")) {
+						activo = deudor;
+					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Ganancia")) {
+						perdida = deudor;
 					}
 				} else if (creditoA > debitoA) {
 					acreedor = creditoA - debitoA;
 					if (lc.get(l).getClaseCuenta().getNombre().equals("Pasivo")) {
 						pasivo = acreedor;
 					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Ganancia")) {
+						ganancia = acreedor;
+					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Activo")) {
+						pasivo = acreedor;
+					} else if (lc.get(l).getClaseCuenta().getNombre().equals("Perdida")) {
 						ganancia = acreedor;
 					}
 				}
