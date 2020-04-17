@@ -29,7 +29,6 @@ import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ClaseCuenta;
-import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Conciliacion;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
