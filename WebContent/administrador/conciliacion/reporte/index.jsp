@@ -37,9 +37,6 @@
 	rel="stylesheet" />
 <script
 	src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
-<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css"
-	rel="stylesheet" />
-
 
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.js"
 	type="text/javascript">
@@ -48,17 +45,21 @@
 
 </head>
 <body>
-<%@ include file = "../../../complementos/nav.jsp" %>
-	<div class="container-lg">
-			<form name="formulario" id="formulario">
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Reportes</h1>
-				</div>
-				<input type="hidden" name="id" id="id" />
-			</form>
 
-			<div class="form-group">
+	<%@ include file="../../../complementos/nav2.jsp"%>
+	<div class="container-lg">
+		<form name="formulario" id="formulario">
+			<div
+				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+				<h1 class="h2">Reporte</h1>
+			</div>
+			<input type="hidden" name="id" id="id" />
+		</form>
+
+
+		<div class="card border-secondary mb-3">
+			<div class="card-header">Conciliación</div>
+			<div class="card-body text-secondary">
 				<div class="form-row">
 					<div class="form-group col-md-2">
 						<div class="form-row">
@@ -97,6 +98,8 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
 
 
 	<input type="hidden" name="idUsuario" id="idUsuario"
@@ -110,8 +113,8 @@
 						$("#cuenta").select2();
 
 						var submitJson = {
-								idUsuario : document.getElementById("idUsuario").value
-							}
+							idUsuario : document.getElementById("idUsuario").value
+						}
 						$
 								.post(
 										'/byeContabilidad/rest-services/private/banco/getLista',
