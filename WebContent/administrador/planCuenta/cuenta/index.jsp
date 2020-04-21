@@ -218,19 +218,23 @@
 	}
 	
 	function busca(){
+		if(document.getElementById("empresa").value!=""){
 		grid.reload({
 			numCuenta : $('#filtro').val(),
 			idEmpresa : $('#empresa').val(),
 		});
 		clear();
 	}
+	}
 	
 	$('#buscar').on('click', function() {
+		if(document.getElementById("empresa").value!=""){
 		grid.reload({
 			numCuenta : $('#filtro').val(),
 			idEmpresa : $('#empresa').val(),
 		});
 		clear();
+		}
 	});
 
 	function clear() {

@@ -115,10 +115,12 @@
 															+ "</option>";
 												}
 												document.getElementById("empresa").innerHTML = str;
+												if(document.getElementById("empresa").value!=""){
 												grid.reload({
 													rut : $('#filtro').val(),
 													idEmpresa : $('#empresa').val()
 												});
+												}
 											}, "json");
 						grid = $('#grid')
 								.grid(
@@ -238,11 +240,13 @@
 	}
 
 	$('#buscar').on('click', function() {
+		if(document.getElementById("empresa").value!=""){
 		grid.reload({
 			rut : $('#filtro').val(),
 			idEmpresa : $('#empresa').val()
 		});
 		clear();
+		}
 	});
 
 	function clear() {

@@ -89,7 +89,7 @@
 						$("#empresa").select2({
 							width : '180'
 						});
-						
+												
 						cargaTabla();
 						
 						var submitJson = {
@@ -107,9 +107,13 @@
 															+ "</option>";
 												}
 												document.getElementById("empresa").innerHTML = str;
-												grid.reload({
-													idEmpresa : $('#empresa').val()
-												});
+											
+												if(document.getElementById("empresa").value!=""){
+													grid.reload({
+														idEmpresa : $('#empresa').val()
+													});
+												}
+
 											}, "json");
 						
 					});
@@ -119,6 +123,8 @@
 	}
 
 	function cargaTabla(){
+		
+
 		grid = $('#grid')
 		.grid(
 				{
@@ -179,7 +185,7 @@
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la sucursal?')) {
 			var submitJson = {
-				id : x.data.record.id
+				codigo : x.data.record.codigo
 			}
 			$.post('/byeContabilidad/rest-services/private/sucursal/delete',
 					JSON.stringify(submitJson)).done(function(data) {
@@ -196,9 +202,11 @@
 	}
 
 	$('#buscar').on('click', function() {
-		grid.reload({
-			idEmpresa : $('#empresa').val(),
-		});
+		if(document.getElementById("empresa").value!=""){
+			grid.reload({
+				idEmpresa : $('#empresa').val()
+			});
+		}
 	});
 
 
