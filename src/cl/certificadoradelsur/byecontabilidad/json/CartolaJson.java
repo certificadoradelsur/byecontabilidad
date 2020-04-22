@@ -22,7 +22,15 @@ public class CartolaJson {
 	private String numCuenta;
 	private Long idCuenta;
 	private String numCartola;
+	private Long idEmpresa;
 
+	
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
 	
 	public String getNumCartola() {
 		return numCartola;

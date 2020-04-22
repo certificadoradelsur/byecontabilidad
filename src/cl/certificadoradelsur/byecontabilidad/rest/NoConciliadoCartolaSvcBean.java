@@ -30,11 +30,11 @@ public class NoConciliadoCartolaSvcBean implements NoConciliadoCartolaSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco) {
+	public Response list(Integer inicio, Integer fin, String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario) {
 		Gson gson = new GsonBuilder().create();
-		List<NoConciliadoCartolaJson> lncj = nccrd.getAll(inicio, fin, fechaInicial, fechaFinal,  idCuenta,idBanco);
+		List<NoConciliadoCartolaJson> lncj = nccrd.getAll(inicio, fin, fechaInicial, fechaFinal,  idCuenta,idBanco, idUsuario);
 		String json = "{\"records\": " + gson.toJson(lncj, new TypeToken<List<NoConciliadoCartolaJson>>() {
-		}.getType()) + ", \"total\": " + nccrd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco) + "}";
+		}.getType()) + ", \"total\": " + nccrd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario) + "}";
 		return Response.ok(json).build();
 	}
 

@@ -161,7 +161,10 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/noConciliado/getAll',
+											dataSource : "/byeContabilidad/rest-services/private/noConciliado/getAll?idUsuario="
+												+ document
+												.getElementById('idUsuario').value
+										+ "",
 											autoLoad : false,
 											columns : [
 													{

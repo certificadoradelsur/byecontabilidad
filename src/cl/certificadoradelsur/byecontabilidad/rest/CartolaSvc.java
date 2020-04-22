@@ -112,7 +112,8 @@ public interface CartolaSvc {
 	@Consumes("multipart/form-data")
 	public Response importar(MultipartFormDataInput input, @QueryParam("banco") Long banco,
 			@QueryParam("cuenta") Long cuenta, @QueryParam("numCartola") String numCartola,
-			@QueryParam("anio") String anio) throws ByeContabilidadException;
+			@QueryParam("anio") String anio,
+			@QueryParam("idEmpresa") Long idEmpresa) throws ByeContabilidadException;
 
 	/**
 	 * Funcion para traer todos las cartolas entre fechas

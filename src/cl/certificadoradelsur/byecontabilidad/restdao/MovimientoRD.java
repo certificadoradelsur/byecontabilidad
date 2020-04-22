@@ -371,9 +371,9 @@ public class MovimientoRD {
 	public String getAllLista(MovimientoJson mj) {
 		try {
 			List<Movimiento> lm = mdao.getAllLista(Utilidades.convertidorFecha(mj.getFechaI()),
-					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco());
+					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco(),mj.getIdEmpresa());
 			List<Cartola> lc = cdao.getAllLista(Utilidades.convertidorFecha(mj.getFechaI()),
-					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco());
+					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco(),mj.getIdEmpresa());
 
 			if (lm.isEmpty() && lc.isEmpty()) {
 				return Constantes.MENSAJE_REST_FAIL;

@@ -30,7 +30,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Cartola.countAllResumen", query = "SELECT count(c.id) FROM Cartola c where c.eliminado = false and c.fecha between :fechaI and :fechaF"),
 		@NamedQuery(name = "Cartola.getByIdCuenta", query = "SELECT c FROM Cartola c where  c.cuenta.id= :idCuenta"),
 		@NamedQuery(name = "Cartola.getByNumDocumento", query = "SELECT c FROM Cartola c where c.numDocumento= :numDocumento"),
-		@NamedQuery(name = "Cartola.getAllFecha", query = "SELECT c  from Cartola c where c.cuenta.banco.id = :idBanco and c.fecha between :fechaI and :fechaF  ") })
+		@NamedQuery(name = "Cartola.getAllFecha", query = "SELECT c  from Cartola c where c.empresa.id = :idEmpresa and c.cuenta.banco.id = :idBanco and c.fecha between :fechaI and :fechaF  ") })
 
 public class Cartola implements Serializable {
 
@@ -45,6 +45,7 @@ public class Cartola implements Serializable {
 	private String tipoMovimiento;
 	private Long monto;
 	private boolean eliminado;
+	private Empresa empresa;
 
 	@Id
 	@GeneratedValue(generator = "seq_cartola", strategy = GenerationType.AUTO)
@@ -137,6 +138,16 @@ public class Cartola implements Serializable {
 
 	public void setEliminado(boolean eliminado) {
 		this.eliminado = eliminado;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name = "id_empresa", nullable = true)
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 
 }

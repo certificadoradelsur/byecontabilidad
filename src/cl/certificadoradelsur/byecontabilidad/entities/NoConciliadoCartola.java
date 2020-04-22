@@ -24,8 +24,8 @@ import javax.persistence.Table;
 @Table(name = "no_conciliado_cartola")
 @SequenceGenerator(name = "seq_no_conciliado_cartola", sequenceName = "seq_no_conciliado_cartola")
 @NamedQueries({
-		@NamedQuery(name = "NoConciliadoCartola.getAll", query = "SELECT c FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.fecha  between :fechaInicial and :fechaFinal  and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
-		@NamedQuery(name = "NoConciliadoCartola.countAll", query = "SELECT count(c.id) FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.fecha  between :fechaInicial and :fechaFinal  and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
+		@NamedQuery(name = "NoConciliadoCartola.getAll", query = "SELECT c FROM NoConciliadoCartola c where c.eliminado = false and c.empresa.oficinaContable.id =:idOficinaContable and c.cartola.fecha  between :fechaInicial and :fechaFinal  and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
+		@NamedQuery(name = "NoConciliadoCartola.countAll", query = "SELECT count(c.id) FROM NoConciliadoCartola c where c.eliminado = false and c.empresa.oficinaContable.id =:idOficinaContable and c.cartola.fecha  between :fechaInicial and :fechaFinal  and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
 		@NamedQuery(name = "NoConciliadoCartola.getByIdCartola", query = "SELECT c FROM NoConciliadoCartola c where c.cartola.id= :idCartola"),
 		@NamedQuery(name = "NoConciliadoCartola.getNoConciliadoCartolaMonto", query = "SELECT  c FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.monto = :monto"),
 		@NamedQuery(name = "NoConciliadoCartola.getNoConciliadoCartolaDoc", query = "SELECT  c FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.numDocumento = :numDocumento"),
@@ -42,6 +42,7 @@ public class NoConciliadoCartola implements Serializable {
 	private Cartola cartola;
 	private Timestamp fecha;
 	private Boolean eliminado;
+	private Empresa empresa;
 
 	@Id
 	@GeneratedValue(generator = "seq_no_conciliado_cartola", strategy = GenerationType.AUTO)
@@ -79,5 +80,15 @@ public class NoConciliadoCartola implements Serializable {
 
 	public void setEliminado(Boolean eliminado) {
 		this.eliminado = eliminado;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name = "id_empresa", nullable = true)
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 }

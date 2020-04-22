@@ -62,20 +62,20 @@ public class CartolaSvcBean implements CartolaSvc {
 	}
 
 	@Override
-	public Response importar(MultipartFormDataInput input, Long banco, Long cuenta, String numCartola, String anio) {
+	public Response importar(MultipartFormDataInput input, Long banco, Long cuenta, String numCartola, String anio, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
 		if (banco == 1) {
-			List<ResultadoImportacionJson> resultado = crd.leerEstado(input, banco, cuenta, numCartola, anio);
+			List<ResultadoImportacionJson> resultado = crd.leerEstado(input, banco, cuenta, numCartola, anio, idEmpresa);
 			String json = gson.toJson(resultado, new TypeToken<List<ResultadoImportacionJson>>() {
 			}.getType());
 			return Response.ok(json).build();
 		} else if (banco == 2) {
-			List<ResultadoImportacionJson> resultado = crd.leerChile(input, banco, cuenta, numCartola, anio);
+			List<ResultadoImportacionJson> resultado = crd.leerChile(input, banco, cuenta, numCartola, anio, idEmpresa);
 			String json = gson.toJson(resultado, new TypeToken<List<ResultadoImportacionJson>>() {
 			}.getType());
 			return Response.ok(json).build();
 		} else if (banco == 3) {
-			List<ResultadoImportacionJson> resultado = crd.leerSantander(input, banco, cuenta, numCartola, anio);
+			List<ResultadoImportacionJson> resultado = crd.leerSantander(input, banco, cuenta, numCartola, anio, idEmpresa);
 			String json = gson.toJson(resultado, new TypeToken<List<ResultadoImportacionJson>>() {
 			}.getType());
 			return Response.ok(json).build();

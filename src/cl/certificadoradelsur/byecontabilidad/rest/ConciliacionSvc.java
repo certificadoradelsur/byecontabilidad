@@ -1,6 +1,5 @@
 package cl.certificadoradelsur.byecontabilidad.rest;
 
-
 import javax.ejb.Local;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,11 +35,14 @@ public interface ConciliacionSvc {
 	 * @param
 	 * @return lista de las conciliaciones
 	 */
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAll")
-	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("fechaInicial") String fechaInicial,  @QueryParam("fechaFinal") String fechaFinal , @QueryParam("idCuenta") Long idCuenta, @QueryParam("idBanco") Long idBanco);
+	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
+			@QueryParam("fechaInicial") String fechaInicial, @QueryParam("fechaFinal") String fechaFinal,
+			@QueryParam("idCuenta") Long idCuenta, @QueryParam("idBanco") Long idBanco,
+			@QueryParam("idUsuario") String idUsuario);
 
 	/**
 	 * Funcion para modificar una conciliacion
@@ -74,6 +76,5 @@ public interface ConciliacionSvc {
 	@Path("/delete")
 	@Produces("application/json")
 	Response eliminar(String datos);
-	
-		
+
 }

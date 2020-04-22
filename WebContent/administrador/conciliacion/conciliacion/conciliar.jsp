@@ -56,6 +56,14 @@
 				</div>
 				<div class="container">
 					<br>
+				   <div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Empresa</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="empresa">
+							</select>
+						</div>
+					</div>
 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
 							&nbsp; &nbsp;Banco</label>
@@ -127,10 +135,25 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$("#empresa").select2({width:'200'});
 		$("#banco").select2();
 		$("#fecha").select2();
 		$("#anio").select2();
 		ComboAnio();
+		
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value}
+				
+				$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+">" + res[i].razonSocial
+										+ "</option>";
+							}
+							document.getElementById("empresa").innerHTML = str;
+						}, "json");	
+
 	});
 
 	function ComboAnio() {
@@ -263,7 +286,8 @@
 		var submitJson = {
 			fechaI : fechaI,
 			fechaF : fechaF,
-			idBanco : document.getElementById("banco").value
+			idBanco : document.getElementById("banco").value,
+			idEmpresa : document.getElementById("empresa").value
 		}
 
 		if (confirm('¿Seguro que desea conciliar los movimientos en esta fecha?')) {

@@ -46,92 +46,101 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav2.jsp" %>
+	<%@ include file="../../../complementos/nav2.jsp"%>
 	<div class="container-lg">
-			<form name="formulario" id="formulario">
-				<input type="hidden" name="id" id="id" />
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Agregar Cartola</h1>
+		<form name="formulario" id="formulario">
+			<input type="hidden" name="id" id="id" />
+			<div
+				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+				<h1 class="h2">Agregar Cartola</h1>
+			</div>
+			<div class="container">
+				
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">N°
+						Cartola</label> <input type="text" id="numCartola" name="numCartola"
+						class="in" placeholder="Ingrese número" required="required" />
 				</div>
-				<div class="container">
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">N°
-							Cartola</label> <input type="text" id="numCartola" name="numCartola"
-							class="in" placeholder="Ingrese número" required="required" />
-					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp; &nbsp;Banco</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="banco"
-								required="required">
-								<option value="1">Estado</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp; &nbsp;N° Cuenta</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="cuenta"
-								required="required">
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">N°
-							documento</label> <input type="number" id="numDocumento"
-							name="numDocumento" placeholder="Ingrese N° de documento"
-							required="required" min="0" pattern="^[0-9]+" />
-					</div>
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Fecha</label>
-						<input type="date" id="fecha" name="fecha" class="in"
-							required="required" />
-					</div>
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Descripción</label>
-						<textarea id="descripcion" class="col-sm-3" name="descripcion"
-							class="in" placeholder="Ingrese descripción" required="required"></textarea>
-					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp; &nbsp;Movimiento</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="tipoMovimiento"
-								required="required">
-								<option value="ABONO">Abono</option>
-								<option value="CARGO">Cargo</option>
-							</select>
-						</div>
-					</div>
-
-
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Monto</label>
-						<input type="number" id="monto" name="monto" class="in"
-							placeholder="Ingrese monto" required="required" min="0"
-							pattern="^[0-9]+" />
-					</div>
-					<div class="row">
-						<div class="col-xs-6 col-md-2">
-							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" onclick="guardar()">Guardar</button>
-						</div>
-						<div class="col-xs-6 col-md-2">
-							<button class=" btt btn btn-primary btn-lg btn-block"
-								type="button" id="back">Cancelar</button>
-						</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Empresa</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="empresa">
+						</select>
 					</div>
 				</div>
-			</form>
-		</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Banco</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="banco"
+							required="required">
+							<option value="1">Estado</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;N° Cuenta</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="cuenta"
+							required="required">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">N°
+						documento</label> <input type="number" id="numDocumento"
+						name="numDocumento" placeholder="Ingrese N° de documento"
+						required="required" min="0" pattern="^[0-9]+" />
+				</div>
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Fecha</label>
+					<input type="date" id="fecha" name="fecha" class="in"
+						required="required" />
+				</div>
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Descripción</label>
+					<textarea id="descripcion" class="col-sm-3" name="descripcion"
+						class="in" placeholder="Ingrese descripción" required="required"></textarea>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Movimiento</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="tipoMovimiento"
+							required="required">
+							<option value="ABONO">Abono</option>
+							<option value="CARGO">Cargo</option>
+						</select>
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Monto</label>
+					<input type="number" id="monto" name="monto" class="in"
+						placeholder="Ingrese monto" required="required" min="0"
+						pattern="^[0-9]+" />
+				</div>
+				<div class="row">
+					<div class="col-xs-6 col-md-2">
+						<button class=" btt btn btn-primary btn-lg btn-block"
+							type="button" onclick="guardar()">Guardar</button>
+					</div>
+					<div class="col-xs-6 col-md-2">
+						<button class=" btt btn btn-primary btn-lg btn-block"
+							type="button" id="back">Cancelar</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 
 
 	<input type="hidden" name="idUsuario" id="idUsuario"
@@ -144,6 +153,21 @@
 						$("#tipoMovimiento").select2();
 						$("#banco").select2();
 						$("#cuenta").select2();
+						$("#empresa").select2({width:'200'});
+
+						
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value}
+								
+								$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">" + res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+										}, "json");	
 							
 					});
 
@@ -171,7 +195,8 @@
 			descripcion : document.getElementById("descripcion").value,
 			tipoMovimiento : document.getElementById("tipoMovimiento").value,
 			monto : document.getElementById("monto").value,
-			idUsuario : document.getElementById("idUsuario").value
+			idUsuario : document.getElementById("idUsuario").value,
+			idEmpresa : document.getElementById("empresa").value
 		}
 		
 

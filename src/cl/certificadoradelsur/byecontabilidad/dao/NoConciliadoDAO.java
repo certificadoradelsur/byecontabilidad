@@ -34,7 +34,7 @@ public class NoConciliadoDAO {
 	 * 
 	 * @return el total de conciliaciones
 	 */
-	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco) {
+	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco, Long idOficinaContable) {
 		Query query = em.createNamedQuery("NoConciliado.countAll");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -49,6 +49,7 @@ public class NoConciliadoDAO {
 			query.setParameter("ignoreIdBanco", false);
 		}
 		query.setParameter("idCuenta", idCuenta);
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idBanco", idBanco);
 		return (Long) query.getSingleResult();
 	}
@@ -87,7 +88,7 @@ public class NoConciliadoDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<NoConciliado> getAll(Integer inicio, Integer fin, Timestamp fechaInicial, Timestamp fechaFinal,
-			Long idCuenta, Long idBanco) {
+			Long idCuenta, Long idBanco, Long idOficinaContable) {
 		Query query = em.createNamedQuery("NoConciliado.getAll");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -103,6 +104,7 @@ public class NoConciliadoDAO {
 		}
 		query.setParameter("idCuenta", idCuenta);
 		query.setParameter("idBanco", idBanco);
+		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

@@ -141,7 +141,7 @@
 							}
 							document.getElementById("empresa").innerHTML = str;
 						}, "json");	
-	})
+	});
 	
 		document.getElementById('rut')
 			.addEventListener(

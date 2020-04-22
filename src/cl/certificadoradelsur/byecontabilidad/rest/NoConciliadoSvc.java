@@ -41,7 +41,8 @@ public interface NoConciliadoSvc {
 	@Path("/getAll")
 	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
 			@QueryParam("fechaInicial") String fechaInicial, @QueryParam("fechaFinal") String fechaFinal,
-			@QueryParam("idCuenta") Long isCuenta, @QueryParam("idBanco") Long idBanco);
+			@QueryParam("idCuenta") Long isCuenta, @QueryParam("idBanco") Long idBanco,
+			@QueryParam("idUsuario") String idUsuario);
 
 	/**
 	 * Funcion para modificar un no conciliado
@@ -91,6 +92,4 @@ public interface NoConciliadoSvc {
 	Response listM(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
 			@QueryParam("monto") Long monto, @QueryParam("idNoConciliadoCartola") Long idNoConciliadoCartola);
 
-	
-	
 }

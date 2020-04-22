@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Cartola;
@@ -30,6 +31,8 @@ public class ConciliacionBancaria {
 	private NoConciliadoDAO ncdao;
 	@Inject
 	private NoConciliadoCartolaDAO nccdao;
+	@Inject
+	private EmpresaDAO edao;
 	
 	List<Cartola> cartolasConciliadas = new ArrayList<>();
 
@@ -70,6 +73,7 @@ public class ConciliacionBancaria {
 							conciliacion.setCartola(lc.get(i));
 							conciliacion.setFecha(new Timestamp(System.currentTimeMillis()));
 							conciliacion.setEliminado(false);
+							conciliacion.setEmpresa(edao.getById(mov.getEmpresa().getId()));
 							cdao.guardar(conciliacion);
 							cartolasConciliadas.add(lc.get(i));
 							movimientoConciliado = true;
@@ -85,6 +89,7 @@ public class ConciliacionBancaria {
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			noConciliado.setFecha(timestamp);
 			noConciliado.setEliminado(false);
+			noConciliado.setEmpresa(edao.getById(mov.getEmpresa().getId()));
 			ncdao.guardar(noConciliado);
 		}
 	}
@@ -104,6 +109,7 @@ public class ConciliacionBancaria {
 					noconciliadocartola.setCartola(lc.get(i));
 					noconciliadocartola.setFecha(new Timestamp(System.currentTimeMillis()));
 					noconciliadocartola.setEliminado(false);
+					noconciliadocartola.setEmpresa(edao.getById(lc.get(i).getEmpresa().getId()));
 					nccdao.guardar(noconciliadocartola);
 					break;
 				}
@@ -122,6 +128,7 @@ public class ConciliacionBancaria {
 					noconciliadocartola.setCartola(lc.get(j));
 					noconciliadocartola.setFecha(new Timestamp(System.currentTimeMillis()));
 					noconciliadocartola.setEliminado(false);
+		         	noconciliadocartola.setEmpresa(edao.getById(lc.get(j).getEmpresa().getId()));
 					nccdao.guardar(noconciliadocartola);
 				}
 				num = 0;

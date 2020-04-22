@@ -7,7 +7,9 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
 import cl.certificadoradelsur.byecontabilidad.json.NoConciliadoCartolaJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -26,6 +28,10 @@ public class NoConciliadoCartolaRD {
 	private NoConciliadoCartolaDAO nccdao;
 	@Inject
 	private CartolaDAO cdao;
+	@Inject
+	private UsuarioDAO udao;
+	@Inject
+	private EmpresaDAO edao;
 
 	/**
 	 * funcion que almacena
@@ -38,6 +44,7 @@ public class NoConciliadoCartolaRD {
 			NoConciliadoCartola noConciliadoCartola = new NoConciliadoCartola();
 			noConciliadoCartola.setCartola(cdao.getById(ncj.getId()));
 			noConciliadoCartola.setFecha(Utilidades.convertidorFecha(ncj.getFecha()));
+			noConciliadoCartola.setEmpresa(edao.getById(ncj.getIdNoConciliado()));
 			nccdao.guardar(noConciliadoCartola);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (
@@ -53,14 +60,14 @@ public class NoConciliadoCartolaRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco) {
+	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario) {
 		try {
 			if (fechaInicial == null || fechaFinal == null || idCuenta == null || idBanco == null) {
 				fechaInicial = Utilidades.fechaActualDesdeFiltro().toString();
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 			}
 			return nccdao.countAll(Utilidades.convertidorFecha(fechaInicial), Utilidades.fechaHasta(fechaFinal),
-					idCuenta, idBanco);
+					idCuenta, idBanco, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cartolas no conciliadas ", e);
 			return 0L;
@@ -75,7 +82,7 @@ public class NoConciliadoCartolaRD {
 	 * @return json con total de cartolas no conciliadas
 	 */
 	public List<NoConciliadoCartolaJson> getAll(Integer page, Integer limit, String fechaInicial, String fechaFinal,
-			Long idCuenta, Long idBanco) {
+			Long idCuenta, Long idBanco, String idUsuario) {
 		List<NoConciliadoCartolaJson> lncj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -89,7 +96,7 @@ public class NoConciliadoCartolaRD {
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 			}
 			List<NoConciliadoCartola> lc = nccdao.getAll(inicio, limit, Utilidades.convertidorFecha(fechaInicial),
-					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco);
+					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lc.size(); i++) {
 				NoConciliadoCartolaJson cj = new NoConciliadoCartolaJson();
 				cj.setId(lc.get(i).getId());

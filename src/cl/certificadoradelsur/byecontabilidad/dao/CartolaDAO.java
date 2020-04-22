@@ -166,11 +166,12 @@ public class CartolaDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Cartola> getAllLista(Timestamp fechaI, Timestamp fechaF, Long idBanco) {
+	public List<Cartola> getAllLista(Timestamp fechaI, Timestamp fechaF, Long idBanco, Long idEmpresa) {
 		Query query = em.createNamedQuery("Cartola.getAllFecha");
 		query.setParameter("fechaI", fechaI);
 		query.setParameter("fechaF", fechaF);
 		query.setParameter("idBanco", idBanco);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 

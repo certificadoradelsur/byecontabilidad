@@ -226,11 +226,12 @@ public class MovimientoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Movimiento> getAllLista(Timestamp fechaI, Timestamp fechaF, Long idBanco) {
+	public List<Movimiento> getAllLista(Timestamp fechaI, Timestamp fechaF, Long idBanco, Long idEmpresa) {
 		Query query = em.createNamedQuery("Movimiento.getAllFecha");
 		query.setParameter("fechaI", fechaI);
 		query.setParameter("fechaF", fechaF);
 		query.setParameter("idBanco", idBanco);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 

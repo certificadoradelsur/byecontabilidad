@@ -6,8 +6,10 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.json.NoConciliadoJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -26,6 +28,10 @@ public class NoConciliadoRD {
 	private NoConciliadoDAO ncdao;
 	@Inject
 	private MovimientoDAO mdao;
+	@Inject
+	private UsuarioDAO udao;
+	@Inject
+	private EmpresaDAO edao;
 
 	/**
 	 * funcion que almacena
@@ -39,6 +45,7 @@ public class NoConciliadoRD {
 			noConciliado.setMovimiento(mdao.getById(ncj.getId()));
 			noConciliado.setFecha(Utilidades.convertidorFecha(ncj.getFecha()));
 			noConciliado.setEliminado(false);
+			noConciliado.setEmpresa(edao.getById(ncj.getIdEmpresa()));
 			ncdao.guardar(noConciliado);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (
@@ -58,14 +65,14 @@ public class NoConciliadoRD {
 	 * @param idBanco
 	 * @return
 	 */
-	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco) {
+	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario) {
 		try {
 			if (fechaInicial == null || fechaFinal == null || idCuenta == null || idBanco == null) {
 				fechaInicial = Utilidades.fechaActualDesdeFiltro().toString();
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 			}
 			return ncdao.countAll(Utilidades.convertidorFecha(fechaInicial), Utilidades.fechaHasta(fechaFinal),
-					idCuenta, idBanco);
+					idCuenta, idBanco, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de movimientos no conciliados ", e);
 			return 0L;
@@ -81,7 +88,7 @@ public class NoConciliadoRD {
 	 * @return json con total no Conciliados
 	 */
 	public List<NoConciliadoJson> getAll(Integer page, Integer limit, String fechaInicial, String fechaFinal,
-			Long idCuenta, Long idBanco) {
+			Long idCuenta, Long idBanco, String idUsuario) {
 		List<NoConciliadoJson> lncj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -95,7 +102,7 @@ public class NoConciliadoRD {
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 			}
 			List<NoConciliado> lc = ncdao.getAll(inicio, limit, Utilidades.convertidorFecha(fechaInicial),
-					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco);
+					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco, udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lc.size(); i++) {
 				NoConciliadoJson cj = new NoConciliadoJson();
 				cj.setId(lc.get(i).getId());

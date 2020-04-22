@@ -22,6 +22,15 @@ public class NoConciliadoCartolaJson {
 	private Long idCuenta;
 	private String numCartola;
 	private Long idNoConciliado;
+	private Long idEmpresa;
+
+	
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
 
 
 

@@ -19,6 +19,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Cartola;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CartolaJson;
@@ -41,6 +42,8 @@ public class CartolaRD {
 	private CartolaDAO cdao;
 	@Inject
 	private CuentaDAO cuentadao;
+	@Inject
+	private EmpresaDAO edao;
 
 	/**
 	 * funcion que almacena cartola
@@ -63,6 +66,7 @@ public class CartolaRD {
 				cartola.setDescripcion(cj.getDescripcion());
 				cartola.setTipoMovimiento(cj.getTipoMovimiento());
 				cartola.setMonto(cj.getMonto());
+				cartola.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				cartola.setEliminado(false);
 				cdao.guardar(cartola);
 				return Constantes.MENSAJE_REST_OK;
@@ -221,7 +225,7 @@ public class CartolaRD {
 	 * almacena en base de datos
 	 */
 	public List<ResultadoImportacionJson> leerEstado(MultipartFormDataInput input, Long banco, Long cuenta,
-			String numCartola, String anio) {
+			String numCartola, String anio, Long idEmpresa) {
 		List<ResultadoImportacionJson> lrij = new ArrayList<>();
 		try {
 			String archivo = Utilidades.procesaArchivoForm(Constantes.FOLDER_IMPORTACION, input);
@@ -278,6 +282,7 @@ public class CartolaRD {
 						}
 						c.setCuenta(cuentadao.getById(cuenta));
 						c.setBanco(bdao.getById(banco));
+						c.setEmpresa(edao.getById(idEmpresa));
 						c.setNumCartola(numCartola + anio);
 						c.setEliminado(false);
 						cdao.guardar(c);
@@ -308,7 +313,7 @@ public class CartolaRD {
 	 * almacena en base de datos
 	 */
 	public List<ResultadoImportacionJson> leerChile(MultipartFormDataInput input, Long banco, Long cuenta,
-			String numCartola, String anio) {
+			String numCartola, String anio, Long idEmpresa) {
 		List<ResultadoImportacionJson> lrij = new ArrayList<>();
 		try {
 			String archivo = Utilidades.procesaArchivoForm(Constantes.FOLDER_IMPORTACION, input);
@@ -374,6 +379,7 @@ public class CartolaRD {
 						}
 						c.setCuenta(cuentadao.getById(cuenta));
 						c.setBanco(bdao.getById(banco));
+						c.setEmpresa(edao.getById(idEmpresa));
 						c.setNumCartola(numCartola + anio);
 						c.setEliminado(false);
 						cdao.guardar(c);
@@ -406,7 +412,7 @@ public class CartolaRD {
 	 * almacena en base de datos
 	 */
 	public List<ResultadoImportacionJson> leerSantander(MultipartFormDataInput input, Long banco, Long cuenta,
-			String numCartola, String anio) {
+			String numCartola, String anio, Long idEmpresa) {
 		List<ResultadoImportacionJson> lrij = new ArrayList<>();
 		try {
 			String archivo = Utilidades.procesaArchivoForm(Constantes.FOLDER_IMPORTACION, input);
@@ -478,6 +484,7 @@ public class CartolaRD {
 						}
 						c.setCuenta(cuentadao.getById(cuenta));
 						c.setBanco(bdao.getById(banco));
+						c.setEmpresa(edao.getById(idEmpresa));
 						c.setNumCartola(numCartola + anio);
 						c.setEliminado(false);
 						cdao.guardar(c);

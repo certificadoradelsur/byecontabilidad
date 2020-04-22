@@ -22,6 +22,15 @@ public class NoConciliadoJson {
 	private String tipoMovimiento;
 	private Long idNoConciliadoCartola;
 	private boolean estado;
+	private Long idEmpresa;
+
+	
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
 
 	public Long getIdNoConciliadoCartola() {
 		return idNoConciliadoCartola;
