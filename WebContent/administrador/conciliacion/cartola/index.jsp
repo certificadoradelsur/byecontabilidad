@@ -107,18 +107,18 @@
 					function() {
 						$("#banco").select2();
 						$("#cuenta").select2();
-						$
-								.post(
-										'/conciliacionBancaria/rest-services/private/banco/getLista',
-
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].nombre
-														+ "</option>";
-											}
-											document.getElementById("banco").innerHTML = str;
+						
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value}
+						
+						$.post('/byeContabilidad/rest-services/private/banco/getLista',
+								function(res, code) {
+									var str;
+									for (var i = 0, len = res.length; i < len; i++) {
+										str += "<option value="+res[i].id+">" + res[i].nombre
+												+ "</option>";
+									}
+									document.getElementById("banco").innerHTML = str;
 											grid.reload({
 												fechaInicial : $('#filtro1')
 														.val(),
@@ -133,7 +133,7 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/conciliacionBancaria/rest-services/private/cartola/getAll',
+											dataSource : '/byeContabilidad/rest-services/private/cartola/getAll',
 											autoLoad : false,
 											columns : [
 													{
@@ -229,28 +229,27 @@
 		document.getElementById("filtro2").value = "";
 	}
 
-	$('#banco')
-			.on(
-					'change',
-					function() {
-						var submitJson = {
-							idBanco : document.getElementById("banco").value
-						}
+	$('#banco').on('change',
+			function() {
+				var submitJson = { 
 
-						$
-								.post(
-										'/conciliacionBancaria/rest-services/private/cuenta/getByIdBanco',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].numCuenta
-														+ "</option>";
-											}
-											document.getElementById("cuenta").innerHTML = str;
-										}, "json");
-					});
+					    idUsuario : document.getElementById("idUsuario").value,
+						idBanco : document.getElementById("banco").value
+				}
+
+				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+								JSON.stringify(submitJson),
+								function(res, code) {
+					               var str;
+									for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">"
+												+ res[i].numCuenta
+												+ "</option>";
+									}
+									document.getElementById("cuenta").innerHTML = str;
+								}, "json");
+			}); 	
+	
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.id;
 		document.getElementById("formulario").action = 'modificar.jsp';
@@ -277,7 +276,7 @@
 			}
 			$
 					.post(
-							'/conciliacionBancaria/rest-services/private/cartola/delete',
+							'/byeContabilidad/rest-services/private/cartola/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
 							alert('Cartola eliminada correctamente');

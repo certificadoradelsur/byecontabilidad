@@ -36,6 +36,8 @@ public class Empresa implements Serializable {
 	private OficinaContable oficinaContable;
 	private Boolean activo;
 	
+	//lista cuentas
+	
 
 	@Id
 	@GeneratedValue(generator = "seq_empresa", strategy = GenerationType.AUTO)
@@ -92,10 +94,5 @@ public class Empresa implements Serializable {
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
-	
-	
-
-	
-	
 	
 }

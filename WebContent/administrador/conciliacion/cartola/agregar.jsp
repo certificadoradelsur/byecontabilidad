@@ -156,6 +156,11 @@
 			alert("Todos los campos deben estar llenos");
 			return;
 		}
+		
+		if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+			alert("Debe seleccionar una cuenta");
+			return;
+		}
 
 		var submitJson = {
 			numCartola :document.getElementById("numCartola").value,
@@ -168,8 +173,9 @@
 			monto : document.getElementById("monto").value,
 			idUsuario : document.getElementById("idUsuario").value
 		}
+		
 
-		$.post('/conciliacionBancaria/rest-services/private/cartola/add',
+		$.post('/byeContabilidad/rest-services/private/cartola/add',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
 				alert('Se guardo exitosamente la cartola');
@@ -191,7 +197,7 @@
 			}
 			$
 					.post(
-							'/conciliacionBancaria/rest-services/private/cartola/delete',
+							'/byeContabilidad/rest-services/private/cartola/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
 							alert('Cartola eliminada correctamente');
@@ -227,45 +233,40 @@
 		document.getElementById("idUsuario").value = "";
 
 	}
+	var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value}
 	
-	$
-	.post(
-			'/conciliacionBancaria/rest-services/private/banco/getLista',
+	$.post('/byeContabilidad/rest-services/private/banco/getLista',
 			function(res, code) {
 				var str;
 				for (var i = 0, len = res.length; i < len; i++) {
-					str += "<option value="+res[i].id+">"
-							+ res[i].nombre
+					str += "<option value="+res[i].id+">" + res[i].nombre
 							+ "</option>";
 				}
 				document.getElementById("banco").innerHTML = str;
 			}, "json");
 
-$('#banco')
-	.on(
-			'change',
+
+	$('#banco').on('change',
 			function() {
-				var submitJson = {
-					idBanco : document
-							.getElementById("banco").value
+				var submitJson = { 
+
+					    idUsuario : document.getElementById("idUsuario").value,
+						idBanco : document.getElementById("banco").value
 				}
 
-				$
-						.post(
-								'/conciliacionBancaria/rest-services/private/cuenta/getByIdBanco',
-								JSON
-										.stringify(submitJson),
+				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+								JSON.stringify(submitJson),
 								function(res, code) {
-									var str;
+					               var str = "<option>Seleccione cuenta</option>";
 									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">"
+									str += "<option value="+res[i].id+">"
 												+ res[i].numCuenta
 												+ "</option>";
 									}
-									document
-											.getElementById("cuenta").innerHTML = str;
+									document.getElementById("cuenta").innerHTML = str;
 								}, "json");
-			});
+			}); 	
 			
 $("#banco").trigger('change');
 </script>

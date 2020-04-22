@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.OficinaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
@@ -30,6 +31,8 @@ public class EmpresaRD {
 	private OficinaContableDAO ofidao;
 	@Inject
 	private UsuarioDAO udao;
+	@Inject
+	private ClasificacionDAO cdao;
 
 
 	/**
@@ -51,7 +54,7 @@ public class EmpresaRD {
 				e.setRut(ej.getRut());
 				e.setActivo(true);
 				e.setOficinaContable(udao.getById(ej.getIdUsuario()).getOficinaContable());
-				edao.guardar(e);
+				edao.guardar(e);	
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {

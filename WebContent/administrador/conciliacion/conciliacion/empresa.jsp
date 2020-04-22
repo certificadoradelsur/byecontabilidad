@@ -161,7 +161,7 @@
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : '/conciliacionBancaria/rest-services/private/noConciliado/getAll',
+											dataSource : '/byeContabilidad/rest-services/private/noConciliado/getAll',
 											autoLoad : false,
 											columns : [
 													{
@@ -298,7 +298,7 @@
 				.grid(
 						{
 							primaryKey : 'ID',
-							dataSource : '/conciliacionBancaria/rest-services/private/noConciliadoCartola/getNoConciliadoCartolaMonto',
+							dataSource : '/byeContabilidad/rest-services/private/noConciliadoCartola/getNoConciliadoCartolaMonto',
 							autoLoad : false,
 							columns : [
 									{
@@ -368,7 +368,7 @@
 				.grid(
 						{
 							primaryKey : 'ID',
-							dataSource : '/conciliacionBancaria/rest-services/private/noConciliadoCartola/getNoConciliadoCartolaDoc',
+							dataSource : '/byeContabilidad/rest-services/private/noConciliadoCartola/getNoConciliadoCartolaDoc',
 							autoLoad : false,
 							columns : [
 									{
@@ -443,7 +443,7 @@
 
 			$
 					.post(
-							'/conciliacionBancaria/rest-services/private/conciliacion/add',
+							'/byeContabilidad/rest-services/private/conciliacion/add',
 							JSON.stringify(submitJson))
 					.done(
 							function(data) {
@@ -465,8 +465,10 @@
 		document.getElementById("filtro2").value = "";
 	}
 
-	$.post('/conciliacionBancaria/rest-services/private/banco/getLista',
-
+	var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value}
+	
+	$.post('/byeContabilidad/rest-services/private/banco/getLista',
 			function(res, code) {
 				var str;
 				for (var i = 0, len = res.length; i < len; i++) {
@@ -476,28 +478,27 @@
 				document.getElementById("banco").innerHTML = str;
 			}, "json");
 
-	$('#banco')
-			.on(
-					'change',
-					function() {
-						var submitJson = {
-							idBanco : document.getElementById("banco").value
-						}
 
-						$
-								.post(
-										'/conciliacionBancaria/rest-services/private/cuenta/getByIdBanco',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].numCuenta
-														+ "</option>";
-											}
-											document.getElementById("cuenta").innerHTML = str;
-										}, "json");
-					});
+	$('#banco').on('change',
+			function() {
+				var submitJson = { 
+
+					    idUsuario : document.getElementById("idUsuario").value,
+						idBanco : document.getElementById("banco").value
+				}
+
+				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+								JSON.stringify(submitJson),
+								function(res, code) {
+					               var str;
+									for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">"
+												+ res[i].numCuenta
+												+ "</option>";
+									}
+									document.getElementById("cuenta").innerHTML = str;
+								}, "json");
+			}); 	
 	
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar el movimiento no conciliado')) {
@@ -506,7 +507,7 @@
 			}
 			$
 					.post(
-							'/conciliacionBancaria/rest-services/private/noConciliado/delete',
+							'/byeContabilidad/rest-services/private/noConciliado/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
 							alert('Movimiento eliminado correctamente');

@@ -59,7 +59,7 @@ public class CartolaRD {
 				cartola.setBanco(bdao.getById(cj.getIdBanco()));
 				cartola.setCuenta(cuentadao.getById(cj.getIdCuenta()));
 				cartola.setNumDocumento(cj.getNumDocumento());
-				cartola.setFecha(Utilidades.convertidorFecha(cj.getFecha()));
+				cartola.setFecha(Utilidades.convertidorFechaSinHora(cj.getFecha()));
 				cartola.setDescripcion(cj.getDescripcion());
 				cartola.setTipoMovimiento(cj.getTipoMovimiento());
 				cartola.setMonto(cj.getMonto());
@@ -90,7 +90,7 @@ public class CartolaRD {
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 
 			}
-			return cdao.countAll(Utilidades.convertidorFecha(fechaInicial), Utilidades.fechaHasta(fechaFinal), idCuenta,
+			return cdao.countAll(Utilidades.convertidorFechaSinHora(fechaInicial), Utilidades.fechaHasta(fechaFinal), idCuenta,
 					idBanco);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cartolas ", e);

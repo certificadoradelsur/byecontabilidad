@@ -128,7 +128,7 @@ $(document).ready(function () {
 	$("#tipoMovimiento").select2();
 	$("#banco").select2();
 	
-	$.post('/conciliacionBancaria/rest-services/private/banco/getLista',
+	$.post('/byeContabilidad/rest-services/private/banco/getLista',
 			function(res, code) {
 				var str;
 				for (var i = 0, len = res.length; i < len; i++) {
@@ -143,7 +143,7 @@ $(document).ready(function () {
 	var datos = {"id": "<%=request.getParameter("id")%>"};
 						$
 								.post(
-										'/conciliacionBancaria/rest-services/private/cartola/getById',
+										'/byeContabilidad/rest-services/private/cartola/getById',
 										JSON.stringify(datos))
 								.done(
 										function(data) {
@@ -191,7 +191,7 @@ $(document).ready(function () {
 			tipoMovimiento : document.getElementById("tipoMovimiento").value,
 			monto : document.getElementById("monto").value
 		}
-		$.post('/conciliacionBancaria/rest-services/private/cartola/update',
+		$.post('/byeContabilidad/rest-services/private/cartola/update',
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
 				alert('Se guardaron los cambios');

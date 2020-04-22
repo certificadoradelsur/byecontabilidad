@@ -128,7 +128,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#banco").select2();
-		//$("#cuenta").select2();
 		$("#fecha").select2();
 		$("#anio").select2();
 		ComboAnio();
@@ -265,11 +264,10 @@
 			fechaI : fechaI,
 			fechaF : fechaF,
 			idBanco : document.getElementById("banco").value
-		//	idCuenta : document.getElementById("cuenta").value
 		}
 
 		if (confirm('¿Seguro que desea conciliar los movimientos en esta fecha?')) {
-			$.post("/conciliacionBancaria/rest-services/private/movimiento/getAllLista",
+			$.post("/byeContabilidad/rest-services/private/movimiento/getAllLista",
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
 							alert('Se realizo exitosamente el proceso de conciliación');
@@ -286,9 +284,11 @@
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
+
+	var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value}
 	
-	$.post('/conciliacionBancaria/rest-services/private/banco/getLista', JSON
-			.stringify(),
+	$.post('/byeContabilidad/rest-services/private/banco/getLista',
 			function(res, code) {
 				var str;
 				for (var i = 0, len = res.length; i < len; i++) {
@@ -298,30 +298,8 @@
 				document.getElementById("banco").innerHTML = str;
 			}, "json");
 
-	$('#banco')
-			.on(
-					'change',
-					function() {
-						var submitJson = {
-							idBanco : document.getElementById("banco").value
-						}
 
-						$
-								.post(
-										'/conciliacionBancaria/rest-services/private/cuenta/getByIdBanco',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].numCuenta
-														+ "</option>";
-											}
-										//	document.getElementById("cuenta").innerHTML = str;
-										}, "json");
-					});
 
-	$("#banco").trigger('change');
 	$("#anio").trigger('change');
 	$("#fecha").trigger('change');
 </script>
