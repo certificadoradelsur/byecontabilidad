@@ -47,7 +47,7 @@ public interface NoConciliadoCartolaSvc {
 	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
 			@QueryParam("fechaInicial") String fechaInicial, @QueryParam("fechaFinal") String fechaFinal,
 			@QueryParam("idCuenta") Long isCuenta, @QueryParam("idBanco") Long idBanco,
-			@QueryParam("idUsuario") String idUsuario);
+			@QueryParam("idUsuario") String idUsuario, @QueryParam("idEmpresa") Long idEmpresa);
 
 	/**
 	 * Funcion para modificar una cartola no conciliada

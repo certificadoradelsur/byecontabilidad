@@ -10,7 +10,6 @@ import javax.persistence.Query;
 
 import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 
-
 /**
  * implementacion de patron dao para Clasificacion
  * 
@@ -35,8 +34,8 @@ public class ClasificacionDAO {
 	 * 
 	 * @return el total de Clasificacion
 	 */
-	public Long countAll(String nombre, Long idClaseCuenta,
-			Long idGrupoCuenta, Long idOficinaContable) {
+	public Long countAll(String nombre, Long idClaseCuenta, Long idGrupoCuenta, Long idOficinaContable,
+			Long idEmpresa) {
 		Query query = em.createNamedQuery("Clasificacion.countAll");
 		if (nombre.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreNombre", true);
@@ -55,6 +54,7 @@ public class ClasificacionDAO {
 		}
 		query.setParameter("nombre", "%" + nombre.toUpperCase() + "%");
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("idClaseCuenta", idClaseCuenta);
 		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		return (Long) query.getSingleResult();
@@ -62,6 +62,7 @@ public class ClasificacionDAO {
 
 	/**
 	 * FUncion para obtener todas las Clasificacion
+	 * 
 	 * @param inicio
 	 * @param fin
 	 * @param nombre
@@ -70,7 +71,7 @@ public class ClasificacionDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Clasificacion> getAll(Integer inicio, Integer fin, String nombre, Long idClaseCuenta,
-			Long idGrupoCuenta, Long idOficinaContable) {
+			Long idGrupoCuenta, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Clasificacion.getAll");
 		if (nombre.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreNombre", true);
@@ -91,6 +92,7 @@ public class ClasificacionDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idClaseCuenta", idClaseCuenta);
 		query.setParameter("idGrupoCuenta", idGrupoCuenta);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();
@@ -98,6 +100,7 @@ public class ClasificacionDAO {
 
 	/**
 	 * Funcion para modificar una Clasificacion
+	 * 
 	 * @param c
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -127,16 +130,15 @@ public class ClasificacionDAO {
 
 	/**
 	 * Obtiene una lista de clasificaciones segun el GrpoCuenta seleccionado
+	 * 
 	 * @return lista de cuentas
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Clasificacion> getByIdGrupoCuenta(Long idGrupoCuenta, Long idOficinaContable) {
-		Query query=em.createNamedQuery("Clasificacion.getByIdGrupoCuenta");
-		query.setParameter("idGrupoCuenta",idGrupoCuenta);
+		Query query = em.createNamedQuery("Clasificacion.getByIdGrupoCuenta");
+		query.setParameter("idGrupoCuenta", idGrupoCuenta);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
-	}	
+	}
 
-	
-	
 }

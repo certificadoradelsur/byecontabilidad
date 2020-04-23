@@ -46,108 +46,119 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav2.jsp" %>
+	<%@ include file="../../../complementos/nav2.jsp"%>
 	<div class="container-lg">
-			<form name="formulario" id="formulario">
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Movimientos no conciliados (EMPRESA)</h1>
-				</div>
-				<input type="hidden" name="id" id="id" />
-			</form>
-
-			<div class="form-group">
-				<div class="form-row">
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label for="desde">&nbsp;&nbsp;Desde</label>
-						</div>
-						<input type="date" id="filtro1" name="filtro1"
-							placeholder="Filtrar por fecha" class="form-control" />
-					</div>
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label for="hasta">&nbsp; &nbsp;Hasta</label>
-						</div>
-						<input type="date" id="filtro2" name="filtro2"
-							class="form-control" />
-					</div>
-
-					<div class="form-group col-md-2">
-						<label for="banco">&nbsp;Banco</label> <select
-							class="browser-default custom-select" id="banco"
-							required="required">
-							<option value="1">Estado</option>
-						</select>
-					</div>
-					<div class="form-group col-md-2">
-						<label for="cuenta">&nbsp;N° Cuenta</label> <select
-							class="browser-default custom-select" id="cuenta"
-							required="required">
-						</select>
-					</div>
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label>&nbsp;</label>
-						</div>
-						<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
-					</div>
-				</div>
+		<form name="formulario" id="formulario">
+			<div
+				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+				<h1 class="h2">Movimientos no conciliados (EMPRESA)</h1>
 			</div>
-			<div class="margen margin-top-10">
-				<table id="grid"></table>
-			</div>
+			<input type="hidden" name="id" id="id" />
+		</form>
 
-			<div class="container">
-				<!-- Trigger the modal with a button -->
-				<button hidden="true" type="button" class="btn btn-info btn-lg"
-					id="modal" data-toggle="modal" data-target="#myModal">Open
-					Modal</button>
-				<!-- Modal -->
-				<div class="modal fade bd-example-modal-xl" id="myModal" tabindex="-1" role="dialog"
-					aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-					<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalCenterTitle">Cartolas no conciliadas</h5>
-								<button type="button" class="close" data-dismiss="modal"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<table id="grid2"></table>
-							</div>
-						</div>
+		<div class="form-group">
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="desde">&nbsp;&nbsp;Desde</label>
 					</div>
+					<input type="date" id="filtro1" name="filtro1"
+						placeholder="Filtrar por fecha" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="hasta">&nbsp; &nbsp;Hasta</label>
+					</div>
+					<input type="date" id="filtro2" name="filtro2" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				</div>
+
+				<div class="form-group col-md-2">
+					<label for="banco">&nbsp;Banco</label> <select
+						class="browser-default custom-select" id="banco"
+						required="required">
+						<option value="1">Estado</option>
+					</select>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="cuenta">&nbsp;N° Cuenta</label> <select
+						class="browser-default custom-select" id="cuenta"
+						required="required">
+					</select>
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label>&nbsp;</label>
+					</div>
+					<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
 				</div>
 			</div>
+		</div>
+		<div class="margen margin-top-10">
+			<table id="grid"></table>
+		</div>
 
-				<div class="container">
-				<!-- Trigger the modal with a button -->
-				<button hidden="true" type="button" class="btn btn-info btn-lg"
-					id="modal2" data-toggle="modal" data-target="#myModal2">Open
-					Modal</button>
-				<!-- Modal -->
-				<div class="modal fade bd-example-modal-xl" id="myModal2" tabindex="-1" role="dialog"
-					aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-					<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalCenterTitle">Cartolas no conciliadas</h5>
-								<button type="button" class="close" data-dismiss="modal"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<table id="grid3"></table>
-							</div>
+		<div class="container">
+			<!-- Trigger the modal with a button -->
+			<button hidden="true" type="button" class="btn btn-info btn-lg"
+				id="modal" data-toggle="modal" data-target="#myModal">Open
+				Modal</button>
+			<!-- Modal -->
+			<div class="modal fade bd-example-modal-xl" id="myModal"
+				tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-xl modal-dialog-centered"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalCenterTitle">Cartolas
+								no conciliadas</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<table id="grid2"></table>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<div class="container">
+			<!-- Trigger the modal with a button -->
+			<button hidden="true" type="button" class="btn btn-info btn-lg"
+				id="modal2" data-toggle="modal" data-target="#myModal2">Open
+				Modal</button>
+			<!-- Modal -->
+			<div class="modal fade bd-example-modal-xl" id="myModal2"
+				tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-xl modal-dialog-centered"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalCenterTitle">Cartolas
+								no conciliadas</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<table id="grid3"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
@@ -157,6 +168,43 @@
 					function() {
 						$("#banco").select2();
 						$("#cuenta").select2();
+						$("#empresa").select2({
+							width : '180'
+						});
+
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+											var fechaInicial = new Date(
+													document.getElementById('filtro1').value);
+											var fechaFinal = new Date(
+													document.getElementById('filtro2').value);
+											var idBanco = document.getElementById('banco').value;
+											var idCuenta = document.getElementById('cuenta').value;
+											if (fechaInicial > fechaFinal) {
+												alert('Fecha inicial no debe ser mayor que fecha final');
+												return;
+											}
+											if (document.getElementById("empresa").value != "") {
+												grid.reload({
+													idEmpresa : $('#empresa').val(),
+													idBanco : $('#banco').val()
+												});
+											}
+										}, "json");
+						
 						grid = $('#grid')
 								.grid(
 										{
@@ -267,13 +315,21 @@
 					alert('Fecha inicial no debe ser mayor que fecha final');
 					return;
 				}
-				grid.reload({
-					fechaInicial : $('#filtro1').val(),
-					fechaFinal : $('#filtro2').val(),
-					idBanco : $('#banco').val(),
-					idCuenta : $('#cuenta').val()
+				
+				if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+					alert("Debe seleccionar una cuenta contable");
+					return;
+				}
 
-				});
+				if (document.getElementById("empresa").value != "") {
+					grid.reload({
+						idEmpresa : $('#empresa').val(),
+						fechaInicial : $('#filtro1').val(),
+						fechaFinal : $('#filtro2').val(),
+						idBanco : $('#banco').val(),
+						idCuenta : $('#cuenta').val()
+					});
+				}
 				//clear();
 			});
 
@@ -493,7 +549,7 @@
 				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 								JSON.stringify(submitJson),
 								function(res, code) {
-					               var str;
+					                var str = "<option>Seleccione cuenta</option>";
 									for (var i = 0, len = res.length; i < len; i++) {
 									str += "<option value="+res[i].id+">"
 												+ res[i].numCuenta

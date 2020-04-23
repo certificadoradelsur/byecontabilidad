@@ -46,58 +46,63 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav2.jsp" %>
+	<%@ include file="../../../complementos/nav2.jsp"%>
 	<div class="container-lg">
-			<form name="formulario" id="formulario">
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Transacciones conciliadas</h1>
-				</div>
-				<input type="hidden" name="id" id="id" />
-			</form>
-
-			<div class="form-group">
-				<div class="form-row">
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label for="desde">&nbsp;&nbsp;Desde</label>
-						</div>
-						<input type="date" id="filtro1" name="filtro1"
-							placeholder="Filtrar por fecha" class="form-control" />
-					</div>
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label for="hasta">&nbsp; &nbsp;Hasta</label>
-						</div>
-						<input type="date" id="filtro2" name="filtro2"
-							class="form-control" />
-					</div>
-
-					<div class="form-group col-md-2">
-						<label for="banco">&nbsp;Banco</label> <select
-							class="browser-default custom-select" id="banco"
-							required="required" class="form-control">
-							<option value="1">Estado</option>
-						</select>
-					</div>
-					<div class="form-group col-md-2">
-						<label for="cuenta">&nbsp;N° Cuenta</label> <select
-							class="browser-default custom-select" id="cuenta"
-							required="required">
-						</select>
-					</div>
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label>&nbsp;</label>
-						</div>
-						<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
-					</div>
-				</div>
+		<form name="formulario" id="formulario">
+			<div
+				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+				<h1 class="h2">Transacciones conciliadas</h1>
 			</div>
-			<div class="margen margin-top-10">
-				<table id="grid"></table>
+			<input type="hidden" name="id" id="id" />
+		</form>
+
+		<div class="form-group">
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="desde">&nbsp;&nbsp;Desde</label>
+					</div>
+					<input type="date" id="filtro1" name="filtro1"
+						placeholder="Filtrar por fecha" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="hasta">&nbsp; &nbsp;Hasta</label>
+					</div>
+					<input type="date" id="filtro2" name="filtro2" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				</div>
+
+				<div class="form-group col-md-2">
+					<label for="banco">&nbsp;Banco</label> <select
+						class="browser-default custom-select" id="banco"
+						required="required" class="form-control">
+						<option value="1">Estado</option>
+					</select>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="cuenta">&nbsp;N° Cuenta</label> <select
+						class="browser-default custom-select" id="cuenta"
+						required="required">
+					</select>
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label>&nbsp;</label>
+					</div>
+					<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
+				</div>
 			</div>
 		</div>
+		<div class="margen margin-top-10">
+			<table id="grid"></table>
+		</div>
+	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>

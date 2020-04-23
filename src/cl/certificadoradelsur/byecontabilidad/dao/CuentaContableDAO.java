@@ -33,7 +33,8 @@ public class CuentaContableDAO {
 	 * 
 	 * @return el total de CuentaContable
 	 */
-	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta, Long idOficinaContable) {
+	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta, Long idOficinaContable,
+			Long idEmpresa) {
 		Query query = em.createNamedQuery("CuentaContable.countAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -53,6 +54,7 @@ public class CuentaContableDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idClaseCuenta", idClaseCuenta);
 		query.setParameter("idGrupoCuenta", idGrupoCuenta);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
 		return (Long) query.getSingleResult();
 	}
@@ -68,7 +70,7 @@ public class CuentaContableDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<CuentaContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Long idClaseCuenta,
-			Long idGrupoCuenta, Long idOficinaContable) {
+			Long idGrupoCuenta, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("CuentaContable.getAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -88,6 +90,7 @@ public class CuentaContableDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idClaseCuenta", idClaseCuenta);
 		query.setParameter("idGrupoCuenta", idGrupoCuenta);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("glosaGeneral", "%" + glosaGeneral.toUpperCase() + "%");
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);

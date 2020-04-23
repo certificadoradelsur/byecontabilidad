@@ -59,7 +59,7 @@
 		<div>
 			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
-<br>
+		<br>
 		<div class="form-group">
 			<div class="form-row">
 				<div class="form-group col-md-2">
@@ -68,6 +68,12 @@
 					</div>
 					<input type="text" id="filtro" name="filtro"
 						placeholder="Filtrar por nombre" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
 				</div>
 				<div class="form-group col-md-2">
 					<label for="claseCuenta">&nbsp;Clase cuenta</label> <select
@@ -106,20 +112,62 @@
 	$(document)
 			.ready(
 					function() {
-						$("#claseCuenta").select2(),
-						$("#grupoCuenta").select2();
-						
-						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
-								function(res, code) {
-									var str;
-									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">"
-												+ res[i].nombre
-												+ "</option>";
-									}
-									document.getElementById("claseCuenta").innerHTML = str;	
-								}, "json");
-						
+						$("#claseCuenta").select2(), $("#grupoCuenta")
+								.select2();
+						$("#empresa").select2({
+							width : '180'
+						});
+
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+											if (document
+													.getElementById("empresa").value != "") {
+												grid
+														.reload({
+															idEmpresa : $(
+																	'#empresa')
+																	.val(),
+															nombre : $(
+																	'#filtro')
+																	.val(),
+															idClaseCuenta : $(
+																	'#claseCuenta')
+																	.val(),
+															idGrupoCuenta : $(
+																	'#grupoCuenta')
+																	.val()
+														});
+												clear();
+											}
+										}, "json");
+
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/claseCuenta/getLista',
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].nombre
+														+ "</option>";
+											}
+											document
+													.getElementById("claseCuenta").innerHTML = str;
+										}, "json");
+
 						grid = $('#grid')
 								.grid(
 										{
@@ -179,28 +227,35 @@
 		location.href = "agregar.jsp";
 	}
 
-	$('#claseCuenta').on('change',function() {
-		var submitJson = {
-			idClaseCuenta : document.getElementById("claseCuenta").value
-		}
+	$('#claseCuenta')
+			.on(
+					'change',
+					function() {
+						var submitJson = {
+							idClaseCuenta : document
+									.getElementById("claseCuenta").value
+						}
 
-		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
-						JSON.stringify(submitJson),
-						function(res, code) {
-							var str;
-							for (var i = 0, len = res.length; i < len; i++) {
-								str += "<option value="+res[i].id+">"
-										+ res[i].nombre
-										+ "</option>";
-							}
-							document
-									.getElementById("grupoCuenta").innerHTML = str;
-							var submitJson = {
-									idGrupoCuenta : document.getElementById("grupoCuenta").value
-								}
-						}, "json");
-	});
-	
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].nombre
+														+ "</option>";
+											}
+											document
+													.getElementById("grupoCuenta").innerHTML = str;
+											var submitJson = {
+												idGrupoCuenta : document
+														.getElementById("grupoCuenta").value
+											}
+										}, "json");
+					});
+
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.id;
 		document.getElementById("formulario").action = 'modificar.jsp';
@@ -230,12 +285,15 @@
 	}
 
 	$('#buscar').on('click', function() {
-		grid.reload({
-			nombre : $('#filtro').val(),
-			idClaseCuenta : $('#claseCuenta').val(),
-			idGrupoCuenta : $('#grupoCuenta').val()
-		});
-		clear();
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				idEmpresa : $('#empresa').val(),
+				nombre : $('#filtro').val(),
+				idClaseCuenta : $('#claseCuenta').val(),
+				idGrupoCuenta : $('#grupoCuenta').val()
+			});
+			clear();
+		}
 	});
 
 	function clear() {

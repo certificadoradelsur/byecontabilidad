@@ -95,12 +95,12 @@ public class CuentaContableRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta,String idUsuario) {
+	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta,String idUsuario, Long idEmpresa) {
 		try {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			return cuentadao.countAll(glosaGeneral, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId());
+			return cuentadao.countAll(glosaGeneral, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cuenta contable ", e);
 			return 0L;
@@ -115,7 +115,7 @@ public class CuentaContableRD {
 	 * @return json con total de Bancos
 	 */
 	public List<CuentaContableJson> getAll(Integer page, Integer limit, String glosaGeneral, Long idClaseCuenta,
-			Long idGrupoCuenta, String idUsuario) {
+			Long idGrupoCuenta, String idUsuario, Long idEmpresa) {
 		List<CuentaContableJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -127,7 +127,7 @@ public class CuentaContableRD {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId());
+			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lcc.size(); i++) {
 				CuentaContableJson ccj = new CuentaContableJson();
 				ccj.setId(lcc.get(i).getId());

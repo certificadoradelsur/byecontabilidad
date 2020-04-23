@@ -24,8 +24,8 @@ import javax.persistence.Table;
 @Table(name = "no_conciliado")
 @SequenceGenerator(name = "seq_no_conciliado", sequenceName = "seq_no_conciliado")
 @NamedQueries({
-		@NamedQuery(name = "NoConciliado.getAll", query = "SELECT c FROM NoConciliado c where c.eliminado = false and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.movimiento.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.movimiento.cuenta.banco.id=:idBanco)"),
-		@NamedQuery(name = "NoConciliado.countAll", query = "SELECT count(c.id) FROM NoConciliado c where c.eliminado = false and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.movimiento.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.movimiento.cuenta.banco.id=:idBanco)"),
+		@NamedQuery(name = "NoConciliado.getAll", query = "SELECT c FROM NoConciliado c where c.eliminado = false and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.movimiento.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.movimiento.cuenta.banco.id=:idBanco)"),
+		@NamedQuery(name = "NoConciliado.countAll", query = "SELECT count(c.id) FROM NoConciliado c where c.eliminado = false and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.movimiento.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.movimiento.cuenta.banco.id=:idBanco)"),
 		@NamedQuery(name = "NoConciliado.getByIdMovimiento", query = "SELECT c FROM NoConciliado c where c.movimiento.id= :idMovimiento"),
 		@NamedQuery(name = "NoConciliado.getNoConciliadoMonto", query = "SELECT  c FROM NoConciliado c where c.eliminado = false and c.movimiento.monto= :monto"),
 		@NamedQuery(name = "NoConciliado.countAllMNC", query = "SELECT count(c.id) FROM NoConciliado c where c.eliminado = false and c.movimiento.monto= :monto"),

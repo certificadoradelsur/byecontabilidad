@@ -19,15 +19,15 @@ import javax.persistence.Table;
  * 
  * @author juan
  *
- * and c.descripcion <> 'Sin descripción'
+ *         and c.descripcion <> 'Sin descripción'
  */
 
 @Entity
 @Table(name = "cuenta_contable")
 @SequenceGenerator(name = "seq_cuenta_contable", sequenceName = "seq_cuenta_contable")
 @NamedQueries({
-		@NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) ORDER BY c.claseCuenta.id"),
-		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta)"),
+		@NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) ORDER BY c.claseCuenta.id"),
+		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta)"),
 		@NamedQuery(name = "CuentaContable.getByCodigo", query = "SELECT c FROM CuentaContable c where  c.codigo= :codigo and c.empresa.oficinaContable.id =:idOficinaContable"),
 		@NamedQuery(name = "CuentaContable.getAllLista", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable"),
 		@NamedQuery(name = "CuentaContable.maxCodigo", query = "SELECT MAX(c.codigo) FROM CuentaContable c "),

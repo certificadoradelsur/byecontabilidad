@@ -56,7 +56,7 @@
 			<h1 class="h2">Lista de cuentas contables</h1>
 		</div>
 		<div>
-				<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
+			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
 		<br>
 
@@ -68,6 +68,12 @@
 					</div>
 					<input type="text" id="filtro" name="filtro"
 						placeholder="Filtrar por Glosa" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
 				</div>
 				<div class="form-group col-md-2">
 					<label for="claseCuenta">&nbsp;Clase cuenta</label> <select
@@ -107,26 +113,68 @@
 	$(document)
 			.ready(
 					function() {
-						$("#claseCuenta").select2(),
-						$("#grupoCuenta").select2();
-						
-						$.post('/byeContabilidad/rest-services/private/claseCuenta/getLista',
-								function(res, code) {
-									var str;
-									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">"
-												+ res[i].nombre
-												+ "</option>";
-									}
-									document.getElementById("claseCuenta").innerHTML = str;	
+						$("#claseCuenta").select2(), $("#grupoCuenta")
+								.select2();
+						$("#empresa").select2({
+							width : '180'
+						});
 
-								}, "json");
-						
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+											if (document
+													.getElementById("empresa").value != "") {
+												grid.reload({
+													idEmpresa : $('#empresa')
+															.val(),
+													glosaGeneral : $('#filtro')
+															.val(),
+													idClaseCuenta : $(
+															'#claseCuenta')
+															.val(),
+													idGrupoCuenta : $(
+															'#grupoCuenta')
+															.val(),
+												});
+												clear();
+											}
+										}, "json");
+
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/claseCuenta/getLista',
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].nombre
+														+ "</option>";
+											}
+											document
+													.getElementById("claseCuenta").innerHTML = str;
+
+										}, "json");
+
 						grid = $('#grid')
 								.grid(
 										{
 											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/cuentaContable/getAll?idUsuario="+ document.getElementById('idUsuario').value+"",
+											dataSource : "/byeContabilidad/rest-services/private/cuentaContable/getAll?idUsuario="
+													+ document
+															.getElementById('idUsuario').value
+													+ "",
 											autoLoad : false,
 											columns : [
 													{
@@ -178,29 +226,34 @@
 											}
 										});
 					});
-	
-	
-	$('#claseCuenta').on('change',function() {
-		var submitJson = {
-			idClaseCuenta : document.getElementById("claseCuenta").value
-		}
 
-		$.post('/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
-						JSON.stringify(submitJson),
-						function(res, code) {
-							var str;
-							for (var i = 0, len = res.length; i < len; i++) {
-								str += "<option value="+res[i].id+">"
-										+ res[i].nombre
-										+ "</option>";
-							}
-							document
-									.getElementById("grupoCuenta").innerHTML = str;
-							var submitJson = {
-									idGrupoCuenta : document.getElementById("grupoCuenta").value
-								}
-						}, "json");
-	});
+	$('#claseCuenta')
+			.on(
+					'change',
+					function() {
+						var submitJson = {
+							idClaseCuenta : document
+									.getElementById("claseCuenta").value
+						}
+
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/grupoCuenta/getByIdClaseCuenta',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].nombre
+														+ "</option>";
+											}
+											document
+													.getElementById("grupoCuenta").innerHTML = str;
+											var submitJson = {
+												idGrupoCuenta : document.getElementById("grupoCuenta").value
+											}
+										}, "json");
+					});
 
 	function agregar() {
 		location.href = "agregar.jsp";
@@ -212,7 +265,6 @@
 		document.getElementById("formulario").method = 'POST';
 		document.getElementById("formulario").submit();
 	}
-
 
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la cuenta contable?')) {
@@ -234,18 +286,17 @@
 					});
 		}
 	}
-	
+
 	$('#buscar').on('click', function() {
-//		if($('#filtro').val()==''){
-//			alert('Debe ingresar una glosa');
-//			return
-//		}
-		grid.reload({
-			glosaGeneral : $('#filtro').val(),
-			idClaseCuenta : $('#claseCuenta').val(),
-			idGrupoCuenta : $('#grupoCuenta').val(),
-		});
-		clear();
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				idEmpresa : $('#empresa').val(),
+				glosaGeneral : $('#filtro').val(),
+				idClaseCuenta : $('#claseCuenta').val(),
+				idGrupoCuenta : $('#grupoCuenta').val(),
+			});
+			clear();
+		}
 	});
 
 	function clear() {

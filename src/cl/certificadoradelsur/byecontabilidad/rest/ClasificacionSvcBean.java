@@ -30,11 +30,13 @@ public class ClasificacionSvcBean implements ClasificacionSvc {
 
 	@Override
 	public Response list(Integer inicio, Integer fin, String nombre, Long idClaseCuenta, Long idGrupoCuenta,
-			String idUsuario) {
+			String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<ClasificacionJson> lccj = clard.getAll(inicio, fin, nombre, idClaseCuenta, idGrupoCuenta,idUsuario);
+		List<ClasificacionJson> lccj = clard.getAll(inicio, fin, nombre, idClaseCuenta, idGrupoCuenta, idUsuario,
+				idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<ClasificacionJson>>() {
-		}.getType()) + ", \"total\": " + clard.countAll(nombre, idClaseCuenta, idGrupoCuenta, idUsuario) + "}";
+		}.getType()) + ", \"total\": " + clard.countAll(nombre, idClaseCuenta, idGrupoCuenta, idUsuario, idEmpresa)
+				+ "}";
 		return Response.ok(json).build();
 	}
 

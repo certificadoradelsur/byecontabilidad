@@ -32,11 +32,11 @@ public class NoConciliadoSvcBean implements NoConciliadoSvc {
 
 	@Override
 	public Response list(Integer inicio, Integer fin, String fechaInicial, String fechaFinal, Long idCuenta,
-			Long idBanco, String idUsuario) {
+			Long idBanco, String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<NoConciliadoJson> lncj = ncrd.getAll(inicio, fin, fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario);
+		List<NoConciliadoJson> lncj = ncrd.getAll(inicio, fin, fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario, idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lncj, new TypeToken<List<NoConciliadoJson>>() {
-		}.getType()) + ", \"total\": " + ncrd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario) + "}";
+		}.getType()) + ", \"total\": " + ncrd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario, idEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 

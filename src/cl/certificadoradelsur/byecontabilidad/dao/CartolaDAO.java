@@ -34,7 +34,7 @@ public class CartolaDAO {
 	 * 
 	 * @return el total de cartolas
 	 */
-	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco) {
+	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco, Long idEmpresa) {
 		Query query = em.createNamedQuery("Cartola.countAll");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -49,6 +49,7 @@ public class CartolaDAO {
 			query.setParameter("ignoreIdBanco", false);
 		}
 		query.setParameter("idCuenta", idCuenta);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setParameter("idBanco", idBanco);
 		return (Long) query.getSingleResult();
 	}
@@ -62,7 +63,7 @@ public class CartolaDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Cartola> getAll(Integer inicio, Integer fin, Timestamp fechaInicial, Timestamp fechaFinal,
-			Long idCuenta, Long idBanco) {
+			Long idCuenta, Long idBanco, Long idEmpresa) {
 		Query query = em.createNamedQuery("Cartola.getAll");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -78,6 +79,7 @@ public class CartolaDAO {
 		}
 		query.setParameter("idCuenta", idCuenta);
 		query.setParameter("idBanco", idBanco);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

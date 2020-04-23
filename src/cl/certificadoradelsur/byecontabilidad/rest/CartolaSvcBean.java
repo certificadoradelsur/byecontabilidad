@@ -35,11 +35,11 @@ public class CartolaSvcBean implements CartolaSvc {
 
 	@Override
 	public Response list(Integer inicio, Integer fin, String fechaInicial, String fechaFinal, Long idCuenta,
-			Long idBanco) {
+			Long idBanco, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<CartolaJson> lcj = crd.getAll(inicio, fin, fechaInicial, fechaFinal, idCuenta, idBanco);
+		List<CartolaJson> lcj = crd.getAll(inicio, fin, fechaInicial, fechaFinal, idCuenta, idBanco, idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lcj, new TypeToken<List<CartolaJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco) + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 

@@ -40,7 +40,8 @@ public interface ClasificacionSvc {
 	@Path("/getAll")
 	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
 			@QueryParam("nombre") String nombre,@QueryParam("idClaseCuenta") Long idClaseCuenta,
-			@QueryParam("idGrupoCuenta") Long idGrupoCuenta, @QueryParam("idUsuario") String idUsuario);
+			@QueryParam("idGrupoCuenta") Long idGrupoCuenta, @QueryParam("idUsuario") String idUsuario, 
+			@QueryParam("idEmpresa") Long idEmpresa);
 
 	/**
 	 * Funcion para modificar una clasificacion

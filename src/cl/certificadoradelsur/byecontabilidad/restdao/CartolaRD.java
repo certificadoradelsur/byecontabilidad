@@ -84,7 +84,7 @@ public class CartolaRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco) {
+	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, Long idEmpresa) {
 		try {
 			if (idCuenta == null || idBanco == null) {
 				return 0L;
@@ -95,7 +95,7 @@ public class CartolaRD {
 
 			}
 			return cdao.countAll(Utilidades.convertidorFechaSinHora(fechaInicial), Utilidades.fechaHasta(fechaFinal), idCuenta,
-					idBanco);
+					idBanco, idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cartolas ", e);
 			return 0L;
@@ -110,7 +110,7 @@ public class CartolaRD {
 	 * @return json con total de cartolas
 	 */
 	public List<CartolaJson> getAll(Integer page, Integer limit, String fechaInicial, String fechaFinal, Long idCuenta,
-			Long idBanco) {
+			Long idBanco, Long idEmpresa) {
 		List<CartolaJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -127,8 +127,8 @@ public class CartolaRD {
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 
 			}
-			List<Cartola> lc = cdao.getAll(inicio, limit, Utilidades.convertidorFecha(fechaInicial),
-					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco);
+			List<Cartola> lc = cdao.getAll(inicio, limit, Utilidades.convertidorFechaSinHora(fechaInicial),
+					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco, idEmpresa);
 			for (int i = 0; i < lc.size(); i++) {
 				CartolaJson cj = new CartolaJson();
 				cj.setId(lc.get(i).getId());
@@ -249,8 +249,8 @@ public class CartolaRD {
 				Cartola car1 = cdao.getByFecha(fecha, cell1M, "ABONO");
 				Cartola car2 = cdao.getByFecha(fecha, cell2M, "CARGO");
 
-				Timestamp fechaInicio = Utilidades.convertidorFecha(anio + "-" + numCartola + "-" + 01);
-				Timestamp fechaFinal = Utilidades.convertidorFecha(anio + "-" + numCartola + "-" + 31);
+				Timestamp fechaInicio = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 01);
+				Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 31);
 				if (((fecha.before(fechaFinal)) && (fecha.after(fechaInicio)))) {
 					if (car1 != null) {
 						if (!(car1.isEliminado())) {
@@ -347,8 +347,8 @@ public class CartolaRD {
 				Cartola car1 = cdao.getByFecha(fecha, cell1M, "ABONO");
 				Cartola car2 = cdao.getByFecha(fecha, cell2M, "CARGO");
 
-				Timestamp fechaInicio = Utilidades.convertidorFecha(anio + "-" + numCartola + "-" + 01);
-				Timestamp fechaFinal = Utilidades.convertidorFecha(anio + "-" + numCartola + "-" + 31);
+				Timestamp fechaInicio = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 01);
+				Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 31);
 				if (((fecha.before(fechaFinal)) && (fecha.after(fechaInicio)))) {
 					if (car1 != null) {
 						if (!(car1.isEliminado())) {
@@ -452,8 +452,8 @@ public class CartolaRD {
 				Cartola car1 = cdao.getByFecha(fecha, cell1M, "CARGO");
 				Cartola car2 = cdao.getByFecha(fecha, cell2M, "ABONO");
 
-				Timestamp fechaInicio = Utilidades.convertidorFecha(anio + "-" + numCartola + "-" + 01);
-				Timestamp fechaFinal = Utilidades.convertidorFecha(anio + "-" + numCartola + "-" + 31);
+				Timestamp fechaInicio = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 01);
+				Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 31);
 				if (((fecha.before(fechaFinal)) && (fecha.after(fechaInicio)))) {
 						if (car1 != null) {
 						if (!(car1.isEliminado())) {

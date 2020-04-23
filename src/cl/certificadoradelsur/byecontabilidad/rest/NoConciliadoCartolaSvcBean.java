@@ -9,7 +9,6 @@ import com.google.gson.reflect.TypeToken;
 import cl.certificadoradelsur.byecontabilidad.json.NoConciliadoCartolaJson;
 import cl.certificadoradelsur.byecontabilidad.restdao.NoConciliadoCartolaRD;
 
-
 /**
  * Clase que implementa la interfaz NoConciliadoCartolaSvc
  * 
@@ -30,11 +29,14 @@ public class NoConciliadoCartolaSvcBean implements NoConciliadoCartolaSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin, String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario) {
+	public Response list(Integer inicio, Integer fin, String fechaInicial, String fechaFinal, Long idCuenta,
+			Long idBanco, String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<NoConciliadoCartolaJson> lncj = nccrd.getAll(inicio, fin, fechaInicial, fechaFinal,  idCuenta,idBanco, idUsuario);
+		List<NoConciliadoCartolaJson> lncj = nccrd.getAll(inicio, fin, fechaInicial, fechaFinal, idCuenta, idBanco,
+				idUsuario, idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lncj, new TypeToken<List<NoConciliadoCartolaJson>>() {
-		}.getType()) + ", \"total\": " + nccrd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario) + "}";
+		}.getType()) + ", \"total\": "
+				+ nccrd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario, idEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 
@@ -66,16 +68,16 @@ public class NoConciliadoCartolaSvcBean implements NoConciliadoCartolaSvc {
 	}
 
 	@Override
-	public  Response listM(Integer inicio, Integer fin, Long monto, Long idNoConciliado) {
+	public Response listM(Integer inicio, Integer fin, Long monto, Long idNoConciliado) {
 		Gson gson = new GsonBuilder().create();
 		List<NoConciliadoCartolaJson> lncj = nccrd.getNoConciliadoCartolaMonto(inicio, fin, monto, idNoConciliado);
 		String json = "{\"records\": " + gson.toJson(lncj, new TypeToken<List<NoConciliadoCartolaJson>>() {
 		}.getType()) + ", \"total\": " + nccrd.countAllNCC(monto) + "}";
 		return Response.ok(json).build();
 	}
-	
+
 	@Override
-	public  Response listD(Integer inicio, Integer fin, Long numDocumento, Long idNoConciliado) {
+	public Response listD(Integer inicio, Integer fin, Long numDocumento, Long idNoConciliado) {
 		Gson gson = new GsonBuilder().create();
 		List<NoConciliadoCartolaJson> lncj = nccrd.getNoConciliadoCartolaDoc(inicio, fin, numDocumento, idNoConciliado);
 		String json = "{\"records\": " + gson.toJson(lncj, new TypeToken<List<NoConciliadoCartolaJson>>() {
