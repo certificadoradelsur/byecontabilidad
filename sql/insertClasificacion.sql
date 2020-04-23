@@ -32,7 +32,7 @@ insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta,id_empre
 insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta,id_empresa) values (nextval('seq_clasificacion'),'Impuesto a la renta',2,4);
 insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta,id_empresa) values (nextval('seq_clasificacion'),'Otros pasivos circulantes',2,4);
 
-insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta,id_empresa) values (nextval('seq_clasificacion')'Obligaciones a largo plazo',2,5);
+insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta,id_empresa) values (nextval('seq_clasificacion'),'Obligaciones a largo plazo',2,5);
 insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta,id_empresa) values (nextval('seq_clasificacion'),'Cuentas por pagar a largo plazo',2,5);
 insert into clasificacion (id, nombre, id_clase_cuenta, id_grupo_cuenta,id_empresa) values (nextval('seq_clasificacion'),'Indemnización años de servicios',2,5);
 
