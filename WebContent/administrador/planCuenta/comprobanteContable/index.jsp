@@ -162,7 +162,7 @@
 									<label>Empresa</label>
 								</div>
 								<div class="col-sm-3">
-									<input type="text" id="empresa" readonly />
+									<input type="text" id="empresaP" readonly />
 								</div>
 							</div>
 						</div>
@@ -455,7 +455,7 @@
 							document.getElementById("numero").value = data.numero;
 							document.getElementById("glosaGeneral").value = data.glosaGeneral;
 							document.getElementById("fecha").value = data.fecha;
-							document.getElementById("empresa").value = data.nombreEmpresa;
+							document.getElementById("empresaP").value = data.nombreEmpresa;
 						}).fail(function(jqxhr, settings, ex) {
 					alert('No se pudo cargar el comprobante contable ' + ex);
 				});

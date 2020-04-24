@@ -148,12 +148,13 @@ public class CartolaDAO {
 	 * @param fecha, monto, tipoMovimiento
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Cartola getByFecha(Timestamp fecha, long monto, String tipoMovimiento) {
+	public Cartola getByFecha(Timestamp fecha, long monto, String tipoMovimiento, Long idEmpresa) {
 		try {
 			Query query = em.createNamedQuery("Cartola.getByFecha");
 			query.setParameter("fecha", fecha);
 			query.setParameter("monto", monto);
 			query.setParameter("tipoMovimiento", tipoMovimiento);
+			query.setParameter("idEmpresa", idEmpresa);
 			return (Cartola) query.getSingleResult();
 		} catch (Exception e) {
 			return null;
@@ -168,11 +169,12 @@ public class CartolaDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Cartola> getAllLista(Timestamp fechaI, Timestamp fechaF, Long idBanco, Long idEmpresa) {
+	public List<Cartola> getAllLista(Timestamp fechaI, Timestamp fechaF, Long idBanco, Long idCuenta, Long idEmpresa) {
 		Query query = em.createNamedQuery("Cartola.getAllFecha");
 		query.setParameter("fechaI", fechaI);
 		query.setParameter("fechaF", fechaF);
 		query.setParameter("idBanco", idBanco);
+		query.setParameter("idCuenta", idCuenta);
 		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}

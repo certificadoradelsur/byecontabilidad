@@ -246,8 +246,8 @@ public class CartolaRD {
 				long cell2M = Long.parseLong(cell2.replace(".", ""));
 				Timestamp fecha = Utilidades.convertidorFecha(currentRow.getCell(0).getStringCellValue(), "dd-MM-yyyy");
 
-				Cartola car1 = cdao.getByFecha(fecha, cell1M, "ABONO");
-				Cartola car2 = cdao.getByFecha(fecha, cell2M, "CARGO");
+				Cartola car1 = cdao.getByFecha(fecha, cell1M, "ABONO", idEmpresa);
+				Cartola car2 = cdao.getByFecha(fecha, cell2M, "CARGO", idEmpresa);
 
 				Timestamp fechaInicio = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 01);
 				Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 31);
@@ -344,8 +344,8 @@ public class CartolaRD {
 				String fechaS2 = fechaS.replace("/", "-");
 				Timestamp fecha = Utilidades.convertidorFecha(fechaS2, "dd-MM-yyyy");
 
-				Cartola car1 = cdao.getByFecha(fecha, cell1M, "ABONO");
-				Cartola car2 = cdao.getByFecha(fecha, cell2M, "CARGO");
+				Cartola car1 = cdao.getByFecha(fecha, cell1M, "ABONO", idEmpresa);
+				Cartola car2 = cdao.getByFecha(fecha, cell2M, "CARGO", idEmpresa);
 
 				Timestamp fechaInicio = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 01);
 				Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 31);
@@ -449,8 +449,8 @@ public class CartolaRD {
 				String fechaS = currentRow.getCell(0).getStringCellValue().replace("/", "-");
 				Timestamp fecha = Utilidades.convertidorFecha(fechaS, "dd-MM-yyyy");
 
-				Cartola car1 = cdao.getByFecha(fecha, cell1M, "CARGO");
-				Cartola car2 = cdao.getByFecha(fecha, cell2M, "ABONO");
+				Cartola car1 = cdao.getByFecha(fecha, cell1M, "CARGO", idEmpresa);
+				Cartola car2 = cdao.getByFecha(fecha, cell2M, "ABONO", idEmpresa);
 
 				Timestamp fechaInicio = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 01);
 				Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + numCartola + "-" + 31);

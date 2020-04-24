@@ -139,7 +139,7 @@ public class ReporteRD {
 				rowConciliacion.createCell(0)
 						.setCellValue(listaConciliacion.get(j).getMovimiento().getNumDocumento().toString());
 				rowConciliacion.createCell(1)
-						.setCellValue(listaConciliacion.get(j).getMovimiento().getMonto().toString());
+						.setCellValue(listaConciliacion.get(j).getMovimiento().getMonto());
 				rowConciliacion.createCell(2)
 						.setCellValue(Utilidades
 								.strToTsDDMMYYYYHHmmssConGuion(listaConciliacion.get(j).getMovimiento().getFecha())
@@ -166,7 +166,7 @@ public class ReporteRD {
 						.setCellValue(listaNoConciliado.get(j).getMovimiento().getNumDocumento().toString());
 				rowNoConciliado.createCell(1).setCellValue(listaNoConciliado.get(j).getMovimiento().getGlosa());
 				rowNoConciliado.createCell(2)
-						.setCellValue(listaNoConciliado.get(j).getMovimiento().getMonto().toString());
+						.setCellValue(listaNoConciliado.get(j).getMovimiento().getMonto());
 				rowNoConciliado.createCell(3).setCellValue(listaNoConciliado.get(j).getMovimiento().getTipoDocumento());
 				rowNoConciliado.createCell(4)
 						.setCellValue(listaNoConciliado.get(j).getMovimiento().getTipoMovimiento());
@@ -202,7 +202,7 @@ public class ReporteRD {
 				rowNoConciliadoCartola.createCell(1)
 						.setCellValue(listaNoConciliadoCartola.get(j).getCartola().getDescripcion());
 				rowNoConciliadoCartola.createCell(2)
-						.setCellValue(listaNoConciliadoCartola.get(j).getCartola().getMonto().toString());
+						.setCellValue(listaNoConciliadoCartola.get(j).getCartola().getMonto());
 				rowNoConciliadoCartola.createCell(3)
 						.setCellValue(listaNoConciliadoCartola.get(j).getCartola().getTipoMovimiento());
 				rowNoConciliadoCartola.createCell(4)
@@ -230,6 +230,9 @@ public class ReporteRD {
 
 			Long saldoBanco = saldoContable + montoNoConciliadoSuma + montoNoConciliadoCartolaSuma
 					- (montoNoConciliadoCartolaResta + montoNoConciliadoResta);
+			
+			Long totalNoConciliado = montoNoConciliadoSuma -montoNoConciliadoResta;
+			Long totalNoConciliadoCartola= montoNoConciliadoCartolaSuma -montoNoConciliadoCartolaResta;
 
 			Long numEmp = cuentadao.getById(idCuenta).getEmpresa().getId();
 			Row rowInforme = sheetInforme.createRow(0);
@@ -258,11 +261,11 @@ public class ReporteRD {
 
 			Row rowInforme9 = sheetInforme.createRow(9);
 			rowInforme9.createCell(0).setCellValue("MONTO MOVIMIENTOS NO CONCILIADOS:");
-			rowInforme9.createCell(1).setCellValue(montoNoConciliado);
+			rowInforme9.createCell(1).setCellValue(totalNoConciliado);
 
 			Row rowInforme10 = sheetInforme.createRow(10);
 			rowInforme10.createCell(0).setCellValue("MONTO CARTOLAS NO CONCILIADAS:");
-			rowInforme10.createCell(1).setCellValue(montoNoConciliadoCartola);
+			rowInforme10.createCell(1).setCellValue(totalNoConciliadoCartola);
 
 			Row rowInforme11 = sheetInforme.createRow(11);
 			rowInforme11.createCell(0).setCellValue("SALDO BANCO:");

@@ -74,7 +74,7 @@
 							</select>
 						</div>
 					</div>
- 					<!--<div class="row">
+ 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
 							&nbsp; &nbsp;N° Cuenta</label>
 						<div class="col-3">
@@ -82,7 +82,7 @@
 								required="required">
 							</select>
 						</div>
-					</div>  -->
+					</div> 
 					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
 							&nbsp;&nbsp; Elija año</label>
@@ -139,6 +139,7 @@
 		$("#banco").select2({width:'200'});
 		$("#fecha").select2({width:'200'});
 		$("#anio").select2({width:'200'});
+		$("#cuenta").select2({width:'200'});
 		ComboAnio();
 		
 		var submitJson = {
@@ -283,10 +284,15 @@
 	
 	function conciliar() {
 
+		if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+			alert("Debe seleccionar una cuenta");
+			return;
+		}
 		var submitJson = {
 			fechaI : fechaI,
 			fechaF : fechaF,
 			idBanco : document.getElementById("banco").value,
+			idCuenta : document.getElementById("cuenta").value,
 			idEmpresa : document.getElementById("empresa").value
 		}
 
@@ -321,9 +327,31 @@
 				}
 				document.getElementById("banco").innerHTML = str;
 			}, "json");
+	
+	$('#banco').on('change',
+			function() {
+				var submitJson = { 
+
+					    idUsuario : document.getElementById("idUsuario").value,
+						idBanco : document.getElementById("banco").value
+				}
+
+				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+								JSON.stringify(submitJson),
+								function(res, code) {
+					               var str = "<option>Seleccione cuenta</option>";
+									for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">"
+												+ res[i].numCuenta
+												+ "</option>";
+									}
+									document.getElementById("cuenta").innerHTML = str;
+								}, "json");
+			}); 	
 
 
 
+	$("#banco").trigger('change');
 	$("#anio").trigger('change');
 	$("#fecha").trigger('change');
 </script>

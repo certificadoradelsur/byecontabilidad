@@ -26,11 +26,11 @@ import javax.persistence.Table;
 @NamedQueries({
 		@NamedQuery(name = "Cartola.getAll", query = "SELECT c FROM Cartola c where c.eliminado = false and c.empresa.id =:idEmpresa and c.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.banco.id=:idBanco)"),
 		@NamedQuery(name = "Cartola.countAll", query = "SELECT count(c.id) FROM Cartola c where c.eliminado = false and c.empresa.id =:idEmpresa and c.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.banco.id=:idBanco)"),
-		@NamedQuery(name = "Cartola.getByFecha", query = "SELECT c FROM Cartola c where c.fecha= :fecha and c.monto= :monto and c.tipoMovimiento=:tipoMovimiento"),
+		@NamedQuery(name = "Cartola.getByFecha", query = "SELECT c FROM Cartola c where c.empresa.id = :idEmpresa and c.fecha= :fecha and c.monto= :monto and c.tipoMovimiento=:tipoMovimiento"),
 		@NamedQuery(name = "Cartola.countAllResumen", query = "SELECT count(c.id) FROM Cartola c where c.eliminado = false and c.fecha between :fechaI and :fechaF"),
 		@NamedQuery(name = "Cartola.getByIdCuenta", query = "SELECT c FROM Cartola c where  c.cuenta.id= :idCuenta"),
 		@NamedQuery(name = "Cartola.getByNumDocumento", query = "SELECT c FROM Cartola c where c.numDocumento= :numDocumento"),
-		@NamedQuery(name = "Cartola.getAllFecha", query = "SELECT c  from Cartola c where c.empresa.id = :idEmpresa and c.cuenta.banco.id = :idBanco and c.fecha between :fechaI and :fechaF  ") })
+		@NamedQuery(name = "Cartola.getAllFecha", query = "SELECT c  from Cartola c where c.empresa.id = :idEmpresa and c.cuenta.banco.id = :idBanco and c.cuenta.id =:idCuenta and c.fecha between :fechaI and :fechaF  ") })
 
 public class Cartola implements Serializable {
 

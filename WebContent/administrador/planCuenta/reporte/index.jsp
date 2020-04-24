@@ -76,6 +76,12 @@
 							class="form-control" class="in" />
 					</div>
 					<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				   </div>
+					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label>&nbsp;</label>
 						</div>
@@ -102,6 +108,12 @@
 						<input type="date" id="filtro2Mayor" name="filtro2Mayor"
 							class="form-control" class="in" />
 					</div>
+					<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa1"
+						required="required">
+					</select>
+				   </div>
 					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label for="desde">&nbsp;&nbsp;Inicial</label>
@@ -181,6 +193,12 @@
 						</select>
 					</div>
 					<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa2"
+						required="required">
+					</select>
+				   </div>
+					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label>&nbsp;</label>
 						</div>
@@ -243,6 +261,12 @@
 						</select>
 					</div>
 					<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa3"
+						required="required">
+					</select>
+				   </div>
+					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label>&nbsp;</label>
 						</div>
@@ -264,6 +288,30 @@
 		$("#anioClasificado").select2();
 		$("#mesInicioClasificado").select2();
 		$("#mesFinalClasificado").select2();
+		$("#empresa").select2();
+		$("#empresa1").select2();
+		$("#empresa2").select2();
+		$("#empresa3").select2();
+
+		var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value
+		}
+		$
+				.post(
+						'/byeContabilidad/rest-services/private/empresa/getLista',
+						JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+">"
+										+ res[i].razonSocial
+										+ "</option>";
+							}
+							document.getElementById("empresa").innerHTML = str;
+							document.getElementById("empresa1").innerHTML = str;
+							document.getElementById("empresa2").innerHTML = str;
+							document.getElementById("empresa3").innerHTML = str;
+						}, "json");
 		ComboAnio();
 		ComboAnioClasificado();
 
@@ -309,6 +357,8 @@
 				+ document.getElementById('filtro2').value
 				+ "&idUsuario="
 				+ document.getElementById('idUsuario').value
+				+ "&idEmpresa="
+				+ document.getElementById('idEmpresa').value
 
 	}
 
@@ -343,6 +393,8 @@
 				+ "&finalMayor="
 				+ document.getElementById('finalMayor').value
 				+ "&idUsuario=" + document.getElementById('idUsuario').value
+				+ "&idEmpresa="
+				+ document.getElementById('idEmpresa1').value
 	}
 
 	function reporteGeneral() {
@@ -361,6 +413,8 @@
 				+ document.getElementById('anio').value
 				+ "&idUsuario="
 				+ document.getElementById('idUsuario').value
+				+ "&idEmpresa="
+				+ document.getElementById('idEmpresa2').value
 	}
 
 	function reporteClasificado() {
@@ -378,6 +432,8 @@
 				+ "&anio="
 				+ document.getElementById('anioClasificado').value
 				+ "&idUsuario=" + document.getElementById('idUsuario').value
+				+ "&idEmpresa="
+				+ document.getElementById('idEmpresa3').value
 	}
 
 </script>

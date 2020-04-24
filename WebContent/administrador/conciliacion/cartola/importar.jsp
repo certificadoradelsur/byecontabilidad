@@ -46,21 +46,21 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav2.jsp" %>
+	<%@ include file="../../../complementos/nav2.jsp"%>
 	<div class="container-lg">
 
-			<form name="importCartola" id="importCartola"
-				action="/byeContabilidad/rest-services/private/cartola/importar"
-				method="post" enctype="multipart/form-data">
+		<form name="importCartola" id="importCartola"
+			action="/byeContabilidad/rest-services/private/cartola/importar"
+			method="post" enctype="multipart/form-data">
 
-				<input type="hidden" name="id" id="id" />
+			<input type="hidden" name="id" id="id" />
 
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Importar Cartola</h1>
-				</div>
-				<div class="container">
-					<br>
+			<div
+				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+				<h1 class="h2">Importar Cartola</h1>
+			</div>
+			<div class="container">
+				<br>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp;&nbsp; Empresa</label>
@@ -69,99 +69,99 @@
 						</select>
 					</div>
 				</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp; &nbsp;Banco</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="banco"
-								required="required">
-								<option value="1">Estado</option>
-								<option value="2">Chile</option>
-								<option value="3">Santander</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp; &nbsp;N° Cuenta</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="cuenta"
-								required="required">
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp;&nbsp; Año</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="anio"
-								required="required">
-
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">
-							&nbsp;&nbsp; Mes</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="numCartola"
-								required="required">
-								<option value="01">Enero</option>
-								<option value="02">Febrero</option>
-								<option value="03">Marzo</option>
-								<option value="04">Abril</option>
-								<option value="05">Mayo</option>
-								<option value="06">Junio</option>
-								<option value="07">Julio</option>
-								<option value="08">Agosto</option>
-								<option value="09">Septiembre</option>
-								<option value="10">Octubre</option>
-								<option value="11">Novimebre</option>
-								<option value="12">Diciembre</option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Cartola</label>
-						<input type="file" id="cartola" name="cartola" class="in"
-							placeholder="Ingrese cuenta" required="required" />
-					</div>
-				</div>
-				<br> <br> <br>
 				<div class="row">
-					<div class="col-xs-6 col-md-2">
-						<button class=" btt btn btn-primary btn-lg btn-block"
-							id="btnImportCartola" type="submit">Importar</button>
-					</div>
-					<div class="col-xs-6 col-md-2">
-						<button class=" btt btn btn-primary btn-lg btn-block"
-							type="button" id="back">Cancelar</button>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Banco</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="banco"
+							required="required">
+							<option value="1">Estado</option>
+							<option value="2">Chile</option>
+							<option value="3">Santander</option>
+						</select>
 					</div>
 				</div>
-			</form>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;N° Cuenta</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="cuenta"
+							required="required">
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp;&nbsp; Año</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="anio"
+							required="required">
 
-			<div class="modal fade" id="successModalCartola" tabindex="-1"
-				role="dialog">
-				<div
-					class="modal-dialog modal-dialog-centered justify-content-center"
-					role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Resultado importaci&oacute;n de
-								Cartola</h5>
-						</div>
-						<div class="modal-body">
-							<div id="cantidadImportados"></div>
-						</div>
-						<div class="modal-footer">
-							<a class="btn btn-danger"
-								href="/byeContabilidad/administrador/cartola/index.jsp">Cerrar</a>
-						</div>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp;&nbsp; Mes</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="numCartola"
+							required="required">
+							<option value="01">Enero</option>
+							<option value="02">Febrero</option>
+							<option value="03">Marzo</option>
+							<option value="04">Abril</option>
+							<option value="05">Mayo</option>
+							<option value="06">Junio</option>
+							<option value="07">Julio</option>
+							<option value="08">Agosto</option>
+							<option value="09">Septiembre</option>
+							<option value="10">Octubre</option>
+							<option value="11">Novimebre</option>
+							<option value="12">Diciembre</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-1"></div>
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Cartola</label>
+					<input type="file" id="cartola" name="cartola" class="in"
+						placeholder="Ingrese cuenta" required="required" />
+				</div>
+			</div>
+			<br> <br> <br>
+			<div class="row">
+				<div class="col-xs-6 col-md-2">
+					<button class=" btt btn btn-primary btn-lg btn-block"
+						id="btnImportCartola" type="submit">Importar</button>
+				</div>
+				<div class="col-xs-6 col-md-2">
+					<button class=" btt btn btn-primary btn-lg btn-block" type="button"
+						id="back">Cancelar</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="modal fade" id="successModalCartola" tabindex="-1"
+			role="dialog">
+			<div
+				class="modal-dialog modal-dialog-centered justify-content-center"
+				role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Resultado importaci&oacute;n de
+							Cartola</h5>
+					</div>
+					<div class="modal-body">
+						<div id="cantidadImportados"></div>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-danger"
+							href="/byeContabilidad/administrador/conciliacion/cartola/index.jsp">Cerrar</a>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
@@ -169,37 +169,59 @@
 	$(document)
 			.ready(
 					function() {
-						$("#banco").select2({width:'200'});
-						$("#cuenta").select2({width:'200'});
-						$("#anio").select2({width:'200'});
-						$("#numCartola").select2({width:'200'});
-						$("#empresa").select2({width:'200'});
+						$("#banco").select2({
+							width : '200'
+						});
+						$("#cuenta").select2({
+							width : '200'
+						});
+						$("#anio").select2({
+							width : '200'
+						});
+						$("#numCartola").select2({
+							width : '200'
+						});
+						$("#empresa").select2({
+							width : '200'
+						});
 
-						
 						var submitJson = {
-								idUsuario : document.getElementById("idUsuario").value}
-								
-								$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+							idUsuario : document.getElementById("idUsuario").value
+						}
+
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
 										function(res, code) {
 											var str;
 											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">" + res[i].razonSocial
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
 														+ "</option>";
 											}
 											document.getElementById("empresa").innerHTML = str;
-										}, "json");	
+										}, "json");
 						ComboAnio();
 						$("#importCartola")
 								.submit(
 										function(event) {
 											event.preventDefault();
+											
+											if ($('#cuenta option:selected')
+													.text() == 'Seleccione cuenta') {
+												alert("Debe seleccionar una cuenta");
+												return;
+											}
+											
 											var form = $('#importCartola')[0];
-									//		var banco = document
-									//				.getElementById("banco")[0].value;
-									//		var cuenta = document
-									//				.getElementById("cuenta")[0].value;
-									//		var cuenta = document
-									//				.getElementById("anio")[0].value;
+											//		var banco = document
+											//				.getElementById("banco")[0].value;
+											//		var cuenta = document
+											//				.getElementById("cuenta")[0].value;
+											//		var cuenta = document
+											//				.getElementById("anio")[0].value;
+
 											var data = new FormData(form);
 											$
 													.ajax({
@@ -283,39 +305,43 @@
 	};
 
 	var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value}
-	
-// 	$.post('/byeContabilidad/rest-services/private/banco/getLista',
-// 			function(res, code) {
-// 				var str;
-// 				for (var i = 0, len = res.length; i < len; i++) {
-// 					str += "<option value="+res[i].id+">" + res[i].nombre
-// 							+ "</option>";
-// 				}
-// 				document.getElementById("banco").innerHTML = str;
-// 			}, "json");
+		idUsuario : document.getElementById("idUsuario").value
+	}
 
+	// 	$.post('/byeContabilidad/rest-services/private/banco/getLista',
+	// 			function(res, code) {
+	// 				var str;
+	// 				for (var i = 0, len = res.length; i < len; i++) {
+	// 					str += "<option value="+res[i].id+">" + res[i].nombre
+	// 							+ "</option>";
+	// 				}
+	// 				document.getElementById("banco").innerHTML = str;
+	// 			}, "json");
 
-	$('#banco').on('change',
-			function() {
-				var submitJson = { 
+	$('#banco')
+			.on(
+					'change',
+					function() {
+						var submitJson = {
 
-					    idUsuario : document.getElementById("idUsuario").value,
-						idBanco : document.getElementById("banco").value
-				}
+							idUsuario : document.getElementById("idUsuario").value,
+							idBanco : document.getElementById("banco").value
+						}
 
-				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
-								JSON.stringify(submitJson),
-								function(res, code) {
-					               var str = "<option>Seleccione cuenta</option>";
-									for (var i = 0, len = res.length; i < len; i++) {
-									str += "<option value="+res[i].id+">"
-												+ res[i].numCuenta
-												+ "</option>";
-									}
-									document.getElementById("cuenta").innerHTML = str;
-								}, "json");
-			}); 	
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str = "<option>Seleccione cuenta</option>";
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].numCuenta
+														+ "</option>";
+											}
+											document.getElementById("cuenta").innerHTML = str;
+										}, "json");
+					});
 
 	$("#anio").trigger('change');
 	$("#banco").trigger('change');

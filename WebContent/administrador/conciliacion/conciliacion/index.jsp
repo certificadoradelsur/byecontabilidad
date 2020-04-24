@@ -304,7 +304,7 @@
 					return;
 				}
 				if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
-					alert("Debe seleccionar una cuenta contable");
+					alert("Debe seleccionar una cuenta");
 					return;
 				}
 

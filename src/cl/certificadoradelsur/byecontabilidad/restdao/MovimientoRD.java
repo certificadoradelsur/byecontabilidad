@@ -56,7 +56,6 @@ public class MovimientoRD {
 	@Inject
 	private ClienteDAO clidao;
 
-
 	/**
 	 * funcion que almacena
 	 * 
@@ -117,34 +116,34 @@ public class MovimientoRD {
 		}
 
 	}
-	
+
 	/**
 	 * metodo obtener un movimiento
-	 *  
+	 * 
 	 * @param id movimiento
-	 * @return  json
+	 * @return json
 	 */
 	public MovimientoJson getById(MovimientoJson mj) {
 		Movimiento m = mdao.getById(mj.getId());
 		MovimientoJson ccJson = new MovimientoJson();
 		ccJson.setId(m.getId());
-		ccJson.setFecha(m.getFecha().toString().substring(0,10));
+		ccJson.setFecha(m.getFecha().toString().substring(0, 10));
 		ccJson.setNumComprobante(m.getNumComprobante());
 		ccJson.setGlosa(m.getGlosa());
 		ccJson.setTipoMovimiento(m.getTipoMovimiento());
 		ccJson.setTipoDocumento(m.getTipoDocumento());
 		ccJson.setEstado(m.getEstado());
-		ccJson.setMonto(m.getMonto()); 
+		ccJson.setMonto(m.getMonto());
 		ccJson.setEliminado(m.isEliminado());
 		ccJson.setAnalisis(m.getCuentaContable().isAnalisis().toString());
 		ccJson.setConciliacion(m.getCuentaContable().isConciliacion().toString());
-		if(m.getCuentaContable().isConciliacion().equals(true)) {
-		ccJson.setIdBanco(m.getCuenta().getBanco().getId());
-		ccJson.setIdCuenta(m.getCuenta().getId());
-		ccJson.setNumDocumento(m.getNumDocumento());
+		if (m.getCuentaContable().isConciliacion().equals(true)) {
+			ccJson.setIdBanco(m.getCuenta().getBanco().getId());
+			ccJson.setIdCuenta(m.getCuenta().getId());
+			ccJson.setNumDocumento(m.getNumDocumento());
 		}
-		if(m.getCuentaContable().isAnalisis().equals(true)) {
-		ccJson.setIdCliente(m.getCliente().getId());	
+		if (m.getCuentaContable().isAnalisis().equals(true)) {
+			ccJson.setIdCliente(m.getCliente().getId());
 		}
 		ccJson.setIdComprobanteContable(m.getComprobanteContable().getId());
 		ccJson.setIdCuentaContable(m.getCuentaContable().getId());
@@ -290,13 +289,25 @@ public class MovimientoRD {
 				mj.setEliminado(lm.get(i).isEliminado());
 				mj.setFecha(Utilidades.strToTsDDMMYYYYHHmmssConGuion((lm.get(i).getFecha())).substring(0, 10));
 				mj.setTipoDocumento(lm.get(i).getTipoDocumento());
-				mj.setTipoMovimiento(lm.get(i).getTipoMovimiento());
+
+				if (lm.get(i).getTipoMovimiento().equals("INGRESO") || lm.get(i).getTipoMovimiento().equals("DEBE")) {
+					mj.setTipoMovimiento("DEBE");
+				} else if (lm.get(i).getTipoMovimiento().equals("EGRESO")
+						|| lm.get(i).getTipoMovimiento().equals("HABER")) {
+					mj.setTipoMovimiento("HABER");
+				} else if (lm.get(i).getTipoMovimiento().equals("TRASPASO")) {
+					if (lm.get(i).getTipoDocumento().equals("AJUSTE INGRESO")) {
+						mj.setTipoMovimiento("DEBE");
+					} else if (lm.get(i).getTipoDocumento().equals("AJUSTE EGRESO")) {
+						mj.setTipoMovimiento("HABER");
+					}
+				}
 				if (lm.get(i).getCuentaContable().isConciliacion().equals(true)) {
 					mj.setNumCuenta(lm.get(i).getCuenta().getNumCuenta());
 					mj.setNombreBanco(lm.get(i).getCuenta().getBanco().getNombre());
-				}else {
+				} else {
 					mj.setNumCuenta("");
-					mj.setNombreBanco("");	
+					mj.setNombreBanco("");
 				}
 				lmj.add(mj);
 			}
@@ -305,9 +316,10 @@ public class MovimientoRD {
 		}
 		return lmj;
 	}
-	
+
 	/**
 	 * Funcion que trae los movimientos por id comprobante contable
+	 * 
 	 * @param page
 	 * @param limit
 	 * @param id
@@ -335,24 +347,25 @@ public class MovimientoRD {
 				mj.setTipoMovimiento(lm.get(i).getTipoMovimiento());
 				mj.setIdCuentaContable(lm.get(i).getCuentaContable().getId());
 				mj.setIdUsuario(lm.get(i).getUsuario().getId());
-				if (lm.get(i).getTipoMovimiento().equals("INGRESO")||lm.get(i).getTipoMovimiento().equals("DEBE")) {
-				mj.setDebe(lm.get(i).getMonto());	
-				} else if(lm.get(i).getTipoMovimiento().equals("EGRESO")||lm.get(i).getTipoMovimiento().equals("HABER")) {
-				mj.setHaber(lm.get(i).getMonto());	
+				if (lm.get(i).getTipoMovimiento().equals("INGRESO") || lm.get(i).getTipoMovimiento().equals("DEBE")) {
+					mj.setDebe(lm.get(i).getMonto());
+				} else if (lm.get(i).getTipoMovimiento().equals("EGRESO")
+						|| lm.get(i).getTipoMovimiento().equals("HABER")) {
+					mj.setHaber(lm.get(i).getMonto());
 				} else if (lm.get(i).getTipoMovimiento().equals("TRASPASO")) {
-					if(lm.get(i).getTipoDocumento().equals("AJUSTE INGRESO")) {
+					if (lm.get(i).getTipoDocumento().equals("AJUSTE INGRESO")) {
 						mj.setDebe(lm.get(i).getMonto());
-					}else if(lm.get(i).getTipoDocumento().equals("AJUSTE EGRESO")) {
+					} else if (lm.get(i).getTipoDocumento().equals("AJUSTE EGRESO")) {
 						mj.setHaber(lm.get(i).getMonto());
 					}
 				}
 				if (lm.get(i).getCuentaContable().isConciliacion().equals(true)) {
 					mj.setNumCuenta(lm.get(i).getCuenta().getNumCuenta());
 					mj.setNombreBanco(lm.get(i).getCuenta().getBanco().getNombre());
-				}else if (lm.get(i).getCuentaContable().isAnalisis().equals(true)){
+				} else if (lm.get(i).getCuentaContable().isAnalisis().equals(true)) {
 					mj.setIdCliente(lm.get(i).getCliente().getId());
 					mj.setNumCuenta("");
-					mj.setNombreBanco("");	
+					mj.setNombreBanco("");
 				}
 				lmj.add(mj);
 			}
@@ -371,9 +384,9 @@ public class MovimientoRD {
 	public String getAllLista(MovimientoJson mj) {
 		try {
 			List<Movimiento> lm = mdao.getAllLista(Utilidades.convertidorFecha(mj.getFechaI()),
-					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco(),mj.getIdEmpresa());
+					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco(), mj.getIdCuenta(), mj.getIdEmpresa());
 			List<Cartola> lc = cdao.getAllLista(Utilidades.convertidorFecha(mj.getFechaI()),
-					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco(),mj.getIdEmpresa());
+					Utilidades.convertidorFecha(mj.getFechaF()), mj.getIdBanco(), mj.getIdCuenta(), mj.getIdEmpresa());
 
 			if (lm.isEmpty() && lc.isEmpty()) {
 				return Constantes.MENSAJE_REST_FAIL;
@@ -385,7 +398,7 @@ public class MovimientoRD {
 			return e.getMessage();
 		}
 	}
- 
+
 	/**
 	 * metodo que modifica movimineto
 	 * 
@@ -396,7 +409,7 @@ public class MovimientoRD {
 		try {
 			Movimiento m = mdao.getById(mj.getId());
 			if (condao.getByIdComprobante(m.getComprobanteContable().getId()) == null
-					&& ncdao.getByIdComprobante(m.getComprobanteContable().getId())== null) {
+					&& ncdao.getByIdComprobante(m.getComprobanteContable().getId()) == null) {
 				if (Utilidades.containsScripting(mj.getGlosa()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
@@ -405,29 +418,30 @@ public class MovimientoRD {
 					m.setTipoDocumento(mj.getTipoDocumento());
 					m.setMonto(mj.getMonto());
 					m.setGlosa(mj.getGlosa());
-					if(cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(false)) {
+					if (cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(false)) {
 						m.setCuenta(null);
-					} else if(cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(true)) {
-					m.setCuenta(cuentadao.getById(mj.getIdCuenta()));
+					} else if (cuentaCondao.getById(mj.getIdCuentaContable()).isConciliacion().equals(true)) {
+						m.setCuenta(cuentadao.getById(mj.getIdCuenta()));
 					}
-					if(cuentaCondao.getById(mj.getIdCuentaContable()).isAnalisis().equals(false)) {
+					if (cuentaCondao.getById(mj.getIdCuentaContable()).isAnalisis().equals(false)) {
 						m.setCliente(null);
-					}else if(cuentaCondao.getById(mj.getIdCuentaContable()).isAnalisis().equals(true)) {
-					m.setCliente(clidao.getById(mj.getIdCliente()));	
+					} else if (cuentaCondao.getById(mj.getIdCuentaContable()).isAnalisis().equals(true)) {
+						m.setCliente(clidao.getById(mj.getIdCliente()));
 					}
 					m.setNumDocumento(mj.getNumDocumento());
 					m.setEstado(mj.isEstado());
-					}
-					mdao.update(m);
-					return Constantes.MENSAJE_REST_OK;	
+				}
+				mdao.update(m);
+				return Constantes.MENSAJE_REST_OK;
 			} else {
 				return "No se puede modificar el movimiento, ya que esta en uso por el proceso de conciliacíon";
 			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar el movimiento");
-			return e.getMessage();		
+			return e.getMessage();
 		}
 	}
+
 	/**
 	 * Funcion que elimina transaccion y movimientos relacionados a dicha
 	 * transaccion
@@ -443,7 +457,7 @@ public class MovimientoRD {
 			for (int i = 0; i < lm.size(); i++) {
 				mdao.eliminar(lm.get(i));
 			}
-			ComprobanteContable c =comdao.getById(mj.getId());
+			ComprobanteContable c = comdao.getById(mj.getId());
 			comdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} else {

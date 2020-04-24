@@ -10,7 +10,7 @@
 <meta name="author" content="">
 
 
-<title>Conciliaciones Bancarias</title>
+<title>ByeContabilidad</title>
 <!-- Bootstrap core CSS -->
 <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -47,84 +47,70 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Certificadora
-			del Sur</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+	<a class="nav-link" hidden="true">Certificadora del sur</a>
+	<button class="navbar-toggler bg-light" type="button"
+		data-toggle="collapse" data-target="#navbarSupportedContent"
+		aria-controls="navbarSupportedContent" aria-expanded="false"
+		aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
 
-		<ul class="navbar-nav px-3">
-			<li class="nav-item text-nowrap"><a class="nav-link"
-				href="/conciliacionBancaria/logout.jsp"><img
-					src="../images/exit.ico" alt="Icono" /> Salir</a></li>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+		
+		<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" style="color: white;"
+				id="navbarDropdown" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"> <img
+					src="../../images/comprobante.ico" /> Cartola
+			</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="cartola/index.jsp"><img
+						src="../../images/lista.ico" /> Lista</a>
+					<div class="dropdown-divider"></div>	
+					<a class="dropdown-item" href="cartola/agregar.jsp"><img
+						src="../../images/add.ico" /> Agregar</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="cartola/importar.jsp"><img
+						src="../../images/import.ico" /> Importar</a> 
+				</div>
+			</li>
+		
+		
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" style="color: white;"
+				id="navbarDropdown" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"> <img
+					src="../../images/movi.ico" /> Conciliación
+			</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="conciliacion/index.jsp"><img
+						src="../../images/lista.ico" /> Lista</a>
+					<div class="dropdown-divider"></div>	
+					<a class="dropdown-item" href="conciliacion/banco.jsp"><img
+						src="../../images/banco.ico" /> Banco</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="conciliacion/empresa.jsp"><img
+						src="../../images/empresa.ico" /> Empresa</a> 
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="conciliacion/conciliar.jsp"><img
+						src="../../images/movi.ico" /> Conciliar</a> 		
+				</div>
+			</li>
+			
+
+			<li class="nav-item"><a class="color nav-link"
+				href="reporte/index.jsp" style="color: white;"><img
+					src="../../images/informe.ico" alt="Icono" /> Reporte</a></li>	
 		</ul>
-	</nav>
+		<a style="padding-left: 0; color: white;"
+			href="/byeContabilidad/logout.jsp"><img
+			src="../../images/exit.ico" alt="Icono" /> Salir</a>
 
-	<div class="sidenav">
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/banco.ico"
-				alt="Icono" />&nbsp;Banco
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="banco/index.jsp">Bancos</a> <a
-					class="dropdown-item" href="cuenta/index.jsp">Cuentas</a>
-			</div>
-		</div>
-		<a href="usuario/index.jsp"><img src="../images/user.ico"
-			alt="Icono" />&nbsp;Usuarios </a>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/comprobante.ico"
-				alt="Icono" />&nbsp;Transacción
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="transaccion/index.jsp">Lista</a> <a
-					class="dropdown-item" href="transaccion/ingresos.jsp">Ingreso</a>
-				<a class="dropdown-item" href="transaccion/egresos.jsp">Egreso</a>
-				<a class="dropdown-item" href="transaccion/traspasos.jsp">Traspaso</a>
-			</div>
-		</div>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/comprobante.ico"
-				alt="Icono" />&nbsp;Cartola
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="cartola/agregar.jsp">Digitar</a> <a
-					class="dropdown-item" href="cartola/importar.jsp">Importar</a> <a
-					class="dropdown-item" href="cartola/index.jsp">Lista</a>
-			</div>
-		</div>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/movi.ico"
-				alt="Icono" />&nbsp;Conciliación
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="conciliacion/conciliar.jsp">Conciliar</a>
-				<a class="dropdown-item" href="conciliacion/index.jsp">Ver
-					conciliación</a>
-			</div>
-		</div>
-		<div class="dropdown">
-			<a class="btn btn-secondary dropdown-toggle" href="#" role="button"
-				id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <img src="../images/movi.ico"
-				alt="Icono" />&nbsp;No Conciliados
-			</a>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-				<a class="dropdown-item" href="conciliacion/empresa.jsp">Empresa</a>
-				<a class="dropdown-item" href="conciliacion/banco.jsp">Banco</a>
-			</div>
-		</div>
-		<a href="reporte/index.jsp"><img src="../images/reporte.ico"
-			alt="Icono" />&nbsp;Reporte </a>
 	</div>
-
-	<div class="main">
+</nav>
+	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
@@ -132,7 +118,7 @@
 					de certificador del sur</h2>
 			</div>
 
-			<img src="../images/LOGO.jpg" alt="Logo" style="width: 900px" />
+			<img src="../../images/LOGO.jpg" alt="Logo" style="width: 900px" />
 		</form>
 	</div>
 
