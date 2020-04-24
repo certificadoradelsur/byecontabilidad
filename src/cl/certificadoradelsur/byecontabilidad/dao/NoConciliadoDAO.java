@@ -34,7 +34,8 @@ public class NoConciliadoDAO {
 	 * 
 	 * @return el total de conciliaciones
 	 */
-	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco, Long idOficinaContable, Long idEmpresa) {
+	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco,
+			Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("NoConciliado.countAll");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -193,13 +194,14 @@ public class NoConciliadoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<NoConciliado> getByIdReporteBancoCuenta(Timestamp fechaInicial, Timestamp fechaFinal, Long idBanco,
-			Long idCuenta) {
+			Long idCuenta, Long idEmpresa) {
 		Query query = em.createNamedQuery("NoConciliado.getByIdReporteBancoCuenta");
 
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idBanco", idBanco);
 		query.setParameter("idCuenta", idCuenta);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 
@@ -220,7 +222,7 @@ public class NoConciliadoDAO {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * busca NoConciliado por idComprobante
 	 * 
@@ -238,6 +240,5 @@ public class NoConciliadoDAO {
 			return null;
 		}
 	}
-
 
 }

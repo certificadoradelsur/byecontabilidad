@@ -235,13 +235,14 @@ public class NoConciliadoCartolaDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<NoConciliadoCartola> getByIdReporteBancoCuenta(Timestamp fechaInicial, Timestamp fechaFinal,
-			Long idBanco, Long idCuenta) {
+			Long idBanco, Long idCuenta, Long idEmpresa) {
 		Query query = em.createNamedQuery("NoConciliadoCartola.getByIdReporteBancoCuenta");
 
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idBanco", idBanco);
 		query.setParameter("idCuenta", idCuenta);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 

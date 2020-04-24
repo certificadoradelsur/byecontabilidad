@@ -95,14 +95,15 @@ public class ConciliacionRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario) {
+	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario,
+			Long idEmpresa) {
 		try {
 			if (fechaInicial == null || fechaFinal == null || idCuenta == null || idBanco == null) {
 				fechaInicial = Utilidades.fechaActualDesdeFiltro().toString();
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 			}
-			return cdao.countAll(Utilidades.convertidorFecha(fechaInicial), Utilidades.fechaHasta(fechaFinal), idCuenta,
-					idBanco, udao.getById(idUsuario).getOficinaContable().getId());
+			return cdao.countAll(Utilidades.convertidorFechaSinHora(fechaInicial), Utilidades.fechaHasta(fechaFinal), idCuenta,
+					idBanco, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de Conciliaciones ", e);
 			return 0L;
@@ -117,7 +118,7 @@ public class ConciliacionRD {
 	 * @return json con total de conciliaciones
 	 */
 	public List<ConciliacionJson> getAll(Integer page, Integer limit, String fechaInicial, String fechaFinal,
-			Long idCuenta, Long idBanco, String idUsuario) {
+			Long idCuenta, Long idBanco, String idUsuario, Long idEmpresa) {
 		List<ConciliacionJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -130,9 +131,9 @@ public class ConciliacionRD {
 				fechaInicial = Utilidades.fechaActualDesdeFiltro().toString();
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 			}
-			List<Conciliacion> lc = cdao.getAll(inicio, limit, Utilidades.convertidorFecha(fechaInicial),
+			List<Conciliacion> lc = cdao.getAll(inicio, limit, Utilidades.convertidorFechaSinHora(fechaInicial),
 					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco,
-					udao.getById(idUsuario).getOficinaContable().getId());
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lc.size(); i++) {
 				ConciliacionJson cj = new ConciliacionJson();
 				cj.setId(lc.get(i).getId());
@@ -170,7 +171,7 @@ public class ConciliacionRD {
 	public String update(ConciliacionJson cj) {
 		try {
 			Conciliacion conciliacion = cdao.getById(cj.getId());
-			conciliacion.setFecha(Utilidades.convertidorFecha(cj.getFecha()));
+			conciliacion.setFecha(Utilidades.convertidorFechaSinHora(cj.getFecha()));
 			cdao.update(conciliacion);
 			return Constantes.MENSAJE_REST_OK;
 

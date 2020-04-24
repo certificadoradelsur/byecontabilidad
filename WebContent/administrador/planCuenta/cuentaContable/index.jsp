@@ -134,8 +134,7 @@
 														+ "</option>";
 											}
 											document.getElementById("empresa").innerHTML = str;
-											if (document
-													.getElementById("empresa").value != "") {
+											if (document.getElementById("empresa").value != "") {
 												grid.reload({
 													idEmpresa : $('#empresa')
 															.val(),
@@ -148,7 +147,6 @@
 															'#grupoCuenta')
 															.val(),
 												});
-												clear();
 											}
 										}, "json");
 

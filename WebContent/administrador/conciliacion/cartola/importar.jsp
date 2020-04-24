@@ -169,10 +169,10 @@
 	$(document)
 			.ready(
 					function() {
-						$("#banco").select2();
-						$("#cuenta").select2();
-						$("#anio").select2();
-						$("#numCartola").select2();
+						$("#banco").select2({width:'200'});
+						$("#cuenta").select2({width:'200'});
+						$("#anio").select2({width:'200'});
+						$("#numCartola").select2({width:'200'});
 						$("#empresa").select2({width:'200'});
 
 						

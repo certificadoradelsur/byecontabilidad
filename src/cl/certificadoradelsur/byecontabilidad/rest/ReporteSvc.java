@@ -29,7 +29,7 @@ public interface ReporteSvc {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	Response getByIdReporteBancoCuenta(@QueryParam("fechaDesde") String fechaDesde,
 			@QueryParam("fechaHasta") String fechaHasta, @QueryParam("idBanco") Long idBanco,
-			@QueryParam("idCuenta") Long idCuenta) throws ParseException;
+			@QueryParam("idCuenta") Long idCuenta, @QueryParam("idEmpresa") Long idEmpresa) throws ParseException;
 
 	/**
 	 * Funcion que provee con datos necesarios para realizar reporte libro diario

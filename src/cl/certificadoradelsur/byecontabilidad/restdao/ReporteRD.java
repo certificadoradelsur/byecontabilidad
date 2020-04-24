@@ -81,7 +81,8 @@ public class ReporteRD {
 	 * @param idCuenta
 	 * @return
 	 */
-	public InputStream getByIdReporteBancoCuenta(String fechaDesde, String fechaHasta, Long idBanco, Long idCuenta) {
+	public InputStream getByIdReporteBancoCuenta(String fechaDesde, String fechaHasta, Long idBanco, Long idCuenta,
+			Long idEmpresa) {
 		XSSFWorkbook workbook = null;
 		try {
 			workbook = new XSSFWorkbook();
@@ -126,11 +127,11 @@ public class ReporteRD {
 			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
 
 			List<Conciliacion> listaConciliacion = cdao.getByIdReporteBancoCuenta(fechaInicial, fechaFinal, idBanco,
-					idCuenta);
+					idCuenta, idEmpresa);
 			List<NoConciliado> listaNoConciliado = ncdao.getByIdReporteBancoCuenta(fechaInicial, fechaFinal, idBanco,
-					idCuenta);
+					idCuenta, idEmpresa);
 			List<NoConciliadoCartola> listaNoConciliadoCartola = nccdao.getByIdReporteBancoCuenta(fechaInicial,
-					fechaFinal, idBanco, idCuenta);
+					fechaFinal, idBanco, idCuenta, idEmpresa);
 
 			rowNum = 1;
 			for (int j = 0; j < listaConciliacion.size(); j++) {
@@ -675,8 +676,10 @@ public class ReporteRD {
 							Row rowCC = sheetClasificado.createRow(rowNum++);
 							rowCC.createCell(0).setCellValue(cuentaContable.getCodigo());
 							rowCC.createCell(1).setCellValue(cuentaContable.getGlosaGeneral());
-							Long montoTotal =movimientodao.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
-											udao.getById(idUsuario).getOficinaContable().getId()).stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
+							Long montoTotal = movimientodao
+									.getBalanceClasificado(fechaInicial, fechaFinal, cuentaContable.getId(),
+											udao.getById(idUsuario).getOficinaContable().getId())
+									.stream().mapToLong(m -> m.getMonto()).reduce(0, (a, b) -> a + b);
 							rowCC.createCell(2).setCellValue(montoTotal);
 							acumulador = acumulador + montoTotal;
 							total = total + montoTotal;

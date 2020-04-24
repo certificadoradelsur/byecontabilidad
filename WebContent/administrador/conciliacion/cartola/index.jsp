@@ -131,11 +131,11 @@
 														+ "</option>";
 											}
 											document.getElementById("empresa").innerHTML = str;
-											if (document.getElementById("empresa").value != "") {
-												grid.reload({
-													idEmpresa : $('#empresa').val()
-												});
-											}
+// 											if (document.getElementById("empresa").value != "") {
+// 												grid.reload({
+// 													idEmpresa : $('#empresa').val()
+// 												});
+// 											}
 											
 										}, "json");
 
@@ -156,68 +156,97 @@
 											document.getElementById("banco").innerHTML = str;
 										}, "json");
 
-						grid = $('#grid')
-								.grid(
-										{
-											primaryKey : 'ID',
-											dataSource : '/byeContabilidad/rest-services/private/cartola/getAll',
-											autoLoad : false,
-											columns : [
-													{
-														field : 'id',
-														title : 'Identificador',
-														width : 100,
-														hidden : true
-
-													},
-													{
-														field : 'numCartola',
-														title : 'N° Cartola',
-														sortable : true
-
-													},
-													{
-														field : 'numDocumento',
-														title : 'N° documento',
-														sortable : true
-													},
-													{
-														field : 'fecha',
-														title : 'Fecha',
-														sortable : true
-													},
-													{
-														field : 'descripcion',
-														title : 'Descripcion',
-														sortable : true
-													},
-													{
-														field : 'tipoMovimiento',
-														title : 'Movimiento',
-														sortable : true
-													},
-													{
-														field : 'monto',
-														title : 'Monto',
-														sortable : true
-													},
-													{
-														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-														align : 'center',
-														events : {
-															'click' : eliminar
-														}
-													}, ],
-											pager : {
-												limit : 10
-											}
-										});
-
-
+						fecha();
 					});
 
+	function fecha(){
+		var now = new Date();
+	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	    var today = now.getFullYear()+"-"+(month)+"-"+("01") ;
+	    $("#filtro1").val(today);
+	    
+		var now = new Date();  
+	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	    var dia =new Date(now.getFullYear() || new Date().getFullYear(), month, 0).getDate();
+	    var today2 = now.getFullYear()+"-"+(month)+"-"+(dia) ;
+	    $("#filtro2").val(today2);
+	    cargaTabla();
+	}
+	
+	function cargaTabla(){
+		grid = $('#grid')
+		.grid(
+				{
+					primaryKey : 'ID',
+					dataSource : '/byeContabilidad/rest-services/private/cartola/getAll',
+					autoLoad : false,
+					columns : [
+							{
+								field : 'id',
+								title : 'Identificador',
+								width : 100,
+								hidden : true
+
+							},
+							{
+								field : 'numCartola',
+								title : 'N° Cartola',
+								sortable : true
+
+							},
+							{
+								field : 'numDocumento',
+								title : 'N° documento',
+								sortable : true
+							},
+							{
+								field : 'fecha',
+								title : 'Fecha',
+								sortable : true
+							},
+							{
+								field : 'descripcion',
+								title : 'Descripcion',
+								sortable : true
+							},
+							{
+								field : 'tipoMovimiento',
+								title : 'Movimiento',
+								sortable : true
+							},
+							{
+								field : 'monto',
+								title : 'Monto',
+								sortable : true
+							},
+							{
+								width : 100,
+								title : 'Eliminar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+								align : 'center',
+								events : {
+									'click' : eliminar
+								}
+							}, ],
+					pager : {
+						limit : 10
+					}
+				});
+		busca();
+
+	}
+	
+	function busca(){
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				idEmpresa : $('#empresa').val(),
+				fechaInicial : $('#filtro1').val(),
+				fechaFinal : $('#filtro2').val(),
+				idBanco : $('#banco').val()
+			});
+		}
+	}
+	
 	$('#buscar')
 			.on(
 					'click',
@@ -245,11 +274,11 @@
 
 						if (document.getElementById("empresa").value != "") {
 							grid.reload({
+								idEmpresa : $('#empresa').val(),
 								fechaInicial : $('#filtro1').val(),
 								fechaFinal : $('#filtro2').val(),
 								idBanco : $('#banco').val(),
-								idCuenta : $('#cuenta').val(),
-								idEmpresa : $('#empresa').val()
+								idCuenta : $('#cuenta').val()
 							});
 						}
 						//clear();

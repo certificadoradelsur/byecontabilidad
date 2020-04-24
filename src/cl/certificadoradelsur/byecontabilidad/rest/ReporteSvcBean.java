@@ -22,9 +22,9 @@ public class ReporteSvcBean implements ReporteSvc {
 	private ReporteRD rrd;
 
 	@Override
-	public Response getByIdReporteBancoCuenta(String fechaDesde, String fechaHasta, Long idBanco, Long idCuenta)
+	public Response getByIdReporteBancoCuenta(String fechaDesde, String fechaHasta, Long idBanco, Long idCuenta , Long idEmpresa)
 			throws ParseException {
-		InputStream file = rrd.getByIdReporteBancoCuenta(fechaDesde, fechaHasta, idBanco, idCuenta);
+		InputStream file = rrd.getByIdReporteBancoCuenta(fechaDesde, fechaHasta, idBanco, idCuenta, idEmpresa);
 		ResponseBuilder response = Response.ok((Object) file);
 
 		response.header("Content-Disposition",

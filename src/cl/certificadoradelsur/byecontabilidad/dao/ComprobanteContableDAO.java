@@ -34,7 +34,8 @@ public class ComprobanteContableDAO {
 	 * 
 	 * @return el total de Comprobantes Contables
 	 */
-	public Long countAll(String glosaGeneral, Timestamp fechaInicial, Timestamp fechaFinal, Long idOficinaContable) {
+	public Long countAll(String glosaGeneral, Timestamp fechaInicial, Timestamp fechaFinal, Long idOficinaContable,
+			Long idEmpresa) {
 		Query query = em.createNamedQuery("ComprobanteContable.countAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -45,6 +46,7 @@ public class ComprobanteContableDAO {
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return (Long) query.getSingleResult();
 	}
 
@@ -59,7 +61,7 @@ public class ComprobanteContableDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<ComprobanteContable> getAll(Integer inicio, Integer fin, String glosaGeneral, Timestamp fechaInicial,
-			Timestamp fechaFinal, Long idOficinaContable) {
+			Timestamp fechaFinal, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("ComprobanteContable.getAll");
 		if (glosaGeneral.trim().equalsIgnoreCase("")) {
 			query.setParameter("ignoreGlosaGeneral", true);
@@ -70,6 +72,7 @@ public class ComprobanteContableDAO {
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();

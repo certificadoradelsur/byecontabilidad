@@ -40,7 +40,8 @@ public interface ComprobanteContableSvc {
 	@Path("/getAll")
 	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin,
 			@QueryParam("glosaGeneral") String glosaGeneral, @QueryParam("fechaDesde") String fechaDesde,
-			@QueryParam("fechaHasta") String fechaHasta, @QueryParam("idUsuario") String idUsuario);
+			@QueryParam("fechaHasta") String fechaHasta, @QueryParam("idUsuario") String idUsuario,
+			@QueryParam("idEmpresa") Long idEmpresa);
 
 	/**
 	 * Funcion para modificar un comprobante Contable

@@ -31,11 +31,11 @@ public class ComprobanteContableSvcBean implements ComprobanteContableSvc {
 
 	@Override
 	public Response list(Integer inicio, Integer fin, String glosaGeneral, String fechaDesde, String fechaHasta,
-			String idUsuario) {
+			String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<ComprobanteContableJson> lccj = comrd.getAll(inicio, fin, glosaGeneral, fechaDesde, fechaHasta, idUsuario);
+		List<ComprobanteContableJson> lccj = comrd.getAll(inicio, fin, glosaGeneral, fechaDesde, fechaHasta, idUsuario, idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lccj, new TypeToken<List<ComprobanteContableJson>>() {
-		}.getType()) + ", \"total\": " + comrd.countAll(glosaGeneral,fechaDesde, fechaHasta, idUsuario) + "}";
+		}.getType()) + ", \"total\": " + comrd.countAll(glosaGeneral,fechaDesde, fechaHasta, idUsuario, idEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 

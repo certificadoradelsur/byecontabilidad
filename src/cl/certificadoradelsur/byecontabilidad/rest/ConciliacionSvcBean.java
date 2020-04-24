@@ -31,11 +31,13 @@ public class ConciliacionSvcBean implements ConciliacionSvc {
 
 	@Override
 	public Response list(Integer inicio, Integer fin, String fechaInicial, String fechaFinal, Long idCuenta,
-			Long idBanco, String idUsuario) {
+			Long idBanco, String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<ConciliacionJson> lbj = crd.getAll(inicio, fin, fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario);
+		List<ConciliacionJson> lbj = crd.getAll(inicio, fin, fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario,
+				idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lbj, new TypeToken<List<ConciliacionJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario) + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(fechaInicial, fechaFinal, idCuenta, idBanco, idUsuario, idEmpresa)
+				+ "}";
 		return Response.ok(json).build();
 	}
 

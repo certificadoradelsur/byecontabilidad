@@ -29,13 +29,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "comprobante_contable")
 @SequenceGenerator(name = "seq_comprobante_contable", sequenceName = "seq_comprobante_contable")
-@NamedQueries({ @NamedQuery(name = "ComprobanteContable.getAll", query = "SELECT c FROM ComprobanteContable c where c.fecha between :fechaInicial and :fechaFinal  and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),
-		@NamedQuery(name = "ComprobanteContable.countAll", query = "SELECT count(c.id) FROM ComprobanteContable c where c.fecha between :fechaInicial and :fechaFinal and  c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),
+@NamedQueries({
+		@NamedQuery(name = "ComprobanteContable.getAll", query = "SELECT c FROM ComprobanteContable c where c.fecha between :fechaInicial and :fechaFinal and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),
+		@NamedQuery(name = "ComprobanteContable.countAll", query = "SELECT count(c.id) FROM ComprobanteContable c where c.fecha between :fechaInicial and :fechaFinal and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),
 		@NamedQuery(name = "ComprobanteContable.getByNumero", query = "SELECT c FROM ComprobanteContable c where  c.numero= :numero"),
-		@NamedQuery(name = "ComprobanteContable.getMaxNumero", query = "SELECT MAX(c.numero) FROM ComprobanteContable c"), 
-        @NamedQuery(name = "ComprobanteContable.getLibroDiario", query = "SELECT c FROM ComprobanteContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.borrador = false and c.fecha between :fechaInicial and :fechaFinal") 
-})
-
+		@NamedQuery(name = "ComprobanteContable.getMaxNumero", query = "SELECT MAX(c.numero) FROM ComprobanteContable c"),
+		@NamedQuery(name = "ComprobanteContable.getLibroDiario", query = "SELECT c FROM ComprobanteContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.borrador = false and c.fecha between :fechaInicial and :fechaFinal") })
 
 public class ComprobanteContable implements Serializable {
 
@@ -47,7 +46,7 @@ public class ComprobanteContable implements Serializable {
 	private List<Movimiento> movimientos;
 	private Empresa empresa;
 	private Boolean borrador;
- 
+
 	@Id
 	@GeneratedValue(generator = "seq_comprobante_contable", strategy = GenerationType.AUTO)
 	public Long getId() {
@@ -113,5 +112,4 @@ public class ComprobanteContable implements Serializable {
 		this.borrador = borrador;
 	}
 
-    
 }

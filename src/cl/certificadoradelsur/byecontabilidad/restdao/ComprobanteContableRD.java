@@ -122,7 +122,8 @@ public class ComprobanteContableRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String glosaGeneral, String fechaDesde, String fechaHasta, String idUsuario) {
+	public Long countAll(String glosaGeneral, String fechaDesde, String fechaHasta, String idUsuario,
+			Long idEmpresa) {
 		try {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
@@ -135,7 +136,7 @@ public class ComprobanteContableRD {
 				fechaFinal = Utilidades.fechaHasta(fechaHasta);
 			} 
 			return comdao.countAll(glosaGeneral, fechaInicial,fechaFinal,
-					udao.getById(idUsuario).getOficinaContable().getId());
+					udao.getById(idUsuario).getOficinaContable().getId(),idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de comprobantes contables ", e);
 			return 0L;
@@ -150,7 +151,7 @@ public class ComprobanteContableRD {
 	 * @return json con total de Bancos
 	 */
 	public List<ComprobanteContableJson> getAll(Integer page, Integer limit, String glosaGeneral, String fechaDesde,
-			String fechaHasta, String idUsuario) {
+			String fechaHasta, String idUsuario, Long idEmpresa) {
 		List<ComprobanteContableJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -170,7 +171,7 @@ public class ComprobanteContableRD {
 				fechaFinal = Utilidades.fechaHasta(fechaHasta);
 			} 
 			List<ComprobanteContable> lcc = comdao.getAll(inicio, limit, glosaGeneral, fechaInicial,fechaFinal,
-					udao.getById(idUsuario).getOficinaContable().getId());
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lcc.size(); i++) {
 				ComprobanteContableJson ccj = new ComprobanteContableJson();
 				ccj.setId(lcc.get(i).getId());

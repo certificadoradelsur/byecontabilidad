@@ -65,7 +65,8 @@ public class NoConciliadoRD {
 	 * @param idBanco
 	 * @return
 	 */
-	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario, Long idEmpresa) {
+	public Long countAll(String fechaInicial, String fechaFinal, Long idCuenta, Long idBanco, String idUsuario,
+			Long idEmpresa) {
 		try {
 			if (fechaInicial == null || fechaFinal == null || idCuenta == null || idBanco == null) {
 				fechaInicial = Utilidades.fechaActualDesdeFiltro().toString();
@@ -79,7 +80,6 @@ public class NoConciliadoRD {
 		}
 	}
 
-	
 	/**
 	 * Funcion que retorna el total de no Conciliados en json
 	 * 
@@ -102,7 +102,8 @@ public class NoConciliadoRD {
 				fechaFinal = Utilidades.fechaActualHastaFiltro().toString();
 			}
 			List<NoConciliado> lc = ncdao.getAll(inicio, limit, Utilidades.convertidorFechaSinHora(fechaInicial),
-					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
+					Utilidades.fechaHasta(fechaFinal), idCuenta, idBanco,
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lc.size(); i++) {
 				NoConciliadoJson cj = new NoConciliadoJson();
 				cj.setId(lc.get(i).getId());
@@ -187,7 +188,6 @@ public class NoConciliadoRD {
 		return ncdao.getByIdMovimiento(idMovimiento);
 	}
 
-	
 	/**
 	 * Cuenta el total de las filas
 	 * 
@@ -195,8 +195,8 @@ public class NoConciliadoRD {
 	 */
 	public Long countAllMNC(Long monto) {
 		try {
-			if(monto==null) {
-				monto=0L;
+			if (monto == null) {
+				monto = 0L;
 			}
 
 			return ncdao.countAllMNC(monto);
@@ -214,7 +214,8 @@ public class NoConciliadoRD {
 	 * @param fecha
 	 * @return
 	 */
-	public List<NoConciliadoJson> getNoConciliadoMonto(Integer page, Integer limit, Long monto , Long idNoConciliadoCartola) {
+	public List<NoConciliadoJson> getNoConciliadoMonto(Integer page, Integer limit, Long monto,
+			Long idNoConciliadoCartola) {
 		List<NoConciliadoJson> lncj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -226,7 +227,7 @@ public class NoConciliadoRD {
 			if (monto == null) {
 				return lncj;
 			}
-			
+
 			List<NoConciliado> lc = ncdao.getNoConciliadoMonto(inicio, limit, monto);
 			for (int i = 0; i < lc.size(); i++) {
 				NoConciliadoJson cj = new NoConciliadoJson();
@@ -249,6 +250,5 @@ public class NoConciliadoRD {
 		}
 		return lncj;
 	}
-
 
 }

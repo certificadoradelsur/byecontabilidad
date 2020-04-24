@@ -161,140 +161,179 @@
 											}
 											document.getElementById("empresa").innerHTML = str;
 
-											if (document.getElementById("empresa").value != "") {
-												grid.reload({
-													idEmpresa : $('#empresa').val(),
-													idBanco : $('#banco').val()
-												});
-											}
+											// 											if (document.getElementById("empresa").value != "") {
+											// 												grid.reload({
+											// 													idEmpresa : $('#empresa').val(),
+											// 													idBanco : $('#banco').val()
+											// 												});
+											// 											}
 										}, "json");
 						var submitJson = {
-								idUsuario : document.getElementById("idUsuario").value}
-						
-						$.post('/byeContabilidad/rest-services/private/banco/getLista',
-								function(res, code) {
-									var str;
-									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">" + res[i].nombre
-												+ "</option>";
-									}
-									document.getElementById("banco").innerHTML = str;
-								}, "json");
-						
-						grid = $('#grid')
-								.grid(
-										{
-											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/noConciliadoCartola/getAll?idUsuario="
-												+ document
-												.getElementById('idUsuario').value
-										+ "",
-											autoLoad : false,
-											columns : [
-													{
-														field : 'id',
-														title : 'Identificador',
-														width : 100,
-														hidden : true
+							idUsuario : document.getElementById("idUsuario").value
+						}
 
-													},
-													{
-														field : 'fechaT',
-														title : 'Fecha',
-														sortable : true,
-														hidden : true
-													},
-													{
-														field : 'numCartola',
-														title : 'N° Cartola',
-														sortable : true
-
-													},
-													{
-														field : 'descripcion',
-														title : 'Descripcion',
-														sortable : true
-													},
-													{
-														field : 'monto',
-														title : 'Monto',
-														sortable : true
-													},
-													{
-														field : 'tipoMovimiento',
-														title : 'T. Movimiento',
-														sortable : true
-													},
-													{
-														field : 'numDocumento',
-														title : 'N° documento',
-														sortable : true
-													},
-
-													{
-														field : 'fecha',
-														title : 'Fecha',
-														sortable : true
-													},
-													{
-
-														width : 100,
-														title : 'Conciliar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">swap_horiz</span>',
-														align : 'center',
-														events : {
-															'click' : ver
-														}
-													},
-													{
-														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-														align : 'center',
-														events : {
-															'click' : eliminar
-														}
-													}, ],
-											pager : {
-												limit : 10
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/banco/getLista',
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].nombre
+														+ "</option>";
 											}
-										});
+											document.getElementById("banco").innerHTML = str;
+										}, "json");
+
+						fecha();
 
 					});
 
-	$('#buscar').on(
-			'click',
-			function() {
-				if (document.getElementById('filtro1').value == ''
-						|| document.getElementById('filtro2').value == '') {
-					alert('Debe ingresar fecha de inicia y hasta');
-					return;
-				}
-				var fechaInicial = new Date(
-						document.getElementById('filtro1').value);
-				var fechaFinal = new Date(
-						document.getElementById('filtro2').value);
-				var idBanco = document.getElementById('banco').value;
-				var idCuenta = document.getElementById('cuenta').value;
-				if (fechaInicial > fechaFinal) {
-					alert('Fecha inicial no debe ser mayor que fecha final');
-					return;
-				}
-				
-				if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
-					alert("Debe seleccionar una cuenta contable");
-					return;
-				}
+	function fecha() {
+		var now = new Date();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear() + "-" + (month) + "-" + ("01");
+		$("#filtro1").val(today);
 
-				grid.reload({
-					idEmpresa : $('#empresa').val(),
-					fechaInicial : $('#filtro1').val(),
-					fechaFinal : $('#filtro2').val(),
-					idBanco : $('#banco').val(),
-					idCuenta : $('#cuenta').val()
-				});
-				clear();
+		var now = new Date();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var dia = new Date(now.getFullYear() || new Date().getFullYear(),
+				month, 0).getDate();
+		var today2 = now.getFullYear() + "-" + (month) + "-" + (dia);
+		$("#filtro2").val(today2);
+		cargaTabla();
+	}
+
+	function cargaTabla() {
+		grid = $('#grid')
+				.grid(
+						{
+							primaryKey : 'ID',
+							dataSource : "/byeContabilidad/rest-services/private/noConciliadoCartola/getAll?idUsuario="
+									+ document.getElementById('idUsuario').value
+									+ "",
+							autoLoad : false,
+							columns : [
+									{
+										field : 'id',
+										title : 'Identificador',
+										width : 100,
+										hidden : true
+
+									},
+									{
+										field : 'fechaT',
+										title : 'Fecha',
+										sortable : true,
+										hidden : true
+									},
+									{
+										field : 'numCartola',
+										title : 'N° Cartola',
+										sortable : true
+
+									},
+									{
+										field : 'descripcion',
+										title : 'Descripcion',
+										sortable : true
+									},
+									{
+										field : 'monto',
+										title : 'Monto',
+										sortable : true
+									},
+									{
+										field : 'tipoMovimiento',
+										title : 'T. Movimiento',
+										sortable : true
+									},
+									{
+										field : 'numDocumento',
+										title : 'N° documento',
+										sortable : true
+									},
+
+									{
+										field : 'fecha',
+										title : 'Fecha',
+										sortable : true
+									},
+									{
+
+										width : 100,
+										title : 'Conciliar',
+										tmpl : '<span class="material-icons gj-cursor-pointer">swap_horiz</span>',
+										align : 'center',
+										events : {
+											'click' : ver
+										}
+									},
+									{
+										width : 100,
+										title : 'Eliminar',
+										tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+										align : 'center',
+										events : {
+											'click' : eliminar
+										}
+									}, ],
+							pager : {
+								limit : 10
+							}
+						});
+
+		busca();
+
+	}
+
+	function busca() {
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				idEmpresa : $('#empresa').val(),
+				fechaInicial : $('#filtro1').val(),
+				fechaFinal : $('#filtro2').val(),
+				idBanco : $('#banco').val()
 			});
+		}
+	}
+
+	$('#buscar')
+			.on(
+					'click',
+					function() {
+						if (document.getElementById('filtro1').value == ''
+								|| document.getElementById('filtro2').value == '') {
+							alert('Debe ingresar fecha de inicia y hasta');
+							return;
+						}
+						var fechaInicial = new Date(document
+								.getElementById('filtro1').value);
+						var fechaFinal = new Date(document
+								.getElementById('filtro2').value);
+						var idBanco = document.getElementById('banco').value;
+						var idCuenta = document.getElementById('cuenta').value;
+						if (fechaInicial > fechaFinal) {
+							alert('Fecha inicial no debe ser mayor que fecha final');
+							return;
+						}
+
+						if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+							alert("Debe seleccionar una cuenta contable");
+							return;
+						}
+
+						if (document.getElementById("empresa").value != "") {
+							grid.reload({
+								idEmpresa : $('#empresa').val(),
+								fechaInicial : $('#filtro1').val(),
+								fechaFinal : $('#filtro2').val(),
+								idBanco : $('#banco').val(),
+								idCuenta : $('#cuenta').val()
+							});
+							//clear();
+						}
+					});
 
 	function ver(x) {
 		tablaP();
@@ -302,7 +341,7 @@
 			monto : x.data.record.monto,
 			idNoConciliadoCartola : x.data.record.id
 		});
-		 document.getElementById('modal').click(); 
+		document.getElementById('modal').click();
 	}
 
 	function eliminar(x) {
@@ -400,24 +439,21 @@
 			idNoConciliadoCartola : x.data.record.idNoConciliadoCartola,
 			idNoConciliado : x.data.record.id
 		}
-		if (window.confirm('¿Esta seguro desea realizar una conciliación entre estos movimientos?')) {
+		if (window
+				.confirm('¿Esta seguro desea realizar una conciliación entre estos movimientos?')) {
 
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/conciliacion/add',
-							JSON.stringify(submitJson))
-					.done(
-							function(data) {
-								if (data == 'OK') {
-									alert('Se guardo la conciliación se guardo exitosamente');
-									location.href = "index.jsp";
-								} else {
-									alert(data);
-								}
+			$.post('/byeContabilidad/rest-services/private/conciliacion/add',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('Se guardo la conciliación se guardo exitosamente');
+					location.href = "index.jsp";
+				} else {
+					alert(data);
+				}
 
-							}).fail(function(jqxhr, settings, ex) {
-						alert('No se pudo guardar la conciliación ' + ex);
-					});
+			}).fail(function(jqxhr, settings, ex) {
+				alert('No se pudo guardar la conciliación ' + ex);
+			});
 		}
 	}
 
@@ -426,29 +462,30 @@
 		document.getElementById("filtro2").value = "";
 	}
 
-	
+	$('#banco')
+			.on(
+					'change',
+					function() {
+						var submitJson = {
 
+							idUsuario : document.getElementById("idUsuario").value,
+							idBanco : document.getElementById("banco").value
+						}
 
-	$('#banco').on('change',
-			function() {
-				var submitJson = { 
-
-					    idUsuario : document.getElementById("idUsuario").value,
-						idBanco : document.getElementById("banco").value
-				}
-
-				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
-								JSON.stringify(submitJson),
-								function(res, code) {
-									var str = "<option>Seleccione cuenta</option>";
-									for (var i = 0, len = res.length; i < len; i++) {
-									str += "<option value="+res[i].id+">"
-												+ res[i].numCuenta
-												+ "</option>";
-									}
-									document.getElementById("cuenta").innerHTML = str;
-								}, "json");
-			}); 	
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str = "<option>Seleccione cuenta</option>";
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].numCuenta
+														+ "</option>";
+											}
+											document.getElementById("cuenta").innerHTML = str;
+										}, "json");
+					});
 
 	$("#banco").trigger('change');
 </script>

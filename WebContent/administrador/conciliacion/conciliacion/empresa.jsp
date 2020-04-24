@@ -187,116 +187,138 @@
 														+ "</option>";
 											}
 											document.getElementById("empresa").innerHTML = str;
-											var fechaInicial = new Date(
-													document.getElementById('filtro1').value);
-											var fechaFinal = new Date(
-													document.getElementById('filtro2').value);
-											var idBanco = document.getElementById('banco').value;
-											var idCuenta = document.getElementById('cuenta').value;
-											if (fechaInicial > fechaFinal) {
-												alert('Fecha inicial no debe ser mayor que fecha final');
-												return;
-											}
-											if (document.getElementById("empresa").value != "") {
-												grid.reload({
-													idEmpresa : $('#empresa').val(),
-													idBanco : $('#banco').val()
-												});
-											}
+											
+// 											if (document.getElementById("empresa").value != "") {
+// 												grid.reload({
+// 													idEmpresa : $('#empresa').val(),
+// 													idBanco : $('#banco').val()
+// 												});
+// 											}
 										}, "json");
 						
-						grid = $('#grid')
-								.grid(
-										{
-											primaryKey : 'ID',
-											dataSource : "/byeContabilidad/rest-services/private/noConciliado/getAll?idUsuario="
-												+ document
-												.getElementById('idUsuario').value
-										+ "",
-											autoLoad : false,
-											columns : [
-													{
-														field : 'id',
-														title : 'Identificador',
-														width : 100,
-														hidden : true
-													},
-													{
-														field : 'numComprobante',
-														title : 'Combrobante',
-														sortable : true,
-													},
-													{
-														field : 'fechaT',
-														title : 'Fecha',
-														sortable : true,
-														hidden : true
-													},
-													{
-														field : 'glosa',
-														title : 'Glosa',
-														sortable : true
-													},
-													{
-														field : 'numDocumento',
-														title : 'N° Documento',
-														sortable : true
-													},
-													{
-														field : 'monto',
-														title : 'Monto',
-														sortable : true
-													},
-													{
-														field : 'tipoDocumento',
-														title : 'T. Documento',
-														sortable : true
-													},
-													{
-														field : 'tipoMovimiento',
-														title : 'T. Movimiento',
-														sortable : true
-													},
-													{
-														field : 'fecha',
-														title : 'Fecha',
-														sortable : true
-													},
-													{
-
-														width : 100,
-														title : 'Busca Monto',
-														tmpl : '<span class="material-icons gj-cursor-pointer">swap_horiz</span>',
-														align : 'center',
-														events : {
-															'click' : verMonto
-														}
-													},
-													{
-														width : 100,
-														title : 'Busca N° Doc',
-														tmpl : '<span class="material-icons gj-cursor-pointer">swap_horiz</span>',
-														align : 'center',
-														events : {
-															'click' : verDoc
-														}
-													},
-													{
-														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-														align : 'center',
-														events : {
-															'click' : eliminar
-														}
-													}, ],
-											pager : {
-												limit : 10
-											}
-										});
+						fecha();
 
 					});
 
+	function fecha(){
+		var now = new Date();
+	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	    var today = now.getFullYear()+"-"+(month)+"-"+("01") ;
+	    $("#filtro1").val(today);
+	    
+		var now = new Date();  
+	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	    var dia =new Date(now.getFullYear() || new Date().getFullYear(), month, 0).getDate();
+	    var today2 = now.getFullYear()+"-"+(month)+"-"+(dia) ;
+	    $("#filtro2").val(today2);
+	    cargaTabla();
+	}
+	
+	
+	function cargaTabla(){
+		grid = $('#grid')
+		.grid(
+				{
+					primaryKey : 'ID',
+					dataSource : "/byeContabilidad/rest-services/private/noConciliado/getAll?idUsuario="
+						+ document
+						.getElementById('idUsuario').value
+				+ "",
+					autoLoad : false,
+					columns : [
+							{
+								field : 'id',
+								title : 'Identificador',
+								width : 100,
+								hidden : true
+							},
+							{
+								field : 'numComprobante',
+								title : 'Combrobante',
+								sortable : true,
+							},
+							{
+								field : 'fechaT',
+								title : 'Fecha',
+								sortable : true,
+								hidden : true
+							},
+							{
+								field : 'glosa',
+								title : 'Glosa',
+								sortable : true
+							},
+							{
+								field : 'numDocumento',
+								title : 'N° Documento',
+								sortable : true
+							},
+							{
+								field : 'monto',
+								title : 'Monto',
+								sortable : true
+							},
+							{
+								field : 'tipoDocumento',
+								title : 'T. Documento',
+								sortable : true
+							},
+							{
+								field : 'tipoMovimiento',
+								title : 'T. Movimiento',
+								sortable : true
+							},
+							{
+								field : 'fecha',
+								title : 'Fecha',
+								sortable : true
+							},
+							{
+
+								width : 100,
+								title : 'Busca Monto',
+								tmpl : '<span class="material-icons gj-cursor-pointer">swap_horiz</span>',
+								align : 'center',
+								events : {
+									'click' : verMonto
+								}
+							},
+							{
+								width : 100,
+								title : 'Busca N° Doc',
+								tmpl : '<span class="material-icons gj-cursor-pointer">swap_horiz</span>',
+								align : 'center',
+								events : {
+									'click' : verDoc
+								}
+							},
+							{
+								width : 100,
+								title : 'Eliminar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+								align : 'center',
+								events : {
+									'click' : eliminar
+								}
+							}, ],
+					pager : {
+						limit : 10
+					}
+				});
+		busca();
+	}
+	
+	function busca(){
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				idEmpresa : $('#empresa').val(),
+				fechaInicial : $('#filtro1').val(),
+				fechaFinal : $('#filtro2').val(),
+				idBanco : $('#banco').val()
+			});
+		}
+	}
+	
 	$('#buscar').on(
 			'click',
 			function() {

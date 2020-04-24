@@ -77,6 +77,13 @@
 					</div>
 
 					<div class="form-group col-md-2">
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				   </div>
+
+					<div class="form-group col-md-2">
 						<label for="banco">&nbsp;Banco</label> <select
 							class="browser-default custom-select" id="banco"
 							required="required">
@@ -111,7 +118,26 @@
 					function() {
 						$("#banco").select2();
 						$("#cuenta").select2();
+						$("#empresa").select2();
 
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+										}, "json");
+
+						
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
@@ -201,7 +227,9 @@
 				+ "&idBanco="
 				+ document.getElementById('banco').value
 				+ "&idCuenta="
-				+ document.getElementById('cuenta').value;
+				+ document.getElementById('cuenta').value
+				+ "&idEmpresa="
+				+ document.getElementById('empresa').value;
 
 	}
 

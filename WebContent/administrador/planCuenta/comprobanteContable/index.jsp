@@ -71,30 +71,36 @@
 						placeholder="Filtrar por glosa" class="form-control" />
 				</div>
 				<div class="form-group col-md-2">
-						<div class="form-row">
-							<label for="desde">&nbsp;&nbsp;Desde</label>
-						</div>
-						<input type="date" id="desde" name="desde"
-							class="form-control" class="in" />
+					<label for="empresa">&nbsp;Empresa</label> <select
+						class="browser-default custom-select" id="empresa"
+						required="required">
+					</select>
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="desde">&nbsp;&nbsp;Desde</label>
 					</div>
-					<div class="form-group col-md-2">
-						<div class="form-row">
-							<label for="hasta">&nbsp; &nbsp;Hasta</label>
-						</div>
-						<input type="date" id="hasta" name="hasta"
-							class="form-control" class="in" />
+					<input type="date" id="desde" name="desde" class="form-control"
+						class="in" />
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="hasta">&nbsp; &nbsp;Hasta</label>
 					</div>
+					<input type="date" id="hasta" name="hasta" class="form-control"
+						class="in" />
+				</div>
 				<div class="form-group col-md-3">
 					<div class="form-row clo md 3">
 						<label>&nbsp;</label>
 					</div>
 					<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
 				</div>
-		<div class="table-responsive">
-			<table id="grid"></table>
-		</div> 
-    </div>
-    </div>
+				<div class="table-responsive">
+					<table id="grid"></table>
+				</div>
+			</div>
+		</div>
 
 		<div class="container">
 			<!-- Trigger the modal with a button -->
@@ -119,12 +125,13 @@
 						<div class="modal-body">
 
 							<div class="row">
-									<div class="col-sm-1">
+								<div class="col-sm-1">
 									<input type="text" id="idComprobante" hidden=true />
 								</div>
 								<div class="col-sm-9"></div>
 								<div class="col-sm-2">
-									<button type="button" class="btn btn-primary" onclick="modificarComprobante()">Modificar</button>
+									<button type="button" class="btn btn-primary"
+										onclick="modificarComprobante()">Modificar</button>
 								</div>
 							</div>
 							<div class="row">
@@ -179,113 +186,134 @@
 	$(document)
 			.ready(
 					function() {
-						tablaP();	
-						
+						tablaP();
+						$("#empresa").select2({
+							width : '180'
+						});
+
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+										}, "json");
 						fecha();
-						
 					});
 
-	function fecha(){
+	function fecha() {
 		var now = new Date();
-	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	    var today = now.getFullYear()+"-"+(month)+"-"+("01") ;
-	    $("#desde").val(today);
-	    
-		var now = new Date();  
-	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	    var dia =new Date(now.getFullYear() || new Date().getFullYear(), month, 0).getDate();
-	    var today2 = now.getFullYear()+"-"+(month)+"-"+(dia) ;
-	    $("#hasta").val(today2);
-	    cargaTabla();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear() + "-" + (month) + "-" + ("01");
+		$("#desde").val(today);
+
+		var now = new Date();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var dia = new Date(now.getFullYear() || new Date().getFullYear(),
+				month, 0).getDate();
+		var today2 = now.getFullYear() + "-" + (month) + "-" + (dia);
+		$("#hasta").val(today2);
+		cargaTabla();
 	}
-	
-	function cargaTabla(){
+
+	function cargaTabla() {
 		grid = $('#grid')
-		.grid(
-				{
-					primaryKey : 'ID',
-					dataSource : "/byeContabilidad/rest-services/private/comprobanteContable/getAll?idUsuario="
-							+ document
-									.getElementById('idUsuario').value
-							+ "",
-					autoLoad : false,
-					columns : [
-							{
-								field : 'id',
-								title : 'Identificador',
-								width : 100,
-								hidden : true
+				.grid(
+						{
+							primaryKey : 'ID',
+							dataSource : "/byeContabilidad/rest-services/private/comprobanteContable/getAll?idUsuario="
+									+ document.getElementById('idUsuario').value
+									+ "",
+							autoLoad : false,
+							columns : [
+									{
+										field : 'id',
+										title : 'Identificador',
+										width : 100,
+										hidden : true
 
-							},
-							{
-								field : 'numero',
-								title : 'N° Comprobante',
-								width : 140
-							},
+									},
+									{
+										field : 'numero',
+										title : 'N° Comprobante',
+										width : 140
+									},
 
-							{
-								field : 'glosaGeneral',
-								title : 'Glosa',
-								sortable : true,
-								width : 140
-							},
-							{
-								field : 'fecha',
-								title : 'Fecha',
-								width : 140
-							},
-							{
-								field : 'nombreEmpresa',
-								title : 'Empresa',
-								width : 160
-							},
-							{
-								field : 'borrador',
-								title : 'Borrador',
-								width : 140
-							},
-							{
-								width : 100,
-								title : 'Ver más',
-								tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
-								align : 'center',
-								events : {
-									'click' : ver
-								}
-							},
-							{
-								width : 160,
-								title : 'Modificar encabezado',
-								tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
-								align : 'center',
-								events : {
-									'click' : modificar
-								}
-							},
-							{
-								width : 100,
-								title : 'Eliminar',
-								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-								align : 'center',
-								events : {
-									'click' : eliminar
-								}
-							}, ],
-					pager : {
-						limit : 10
-					}
-				});
+									{
+										field : 'glosaGeneral',
+										title : 'Glosa',
+										sortable : true,
+										width : 140
+									},
+									{
+										field : 'fecha',
+										title : 'Fecha',
+										width : 140
+									},
+									{
+										field : 'nombreEmpresa',
+										title : 'Empresa',
+										width : 160
+									},
+									{
+										field : 'borrador',
+										title : 'Borrador',
+										width : 140
+									},
+									{
+										width : 100,
+										title : 'Ver más',
+										tmpl : '<span class="material-icons gj-cursor-pointer">remove_red_eye</span>',
+										align : 'center',
+										events : {
+											'click' : ver
+										}
+									},
+									{
+										width : 160,
+										title : 'Modificar encabezado',
+										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+										align : 'center',
+										events : {
+											'click' : modificar
+										}
+									},
+									{
+										width : 100,
+										title : 'Eliminar',
+										tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+										align : 'center',
+										events : {
+											'click' : eliminar
+										}
+									}, ],
+							pager : {
+								limit : 10
+							}
+						});
 		busca();
 	}
-	
-	function busca(){
-		grid.reload({
-			glosaGeneral : $('#filtro').val(),
-			fechaDesde : $('#desde').val(),
-			fechaHasta :$('#hasta').val()
-		});
+
+	function busca() {
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				glosaGeneral : $('#filtro').val(),
+				fechaDesde : $('#desde').val(),
+				fechaHasta : $('#hasta').val(),
+				idEmpresa : $('#empresa').val()
+			});
+		}
 	}
-	
+
 	function agregar() {
 		location.href = "agregar.jsp";
 	}
@@ -367,15 +395,15 @@
 										title : 'Documento',
 										width : 140
 									},
-// 									{
-// 										width : 160,
-// 										title : 'Modificar movimiento',
-// 										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
-// 										align : 'center',
-// 										events : {
-// 											'click' : modificarMovimiento
-// 										}
-// 									},
+									// 									{
+									// 										width : 160,
+									// 										title : 'Modificar movimiento',
+									// 										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+									// 										align : 'center',
+									// 										events : {
+									// 											'click' : modificarMovimiento
+									// 										}
+									// 									},
 									{
 										width : 80,
 										title : 'Eliminar',
@@ -416,7 +444,7 @@
 		var submitjson = {
 			id : x.data.record.id
 		};
-		
+
 		$
 				.post(
 						'/byeContabilidad/rest-services/private/comprobanteContable/getById',
@@ -428,12 +456,9 @@
 							document.getElementById("glosaGeneral").value = data.glosaGeneral;
 							document.getElementById("fecha").value = data.fecha;
 							document.getElementById("empresa").value = data.nombreEmpresa;
-						})
-				.fail(
-						function(jqxhr, settings, ex) {
-							alert('No se pudo cargar el comprobante contable '
-									+ ex);
-						});
+						}).fail(function(jqxhr, settings, ex) {
+					alert('No se pudo cargar el comprobante contable ' + ex);
+				});
 
 		gridComprobante.reload({
 			id : x.data.record.id
@@ -446,22 +471,27 @@
 		var fechaHasta = new Date(document.getElementById('hasta').value);
 		if (fechaDesde > fechaHasta) {
 			alert('Fecha Inicial no debe ser mayor que fecha final');
-			return;}
-		grid.reload({
-			glosaGeneral : $('#filtro').val(),
-			fechaDesde : $('#desde').val(),
-			fechaHasta :$('#hasta').val()
-		});
-		clear();
+			return;
+		}
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				glosaGeneral : $('#filtro').val(),
+				fechaDesde : $('#desde').val(),
+				fechaHasta : $('#hasta').val(),
+				idEmpresa : $('#empresa').val()
+			});
+		}
+		//clear();
 	});
-	
+
 	function modificarComprobante(e) {
-		document.getElementById("id").value = document.getElementById("idComprobante").value;
+		document.getElementById("id").value = document
+				.getElementById("idComprobante").value;
 		document.getElementById("formulario").action = 'modificarComprobante.jsp';
 		document.getElementById("formulario").method = 'POST';
 		document.getElementById("formulario").submit();
 	}
-	
+
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.id;
 		document.getElementById("formulario").action = 'modificar.jsp';

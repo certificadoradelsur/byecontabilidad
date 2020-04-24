@@ -34,7 +34,8 @@ public class ConciliacionDAO {
 	 * 
 	 * @return el total de conciliaciones
 	 */
-	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco, Long idOficinaContable) {
+	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuenta, Long idBanco,
+			Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Conciliacion.countAll");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -51,6 +52,7 @@ public class ConciliacionDAO {
 		query.setParameter("idCuenta", idCuenta);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idBanco", idBanco);
+		query.setParameter("idEmpresa", idEmpresa);
 		return (Long) query.getSingleResult();
 	}
 
@@ -63,7 +65,7 @@ public class ConciliacionDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Conciliacion> getAll(Integer inicio, Integer fin, Timestamp fechaInicial, Timestamp fechaFinal,
-			Long idCuenta, Long idBanco, Long idOficinaContable) {
+			Long idCuenta, Long idBanco, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Conciliacion.getAll");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
@@ -80,6 +82,7 @@ public class ConciliacionDAO {
 		query.setParameter("idCuenta", idCuenta);
 		query.setParameter("idBanco", idBanco);
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();
@@ -185,7 +188,7 @@ public class ConciliacionDAO {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * busca conciliacion por idComprobante
 	 * 
@@ -204,7 +207,6 @@ public class ConciliacionDAO {
 		}
 	}
 
-
 	/**
 	 * Funcion que obtiene datos desde BD para alimentar los reportes
 	 * 
@@ -216,13 +218,14 @@ public class ConciliacionDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Conciliacion> getByIdReporteBancoCuenta(Timestamp fechaInicial, Timestamp fechaFinal, Long idBanco,
-			Long idCuenta) {
+			Long idCuenta, Long idEmpresa) {
 		Query query = em.createNamedQuery("Conciliacion.getByIdReporteBancoCuenta");
 
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idBanco", idBanco);
 		query.setParameter("idCuenta", idCuenta);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 

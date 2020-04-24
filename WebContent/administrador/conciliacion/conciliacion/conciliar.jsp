@@ -136,9 +136,9 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#empresa").select2({width:'200'});
-		$("#banco").select2();
-		$("#fecha").select2();
-		$("#anio").select2();
+		$("#banco").select2({width:'200'});
+		$("#fecha").select2({width:'200'});
+		$("#anio").select2({width:'200'});
 		ComboAnio();
 		
 		var submitJson = {

@@ -25,19 +25,17 @@ import javax.persistence.Table;
 @Table(name = "conciliacion")
 @SequenceGenerator(name = "seq_conciliacion", sequenceName = "seq_conciliacion")
 @NamedQueries({
-		@NamedQuery(name = "Conciliacion.getAll", query = "SELECT c FROM  Conciliacion c where c.eliminado = false and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
-		@NamedQuery(name = "Conciliacion.countAll", query = "SELECT count(c.id) FROM Conciliacion c where c.eliminado = false and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
+		@NamedQuery(name = "Conciliacion.getAll", query = "SELECT c FROM  Conciliacion c where c.eliminado = false and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
+		@NamedQuery(name = "Conciliacion.countAll", query = "SELECT count(c.id) FROM Conciliacion c where c.eliminado = false and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and c.movimiento.fecha  between :fechaInicial and :fechaFinal and (true = :ignoreIdCuenta or c.cartola.cuenta.id=:idCuenta) and (true = :ignoreIdBanco or c.cartola.banco.id=:idBanco)"),
 		@NamedQuery(name = "Conciliacion.getByMovCar", query = "SELECT c FROM Conciliacion c where  c.cartola.id =  :idCartola or c.movimiento.id= :idMovimiento"),
 		@NamedQuery(name = "Conciliacion.getByMov", query = "SELECT c FROM Conciliacion c where  c.movimiento.id= :idMovimiento"),
 		@NamedQuery(name = "Conciliacion.getByCart", query = "SELECT c FROM Conciliacion c where  c.cartola.id= :idCartola"),
 		@NamedQuery(name = "Conciliacion.getByIdTransaccion", query = "SELECT c FROM Conciliacion c where  c.movimiento.transaccion.id= :idTransaccion"),
 		@NamedQuery(name = "Conciliacion.idComprobante", query = "SELECT c FROM Conciliacion c where  c.movimiento.comprobanteContable.id= :idComprobante"),
 		@NamedQuery(name = "Conciliacion.countAllResumen", query = "SELECT count(c.id) FROM Conciliacion c where c.eliminado = false and c.movimiento.fecha between :fechaI and :fechaF"),
-		@NamedQuery(name = "Conciliacion.getByIdReporteBancoCuenta", query = "SELECT c FROM Conciliacion c where c.eliminado = false and c.movimiento.fecha between :fechaInicial and :fechaFinal and c.cartola.banco.id= :idBanco and c.cartola.cuenta.id= :idCuenta") 
-		
+		@NamedQuery(name = "Conciliacion.getByIdReporteBancoCuenta", query = "SELECT c FROM Conciliacion c where c.eliminado = false and c.empresa.id=:idEmpresa and c.movimiento.fecha between :fechaInicial and :fechaFinal and c.cartola.banco.id= :idBanco and c.cartola.cuenta.id= :idCuenta")
+
 })
-
-
 
 public class Conciliacion implements Serializable {
 
@@ -96,6 +94,7 @@ public class Conciliacion implements Serializable {
 	public void setEliminado(Boolean eliminado) {
 		this.eliminado = eliminado;
 	}
+
 	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = true)
 	public Empresa getEmpresa() {

@@ -31,7 +31,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "NoConciliadoCartola.getNoConciliadoCartolaDoc", query = "SELECT  c FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.numDocumento = :numDocumento"),
 		@NamedQuery(name = "NoConciliadoCartola.countAllNCC", query = "SELECT  count(c.id) FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.monto = :monto"),
 		@NamedQuery(name = "NoConciliadoCartola.countAllNCCDoc", query = "SELECT  count(c.id) FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.numDocumento = :numDocumento"),
-		@NamedQuery(name = "NoConciliadoCartola.getByIdReporteBancoCuenta", query = "SELECT c FROM NoConciliadoCartola c where c.eliminado = false and c.cartola.fecha between :fechaInicial and :fechaFinal and c.cartola.cuenta.banco.id= :idBanco and c.cartola.cuenta.id= :idCuenta")
+		@NamedQuery(name = "NoConciliadoCartola.getByIdReporteBancoCuenta", query = "SELECT c FROM NoConciliadoCartola c where c.eliminado = false and c.empresa.id=:idEmpresa and c.cartola.fecha between :fechaInicial and :fechaFinal and c.cartola.cuenta.banco.id= :idBanco and c.cartola.cuenta.id= :idCuenta")
 
 })
 
