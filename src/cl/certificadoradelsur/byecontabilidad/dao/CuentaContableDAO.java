@@ -146,9 +146,24 @@ public class CuentaContableDAO {
 	}
 
 	/**
-	 * Obtiene todas las Cuentas Contables
+	 *	Obtiene Cuentas Contables por id empresa
 	 * 
+	 * @param idOficinaContable
+	 * @param idEmpresa
 	 * @return la lista de Cuentas Contables
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CuentaContable> getListaEmpresa(Long idOficinaContable, Long idEmpresa) {
+		Query query = em.createNamedQuery("CuentaContable.getAllListaEmpresa");
+		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
+		return query.getResultList();
+	}
+	
+	/**
+	 * Obtiene todas las Cuentas Contables
+	 * @param idOficinaContable
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public List<CuentaContable> getLista(Long idOficinaContable) {
@@ -163,9 +178,10 @@ public class CuentaContableDAO {
 	 * @return la lista de Cuentas Contables
 	 */
 	@SuppressWarnings("unchecked")
-	public List<CuentaContable> getBalance(Long idOficinaContable) {
+	public List<CuentaContable> getBalance(Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("CuentaContable.getBalance");
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 

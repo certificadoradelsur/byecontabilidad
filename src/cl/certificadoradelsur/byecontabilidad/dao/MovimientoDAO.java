@@ -184,9 +184,10 @@ public class MovimientoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Movimiento> getByIdComprobanteReporte(Long idComprobante) {
+	public List<Movimiento> getByIdComprobanteReporte(Long idComprobante, Long idEmpresa) {
 		Query query = em.createNamedQuery("Movimiento.getByIdComprobanteReporte");
 		query.setParameter("idComprobante", idComprobante);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 
@@ -268,13 +269,14 @@ public class MovimientoDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Movimiento> getByMovEntreCuentas(Timestamp fechaInicial, Timestamp fechaFinal, Long inicialMayor,
-			Long finalMayor, Long idOficinaContable) {
+			Long finalMayor, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Movimiento.getByMovEntreCuentas");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("inicialMayor", inicialMayor);
 		query.setParameter("finalMayor", finalMayor);
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 
@@ -290,12 +292,13 @@ public class MovimientoDAO {
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Movimiento> getBalanceGeneral(Timestamp fechaInicial, Timestamp fechaFinal, Long idCuentaContable,
-			Long idOficinaContable) {
+			Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Movimiento.getBalanceGeneral");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idCuentaContable", idCuentaContable);
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 

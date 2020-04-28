@@ -157,11 +157,12 @@ public class ComprobanteContableDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ComprobanteContable> getLibroDiario(Timestamp fechaInicial, Timestamp fechaFinal,
-			Long idOficinaContable) {
+			Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("ComprobanteContable.getLibroDiario");
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 }

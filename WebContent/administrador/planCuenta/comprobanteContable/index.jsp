@@ -329,7 +329,7 @@
 							'/byeContabilidad/rest-services/private/movimiento/eliminarMovimientosComprobante',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
-							('Comprobante contable eliminado correctamente');
+							alert('Comprobante contable eliminado correctamente');
 							grid.reload();
 						} else {
 							alert(data);

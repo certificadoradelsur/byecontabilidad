@@ -119,4 +119,14 @@ public class EmpresaDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
+	
+	/**
+	 * Funcion que trae el id más grande
+	 * 
+	 * @return max(id)
+	 */
+	public Long maxId() {
+		Query query = em.createNamedQuery("Empresa.maxId");
+		return (Long) query.getSingleResult();
+	}
 }

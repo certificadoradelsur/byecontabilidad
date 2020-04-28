@@ -43,9 +43,7 @@ public interface ReporteSvc {
 	@Path("/getLibroDiario")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	Response getLibroDiario(@QueryParam("fechaDesde") String fechaDesde, @QueryParam("fechaHasta") String fechaHasta,
-			@QueryParam("idUsuario") String idUsuario
-			//, @QueryParam("idEmpresa") Long idEmpresa
-			) throws ParseException;
+			@QueryParam("idUsuario") String idUsuario, @QueryParam("idEmpresa") Long idEmpresa) throws ParseException;
 
 	/**
 	 * Funcion que provee con datos necesarios para realizar reporte libro mayor
@@ -63,9 +61,8 @@ public interface ReporteSvc {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	Response getLibroMayor(@QueryParam("fechaDesde") String fechaDesde, @QueryParam("fechaHasta") String fechaHasta,
 			@QueryParam("inicialMayor") Long inicialMayor, @QueryParam("finalMayor") Long finalMayor,
-			@QueryParam("idUsuario") String idUsuario
-			//, @QueryParam("idEmpresa") Long idEmpresa
-			) throws ParseException;
+			@QueryParam("idUsuario") String idUsuario, @QueryParam("idEmpresa") Long idEmpresa) throws ParseException;
+
 	/**
 	 * Funcion que provee con datos necesarios para realizar reporte balance general
 	 * 
@@ -80,9 +77,8 @@ public interface ReporteSvc {
 	@Path("/getBalanceGeneral")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	Response getBalanceGeneral(@QueryParam("fechaDesde") String fechaDesde, @QueryParam("fechaHasta") String fechaHasta,
-			@QueryParam("anio") String anio, @QueryParam("idUsuario") String idUsuario
-			//, @QueryParam("idEmpresa") Long idEmpresa
-			) throws ParseException;
+			@QueryParam("anio") String anio, @QueryParam("idUsuario") String idUsuario,
+			@QueryParam("idEmpresa") Long idEmpresa) throws ParseException;
 
 	/**
 	 * Funcion que provee con datos necesarios para realizar reporte balance
@@ -100,8 +96,6 @@ public interface ReporteSvc {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	Response getBalanceClasificado(@QueryParam("fechaDesde") String fechaDesde,
 			@QueryParam("fechaHasta") String fechaHasta, @QueryParam("anio") String anio,
-			@QueryParam("idUsuario") String idUsuario
-			//, @QueryParam("idEmpresa") Long idEmpresa
-			) throws ParseException;
+			@QueryParam("idUsuario") String idUsuario, @QueryParam("idEmpresa") Long idEmpresa) throws ParseException;
 
 }

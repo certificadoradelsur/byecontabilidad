@@ -308,10 +308,59 @@
 										+ "</option>";
 							}
 							document.getElementById("empresa").innerHTML = str;
-							document.getElementById("empresa1").innerHTML = str;
-							document.getElementById("empresa2").innerHTML = str;
-							document.getElementById("empresa3").innerHTML = str;
 						}, "json");
+		
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value
+			}
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/empresa/getLista',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str;
+								for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">"
+											+ res[i].razonSocial
+											+ "</option>";
+								}
+								document.getElementById("empresa1").innerHTML = str;
+							}, "json");
+		
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value
+			}
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/empresa/getLista',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str;
+								for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">"
+											+ res[i].razonSocial
+											+ "</option>";
+								}
+								document.getElementById("empresa2").innerHTML = str;
+							}, "json");
+		
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value
+			}
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/empresa/getLista',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str;
+								for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+">"
+											+ res[i].razonSocial
+											+ "</option>";
+								}
+								document.getElementById("empresa3").innerHTML = str;
+							}, "json");
+		
 		ComboAnio();
 		ComboAnioClasificado();
 
@@ -358,7 +407,7 @@
 				+ "&idUsuario="
 				+ document.getElementById('idUsuario').value
 				+ "&idEmpresa="
-				+ document.getElementById('idEmpresa').value
+				+ document.getElementById('empresa').value
 
 	}
 
@@ -394,7 +443,7 @@
 				+ document.getElementById('finalMayor').value
 				+ "&idUsuario=" + document.getElementById('idUsuario').value
 				+ "&idEmpresa="
-				+ document.getElementById('idEmpresa1').value
+				+ document.getElementById('empresa1').value
 	}
 
 	function reporteGeneral() {
@@ -414,7 +463,7 @@
 				+ "&idUsuario="
 				+ document.getElementById('idUsuario').value
 				+ "&idEmpresa="
-				+ document.getElementById('idEmpresa2').value
+				+ document.getElementById('empresa2').value
 	}
 
 	function reporteClasificado() {
@@ -433,7 +482,7 @@
 				+ document.getElementById('anioClasificado').value
 				+ "&idUsuario=" + document.getElementById('idUsuario').value
 				+ "&idEmpresa="
-				+ document.getElementById('idEmpresa3').value
+				+ document.getElementById('empresa3').value
 	}
 
 </script>

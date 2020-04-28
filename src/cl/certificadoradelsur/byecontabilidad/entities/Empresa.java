@@ -24,7 +24,8 @@ import javax.persistence.Table;
 @SequenceGenerator(name = "seq_empresa", sequenceName = "seq_empresa")
 @NamedQueries({ @NamedQuery(name = "Empresa.getAll", query = "SELECT e FROM Empresa e  where e.oficinaContable.id =:idOficinaContable and (true = :ignoreRazonSocial or upper(e.razonSocial) like :razonSocial) ORDER BY e.rut"),
 				@NamedQuery(name = "Empresa.countAll", query = "SELECT count(e.razonSocial) FROM Empresa e where e.oficinaContable.id =:idOficinaContable and(true = :ignoreRazonSocial or upper(e.razonSocial) like :razonSocial)"),
-				@NamedQuery(name = "Empresa.getAllLista", query = "SELECT e FROM Empresa e where e.oficinaContable.id =:idOficinaContable and e.activo = true") })
+				@NamedQuery(name = "Empresa.getAllLista", query = "SELECT e FROM Empresa e where e.oficinaContable.id =:idOficinaContable and e.activo = true"),
+				@NamedQuery(name = "Empresa.maxId", query = "SELECT MAX(e.id) FROM Empresa e")})
 
 public class Empresa implements Serializable {
 

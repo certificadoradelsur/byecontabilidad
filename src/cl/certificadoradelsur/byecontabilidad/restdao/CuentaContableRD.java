@@ -285,7 +285,7 @@ public class CuentaContableRD {
 	
 	/**
 	 * funcion que busca cuenta por idEmpresa
-	 * @param idBanco
+	 * @param idEmpresa
 	 * @return
 	 */
 	public List<CuentaContableJson> getByIdEmpresa(CuentaContableJson ccj) {
@@ -308,6 +308,43 @@ public class CuentaContableRD {
 				}
 				cj.setAnalisis(c.get(i).isAnalisis());
 				lcj.add(cj);
+			}
+			return lcj;
+		} catch (Exception e) {
+			log.error("No se pudo obtener la lista de cuentas contables ", e);
+			return lcj;
+		}
+
+	}
+	
+	/**
+	 * funcion que busca cuenta por idEmpresa
+	 * @param idEmpresa
+	 * @return
+	 */
+	public List<CuentaContableJson> getByIdEmpresaList(CuentaContableJson ccj) {
+
+		List<CuentaContableJson> lcj = new ArrayList<>();
+		try {
+
+			List<CuentaContable> c = cuentadao.getByIdEmpresa(ccj.getIdEmpresa(), udao.getById(ccj.getIdUsuario()).getOficinaContable().getId());
+			for (int i = 0; i < c.size(); i++) {	
+			CuentaContable cuentaContable = new CuentaContable();
+			cuentaContable.setGlosaGeneral(c.get(i).getGlosaGeneral());
+			cuentaContable.setCodigo(c.get(i).getCodigo());
+			cuentaContable.setDescripcion(c.get(i).getDescripcion());
+			cuentaContable.setAnalisis(c.get(i).isAnalisis());
+			cuentaContable.setImputable(true);
+			cuentaContable.setConciliacion(c.get(i).isConciliacion());
+			cuentaContable.setClaseCuenta(clasedao.getById(c.get(i).getClaseCuenta().getId()));
+			cuentaContable.setGrupoCuenta(grupodao.getById(c.get(i).getGrupoCuenta().getId()));
+			cuentaContable.setEmpresa(edao.getById(edao.maxId()));
+			cuentaContable.setSucursal(sudao.getById(sudao.maxId()));
+			if (c.get(i).isConciliacion().equals(true)) {
+				cuentaContable.setBanco(bdao.getById(c.get(i).getBanco().getId()));
+				cuentaContable.setCuenta(cdao.getById(c.get(i).getCuenta().getId()));
+			}
+			cuentadao.guardar(cuentaContable);
 			}
 			return lcj;
 		} catch (Exception e) {

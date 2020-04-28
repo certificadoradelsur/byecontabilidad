@@ -18,6 +18,7 @@ public class EmpresaJson {
 	private Long idEmpresa;
 	private String razonSocialEmpresa;
 	private String idUsuario;
+	private String direccion;
 
 	public Long getId() {
 		return id;
@@ -79,6 +80,12 @@ public class EmpresaJson {
 	public void setRazonSocialEmpresa(String razonSocialEmpresa) {
 		this.razonSocialEmpresa = razonSocialEmpresa;
 	}
-
+	public String getDireccion() {
+		return direccion;
+	}
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+	
 	
 }

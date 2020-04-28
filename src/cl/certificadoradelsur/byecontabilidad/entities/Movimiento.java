@@ -33,10 +33,10 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Movimiento.getByIdCuenta", query = "SELECT m FROM Movimiento m where  m.cuenta.id= :idCuenta"),
 		@NamedQuery(name = "Movimiento.getByIdTransaccion", query = "SELECT m FROM Movimiento m where  m.transaccion.id= :idTransaccion"),
 		@NamedQuery(name = "Movimiento.getByIdComprobante", query = "SELECT m FROM Movimiento m where  m.comprobanteContable.id= :idComprobante"),
-		@NamedQuery(name = "Movimiento.getByIdComprobanteReporte", query = "SELECT m FROM Movimiento m where  m.comprobanteContable.id= :idComprobante and m.comprobanteContable.borrador=false"),
+		@NamedQuery(name = "Movimiento.getByIdComprobanteReporte", query = "SELECT m FROM Movimiento m where  m.comprobanteContable.id= :idComprobante and m.empresa.id =:idEmpresa and m.comprobanteContable.borrador=false"),
 		@NamedQuery(name = "Movimiento.getAllFecha", query = "SELECT m  from Movimiento m where m.empresa.id = :idEmpresa and m.cuenta.banco.id = :idBanco and m.cuenta.id =:idCuenta and m.fecha between :fechaI and :fechaF  "),
-		@NamedQuery(name = "Movimiento.getByMovEntreCuentas", query = "SELECT M FROM Movimiento m where m.cuentaContable.codigo between :inicialMayor and :finalMayor and m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.id"),
-		@NamedQuery(name = "Movimiento.getBalanceGeneral", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.cuentaContable.id= :idCuentaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.codigo"),
+		@NamedQuery(name = "Movimiento.getByMovEntreCuentas", query = "SELECT M FROM Movimiento m where m.cuentaContable.codigo between :inicialMayor and :finalMayor and m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.empresa.id=:idEmpresa and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.id"),
+		@NamedQuery(name = "Movimiento.getBalanceGeneral", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.empresa.id =:idEmpresa and m.cuentaContable.id= :idCuentaContable and m.comprobanteContable.borrador=false ORDER BY m.cuentaContable.codigo"),
 		@NamedQuery(name = "Movimiento.getBalanceClasificado", query = "SELECT M FROM Movimiento m where m.fecha between :fechaInicial and :fechaFinal and m.empresa.oficinaContable.id= :idOficinaContable and m.cuentaContable.id= :idCuentaContable and m.comprobanteContable.borrador=false") })
 
 public class Movimiento implements Serializable {

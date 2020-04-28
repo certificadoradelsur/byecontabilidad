@@ -22,8 +22,8 @@ public class ReporteSvcBean implements ReporteSvc {
 	private ReporteRD rrd;
 
 	@Override
-	public Response getByIdReporteBancoCuenta(String fechaDesde, String fechaHasta, Long idBanco, Long idCuenta , Long idEmpresa)
-			throws ParseException {
+	public Response getByIdReporteBancoCuenta(String fechaDesde, String fechaHasta, Long idBanco, Long idCuenta,
+			Long idEmpresa) throws ParseException {
 		InputStream file = rrd.getByIdReporteBancoCuenta(fechaDesde, fechaHasta, idBanco, idCuenta, idEmpresa);
 		ResponseBuilder response = Response.ok((Object) file);
 
@@ -39,8 +39,9 @@ public class ReporteSvcBean implements ReporteSvc {
 	}
 
 	@Override
-	public Response getLibroDiario(String fechaDesde, String fechaHasta, String idUsuario) throws ParseException {
-		InputStream file = rrd.getLibroDiario(fechaDesde, fechaHasta, idUsuario);
+	public Response getLibroDiario(String fechaDesde, String fechaHasta, String idUsuario, Long idEmpresa)
+			throws ParseException {
+		InputStream file = rrd.getLibroDiario(fechaDesde, fechaHasta, idUsuario, idEmpresa);
 		ResponseBuilder response = Response.ok((Object) file);
 
 		response.header("Content-Disposition",
@@ -56,8 +57,8 @@ public class ReporteSvcBean implements ReporteSvc {
 
 	@Override
 	public Response getLibroMayor(String fechaDesde, String fechaHasta, Long inicialMayor, Long finalMayor,
-			String idUsuario) throws ParseException {
-		InputStream file = rrd.getLibroMayor(fechaDesde, fechaHasta, inicialMayor, finalMayor, idUsuario);
+			String idUsuario, Long idEmpresa) throws ParseException {
+		InputStream file = rrd.getLibroMayor(fechaDesde, fechaHasta, inicialMayor, finalMayor, idUsuario, idEmpresa);
 		ResponseBuilder response = Response.ok((Object) file);
 
 		response.header("Content-Disposition",
@@ -72,9 +73,9 @@ public class ReporteSvcBean implements ReporteSvc {
 	}
 
 	@Override
-	public Response getBalanceGeneral(String fechaDesde, String fechaHasta, String anio, String idUsuario)
-			throws ParseException {
-		InputStream file = rrd.getBalanceGeneral(fechaDesde, fechaHasta, anio, idUsuario);
+	public Response getBalanceGeneral(String fechaDesde, String fechaHasta, String anio, String idUsuario,
+			Long idEmpresa) throws ParseException {
+		InputStream file = rrd.getBalanceGeneral(fechaDesde, fechaHasta, anio, idUsuario, idEmpresa);
 		ResponseBuilder response = Response.ok((Object) file);
 
 		response.header("Content-Disposition", "attachment; filename=BalanceGeneral" + (fechaDesde) + "-" + (anio) + "a"
@@ -84,9 +85,9 @@ public class ReporteSvcBean implements ReporteSvc {
 	}
 
 	@Override
-	public Response getBalanceClasificado(String fechaDesde, String fechaHasta, String anio, String idUsuario)
-			throws ParseException {
-		InputStream file = rrd.getBalanceClasificado(fechaDesde, fechaHasta, anio, idUsuario);
+	public Response getBalanceClasificado(String fechaDesde, String fechaHasta, String anio, String idUsuario,
+			Long idEmpresa) throws ParseException {
+		InputStream file = rrd.getBalanceClasificado(fechaDesde, fechaHasta, anio, idUsuario, idEmpresa);
 		ResponseBuilder response = Response.ok((Object) file);
 
 		response.header("Content-Disposition", "attachment; filename=BalanceClasificado" + (fechaDesde) + "-" + (anio)

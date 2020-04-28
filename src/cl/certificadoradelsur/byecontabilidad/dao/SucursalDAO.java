@@ -113,4 +113,14 @@ public class SucursalDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
+	
+	/**
+	 * Funcion que trae el id más grande
+	 * 
+	 * @return max(id)
+	 */
+	public Long maxId() {
+		Query query = em.createNamedQuery("Sucursal.maxId");
+		return (Long) query.getSingleResult();
+	}
 }

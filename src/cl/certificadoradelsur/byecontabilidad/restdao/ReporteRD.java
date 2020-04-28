@@ -138,8 +138,7 @@ public class ReporteRD {
 				Row rowConciliacion = sheetConciliacion.createRow(rowNum++);
 				rowConciliacion.createCell(0)
 						.setCellValue(listaConciliacion.get(j).getMovimiento().getNumDocumento().toString());
-				rowConciliacion.createCell(1)
-						.setCellValue(listaConciliacion.get(j).getMovimiento().getMonto());
+				rowConciliacion.createCell(1).setCellValue(listaConciliacion.get(j).getMovimiento().getMonto());
 				rowConciliacion.createCell(2)
 						.setCellValue(Utilidades
 								.strToTsDDMMYYYYHHmmssConGuion(listaConciliacion.get(j).getMovimiento().getFecha())
@@ -165,8 +164,7 @@ public class ReporteRD {
 				rowNoConciliado.createCell(0)
 						.setCellValue(listaNoConciliado.get(j).getMovimiento().getNumDocumento().toString());
 				rowNoConciliado.createCell(1).setCellValue(listaNoConciliado.get(j).getMovimiento().getGlosa());
-				rowNoConciliado.createCell(2)
-						.setCellValue(listaNoConciliado.get(j).getMovimiento().getMonto());
+				rowNoConciliado.createCell(2).setCellValue(listaNoConciliado.get(j).getMovimiento().getMonto());
 				rowNoConciliado.createCell(3).setCellValue(listaNoConciliado.get(j).getMovimiento().getTipoDocumento());
 				rowNoConciliado.createCell(4)
 						.setCellValue(listaNoConciliado.get(j).getMovimiento().getTipoMovimiento());
@@ -230,9 +228,9 @@ public class ReporteRD {
 
 			Long saldoBanco = saldoContable + montoNoConciliadoSuma + montoNoConciliadoCartolaSuma
 					- (montoNoConciliadoCartolaResta + montoNoConciliadoResta);
-			
-			Long totalNoConciliado = montoNoConciliadoSuma -montoNoConciliadoResta;
-			Long totalNoConciliadoCartola= montoNoConciliadoCartolaSuma -montoNoConciliadoCartolaResta;
+
+			Long totalNoConciliado = montoNoConciliadoSuma - montoNoConciliadoResta;
+			Long totalNoConciliadoCartola = montoNoConciliadoCartolaSuma - montoNoConciliadoCartolaResta;
 
 			Long numEmp = cuentadao.getById(idCuenta).getEmpresa().getId();
 			Row rowInforme = sheetInforme.createRow(0);
@@ -304,7 +302,7 @@ public class ReporteRD {
 		}
 	}
 
-	public InputStream getLibroDiario(String fechaDesde, String fechaHasta, String idUsuario) {
+	public InputStream getLibroDiario(String fechaDesde, String fechaHasta, String idUsuario, Long idEmpresa) {
 		XSSFWorkbook workbook = null;
 		try {
 			workbook = new XSSFWorkbook();
@@ -315,14 +313,14 @@ public class ReporteRD {
 			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
 			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
 			List<ComprobanteContable> listaComprobante = comprobantedao.getLibroDiario(fechaInicial, fechaFinal,
-					udao.getById(idUsuario).getOficinaContable().getId());
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 
 			int rowNum = 0;
 			for (int i = 0; i < listaComprobante.size(); i++) {
 				Long debeA = 0L;
 				Long haberA = 0L;
 				List<Movimiento> listaMovimiento = movimientodao
-						.getByIdComprobanteReporte(listaComprobante.get(i).getId());
+						.getByIdComprobanteReporte(listaComprobante.get(i).getId(), idEmpresa);
 				Row rowComprobante = sheetDiario.createRow(rowNum++);
 				rowComprobante.createCell(0).setCellValue("N° de Comprobante");
 				rowComprobante.createCell(1).setCellValue(listaComprobante.get(i).getNumero().toString());
@@ -389,7 +387,7 @@ public class ReporteRD {
 	}
 
 	public InputStream getLibroMayor(String fechaDesde, String fechaHasta, Long inicialMayor, Long finalMayor,
-			String idUsuario) {
+			String idUsuario, Long idEmpresa) {
 		XSSFWorkbook workbook = null;
 		try {
 			workbook = new XSSFWorkbook();
@@ -401,7 +399,7 @@ public class ReporteRD {
 			Timestamp fechaInicial = Utilidades.fechaDesde(fechaDesde);
 			Timestamp fechaFinal = Utilidades.fechaHasta(fechaHasta);
 			List<Movimiento> listaMovimiento = movimientodao.getByMovEntreCuentas(fechaInicial, fechaFinal,
-					inicialMayor, finalMayor, udao.getById(idUsuario).getOficinaContable().getId());
+					inicialMayor, finalMayor, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 
 			int rowNum = 0;
 			Map<Long, List<Movimiento>> lc = listaMovimiento.stream()
@@ -499,7 +497,8 @@ public class ReporteRD {
 		}
 	}
 
-	public InputStream getBalanceGeneral(String fechaDesde, String fechaHasta, String anio, String idUsuario) {
+	public InputStream getBalanceGeneral(String fechaDesde, String fechaHasta, String anio, String idUsuario,
+			Long idEmpresa) {
 		XSSFWorkbook workbook = null;
 		try {
 			workbook = new XSSFWorkbook();
@@ -510,7 +509,8 @@ public class ReporteRD {
 					"PERDIDA", "GANANCIA" };
 			Timestamp fechaInicial = Utilidades.convertidorFechaSinHora(anio + "-" + fechaDesde + "-01");
 			Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + fechaHasta + "-31");
-			List<CuentaContable> lc = cuentaContabledao.getLista(udao.getById(idUsuario).getOficinaContable().getId());
+			List<CuentaContable> lc = cuentaContabledao
+					.getListaEmpresa(udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 
 			Long totalDebe = 0L;
 			Long totalHaber = 0L;
@@ -539,7 +539,7 @@ public class ReporteRD {
 
 			for (int l = 0; l < lc.size(); l++) {
 				List<Movimiento> mov = movimientodao.getBalanceGeneral(fechaInicial, fechaFinal, lc.get(l).getId(),
-						udao.getById(idUsuario).getOficinaContable().getId());
+						udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 				Long debitoA = 0L;
 				Long creditoA = 0L;
 				Long deudor = 0L;
@@ -636,7 +636,8 @@ public class ReporteRD {
 		}
 	}
 
-	public InputStream getBalanceClasificado(String fechaDesde, String fechaHasta, String anio, String idUsuario) {
+	public InputStream getBalanceClasificado(String fechaDesde, String fechaHasta, String anio, String idUsuario,
+			Long idEmpresa) {
 		XSSFWorkbook workbook = null;
 		try {
 			workbook = new XSSFWorkbook();
@@ -645,8 +646,8 @@ public class ReporteRD {
 
 			Timestamp fechaInicial = Utilidades.convertidorFechaSinHora(anio + "-" + fechaDesde + "-01");
 			Timestamp fechaFinal = Utilidades.convertidorFechaSinHora(anio + "-" + fechaHasta + "-31");
-			List<CuentaContable> cc = cuentaContabledao
-					.getBalance(udao.getById(idUsuario).getOficinaContable().getId());
+			List<CuentaContable> cc = cuentaContabledao.getBalance(udao.getById(idUsuario).getOficinaContable().getId(),
+					idEmpresa);
 
 			int rowNum = 0;
 			Map<ClaseCuenta, List<CuentaContable>> mcc = cc.stream()
