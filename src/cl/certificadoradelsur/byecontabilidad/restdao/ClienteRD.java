@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Cliente;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
@@ -29,6 +30,8 @@ public class ClienteRD {
 	private EmpresaDAO edao;
 	@Inject
 	private UsuarioDAO udao;
+	@Inject
+	private MovimientoDAO movdao;
 
 	/**
 	 * funcion que almacena
@@ -40,12 +43,12 @@ public class ClienteRD {
 		try {
 			Cliente c = new Cliente();
 			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getRut()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getDireccion()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getGiro()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getEmail()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getTelefono()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
+					|| Utilidades.containsScripting(cj.getRut()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getDireccion()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getGiro()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getEmail()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getTelefono()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				c.setRut(cj.getRut());
@@ -60,8 +63,7 @@ public class ClienteRD {
 				clidao.guardar(c);
 				return Constantes.MENSAJE_REST_OK;
 			}
-		} catch (
-		Exception e) {
+		} catch (Exception e) {
 			log.error("No se pudo guardar el cliente ", e);
 			return Constantes.MENSAJE_REST_FAIL;
 		}
@@ -72,13 +74,13 @@ public class ClienteRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String rut,Long idEmpresa, String idUsuario) {
+	public Long countAll(String rut, Long idEmpresa, String idUsuario) {
 		try {
-			if(rut==null) {
-				rut="";
+			if (rut == null) {
+				rut = "";
 			}
 
-			return clidao.countAll(rut,idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
+			return clidao.countAll(rut, idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cliente ", e);
 			return 0L;
@@ -92,7 +94,7 @@ public class ClienteRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Bancos
 	 */
-	public List<ClienteJson> getAll(Integer page, Integer limit, String rut, Long idEmpresa,String idUsuario) {
+	public List<ClienteJson> getAll(Integer page, Integer limit, String rut, Long idEmpresa, String idUsuario) {
 		List<ClienteJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -101,10 +103,11 @@ public class ClienteRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-			if(rut==null) {
-				rut="";
+			if (rut == null) {
+				rut = "";
 			}
-			List<Cliente> lc = clidao.getAll(inicio, limit, rut,idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
+			List<Cliente> lc = clidao.getAll(inicio, limit, rut, idEmpresa,
+					udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < lc.size(); i++) {
 				ClienteJson cj = new ClienteJson();
 				cj.setId(lc.get(i).getId());
@@ -117,7 +120,7 @@ public class ClienteRD {
 				cj.setTelefono(lc.get(i).getTelefono());
 				cj.setActivo(lc.get(i).isActivo());
 				cj.setRazonSocialEmpresa(lc.get(i).getEmpresa().getRazonSocial());
-			    lcj.add(cj);
+				lcj.add(cj);
 			}
 		} catch (Exception e) {
 			log.error("No se puede obtener la lista de clientes ", e);
@@ -135,12 +138,12 @@ public class ClienteRD {
 		try {
 			Cliente c = clidao.getById(cj.getId());
 			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getRut()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getDireccion()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getGiro()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getEmail()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getTelefono()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
+					|| Utilidades.containsScripting(cj.getRut()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getDireccion()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getGiro()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getEmail()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getTelefono()).compareTo(true) == 0
+					|| Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				c.setRut(cj.getRut());
@@ -191,19 +194,27 @@ public class ClienteRD {
 	 */
 	public String eliminar(ClienteJson cj) {
 		try {
-			Cliente c = clidao.getById(cj.getId());
-			c.setActivo(false);
-			clidao.update(c);
-			return Constantes.MENSAJE_REST_OK;
+			if (movdao.getbyIdCliente(cj.getId()) == null) {
+				Cliente c = clidao.getById(cj.getId());
+				if (c.isActivo().equals(true)) {
+					c.setActivo(false);
+				} else {
+					c.setActivo(true);
+				}
+				clidao.update(c);
+				return Constantes.MENSAJE_REST_OK;
+			} else {
+				return "No se puede cambiar el estado, ya que se encuentra asociado a un comprobante contable";
+			}
 		} catch (Exception e) {
-			log.error("No se pudo eliminar el Cliente");
+			log.error("No se pudo cambiar estado al Cliente");
 			return e.getMessage();
 		}
 	}
-	
-	
+
 	/**
 	 * Metodo para traer una lista de cliente (select)
+	 * 
 	 * @return
 	 */
 	public List<ClienteJson> getAllLista(ClienteJson cj) {

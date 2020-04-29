@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
@@ -39,6 +40,8 @@ public class CuentaRD {
 	private EmpresaDAO edao;
 	@Inject
 	private UsuarioDAO udao;
+	@Inject
+	private CuentaContableDAO cuentaCondao;
 
 	
 
@@ -181,13 +184,13 @@ public class CuentaRD {
 	public String eliminar(CuentaJson cj) {
 		try {
 			
-			if (mdao.getByIdCuenta(cj.getId())==null && cardao.getByIdCuenta(cj.getId())==null) {
+			if (cuentaCondao.getbyIdCuenta(cj.getId())==null && cardao.getByIdCuenta(cj.getId())==null && mdao.getByIdCuenta(cj.getId())==null) {
 			Cuenta cuenta = cdao.getById(cj.getId());
 			cuenta.setEliminado(true);
 			cdao.update(cuenta);
 			return Constantes.MENSAJE_REST_OK;
 			} else {
-				return "No se puede eliminar la cuenta, ya que esta en uso";
+				return "No se puede eliminar la cuenta, ya que se encuentra en uso";
 			}
 		} catch (Exception e) {
 			log.error("No se pudo eliminar la cuenta");

@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 
 /**
@@ -207,5 +208,40 @@ public class CuentaContableDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
-
+	
+	/**
+	 * busca cuentaContable por idSucursal
+	 * 
+	 * @param idSucursal
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public CuentaContable getbyIdSucursal(Long idSucursal) {
+		Query query = em.createNamedQuery("CuentaContable.getbyIdSucursal");
+		try {
+			query.setParameter("idSucursal", idSucursal);
+			query.setMaxResults(1);
+			return (CuentaContable) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * busca cuentaContable por idCuenta
+	 * 
+	 * @param idCuenta
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public CuentaContable getbyIdCuenta(Long idCuenta) {
+		Query query = em.createNamedQuery("CuentaContable.getbyIdCuenta");
+		try {
+			query.setParameter("idCuenta", idCuenta);
+			query.setMaxResults(1);
+			return (CuentaContable) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

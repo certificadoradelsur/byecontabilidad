@@ -102,8 +102,7 @@ public class MovimientoRD {
 	public String eliminar(MovimientoJson mj) {
 		try {
 
-			if (condao.getByMov(mj.getId()) == null && ncdao.getByIdMovimiento(mj.getId()) == null) {
-
+			if (condao.getByMov(mj.getId()) == null || ncdao.getByIdMovimiento(mj.getId()) == null) {
 				Movimiento movimiento = mdao.getById(mj.getId());
 				mdao.eliminar(movimiento);
 				return Constantes.MENSAJE_REST_OK;

@@ -354,6 +354,9 @@
 											document.getElementById("empresa").innerHTML = str;
 										}, "json");
 
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value
+							}
 						$
 								.post(
 										'/byeContabilidad/rest-services/private/cliente/getLista',
@@ -649,6 +652,10 @@
 					cliente = document.getElementById("cliente").value,
 					documento = "",
 					tipo = document.getElementById("tipoAnalisis").value
+					if ($('#cliente option:selected').text() == '') {
+						alert("Debe seleccionar un cliente valido");
+						return;
+					}
 			if ($('#tipoAnalisis option:selected').text() == 'Debe') {
 				debe = document.getElementById("monto").value
 			} else if ($('#tipoAnalisis option:selected').text() == 'Haber') {

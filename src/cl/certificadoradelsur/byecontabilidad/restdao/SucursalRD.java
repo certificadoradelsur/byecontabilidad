@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.SucursalDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
@@ -30,6 +31,8 @@ public class SucursalRD {
 	private EmpresaDAO edao;
 	@Inject
 	private UsuarioDAO udao;
+	@Inject
+	private CuentaContableDAO cuentaCondao;
 
 	/**
 	 * funcion que almacena
@@ -62,7 +65,7 @@ public class SucursalRD {
 	public Long countAll(Long idEmpresa, String idUsuario) {
 		try {
 
-			return sudao.countAll(idEmpresa,udao.getById(idUsuario).getOficinaContable().getId());
+			return sudao.countAll(idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
 		} catch (Exception e) {
 			log.error("No se puede contar el total de sucursal ", e);
 			return 0L;
@@ -86,12 +89,13 @@ public class SucursalRD {
 				inicio = (page * limit) - limit;
 			}
 
-			List<Sucursal> ls = sudao.getAll(inicio, limit, idEmpresa, udao.getById(idUsuario).getOficinaContable().getId());
+			List<Sucursal> ls = sudao.getAll(inicio, limit, idEmpresa,
+					udao.getById(idUsuario).getOficinaContable().getId());
 			for (int i = 0; i < ls.size(); i++) {
 				SucursalJson sj = new SucursalJson();
 				sj.setCodigo(ls.get(i).getCodigo());
 				sj.setDireccion(ls.get(i).getDireccion());
-				sj.setNombreEmpresa(edao.getById(ls.get(i).getEmpresa().getId()).getRazonSocial());			
+				sj.setNombreEmpresa(edao.getById(ls.get(i).getEmpresa().getId()).getRazonSocial());
 				lsj.add(sj);
 			}
 
@@ -134,7 +138,7 @@ public class SucursalRD {
 		Sucursal s = sudao.getById(bj.getCodigo());
 		SucursalJson sJson = new SucursalJson();
 		sJson.setCodigo(s.getCodigo());
-		sJson.setDireccion(s.getDireccion());	
+		sJson.setDireccion(s.getDireccion());
 		sJson.setIdEmpresa(s.getEmpresa().getId());
 		return sJson;
 	}
@@ -147,17 +151,23 @@ public class SucursalRD {
 	 */
 	public String eliminar(SucursalJson bj) {
 		try {
+			if(cuentaCondao.getbyIdSucursal(bj.getCodigo())==null){
 			Sucursal s = sudao.getById(bj.getCodigo());
 			sudao.eliminar(s);
 			return Constantes.MENSAJE_REST_OK;
+			} else {
+				return "No se puede eliminar la sucursal, ya que esta asociada a una cuenta contable";
+			}
 		} catch (Exception e) {
 			log.error("No se pudo eliminar la sucursal");
 			return e.getMessage();
+			
 		}
 	}
-	
+
 	/**
 	 * funcion que busca sucursal por idEmpresa
+	 * 
 	 * @param idEmpresa
 	 * @return
 	 */
@@ -165,7 +175,8 @@ public class SucursalRD {
 
 		List<SucursalJson> lcj = new ArrayList<>();
 		try {
-			List<Sucursal> s = sudao.getByIdEmpresa(sj.getIdEmpresa(),udao.getById(sj.getIdUsuario()).getOficinaContable().getId());
+			List<Sucursal> s = sudao.getByIdEmpresa(sj.getIdEmpresa(),
+					udao.getById(sj.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < s.size(); i++) {
 				SucursalJson bjj = new SucursalJson();
 				bjj.setCodigo(s.get(i).getCodigo());

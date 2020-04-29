@@ -8,7 +8,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
 
 /**
@@ -321,5 +320,23 @@ public class MovimientoDAO {
 		query.setParameter("idCuentaContable", idCuentaContable);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
+	}
+	
+	/**
+	 * busca Movimiento por idCliente
+	 * 
+	 * @param idCliente
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Movimiento getbyIdCliente(Long idCliente) {
+		Query query = em.createNamedQuery("Movimiento.getbyIdCliente");
+		try {
+			query.setParameter("idCliente", idCliente);
+			query.setMaxResults(1);
+			return (Movimiento) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

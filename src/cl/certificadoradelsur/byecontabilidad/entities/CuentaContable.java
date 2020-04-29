@@ -32,6 +32,8 @@ import javax.persistence.Table;
 		@NamedQuery(name = "CuentaContable.getAllListaEmpresa", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.empresa.id =:idEmpresa"),
 		@NamedQuery(name = "CuentaContable.getAllLista", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable"),
 		@NamedQuery(name = "CuentaContable.maxCodigo", query = "SELECT MAX(c.codigo) FROM CuentaContable c "),
+		@NamedQuery(name = "CuentaContable.getbyIdSucursal", query = "SELECT c FROM CuentaContable c where c.sucursal.codigo =:idSucursal"),
+		@NamedQuery(name = "CuentaContable.getbyIdCuenta", query = "SELECT c FROM CuentaContable c where c.cuenta.id =:idCuenta"),
 		@NamedQuery(name = "CuentaContable.getByIdEmpresa", query = "SELECT c FROM CuentaContable c  where c.empresa.oficinaContable.id =:idOficinaContable  and  c.empresa.id=:idEmpresa"),
 		@NamedQuery(name = "CuentaContable.getBalance", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.empresa.id =:idEmpresa and c.claseCuenta.id <=2") })
 

@@ -193,7 +193,7 @@
 					alert('Sucursal eliminada correctamente');
 					grid.reload();
 				} else {
-					alert('Error al eliminar la sucursal');
+					alert(data);
 				}
 			}).fail(function() {
 				alert('Error al eliminar la sucursal');

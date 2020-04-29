@@ -165,4 +165,5 @@ public class ComprobanteContableDAO {
 		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
+	
 }

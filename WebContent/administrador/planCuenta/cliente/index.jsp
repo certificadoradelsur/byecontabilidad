@@ -140,7 +140,7 @@
 													{
 														field : 'rut',
 														title : 'Rut',
-														width : 120
+														width : 110
 													},
 													{
 														field : 'nombre',
@@ -155,7 +155,7 @@
 													{
 														field : 'direccion',
 														title : 'Direccion',
-														width : 140
+														width : 130
 													},
 													{
 														field : 'giro',
@@ -179,7 +179,12 @@
 														width : 100
 													},
 													{
-														width : 100,
+														field : 'activo',
+														title : 'Activo',
+														width : 80
+													},
+													{
+														width : 70,
 														title : 'Modificar',
 														tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
 														align : 'center',
@@ -189,8 +194,8 @@
 													},
 													{
 														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+														title : 'Cambiar estado',
+														tmpl : '<span class="material-icons gj-cursor-pointer">autorenew</span>',
 														align : 'center',
 														events : {
 															'click' : eliminar
@@ -221,20 +226,20 @@
 	}
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea desactivar el cliente?')) {
+		if (confirm('¿Esta seguro desea cambiar el estado al cliente?')) {
 			var submitJson = {
 				id : x.data.record.id
 			}
 			$.post('/byeContabilidad/rest-services/private/cliente/delete',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('Cliente inactivo');
+					alert('Cambio realizado');
 					grid.reload();
 				} else {
-					alert('Error al desactivar cliente');
+					alert(data);
 				}
 			}).fail(function() {
-				alert('Error al desactivar cliente');
+				alert('Error al cambiar estado al cliente');
 			});
 		}
 	}
