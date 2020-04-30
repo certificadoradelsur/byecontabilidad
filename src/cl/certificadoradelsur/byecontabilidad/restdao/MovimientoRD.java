@@ -281,6 +281,7 @@ public class MovimientoRD {
 				MovimientoJson mj = new MovimientoJson();
 				mj.setId(lm.get(i).getId());
 				mj.setGlosa(lm.get(i).getGlosa());
+				mj.setNombreCuentaContable(lm.get(i).getCuentaContable().getGlosaGeneral());
 				mj.setEstado(lm.get(i).getEstado());
 				mj.setMonto(lm.get(i).getMonto());
 				mj.setNumDocumento(lm.get(i).getNumDocumento());

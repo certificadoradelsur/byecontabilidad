@@ -247,7 +247,6 @@
 										title : 'N° Comprobante',
 										width : 140
 									},
-
 									{
 										field : 'glosaGeneral',
 										title : 'Glosa',
@@ -356,8 +355,13 @@
 										sortable : true
 									},
 									{
+										field : 'nombreCuentaContable',
+										title : 'Glosa cuenta contable',
+										width : 160
+									},
+									{
 										field : 'glosa',
-										title : 'Glosa',
+										title : 'Glosa movimiento',
 										width : 140
 									},
 									{
@@ -373,27 +377,27 @@
 									{
 										field : 'nombreBanco',
 										title : 'Banco',
-										width : 140
+										width : 100
 									},
 									{
 										field : 'numCuenta',
 										title : 'N° Cuenta',
-										width : 140
+										width : 100
 									},
 									{
 										field : 'tipoMovimiento',
 										title : 'Movimiento',
-										width : 140
+										width : 100
 									},
 									{
 										field : 'numDocumento',
 										title : 'N° Documento',
-										width : 140
+										width : 100
 									},
 									{
 										field : 'tipoDocumento',
 										title : 'Documento',
-										width : 140
+										width : 100
 									},
 									// 									{
 									// 										width : 160,

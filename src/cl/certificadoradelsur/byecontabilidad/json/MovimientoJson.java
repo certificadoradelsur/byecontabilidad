@@ -39,8 +39,15 @@ public class MovimientoJson {
 	private String descripcion;
 	private Long debe;
 	private Long haber;
+	private String nombreCuentaContable;
 	
 	
+	public String getNombreCuentaContable() {
+		return nombreCuentaContable;
+	}
+	public void setNombreCuentaContable(String nombreCuentaContable) {
+		this.nombreCuentaContable = nombreCuentaContable;
+	}
 	public String getConciliacion() {
 		return conciliacion;
 	}
