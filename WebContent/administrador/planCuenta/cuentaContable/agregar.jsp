@@ -410,10 +410,18 @@
 			return;
 		}
 		
-
-		
 		if ($('#sucursal option:selected').text() == 'Seleccione sucursal') {
 			alert("Debe seleccionar una sucursal");
+			return;
+		}
+		
+		if ($('#sucursal option:selected').text() == '') {
+			alert("Debe seleccionar una sucursal valida");
+			return;
+		}
+		
+		if ($('#descripcion option:selected').text() == '') {
+			alert("Debe seleccionar una descripción valida");
 			return;
 		}
 		

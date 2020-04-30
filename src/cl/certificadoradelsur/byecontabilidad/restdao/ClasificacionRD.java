@@ -39,6 +39,7 @@ public class ClasificacionRD {
 	private EmpresaDAO edao;
 	@Inject
 	private CuentaContableDAO cuentaCondao;
+
 	/**
 	 * funcion que almacena
 	 * 
@@ -129,16 +130,21 @@ public class ClasificacionRD {
 	 */
 	public String update(ClasificacionJson ccj) {
 		try {
-			Clasificacion clasificacion = cladao.getById(ccj.getId());
-			if (Utilidades.containsScripting(ccj.getNombre()).compareTo(true) == 0) {
-				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+			if (cuentaCondao.getbyIdClasificacion(ccj.getId()) == null) {
+				Clasificacion clasificacion = cladao.getById(ccj.getId());
+				if (Utilidades.containsScripting(ccj.getNombre()).compareTo(true) == 0) {
+					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
+				} else {
+					clasificacion.setNombre(ccj.getNombre());
+					clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
+					clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
+					clasificacion.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+					cladao.update(clasificacion);
+					return Constantes.MENSAJE_REST_OK;
+
+				}
 			} else {
-				clasificacion.setNombre(ccj.getNombre());
-				clasificacion.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
-				clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
-				clasificacion.setEmpresa(edao.getById(ccj.getIdEmpresa()));
-				cladao.update(clasificacion);
-				return Constantes.MENSAJE_REST_OK;
+				return "No se puede modificar la clasificación, ya que está asociada a una cuenta contable";
 			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar la clasificación");
