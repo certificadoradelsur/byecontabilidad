@@ -136,10 +136,11 @@ public class ComprobanteContableDAO {
 	 * @return
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public ComprobanteContable getByNumero(Long numero) {
+	public ComprobanteContable getByNumero(Long numero, Long idEmpresa) {
 		Query query = em.createNamedQuery("ComprobanteContable.getByNumero");
 		try {
 			query.setParameter("numero", numero);
+			query.setParameter("idEmpresa", idEmpresa);
 			query.setMaxResults(1);
 			return (ComprobanteContable) query.getSingleResult();
 		} catch (Exception e) {

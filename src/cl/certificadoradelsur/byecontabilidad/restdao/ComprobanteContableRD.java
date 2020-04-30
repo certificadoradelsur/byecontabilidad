@@ -60,7 +60,7 @@ public class ComprobanteContableRD {
 	public String save(ComprobanteContableJson ccj) {
 		try {
 			ComprobanteContable c = new ComprobanteContable();
-			if (comdao.getByNumero(ccj.getNumero()) == null) {
+			if (comdao.getByNumero(ccj.getNumero(), ccj.getIdEmpresa()) == null) {
 				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
@@ -198,8 +198,8 @@ public class ComprobanteContableRD {
 		try {
 			ComprobanteContable c = comdao.getById(ccj.getId());
 			if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
-				if (comdao.getByNumero(ccj.getNumero()) == null
-						|| comdao.getByNumero(ccj.getNumero()).getNumero().equals(c.getNumero())) {
+				if (comdao.getByNumero(ccj.getNumero(),ccj.getIdEmpresa()) == null
+						|| comdao.getByNumero(ccj.getNumero(),ccj.getIdEmpresa()).getNumero().equals(c.getNumero())) {
 					if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 						throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 					} else {
@@ -245,8 +245,8 @@ public class ComprobanteContableRD {
 			}
 			ComprobanteContable c = comdao.getById(ccj.getId());
 			if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
-				if (comdao.getByNumero(ccj.getNumero()) == null
-						|| comdao.getByNumero(ccj.getNumero()).getNumero().equals(c.getNumero())) {
+				if (comdao.getByNumero(ccj.getNumero(),ccj.getIdEmpresa()) == null
+						|| comdao.getByNumero(ccj.getNumero(),ccj.getIdEmpresa()).getNumero().equals(c.getNumero())) {
 					if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 						throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 					} else {
