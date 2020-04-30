@@ -215,7 +215,7 @@ public class ComprobanteContableRD {
 						return Constantes.MENSAJE_REST_OK;
 					}
 				} else {
-					return "No se puede modificar el comprobante contable, ya que esta en uso por el proceso de conciliacíon";
+					return "No se puede modificar el comprobante contable, ya que está en uso por el proceso de conciliacíon";
 				}
 			} else {
 				return "El codigo ingresado, ya se encuentra registrado";
@@ -241,7 +241,7 @@ public class ComprobanteContableRD {
 					mdao.eliminar(lm.get(i));
 				}
 			} else {
-				return "No se puede eliminar el comprobante, ya que esta en uso por el proceso de conciliacíon";
+				return "No se puede eliminar el comprobante, ya que está en uso por el proceso de conciliacíon";
 			}
 			ComprobanteContable c = comdao.getById(ccj.getId());
 			if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
@@ -295,7 +295,7 @@ public class ComprobanteContableRD {
 						return Constantes.MENSAJE_REST_OK;
 					}
 				} else {
-					return "No se puede modificar el comprobante contable, ya que esta en uso por el proceso de conciliacíon";
+					return "No se puede modificar el comprobante contable, ya que está en uso por el proceso de conciliacíon";
 				}
 			} else {
 				return "El codigo ingresado, ya se encuentra registrado";

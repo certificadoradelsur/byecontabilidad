@@ -276,7 +276,7 @@
 							alert('Clasificación eliminada correctamente');
 							grid.reload();
 						} else {
-							alert('Error al eliminar la clasificación');
+							alert(data);
 						}
 					}).fail(function() {
 						alert('Error al eliminar la clasificación');

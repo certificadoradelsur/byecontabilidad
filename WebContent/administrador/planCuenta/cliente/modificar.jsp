@@ -191,6 +191,11 @@ $(document).ready(function () {
 			alert("Los campos deben estar llenos");
 			return;
 		}
+		
+		if ($('#empresa option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
 
 		var submitJson = {
 			id : <%=request.getParameter("id")%>,

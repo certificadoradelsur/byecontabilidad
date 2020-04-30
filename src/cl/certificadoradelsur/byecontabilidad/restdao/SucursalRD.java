@@ -156,7 +156,7 @@ public class SucursalRD {
 			sudao.eliminar(s);
 			return Constantes.MENSAJE_REST_OK;
 			} else {
-				return "No se puede eliminar la sucursal, ya que esta asociada a una cuenta contable";
+				return "No se puede eliminar la sucursal, ya que está asociada a una cuenta contable";
 			}
 		} catch (Exception e) {
 			log.error("No se pudo eliminar la sucursal");

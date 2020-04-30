@@ -18,7 +18,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
-import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
@@ -29,6 +28,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.ClaseCuenta;
+import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Conciliacion;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
@@ -71,8 +71,6 @@ public class ReporteRD {
 	private UsuarioDAO udao;
 	@Inject
 	private MovimientoDAO movimientodao;
-	@Inject
-	private ClasificacionDAO clasificacionDAO;
 
 	/**
 	 * @param fechaDesde
@@ -667,16 +665,16 @@ public class ReporteRD {
 					// rowGc.createCell(0).setCellValue("Grupo Cuenta:");
 					rowGc.createCell(1).setCellValue(lgc.getKey().getNombre());
 
-					Map<Long, List<CuentaContable>> mc = lgc.getValue().stream()
-							.collect(Collectors.groupingBy(d -> Long.parseLong(d.getDescripcion())));
+					Map<Clasificacion, List<CuentaContable>> mc = lgc.getValue().stream()
+							.collect(Collectors.groupingBy(CuentaContable::getClasificacion));
 
-					for (Map.Entry<Long, List<CuentaContable>> lc : mc.entrySet()) {
+					for (Map.Entry<Clasificacion, List<CuentaContable>> lcla : mc.entrySet()) {
 
 						Row rowC = sheetClasificado.createRow(rowNum++);
 						// rowC.createCell(0).setCellValue("Clasificación:");
-						rowC.createCell(1).setCellValue(clasificacionDAO.getById(lc.getKey()).getNombre());
+						rowC.createCell(1).setCellValue(lcla.getKey().getNombre());
 
-						for (CuentaContable cuentaContable : lc.getValue()) {
+						for (CuentaContable cuentaContable : lcla.getValue()) {
 							Row rowCC = sheetClasificado.createRow(rowNum++);
 							rowCC.createCell(0).setCellValue(cuentaContable.getCodigo());
 							rowCC.createCell(1).setCellValue(cuentaContable.getGlosaGeneral());

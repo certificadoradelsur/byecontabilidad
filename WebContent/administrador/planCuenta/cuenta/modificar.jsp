@@ -177,6 +177,12 @@ function cargaEmpresa(idEmpresa) {
 			return;
 
 		}
+		
+		if ($('#empresa option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
+		
 		var submitJson = {
 			id :<%=request.getParameter("id")%>	,
 			idBanco : document.getElementById("banco").value,

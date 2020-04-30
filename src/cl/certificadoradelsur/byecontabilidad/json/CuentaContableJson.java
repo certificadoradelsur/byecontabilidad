@@ -10,7 +10,8 @@ public class CuentaContableJson {
 
 	private Long id;
 	private Long codigo;
-	private String descripcion;
+	private Long idClasificacion;
+	private String clasificacion;
 	private Boolean imputable;
 	private Boolean analisis;
 	private Boolean conciliacion;
@@ -45,12 +46,20 @@ public class CuentaContableJson {
 		this.codigo = codigo;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public Long getIdClasificacion() {
+		return idClasificacion;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setIdClasificacion(Long idClasificacion) {
+		this.idClasificacion = idClasificacion;
+	}
+
+	public String getClasificacion() {
+		return clasificacion;
+	}
+
+	public void setClasificacion(String clasificacion) {
+		this.clasificacion = clasificacion;
 	}
 
 	public Boolean isImputable() {

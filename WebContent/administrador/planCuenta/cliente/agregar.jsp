@@ -177,6 +177,10 @@
 			return;
 		}
 
+		if ($('#empresa option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
 
 		var correo = document.getElementById("email").value
 

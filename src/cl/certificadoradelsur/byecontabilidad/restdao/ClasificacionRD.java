@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
@@ -36,7 +37,8 @@ public class ClasificacionRD {
 	private UsuarioDAO udao;
 	@Inject
 	private EmpresaDAO edao;
-
+	@Inject
+	private CuentaContableDAO cuentaCondao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -68,13 +70,13 @@ public class ClasificacionRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String nombre, Long idClaseCuenta,
-			Long idGrupoCuenta, String idUsuario, Long idEmpresa) {
+	public Long countAll(String nombre, Long idClaseCuenta, Long idGrupoCuenta, String idUsuario, Long idEmpresa) {
 		try {
-			if(nombre==null) {
-				nombre="";
+			if (nombre == null) {
+				nombre = "";
 			}
-			return cladao.countAll(nombre, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
+			return cladao.countAll(nombre, idClaseCuenta, idGrupoCuenta,
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de clasificacines ", e);
 			return 0L;
@@ -98,10 +100,11 @@ public class ClasificacionRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-			if(nombre==null) {
-				nombre="";
+			if (nombre == null) {
+				nombre = "";
 			}
-			List<Clasificacion> lcc = cladao.getAll(inicio, limit, nombre, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
+			List<Clasificacion> lcc = cladao.getAll(inicio, limit, nombre, idClaseCuenta, idGrupoCuenta,
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lcc.size(); i++) {
 				ClasificacionJson ccj = new ClasificacionJson();
 				ccj.setId(lcc.get(i).getId());
@@ -168,27 +171,31 @@ public class ClasificacionRD {
 	 */
 	public String eliminar(ClasificacionJson bj) {
 		try {
-			Clasificacion clasificacion = cladao.getById(bj.getId());
-			cladao.eliminar(clasificacion);
-			return Constantes.MENSAJE_REST_OK;
+			if (cuentaCondao.getbyIdClasificacion(bj.getId()) == null) {
+				Clasificacion clasificacion = cladao.getById(bj.getId());
+				cladao.eliminar(clasificacion);
+				return Constantes.MENSAJE_REST_OK;
+			} else {
+				return "No se puede eliminar la clasificación, ya que está asociada a una cuenta contable";
+			}
 		} catch (Exception e) {
 			log.error("No se pudo eliminar la clasificación");
 			return e.getMessage();
 		}
 	}
-	
 
 	/**
 	 * metodo obtener una lista de clasificaciones
 	 * 
 	 * @param idGrupoCuenta
-	 * @return lista clasificacion 
+	 * @return lista clasificacion
 	 */
 	public List<ClasificacionJson> getByIdGrupoCuenta(ClasificacionJson cj) {
 
 		List<ClasificacionJson> lcj = new ArrayList<>();
 		try {
-			List<Clasificacion> c = cladao.getByIdGrupoCuenta(cj.getIdGrupoCuenta(), udao.getById(cj.getIdUsuario()).getOficinaContable().getId());
+			List<Clasificacion> c = cladao.getByIdGrupoCuenta(cj.getIdGrupoCuenta(),
+					udao.getById(cj.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < c.size(); i++) {
 				ClasificacionJson cjj = new ClasificacionJson();
 				cjj.setId(c.get(i).getId());
@@ -202,7 +209,5 @@ public class ClasificacionRD {
 		}
 
 	}
-	
-	
 
 }

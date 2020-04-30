@@ -217,7 +217,7 @@
 							document.getElementById("codigo").value = data.codigo;
 							document.getElementById("glosa").value = data.glosaGeneral;
 							//document.getElementById("imputable").checked = data.imputable;
-							document.getElementById("descripcion").value = data.descripcion;
+							document.getElementById("descripcion").value = data.idClasificacion;
 							document.getElementById("claseCuenta").value = data.idClaseCuenta;
 							//document.getElementById("empresa").value = data.idEmpresa;
 
@@ -241,7 +241,7 @@
 
 								
 							}
-							cargaselect(data.idGrupoCuenta,data.descripcion );
+							cargaselect(data.idGrupoCuenta,data.idClasificacion );
 
 							})
 							
@@ -597,7 +597,7 @@
 				idClaseCuenta : document.getElementById("claseCuenta").value,
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
 				glosaGeneral : document.getElementById("glosa").value,
-				descripcion : document.getElementById("descripcion").value,
+				idClasificacion : document.getElementById("descripcion").value,
 				idEmpresa : document.getElementById("empresa").value, 
 				//imputable:document.getElementById("imputable").checked,
 				analisis : document.getElementById("analisis").checked,
@@ -612,7 +612,7 @@
 				idClaseCuenta : document.getElementById("claseCuenta").value,
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
 				glosaGeneral : document.getElementById("glosa").value,
-				descripcion : document.getElementById("descripcion").value,
+				idClasificacio  : document.getElementById("descripcion").value,
 				//imputable:document.getElementById("imputable").checked,
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
@@ -628,7 +628,7 @@
 					idClaseCuenta : document.getElementById("claseCuenta").value,
 					idGrupoCuenta : document.getElementById("grupoCuenta").value,
 					glosaGeneral : document.getElementById("glosa").value,
-					descripcion : document.getElementById("descripcion").value,
+					idClasificacion : document.getElementById("descripcion").value,
 					idEmpresa : document.getElementById("empresa").value,
 					analisis : document.getElementById("analisis").checked,
 					conciliacion : document.getElementById("conciliacion").checked,

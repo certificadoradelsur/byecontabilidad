@@ -37,8 +37,6 @@ public class CuentaContableRD {
 	@Inject
 	private GrupoCuentaDAO grupodao;
 	@Inject
-	private ClasificacionDAO clasificaciondao;
-	@Inject
 	private BancoDAO bdao;
 	@Inject
 	private CuentaDAO cdao;
@@ -48,6 +46,8 @@ public class CuentaContableRD {
 	private EmpresaDAO edao;
 	@Inject
 	private SucursalDAO sudao;
+	@Inject
+	private ClasificacionDAO cladao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -59,13 +59,12 @@ public class CuentaContableRD {
 			CuentaContable cuentaContable = new CuentaContable();
 
 			if (cuentadao.getByCodigo(ccj.getCodigo()) == null) {
-				if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
-						|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
+				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
 					cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
 					cuentaContable.setCodigo(ccj.getCodigo());
-					cuentaContable.setDescripcion(ccj.getDescripcion());
+					cuentaContable.setClasificacion(cladao.getById(ccj.getIdClasificacion()));
 					cuentaContable.setAnalisis(ccj.isAnalisis());
 					cuentaContable.setImputable(true);
 					cuentaContable.setConciliacion(ccj.isConciliacion());
@@ -133,14 +132,9 @@ public class CuentaContableRD {
 				ccj.setId(lcc.get(i).getId());
 				ccj.setCodigo(lcc.get(i).getCodigo());
 				ccj.setAnalisis(lcc.get(i).isAnalisis());
-				if (lcc.get(i).getDescripcion().equals("Sin descripción")) {
-					ccj.setDescripcion(lcc.get(i).getDescripcion());
-				} else {
-					ccj.setDescripcion(
-							clasificaciondao.getById(Long.parseLong(lcc.get(i).getDescripcion())).getNombre());
-				}
 				ccj.setGlosaGeneral(lcc.get(i).getGlosaGeneral());
 				ccj.setImputable(lcc.get(i).isImputable());
+				ccj.setClasificacion(cladao.getById(lcc.get(i).getClasificacion().getId()).getNombre());
 				ccj.setNombreClaseCuenta(clasedao.getById(lcc.get(i).getClaseCuenta().getId()).getNombre());
 				ccj.setNombreGrupoCuenta(grupodao.getById(lcc.get(i).getGrupoCuenta().getId()).getNombre());
 				ccj.setRazonSocialEmpresa(edao.getById(lcc.get(i).getEmpresa().getId()).getRazonSocial());
@@ -164,13 +158,12 @@ public class CuentaContableRD {
 			CuentaContable cuentaContable = cuentadao.getById(ccj.getId());
 			if (cuentadao.getByCodigo(ccj.getCodigo()) == null
 					|| cuentadao.getByCodigo(ccj.getCodigo()).getCodigo().equals(cuentaContable.getCodigo())) {
-				if (Utilidades.containsScripting(ccj.getDescripcion()).compareTo(true) == 0
-						|| Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
+				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
 					throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 				} else {
 					cuentaContable.setGlosaGeneral(ccj.getGlosaGeneral());
 					cuentaContable.setCodigo(ccj.getCodigo());
-					cuentaContable.setDescripcion(ccj.getDescripcion());
+					cuentaContable.setClasificacion(cladao.getById(ccj.getIdClasificacion()));
 					cuentaContable.setAnalisis(ccj.isAnalisis());
 					cuentaContable.setImputable(true);
 					cuentaContable.setConciliacion(ccj.isConciliacion());
@@ -211,10 +204,10 @@ public class CuentaContableRD {
 		ccJson.setId(cuentaContable.getId());
 		ccJson.setCodigo(cuentaContable.getCodigo());
 		ccJson.setGlosaGeneral(cuentaContable.getGlosaGeneral());
-		ccJson.setDescripcion(cuentaContable.getDescripcion());
 		ccJson.setAnalisis(cuentaContable.isAnalisis());
 		ccJson.setConciliacion(cuentaContable.isConciliacion());
 		ccJson.setIdEmpresa(cuentaContable.getEmpresa().getId());
+		ccJson.setIdClasificacion(cuentaContable.getClasificacion().getId());
 		ccJson.setIdSucursal(cuentaContable.getSucursal().getCodigo());
 		if(cuentaContable.isConciliacion().equals(true)) {
 			ccJson.setIdBanco(cuentaContable.getBanco().getId());
@@ -260,7 +253,7 @@ public class CuentaContableRD {
 				CuentaContableJson cj = new CuentaContableJson();
 				cj.setId(c.get(i).getId());
 				cj.setGlosaGeneral(c.get(i).getGlosaGeneral());
-				cj.setDescripcion(c.get(i).getDescripcion());
+				cj.setIdClasificacion(c.get(i).getClasificacion().getId());
 				cj.setIdEmpresa(c.get(i).getEmpresa().getId());
 				cj.setConciliacion(c.get(i).isConciliacion());
 				cj.setCodigo(c.get(i).getCodigo());
@@ -298,7 +291,7 @@ public class CuentaContableRD {
 			CuentaContableJson cj = new CuentaContableJson();
 				cj.setId(c.get(i).getId());
 				cj.setGlosaGeneral(c.get(i).getGlosaGeneral());
-				cj.setDescripcion(c.get(i).getDescripcion());
+				cj.setIdClasificacion(c.get(i).getClasificacion().getId());
 				cj.setIdEmpresa(c.get(i).getEmpresa().getId());
 				cj.setConciliacion(c.get(i).isConciliacion());
 				cj.setCodigo(c.get(i).getCodigo());
@@ -332,7 +325,7 @@ public class CuentaContableRD {
 			CuentaContable cuentaContable = new CuentaContable();
 			cuentaContable.setGlosaGeneral(c.get(i).getGlosaGeneral());
 			cuentaContable.setCodigo(c.get(i).getCodigo());
-			cuentaContable.setDescripcion(c.get(i).getDescripcion());
+			cuentaContable.setClasificacion(cladao.getById(c.get(i).getClasificacion().getId()));
 			cuentaContable.setAnalisis(c.get(i).isAnalisis());
 			cuentaContable.setImputable(true);
 			cuentaContable.setConciliacion(c.get(i).isConciliacion());

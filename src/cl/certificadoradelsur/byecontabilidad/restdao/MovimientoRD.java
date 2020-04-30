@@ -433,7 +433,7 @@ public class MovimientoRD {
 				mdao.update(m);
 				return Constantes.MENSAJE_REST_OK;
 			} else {
-				return "No se puede modificar el movimiento, ya que esta en uso por el proceso de conciliacíon";
+				return "No se puede modificar el movimiento, ya que está en uso por el proceso de conciliacíon";
 			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar el movimiento");
@@ -460,7 +460,7 @@ public class MovimientoRD {
 			comdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} else {
-			return "No se puede eliminar el comprobante, ya que esta en uso por el proceso de conciliacíon";
+			return "No se puede eliminar el comprobante, ya que está en uso por el proceso de conciliacíon";
 		}
 
 	}

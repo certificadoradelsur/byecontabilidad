@@ -631,6 +631,11 @@
 			alert("Debe seleccionar una empresa");
 			return;
 		}
+		
+		if ($('#empresa option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
 
 		if ($('#cuentaContable option:selected').text() == 'Seleccione cuenta') {
 			alert("Debe seleccionar una cuenta contable");

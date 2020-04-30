@@ -387,6 +387,12 @@
 	};
 
 	function reporte() {
+		
+		if ($('#empresa option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
+		
 		if (document.getElementById('filtro1').value == ""
 				|| document.getElementById('filtro2').value == "") {
 			alert('No pueden haber campos vacios');
@@ -412,6 +418,12 @@
 	}
 
 	function reporteMayor() {
+		
+		if ($('#empresa1 option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
+		
 		if (document.getElementById('filtro1Mayor').value == ""
 				|| document.getElementById('filtro2Mayor').value == ""
 				|| document.getElementById('inicialMayor').value == ""
@@ -447,6 +459,12 @@
 	}
 
 	function reporteGeneral() {
+		
+		if ($('#empresa2 option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
+		
 		var fechaDesde = document.getElementById('mesInicio').value;
 		var fechaHasta = document.getElementById('mesFinal').value;
 		if (fechaDesde > fechaHasta) {
@@ -467,6 +485,12 @@
 	}
 
 	function reporteClasificado() {
+		
+		if ($('#empresa3 option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
+		
 		var fechaDesde = document.getElementById('mesInicioClasificado').value;
 		var fechaHasta = document.getElementById('mesFinalClasificado').value;
 		if (fechaDesde > fechaHasta) {

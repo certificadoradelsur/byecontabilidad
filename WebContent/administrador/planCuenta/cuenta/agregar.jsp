@@ -151,6 +151,12 @@
 			alert("Todos los campos deben estar llenos");
 			return;
 		}
+		
+		if ($('#empresa option:selected').text() == '') {
+			alert("Debe seleccionar una empresa valida");
+			return;
+		}
+		
 		var submitJson = {
 			idBanco : document.getElementById("banco").value,	
 			numCuenta : document.getElementById("numCuenta").value,

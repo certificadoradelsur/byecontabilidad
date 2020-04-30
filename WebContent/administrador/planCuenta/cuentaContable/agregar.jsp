@@ -433,7 +433,7 @@
 			idClaseCuenta : document.getElementById("claseCuenta").value,
 			idGrupoCuenta : document.getElementById("grupoCuenta").value,
 			glosaGeneral : document.getElementById("glosa").value,
-			descripcion : document.getElementById("descripcion").value,
+			idClasificacion : document.getElementById("descripcion").value,
 			//imputable : document.getElementById("imputable").checked,
 			analisis : document.getElementById("analisis").checked,
 			conciliacion : document.getElementById("conciliacion").checked,

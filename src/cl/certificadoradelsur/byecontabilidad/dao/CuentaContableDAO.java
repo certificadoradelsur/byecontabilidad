@@ -244,4 +244,22 @@ public class CuentaContableDAO {
 			return null;
 		}
 	}
+	
+	/**
+	 * busca cuentaContable por idClasificación
+	 * 
+	 * @param idSucursal
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public CuentaContable getbyIdClasificacion(Long idClasificacion) {
+		Query query = em.createNamedQuery("CuentaContable.getbyIdClasificacion");
+		try {
+			query.setParameter("idClasificacion", idClasificacion);
+			query.setMaxResults(1);
+			return (CuentaContable) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }
