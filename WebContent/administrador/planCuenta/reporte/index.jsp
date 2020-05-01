@@ -76,11 +76,11 @@
 							class="form-control" class="in" />
 					</div>
 					<div class="form-group col-md-2">
-					<label for="empresa">&nbsp;Empresa</label> <select
-						class="browser-default custom-select" id="empresa"
-						required="required">
-					</select>
-				   </div>
+						<label for="empresa">&nbsp;Empresa</label> <select
+							class="browser-default custom-select" id="empresa"
+							required="required">
+						</select>
+					</div>
 					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label>&nbsp;</label>
@@ -109,11 +109,11 @@
 							class="form-control" class="in" />
 					</div>
 					<div class="form-group col-md-2">
-					<label for="empresa">&nbsp;Empresa</label> <select
-						class="browser-default custom-select" id="empresa1"
-						required="required">
-					</select>
-				   </div>
+						<label for="empresa">&nbsp;Empresa</label> <select
+							class="browser-default custom-select" id="empresa1"
+							required="required">
+						</select>
+					</div>
 					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label for="desde">&nbsp;&nbsp;Inicial</label>
@@ -193,11 +193,11 @@
 						</select>
 					</div>
 					<div class="form-group col-md-2">
-					<label for="empresa">&nbsp;Empresa</label> <select
-						class="browser-default custom-select" id="empresa2"
-						required="required">
-					</select>
-				   </div>
+						<label for="empresa">&nbsp;Empresa</label> <select
+							class="browser-default custom-select" id="empresa2"
+							required="required">
+						</select>
+					</div>
 					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label>&nbsp;</label>
@@ -261,11 +261,11 @@
 						</select>
 					</div>
 					<div class="form-group col-md-2">
-					<label for="empresa">&nbsp;Empresa</label> <select
-						class="browser-default custom-select" id="empresa3"
-						required="required">
-					</select>
-				   </div>
+						<label for="empresa">&nbsp;Empresa</label> <select
+							class="browser-default custom-select" id="empresa3"
+							required="required">
+						</select>
+					</div>
 					<div class="form-group col-md-2">
 						<div class="form-row">
 							<label>&nbsp;</label>
@@ -281,98 +281,104 @@
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#anio").select2();
-		$("#mesInicio").select2();
-		$("#mesFinal").select2();
-		$("#anioClasificado").select2();
-		$("#mesInicioClasificado").select2();
-		$("#mesFinalClasificado").select2();
-		$("#empresa").select2();
-		$("#empresa1").select2();
-		$("#empresa2").select2();
-		$("#empresa3").select2();
+	$(document)
+			.ready(
+					function() {
+						$("#anio").select2();
+						$("#mesInicio").select2();
+						$("#mesFinal").select2();
+						$("#anioClasificado").select2();
+						$("#mesInicioClasificado").select2();
+						$("#mesFinalClasificado").select2();
+						$("#empresa").select2();
+						$("#empresa1").select2();
+						$("#empresa2").select2();
+						$("#empresa3").select2();
 
-		var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value
-		}
-		$
-				.post(
-						'/byeContabilidad/rest-services/private/empresa/getLista',
-						JSON.stringify(submitJson),
-						function(res, code) {
-							var str;
-							for (var i = 0, len = res.length; i < len; i++) {
-								str += "<option value="+res[i].id+">"
-										+ res[i].razonSocial
-										+ "</option>";
-							}
-							document.getElementById("empresa").innerHTML = str;
-						}, "json");
-		
-		var submitJson = {
-				idUsuario : document.getElementById("idUsuario").value
-			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/empresa/getLista',
-							JSON.stringify(submitJson),
-							function(res, code) {
-								var str;
-								for (var i = 0, len = res.length; i < len; i++) {
-									str += "<option value="+res[i].id+">"
-											+ res[i].razonSocial
-											+ "</option>";
-								}
-								document.getElementById("empresa1").innerHTML = str;
-							}, "json");
-		
-		var submitJson = {
-				idUsuario : document.getElementById("idUsuario").value
-			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/empresa/getLista',
-							JSON.stringify(submitJson),
-							function(res, code) {
-								var str;
-								for (var i = 0, len = res.length; i < len; i++) {
-									str += "<option value="+res[i].id+">"
-											+ res[i].razonSocial
-											+ "</option>";
-								}
-								document.getElementById("empresa2").innerHTML = str;
-							}, "json");
-		
-		var submitJson = {
-				idUsuario : document.getElementById("idUsuario").value
-			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/empresa/getLista',
-							JSON.stringify(submitJson),
-							function(res, code) {
-								var str;
-								for (var i = 0, len = res.length; i < len; i++) {
-									str += "<option value="+res[i].id+">"
-											+ res[i].razonSocial
-											+ "</option>";
-								}
-								document.getElementById("empresa3").innerHTML = str;
-							}, "json");
-		
-		ComboAnio();
-		ComboAnioClasificado();
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+										}, "json");
 
-	});
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa1").innerHTML = str;
+										}, "json");
+
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa2").innerHTML = str;
+										}, "json");
+
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa3").innerHTML = str;
+										}, "json");
+
+						ComboAnio();
+						ComboAnioClasificado();
+
+					});
 
 	function ComboAnio() {
 		var str = "";
 		var n = (new Date()).getFullYear();
 
-		for (var i = n; i <= (n + 5); i++) {
-			str += "<option value="+i+">" + i + "</option>";
+		for (var i = n - 5; i <= (n + 5); i++) {
+			if (i == n) {
+				str += "<option value="+i+" selected>"+i+"</option>";
+			} else {
 		}
+			str += "<option value="+i+">" + i + "</option>";
+	}
 		document.getElementById("anio").innerHTML = str;
 	};
 
@@ -380,19 +386,23 @@
 		var str = "";
 		var n = (new Date()).getFullYear();
 
-		for (var i = n; i <= (n + 5); i++) {
-			str += "<option value="+i+">" + i + "</option>";
+		for (var i = n - 5; i <= (n + 5); i++) {
+			if (i == n) {
+				str += "<option value="+i+" selected>"+i+"</option>";
+			} else {
 		}
+			str += "<option value="+i+">" + i + "</option>";
+	}
 		document.getElementById("anioClasificado").innerHTML = str;
 	};
 
 	function reporte() {
-		
+
 		if ($('#empresa option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-		
+
 		if (document.getElementById('filtro1').value == ""
 				|| document.getElementById('filtro2').value == "") {
 			alert('No pueden haber campos vacios');
@@ -418,12 +428,12 @@
 	}
 
 	function reporteMayor() {
-		
+
 		if ($('#empresa1 option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-		
+
 		if (document.getElementById('filtro1Mayor').value == ""
 				|| document.getElementById('filtro2Mayor').value == ""
 				|| document.getElementById('inicialMayor').value == ""
@@ -453,18 +463,18 @@
 				+ document.getElementById('inicialMayor').value
 				+ "&finalMayor="
 				+ document.getElementById('finalMayor').value
-				+ "&idUsuario=" + document.getElementById('idUsuario').value
-				+ "&idEmpresa="
-				+ document.getElementById('empresa1').value
+				+ "&idUsuario="
+				+ document.getElementById('idUsuario').value
+				+ "&idEmpresa=" + document.getElementById('empresa1').value
 	}
 
 	function reporteGeneral() {
-		
+
 		if ($('#empresa2 option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-		
+
 		var fechaDesde = document.getElementById('mesInicio').value;
 		var fechaHasta = document.getElementById('mesFinal').value;
 		if (fechaDesde > fechaHasta) {
@@ -485,12 +495,12 @@
 	}
 
 	function reporteClasificado() {
-		
+
 		if ($('#empresa3 option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-		
+
 		var fechaDesde = document.getElementById('mesInicioClasificado').value;
 		var fechaHasta = document.getElementById('mesFinalClasificado').value;
 		if (fechaDesde > fechaHasta) {
@@ -504,10 +514,9 @@
 				+ document.getElementById('mesFinalClasificado').value
 				+ "&anio="
 				+ document.getElementById('anioClasificado').value
-				+ "&idUsuario=" + document.getElementById('idUsuario').value
-				+ "&idEmpresa="
-				+ document.getElementById('empresa3').value
+				+ "&idUsuario="
+				+ document.getElementById('idUsuario').value
+				+ "&idEmpresa=" + document.getElementById('empresa3').value
 	}
-
 </script>
 </html>
