@@ -147,6 +147,7 @@ $(document).ready(function () {
 			codigo : <%=request.getParameter("id")%>,
 			direccion : document.getElementById("direccion").value,
 			idEmpresa : document.getElementById("empresa").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		$.post('/byeContabilidad/rest-services/private/sucursal/update',
 				JSON.stringify(submitJson)).done(function(data) {

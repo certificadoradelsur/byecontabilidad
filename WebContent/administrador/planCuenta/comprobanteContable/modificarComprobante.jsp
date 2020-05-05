@@ -131,7 +131,7 @@
 				</div>
 				<div class="col-sm-3">
 					<input type="text" id="glosaSin" name="glosaSin"
-						placeholder="Ingrese glosa" required="required" />
+						placeholder="Ingrese glosa"  required="required" />
 				</div>
 				<div class="col-sm-1">
 					<label>&nbsp;Tipo</label>
@@ -565,7 +565,6 @@
 													.getElementById("cuentaContable").value
 													.split("/");
 											varCodigo = codigo[5];
-											60120
 											var idEmpresa = document
 													.getElementById("cuentaContable").value
 													.split("/");
@@ -734,6 +733,13 @@
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
+		
+		if(document.getElementById("glosaAnalisis").value=="" && document.getElementById("glosaConciliacion").value=="" &&
+				document.getElementById("glosaSin").value==""){
+			alert("Debe ingresar una glosa valida");
+			return;
+		}
+		
 		if ($('#empresa option:selected').text() == 'Seleccione empresa') {
 			alert("Debe seleccionar una empresa");
 			return;
@@ -884,6 +890,7 @@
 					glosaGeneral : document.getElementById("glosaGeneral").value,
 					fecha : document.getElementById("fecha").value,
 					idEmpresa : document.getElementById("empresa").value,
+					idUsuario : document.getElementById("idUsuario").value,
 					borrador : true,
 					movimientos : list.map(function(value) {
 						return {
@@ -911,7 +918,6 @@
 									: value.numCuenta,
 							idCuentaContable : value.idCuentaContable == '' ? 0
 									: value.idCuentaContable
-
 						}
 
 					}),
@@ -947,6 +953,7 @@
 				glosaGeneral : document.getElementById("glosaGeneral").value,
 				fecha : document.getElementById("fecha").value,
 				idEmpresa : document.getElementById("empresa").value,
+				idUsuario : document.getElementById("idUsuario").value,
 				borrador : false,
 				movimientos : list
 						.map(function(value) {

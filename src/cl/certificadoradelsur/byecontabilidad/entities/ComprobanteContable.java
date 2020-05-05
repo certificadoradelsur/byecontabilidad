@@ -46,6 +46,7 @@ public class ComprobanteContable implements Serializable {
 	private List<Movimiento> movimientos;
 	private Empresa empresa;
 	private Boolean borrador;
+	private Timestamp fechaCreacion;
 
 	@Id
 	@GeneratedValue(generator = "seq_comprobante_contable", strategy = GenerationType.AUTO)
@@ -111,5 +112,15 @@ public class ComprobanteContable implements Serializable {
 	public void setBorrador(Boolean borrador) {
 		this.borrador = borrador;
 	}
+
+	@Column(name = "fecha_creacion", nullable = true)
+	public Timestamp getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Timestamp fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
 
 }

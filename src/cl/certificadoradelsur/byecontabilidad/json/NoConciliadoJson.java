@@ -23,8 +23,16 @@ public class NoConciliadoJson {
 	private Long idNoConciliadoCartola;
 	private boolean estado;
 	private Long idEmpresa;
+	private String idUsuario;
 
 	
+	
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
+	}
 	public Long getIdEmpresa() {
 		return idEmpresa;
 	}

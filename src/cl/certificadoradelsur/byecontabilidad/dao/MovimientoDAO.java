@@ -339,4 +339,22 @@ public class MovimientoDAO {
 			return null;
 		}
 	}
+	
+	/**
+	 * busca Movimiento por idCuentaContable
+	 * 
+	 * @param idCuentaContable
+	 * @return
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Movimiento getbyIdCuentaContable(Long idCuentaContable) {
+		Query query = em.createNamedQuery("Movimiento.getbyIdCuentaContable");
+		try {
+			query.setParameter("idCuentaContable", idCuentaContable);
+			query.setMaxResults(1);
+			return (Movimiento) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

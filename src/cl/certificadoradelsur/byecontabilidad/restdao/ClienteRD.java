@@ -1,14 +1,18 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
+
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Cliente;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ClienteJson;
@@ -32,6 +36,8 @@ public class ClienteRD {
 	private UsuarioDAO udao;
 	@Inject
 	private MovimientoDAO movdao;
+	@Inject
+	private BitacoraDAO bidao;
 
 	/**
 	 * funcion que almacena
@@ -60,6 +66,7 @@ public class ClienteRD {
 				c.setTelefono(cj.getTelefono());
 				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				c.setActivo(true);
+				c.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				clidao.guardar(c);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -156,6 +163,13 @@ public class ClienteRD {
 				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				c.setActivo(cj.isActivo());
 				clidao.update(c);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(cj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Cliente");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico " + clidao.getById(cj.getId()).getNombre());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -202,6 +216,13 @@ public class ClienteRD {
 					c.setActivo(true);
 				}
 				clidao.update(c);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(cj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Cliente");
+				b.setAccion("Delete");
+				b.setDescripcion("Se cambio estado " + clidao.getById(cj.getId()).getNombre() +" "+ clidao.getById(cj.getId()).isActivo());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			} else {
 				return "No se puede cambiar el estado, ya que se encuentra asociado a un comprobante contable";

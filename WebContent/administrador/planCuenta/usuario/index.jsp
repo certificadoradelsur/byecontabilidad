@@ -161,7 +161,8 @@
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar el usuario?')) {
 			var submitJson = {
-				id : x.data.record.id
+				id : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$
 					.post(

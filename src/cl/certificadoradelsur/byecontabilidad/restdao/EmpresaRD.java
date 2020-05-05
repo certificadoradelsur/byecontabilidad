@@ -1,11 +1,13 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
@@ -13,6 +15,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.OficinaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.SucursalDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 import cl.certificadoradelsur.byecontabilidad.entities.Sucursal;
@@ -44,6 +47,8 @@ public class EmpresaRD {
 	private ClaseCuentaDAO clasedao;
 	@Inject
 	private SucursalDAO sudao;
+	@Inject
+	private BitacoraDAO bidao;
 
 	/**
 	 * funcion que almacena
@@ -64,12 +69,14 @@ public class EmpresaRD {
 				e.setRazonSocial(ej.getRazonSocial());
 				e.setRut(ej.getRut());
 				e.setActivo(true);
+				e.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				e.setOficinaContable(udao.getById(ej.getIdUsuario()).getOficinaContable());
 				edao.guardar(e);
 				saveClasificacion(e.getId());
 				Sucursal s = new Sucursal();
 				s.setDireccion(ej.getDireccion());
 				s.setEmpresa(edao.getById(e.getId()));
+				s.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				sudao.guardar(s);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -589,6 +596,7 @@ public class EmpresaRD {
 				ej.setGiro(le.get(i).getGiro());
 				ej.setRut(le.get(i).getRut());
 				ej.setRazonSocial(le.get(i).getRazonSocial());
+				ej.setActivo(le.get(i).getActivo());
 				ej.setRazonSocialOficina(ofidao.getById(le.get(i).getOficinaContable().getId()).getRazonSocial());
 				lej.add(ej);
 			}
@@ -618,6 +626,13 @@ public class EmpresaRD {
 				e.setRazonSocial(ej.getRazonSocial());
 				e.setActivo(ej.isActivo());
 				edao.update(e);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(ej.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Empresa");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico " + edao.getById(ej.getId()).getRazonSocial());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -653,7 +668,18 @@ public class EmpresaRD {
 	public String eliminar(EmpresaJson ej) {
 		try {
 			Empresa e = edao.getById(ej.getId());
-			e.setActivo(false);
+			if (e.getActivo().equals(true)) {
+				e.setActivo(false);
+			} else {
+				e.setActivo(true);
+			}
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(ej.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Empresa");
+			b.setAccion("Delete");
+			b.setDescripcion("Se cambio estado " + edao.getById(ej.getId()).getRazonSocial() +" "+ edao.getById(ej.getId()).getActivo());
+			bidao.guardar(b);
 			edao.update(e);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {

@@ -514,7 +514,8 @@ $(document).ready(function () {
 			numDocumento :document.getElementById("numDocumento").value == '' ? 0 : document.getElementById("numDocumento").value,
 			idUsuario : document.getElementById("idUsuario").value == '' ? 0 : document.getElementById("idUsuario").value,
 			idCuentaContable : varIdCuentaContable == '' ? 0 : varIdCuentaContable,
-			idCliente: cliente == '' ? 0 : cliente
+			idCliente: cliente == '' ? 0 : cliente,
+			idUsuario : document.getElementById("idUsuario").value
  
 		}
 		$

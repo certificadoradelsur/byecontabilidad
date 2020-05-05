@@ -17,9 +17,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Cartola;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CartolaJson;
@@ -44,6 +47,10 @@ public class CartolaRD {
 	private CuentaDAO cuentadao;
 	@Inject
 	private EmpresaDAO edao;
+	@Inject
+	private BitacoraDAO bidao;
+	@Inject
+	private UsuarioDAO udao;
 
 	/**
 	 * funcion que almacena cartola
@@ -68,6 +75,7 @@ public class CartolaRD {
 				cartola.setMonto(cj.getMonto());
 				cartola.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				cartola.setEliminado(false);
+				cartola.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				cdao.guardar(cartola);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -174,6 +182,13 @@ public class CartolaRD {
 				cartola.setMonto(cj.getMonto());
 				cartola.setEliminado(cj.isEliminado());
 				cdao.update(cartola);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(cj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Cartola");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico la cartola " + cdao.getById(cj.getId()).getDescripcion());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -212,6 +227,13 @@ public class CartolaRD {
 	public String eliminar(CartolaJson cj) {
 		try {
 			Cartola cartola = cdao.getById(cj.getId());
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(cj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Cartola");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino cartola " + cdao.getById(cj.getId()).getDescripcion());
+			bidao.guardar(b);
 			cdao.eliminar(cartola);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {

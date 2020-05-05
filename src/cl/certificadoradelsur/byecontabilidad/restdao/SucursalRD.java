@@ -1,15 +1,18 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.SucursalDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Sucursal;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.SucursalJson;
@@ -33,7 +36,9 @@ public class SucursalRD {
 	private UsuarioDAO udao;
 	@Inject
 	private CuentaContableDAO cuentaCondao;
-
+	@Inject
+	private BitacoraDAO bidao;
+	
 	/**
 	 * funcion que almacena
 	 * 
@@ -48,6 +53,7 @@ public class SucursalRD {
 			} else {
 				s.setDireccion(ccj.getDireccion());
 				s.setEmpresa(edao.getById(ccj.getIdEmpresa()));
+				s.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				sudao.guardar(s);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -120,6 +126,13 @@ public class SucursalRD {
 				s.setDireccion(ccj.getDireccion());
 				s.setEmpresa(edao.getById(ccj.getIdEmpresa()));
 				sudao.update(s);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(ccj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Sucursal");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico " + sudao.getById(ccj.getCodigo()).getDireccion());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -153,6 +166,13 @@ public class SucursalRD {
 		try {
 			if(cuentaCondao.getbyIdSucursal(bj.getCodigo())==null){
 			Sucursal s = sudao.getById(bj.getCodigo());
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(bj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Sucursal");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino " + sudao.getById(bj.getCodigo()).getDireccion());
+			bidao.guardar(b);
 			sudao.eliminar(s);
 			return Constantes.MENSAJE_REST_OK;
 			} else {

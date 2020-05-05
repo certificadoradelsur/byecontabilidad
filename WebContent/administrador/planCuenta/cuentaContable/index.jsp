@@ -267,7 +267,8 @@
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la cuenta contable?')) {
 			var submitJson = {
-				id : x.data.record.id
+				id : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$
 					.post(
@@ -277,7 +278,7 @@
 							alert('Cuenta contable eliminada correctamente');
 							grid.reload();
 						} else {
-							alert('Error al eliminar la cuenta contable');
+							alert(data);
 						}
 					}).fail(function() {
 						alert('Error al eliminar la cuenta contable');

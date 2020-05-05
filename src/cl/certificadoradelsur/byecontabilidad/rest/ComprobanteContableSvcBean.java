@@ -39,15 +39,20 @@ public class ComprobanteContableSvcBean implements ComprobanteContableSvc {
 		return Response.ok(json).build();
 	}
 
+	
+	
+	
+	
 	@Override
 	public Response update(String datos) {
 		Gson gson = new GsonBuilder().create();
 		ComprobanteContableJson ccj = gson.fromJson(datos, ComprobanteContableJson.class);
 		String respuesta = gson.toJson(comrd.update(ccj), new TypeToken<String>() {
-		}.getType());
+		}.getType()); 
 		return Response.ok(respuesta).build();
 	}
 
+	
 	@Override
 	public Response modificar(String datos) {
 		Gson gson = new GsonBuilder().create();

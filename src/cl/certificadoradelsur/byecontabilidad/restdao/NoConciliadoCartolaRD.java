@@ -1,15 +1,18 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
 import cl.certificadoradelsur.byecontabilidad.json.NoConciliadoCartolaJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -32,6 +35,8 @@ public class NoConciliadoCartolaRD {
 	private UsuarioDAO udao;
 	@Inject
 	private EmpresaDAO edao;
+	@Inject
+	private BitacoraDAO bidao;
 
 	/**
 	 * funcion que almacena
@@ -164,6 +169,13 @@ public class NoConciliadoCartolaRD {
 			NoConciliadoCartola noConciliadoCartola = nccdao.getById(cj.getId());
 			noConciliadoCartola.setEliminado(true);
 			nccdao.update(noConciliadoCartola);
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(cj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("NoConciliadoCartola");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino no conciliado cartola " + nccdao.getById(cj.getId()).getCartola().getDescripcion());
+			bidao.guardar(b);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
 			log.error("No se pudo eliminar la cartola no conciliada");

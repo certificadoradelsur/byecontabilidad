@@ -46,6 +46,7 @@ public class Cartola implements Serializable {
 	private Long monto;
 	private boolean eliminado;
 	private Empresa empresa;
+	private Timestamp fechaCreacion;
 
 	@Id
 	@GeneratedValue(generator = "seq_cartola", strategy = GenerationType.AUTO)
@@ -150,4 +151,12 @@ public class Cartola implements Serializable {
 		this.empresa = empresa;
 	}
 
+	@Column(name = "fecha_creacion", nullable = true)
+	public Timestamp getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Timestamp fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
 }

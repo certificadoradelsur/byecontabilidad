@@ -1,15 +1,18 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.json.NoConciliadoJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -32,6 +35,8 @@ public class NoConciliadoRD {
 	private UsuarioDAO udao;
 	@Inject
 	private EmpresaDAO edao;
+	@Inject
+	private BitacoraDAO bidao;
 
 	/**
 	 * funcion que almacena
@@ -171,6 +176,13 @@ public class NoConciliadoRD {
 			NoConciliado noConciliado = ncdao.getById(cj.getId());
 			noConciliado.setEliminado(true);
 			ncdao.update(noConciliado);
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(cj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("NoConciliado");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino movimiento no conciliado con fecha " + ncdao.getById(cj.getId()).getFecha());
+			bidao.guardar(b);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
 			log.error("No se pudo eliminar el movimiento no conciliado");

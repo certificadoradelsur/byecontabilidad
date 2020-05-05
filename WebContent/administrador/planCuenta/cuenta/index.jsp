@@ -201,7 +201,8 @@
 	function eliminar(x) {
 		if (confirm('¿Esta seguro que desea eliminar la cuenta?')) {
 			var submitJson = {
-				id : x.data.record.id
+				id : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$.post('/byeContabilidad/rest-services/private/cuenta/delete',
 					JSON.stringify(submitJson)).done(function(data) {

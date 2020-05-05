@@ -110,6 +110,11 @@
 														width : 200
 													},
 													{
+														field : 'activo',
+														title : 'Activo',
+														width : 80
+													},
+													{
 														width : 100,
 														title : 'Modificar',
 														tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
@@ -120,8 +125,8 @@
 													},
 													{
 														width : 100,
-														title : 'Eliminar',
-														tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+														title : 'Cambiar estado',
+														tmpl : '<span class="material-icons gj-cursor-pointer">autorenew</span>',
 														align : 'center',
 														events : {
 															'click' : eliminar
@@ -146,16 +151,17 @@
 
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea desactivar la empresa?')) {
+		if (confirm('¿Esta seguro desea cambiar el estado de la empresa?')) {
 			var submitJson = {
-				id : x.data.record.id
+				id : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$
 					.post(
 							'/byeContabilidad/rest-services/private/empresa/delete',
 							JSON.stringify(submitJson)).done(function(data) {
 						if (data == 'OK') {
-							alert('Empresa inactiva');
+							alert('Cambio realizado');
 							grid.reload();
 						} else {
 							alert('Error al inactivar la empresa');

@@ -337,7 +337,8 @@
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la cartola')) {
 			var submitJson = {
-				id : x.data.record.id
+				id : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$.post('/byeContabilidad/rest-services/private/cartola/delete',
 					JSON.stringify(submitJson)).done(function(data) {

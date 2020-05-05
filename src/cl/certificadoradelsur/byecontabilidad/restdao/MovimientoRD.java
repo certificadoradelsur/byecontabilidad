@@ -1,5 +1,6 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.conciliacion.ConciliacionBancaria;
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
@@ -17,6 +19,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Cartola;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
@@ -55,6 +58,8 @@ public class MovimientoRD {
 	private ComprobanteContableDAO comdao;
 	@Inject
 	private ClienteDAO clidao;
+	@Inject
+	private BitacoraDAO bidao;
 
 	/**
 	 * funcion que almacena
@@ -104,6 +109,13 @@ public class MovimientoRD {
 
 			if (condao.getByMov(mj.getId()) == null || ncdao.getByIdMovimiento(mj.getId()) == null) {
 				Movimiento movimiento = mdao.getById(mj.getId());
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(mj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Movimiento");
+				b.setAccion("Delete");
+				b.setDescripcion("Se elimino " + mdao.getById(mj.getId()).getGlosa());
+				bidao.guardar(b);
 				mdao.eliminar(movimiento);
 				return Constantes.MENSAJE_REST_OK;
 			} else {
@@ -360,7 +372,7 @@ public class MovimientoRD {
 					}
 				}
 				if (lm.get(i).getCuentaContable().isConciliacion().equals(true)) {
-					mj.setNumCuenta(lm.get(i).getCuenta().getNumCuenta());
+					mj.setIdCuenta(lm.get(i).getCuenta().getId());
 					mj.setNombreBanco(lm.get(i).getCuenta().getBanco().getNombre());
 				} else if (lm.get(i).getCuentaContable().isAnalisis().equals(true)) {
 					mj.setIdCliente(lm.get(i).getCliente().getId());
@@ -432,6 +444,13 @@ public class MovimientoRD {
 					m.setEstado(mj.isEstado());
 				}
 				mdao.update(m);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(mj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Movimiento");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico " + mdao.getById(mj.getId()).getGlosa());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			} else {
 				return "No se puede modificar el movimiento, ya que está en uso por el proceso de conciliacíon";
@@ -458,6 +477,13 @@ public class MovimientoRD {
 				mdao.eliminar(lm.get(i));
 			}
 			ComprobanteContable c = comdao.getById(mj.getId());
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(mj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Comprobante contable");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino " + comdao.getById(mj.getIdComprobanteContable()).getGlosaGeneral());
+			bidao.guardar(b);
 			comdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} else {

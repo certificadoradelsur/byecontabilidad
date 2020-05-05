@@ -1,17 +1,20 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ClasificacionJson;
@@ -39,7 +42,8 @@ public class ClasificacionRD {
 	private EmpresaDAO edao;
 	@Inject
 	private CuentaContableDAO cuentaCondao;
-
+	@Inject
+	private BitacoraDAO bidao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -140,6 +144,13 @@ public class ClasificacionRD {
 					clasificacion.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
 					clasificacion.setEmpresa(edao.getById(ccj.getIdEmpresa()));
 					cladao.update(clasificacion);
+					Bitacora b = new Bitacora();
+					b.setUsuario(udao.getById(ccj.getIdUsuario()));
+					b.setFecha(new Timestamp(System.currentTimeMillis()));
+					b.setTabla("Clasificación");
+					b.setAccion("Update");
+					b.setDescripcion("Se modifico " + cladao.getById(ccj.getId()).getNombre());
+					bidao.guardar(b);
 					return Constantes.MENSAJE_REST_OK;
 
 				}
@@ -179,6 +190,13 @@ public class ClasificacionRD {
 		try {
 			if (cuentaCondao.getbyIdClasificacion(bj.getId()) == null) {
 				Clasificacion clasificacion = cladao.getById(bj.getId());
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(bj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Clasificación");
+				b.setAccion("Delete");
+				b.setDescripcion("Se elimino " + cladao.getById(bj.getId()).getNombre());
+				bidao.guardar(b);
 				cladao.eliminar(clasificacion);
 				return Constantes.MENSAJE_REST_OK;
 			} else {

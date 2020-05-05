@@ -228,7 +228,8 @@
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea cambiar el estado al cliente?')) {
 			var submitJson = {
-				id : x.data.record.id
+				id : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$.post('/byeContabilidad/rest-services/private/cliente/delete',
 					JSON.stringify(submitJson)).done(function(data) {

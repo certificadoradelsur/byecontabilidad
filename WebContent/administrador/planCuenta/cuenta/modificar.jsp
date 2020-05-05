@@ -189,7 +189,8 @@ function cargaEmpresa(idEmpresa) {
 			numCuenta : document.getElementById("numCuenta").value,
 			nombreEjecutivo : document.getElementById("nombreEjecutivo").value,
 			saldoInicial : document.getElementById("saldoInicial").value,
-			idEmpresa : document.getElementById("empresa").value
+			idEmpresa : document.getElementById("empresa").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		$.post('/byeContabilidad/rest-services/private/cuenta/update',
 				JSON.stringify(submitJson)).done(function(data) {

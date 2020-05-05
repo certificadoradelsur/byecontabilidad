@@ -137,7 +137,8 @@ $(document).ready(function () {
 			numero : document.getElementById("numero").value,
 			glosaGeneral : document.getElementById("glosaGeneral").value,
 			fecha : document.getElementById("fecha").value,
-			idEmpresa : document.getElementById("empresa").value
+			idEmpresa : document.getElementById("empresa").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		$.post('/byeContabilidad/rest-services/private/comprobanteContable/update',
 				JSON.stringify(submitJson)).done(function(data) {

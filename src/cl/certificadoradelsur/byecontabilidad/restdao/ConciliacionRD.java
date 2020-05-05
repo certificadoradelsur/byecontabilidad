@@ -7,11 +7,13 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoCartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Conciliacion;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliado;
 import cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola;
@@ -38,7 +40,8 @@ public class ConciliacionRD {
 	private UsuarioDAO udao;
 	@Inject
 	private EmpresaDAO edao;
-
+	@Inject
+	private BitacoraDAO bidao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -173,6 +176,13 @@ public class ConciliacionRD {
 			Conciliacion conciliacion = cdao.getById(cj.getId());
 			conciliacion.setFecha(Utilidades.convertidorFechaSinHora(cj.getFecha()));
 			cdao.update(conciliacion);
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(cj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Conciliacion");
+			b.setAccion("Update");
+			b.setDescripcion("Se modifico conciliacion de la fecha" + cdao.getById(cj.getId()).getFecha());
+			bidao.guardar(b);
 			return Constantes.MENSAJE_REST_OK;
 
 		} catch (Exception e) {
@@ -203,8 +213,15 @@ public class ConciliacionRD {
 	public String eliminar(ConciliacionJson cj) {
 		try {
 			Conciliacion conciliacion = cdao.getById(cj.getId());
-			conciliacion.setEliminado(true);
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(cj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Conciliacion");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino conciliacion con fecha " + cdao.getById(cj.getId()).getFecha());
+			bidao.guardar(b);
 			cdao.eliminar(conciliacion);
+
 
 			if (ncdao.getByIdMovimiento(conciliacion.getMovimiento().getId()) != null
 					&& nccdao.getByIdCartola(conciliacion.getCartola().getId()) != null) {

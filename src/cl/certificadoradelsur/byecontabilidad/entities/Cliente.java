@@ -1,6 +1,8 @@
 package cl.certificadoradelsur.byecontabilidad.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,6 +43,7 @@ public class Cliente implements Serializable {
 	private String telefono;
 	private Boolean activo;
 	private Empresa empresa;
+	private Timestamp fechaCreacion;
 
 	@Id
 	@GeneratedValue(generator = "seq_cliente", strategy = GenerationType.AUTO)
@@ -134,6 +137,14 @@ public class Cliente implements Serializable {
 		this.empresa = empresa;
 	}
 	
-	
+	@Column(name = "fecha_creacion", nullable = true)
+	public Timestamp getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Timestamp fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
 
 }

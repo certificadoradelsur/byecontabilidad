@@ -602,7 +602,8 @@
 				//imputable:document.getElementById("imputable").checked,
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
-				idSucursal : document.getElementById("sucursal").value
+				idSucursal : document.getElementById("sucursal").value,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 		} else if (document.getElementById("conciliacion").checked) {
 
@@ -612,14 +613,15 @@
 				idClaseCuenta : document.getElementById("claseCuenta").value,
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,
 				glosaGeneral : document.getElementById("glosa").value,
-				idClasificacio  : document.getElementById("descripcion").value,
+				idClasificacion  : document.getElementById("descripcion").value,
 				//imputable:document.getElementById("imputable").checked,
 				analisis : document.getElementById("analisis").checked,
 				conciliacion : document.getElementById("conciliacion").checked,
 				idBanco : document.getElementById("banco").value,
 				idEmpresa : document.getElementById("empresa").value, 
 				idCuenta : document.getElementById("cuenta").value == '' ? 0 : document.getElementById("cuenta").value,
-				idSucursal : document.getElementById("sucursal").value
+				idSucursal : document.getElementById("sucursal").value,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 		}else {
 			var submitJson = {
@@ -632,7 +634,8 @@
 					idEmpresa : document.getElementById("empresa").value,
 					analisis : document.getElementById("analisis").checked,
 					conciliacion : document.getElementById("conciliacion").checked,
-					idSucursal : document.getElementById("sucursal").value
+					idSucursal : document.getElementById("sucursal").value,
+					idUsuario : document.getElementById("idUsuario").value
 			}
 		}
 

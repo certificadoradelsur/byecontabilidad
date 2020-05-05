@@ -180,16 +180,15 @@ $(document).ready(function () {
 		}
 
 		var submitJson = {
-			id :
-<%=request.getParameter("id")%>
-	,
+			id :<%=request.getParameter("id")%>	,
 			idBanco : document.getElementById("banco").value,
 			cuenta : document.getElementById("cuenta").value,
 			numDocumento : document.getElementById("numDocumento").value,
 			fecha : document.getElementById("fecha").value,
 			descripcion : document.getElementById("descripcion").value,
 			tipoMovimiento : document.getElementById("tipoMovimiento").value,
-			monto : document.getElementById("monto").value
+			monto : document.getElementById("monto").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		$.post('/byeContabilidad/rest-services/private/cartola/update',
 				JSON.stringify(submitJson)).done(function(data) {

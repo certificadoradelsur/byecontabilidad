@@ -1,5 +1,6 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -7,14 +8,17 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClaseCuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClasificacionDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.GrupoCuentaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.SucursalDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.CuentaContable;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CuentaContableJson;
@@ -48,6 +52,11 @@ public class CuentaContableRD {
 	private SucursalDAO sudao;
 	@Inject
 	private ClasificacionDAO cladao;
+	@Inject
+	private BitacoraDAO bidao;
+	@Inject
+	private MovimientoDAO movdao;
+
 	/**
 	 * funcion que almacena
 	 * 
@@ -67,6 +76,8 @@ public class CuentaContableRD {
 					cuentaContable.setClasificacion(cladao.getById(ccj.getIdClasificacion()));
 					cuentaContable.setAnalisis(ccj.isAnalisis());
 					cuentaContable.setImputable(true);
+					cuentaContable.setEliminado(false);
+					cuentaContable.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 					cuentaContable.setConciliacion(ccj.isConciliacion());
 					cuentaContable.setClaseCuenta(clasedao.getById(ccj.getIdClaseCuenta()));
 					cuentaContable.setGrupoCuenta(grupodao.getById(ccj.getIdGrupoCuenta()));
@@ -94,12 +105,14 @@ public class CuentaContableRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta,String idUsuario, Long idEmpresa) {
+	public Long countAll(String glosaGeneral, Long idClaseCuenta, Long idGrupoCuenta, String idUsuario,
+			Long idEmpresa) {
 		try {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			return cuentadao.countAll(glosaGeneral, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
+			return cuentadao.countAll(glosaGeneral, idClaseCuenta, idGrupoCuenta,
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de cuenta contable ", e);
 			return 0L;
@@ -126,7 +139,8 @@ public class CuentaContableRD {
 			if (glosaGeneral == null) {
 				glosaGeneral = "";
 			}
-			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral, idClaseCuenta, idGrupoCuenta, udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
+			List<CuentaContable> lcc = cuentadao.getAll(inicio, limit, glosaGeneral, idClaseCuenta, idGrupoCuenta,
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lcc.size(); i++) {
 				CuentaContableJson ccj = new CuentaContableJson();
 				ccj.setId(lcc.get(i).getId());
@@ -180,6 +194,13 @@ public class CuentaContableRD {
 						cuentaContable.setCuenta(cdao.getById(ccj.getIdCuenta()));
 					}
 					cuentadao.update(cuentaContable);
+					Bitacora b = new Bitacora();
+					b.setUsuario(udao.getById(ccj.getIdUsuario()));
+					b.setFecha(new Timestamp(System.currentTimeMillis()));
+					b.setTabla("CuentaContable");
+					b.setAccion("Update");
+					b.setDescripcion("Se modifico " + cuentadao.getById(ccj.getId()).getGlosaGeneral());
+					bidao.guardar(b);
 					return Constantes.MENSAJE_REST_OK;
 				}
 			} else {
@@ -209,7 +230,7 @@ public class CuentaContableRD {
 		ccJson.setIdEmpresa(cuentaContable.getEmpresa().getId());
 		ccJson.setIdClasificacion(cuentaContable.getClasificacion().getId());
 		ccJson.setIdSucursal(cuentaContable.getSucursal().getCodigo());
-		if(cuentaContable.isConciliacion().equals(true)) {
+		if (cuentaContable.isConciliacion().equals(true)) {
 			ccJson.setIdBanco(cuentaContable.getBanco().getId());
 			ccJson.setIdCuenta(cuentaContable.getCuenta().getId());
 		}
@@ -221,8 +242,6 @@ public class CuentaContableRD {
 		return ccJson;
 	}
 
-
-	
 	/**
 	 * metodo elimina una cuenta contable
 	 * 
@@ -231,9 +250,22 @@ public class CuentaContableRD {
 	 */
 	public String eliminar(CuentaContableJson bj) {
 		try {
-			CuentaContable cuentaContable = cuentadao.getById(bj.getId());
-			cuentadao.eliminar(cuentaContable);
-			return Constantes.MENSAJE_REST_OK;
+			if (movdao.getbyIdCuentaContable(bj.getId()) == null) {
+				CuentaContable cuentaContable = cuentadao.getById(bj.getId());
+				cuentaContable.setEliminado(true);
+				cuentadao.update(cuentaContable);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(bj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("CuentaContable");
+				b.setAccion("Delete");
+				b.setDescripcion("Se elimino " + cuentadao.getById(bj.getId()).getGlosaGeneral());
+				bidao.guardar(b);
+
+				return Constantes.MENSAJE_REST_OK;
+			} else {
+				return "No se puede eliminar la cuenta contable, ya que posee movimientos asociados";
+			}
 		} catch (Exception e) {
 			log.error("No se pudo eliminar la cuenta contable");
 			return e.getMessage();
@@ -257,9 +289,9 @@ public class CuentaContableRD {
 				cj.setIdEmpresa(c.get(i).getEmpresa().getId());
 				cj.setConciliacion(c.get(i).isConciliacion());
 				cj.setCodigo(c.get(i).getCodigo());
-				if(c.get(i).isConciliacion().equals(true)) {
-				cj.setIdBanco(c.get(i).getBanco().getId());
-				cj.setIdCuenta(c.get(i).getCuenta().getId());
+				if (c.get(i).isConciliacion().equals(true)) {
+					cj.setIdBanco(c.get(i).getBanco().getId());
+					cj.setIdCuenta(c.get(i).getCuenta().getId());
 				}
 				cj.setAnalisis(c.get(i).isAnalisis());
 				lcj.add(cj);
@@ -271,13 +303,14 @@ public class CuentaContableRD {
 		}
 
 	}
-	
+
 	public Long getMaxCodigo() {
-		return cuentadao.getMaxCodigo();	
+		return cuentadao.getMaxCodigo();
 	}
-	
+
 	/**
 	 * funcion que busca cuenta por idEmpresa
+	 * 
 	 * @param idEmpresa
 	 * @return
 	 */
@@ -286,18 +319,19 @@ public class CuentaContableRD {
 		List<CuentaContableJson> lcj = new ArrayList<>();
 		try {
 
-			List<CuentaContable> c = cuentadao.getByIdEmpresa(ccj.getIdEmpresa(), udao.getById(ccj.getIdUsuario()).getOficinaContable().getId());
-			for (int i = 0; i < c.size(); i++) {	
-			CuentaContableJson cj = new CuentaContableJson();
+			List<CuentaContable> c = cuentadao.getByIdEmpresa(ccj.getIdEmpresa(),
+					udao.getById(ccj.getIdUsuario()).getOficinaContable().getId());
+			for (int i = 0; i < c.size(); i++) {
+				CuentaContableJson cj = new CuentaContableJson();
 				cj.setId(c.get(i).getId());
 				cj.setGlosaGeneral(c.get(i).getGlosaGeneral());
 				cj.setIdClasificacion(c.get(i).getClasificacion().getId());
 				cj.setIdEmpresa(c.get(i).getEmpresa().getId());
 				cj.setConciliacion(c.get(i).isConciliacion());
 				cj.setCodigo(c.get(i).getCodigo());
-				if(c.get(i).isConciliacion().equals(true)) {
-				cj.setIdBanco(c.get(i).getBanco().getId());
-				cj.setIdCuenta(c.get(i).getCuenta().getId());
+				if (c.get(i).isConciliacion().equals(true)) {
+					cj.setIdBanco(c.get(i).getBanco().getId());
+					cj.setIdCuenta(c.get(i).getCuenta().getId());
 				}
 				cj.setAnalisis(c.get(i).isAnalisis());
 				lcj.add(cj);
@@ -309,9 +343,10 @@ public class CuentaContableRD {
 		}
 
 	}
-	
+
 	/**
 	 * funcion que busca cuenta por idEmpresa
+	 * 
 	 * @param idEmpresa
 	 * @return
 	 */
@@ -320,24 +355,25 @@ public class CuentaContableRD {
 		List<CuentaContableJson> lcj = new ArrayList<>();
 		try {
 
-			List<CuentaContable> c = cuentadao.getByIdEmpresa(ccj.getIdEmpresa(), udao.getById(ccj.getIdUsuario()).getOficinaContable().getId());
-			for (int i = 0; i < c.size(); i++) {	
-			CuentaContable cuentaContable = new CuentaContable();
-			cuentaContable.setGlosaGeneral(c.get(i).getGlosaGeneral());
-			cuentaContable.setCodigo(c.get(i).getCodigo());
-			cuentaContable.setClasificacion(cladao.getById(c.get(i).getClasificacion().getId()));
-			cuentaContable.setAnalisis(c.get(i).isAnalisis());
-			cuentaContable.setImputable(true);
-			cuentaContable.setConciliacion(c.get(i).isConciliacion());
-			cuentaContable.setClaseCuenta(clasedao.getById(c.get(i).getClaseCuenta().getId()));
-			cuentaContable.setGrupoCuenta(grupodao.getById(c.get(i).getGrupoCuenta().getId()));
-			cuentaContable.setEmpresa(edao.getById(edao.maxId()));
-			cuentaContable.setSucursal(sudao.getById(sudao.maxId()));
-			if (c.get(i).isConciliacion().equals(true)) {
-				cuentaContable.setBanco(bdao.getById(c.get(i).getBanco().getId()));
-				cuentaContable.setCuenta(cdao.getById(c.get(i).getCuenta().getId()));
-			}
-			cuentadao.guardar(cuentaContable);
+			List<CuentaContable> c = cuentadao.getByIdEmpresa(ccj.getIdEmpresa(),
+					udao.getById(ccj.getIdUsuario()).getOficinaContable().getId());
+			for (int i = 0; i < c.size(); i++) {
+				CuentaContable cuentaContable = new CuentaContable();
+				cuentaContable.setGlosaGeneral(c.get(i).getGlosaGeneral());
+				cuentaContable.setCodigo(c.get(i).getCodigo());
+				cuentaContable.setClasificacion(cladao.getById(c.get(i).getClasificacion().getId()));
+				cuentaContable.setAnalisis(c.get(i).isAnalisis());
+				cuentaContable.setImputable(true);
+				cuentaContable.setConciliacion(c.get(i).isConciliacion());
+				cuentaContable.setClaseCuenta(clasedao.getById(c.get(i).getClaseCuenta().getId()));
+				cuentaContable.setGrupoCuenta(grupodao.getById(c.get(i).getGrupoCuenta().getId()));
+				cuentaContable.setEmpresa(edao.getById(edao.maxId()));
+				cuentaContable.setSucursal(sudao.getById(sudao.maxId()));
+				if (c.get(i).isConciliacion().equals(true)) {
+					cuentaContable.setBanco(bdao.getById(c.get(i).getBanco().getId()));
+					cuentaContable.setCuenta(cdao.getById(c.get(i).getCuenta().getId()));
+				}
+				cuentadao.guardar(cuentaContable);
 			}
 			return lcj;
 		} catch (Exception e) {

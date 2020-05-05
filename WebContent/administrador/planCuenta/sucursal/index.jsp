@@ -185,7 +185,8 @@
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la sucursal?')) {
 			var submitJson = {
-				codigo : x.data.record.codigo
+				codigo : x.data.record.codigo,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$.post('/byeContabilidad/rest-services/private/sucursal/delete',
 					JSON.stringify(submitJson)).done(function(data) {

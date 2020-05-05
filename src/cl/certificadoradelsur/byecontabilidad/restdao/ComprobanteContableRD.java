@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ComprobanteContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ConciliacionDAO;
@@ -16,6 +17,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
@@ -50,6 +52,8 @@ public class ComprobanteContableRD {
 	private ClienteDAO clientedao;
 	@Inject
 	private MovimientoDAO mdao;
+	@Inject
+	private BitacoraDAO bidao;
 
 	/**
 	 * funcion que almacena
@@ -69,6 +73,7 @@ public class ComprobanteContableRD {
 					c.setFecha(Utilidades.convertidorFechaSinHora(ccj.getFecha()));
 					c.setEmpresa(edao.getById(ccj.getIdEmpresa()));
 					c.setBorrador(ccj.isBorrador());
+					c.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 					List<Movimiento> movimientos = new ArrayList<>();
 					for (int i = 0; i < ccj.getMovimientos().size(); i++) {
 						Movimiento movimiento = new Movimiento();
@@ -211,6 +216,13 @@ public class ComprobanteContableRD {
 							m.setNumComprobante(ccj.getNumero());
 							m.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
 						}
+						Bitacora b = new Bitacora();
+						b.setUsuario(udao.getById(ccj.getIdUsuario()));
+						b.setFecha(new Timestamp(System.currentTimeMillis()));
+						b.setTabla("ComprobanteContable");
+						b.setAccion("Update");
+						b.setDescripcion("Se modifico " + comdao.getById(ccj.getId()).getGlosaGeneral());
+						bidao.guardar(b);
 						comdao.update(c);
 						return Constantes.MENSAJE_REST_OK;
 					}
@@ -241,7 +253,7 @@ public class ComprobanteContableRD {
 					mdao.eliminar(lm.get(i));
 				}
 			} else {
-				return "No se puede eliminar el comprobante, ya que está en uso por el proceso de conciliacíon";
+				return "No se puede modificar el comprobante, ya que está en uso por el proceso de conciliacíon";
 			}
 			ComprobanteContable c = comdao.getById(ccj.getId());
 			if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
@@ -274,8 +286,8 @@ public class ComprobanteContableRD {
 										.getById(cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable())
 												.getEmpresa().getId()));
 								movimiento.setUsuario(udao.getById(ccj.getMovimientos().get(i).getIdUsuario()));
-								if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable())
-										.isConciliacion().equals(true)) {
+								if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isConciliacion()
+										.equals(true)) {
 									movimiento.setCuenta(cdao.getById(ccj.getMovimientos().get(i).getIdCuenta()));
 								}
 								if (cuentadao.getById(ccj.getMovimientos().get(i).getIdCuentaContable()).isAnalisis()
@@ -291,6 +303,13 @@ public class ComprobanteContableRD {
 							}
 						}
 						c.setMovimientos(movimientos);
+						Bitacora b = new Bitacora();
+						b.setUsuario(udao.getById(ccj.getIdUsuario()));
+						b.setFecha(new Timestamp(System.currentTimeMillis()));
+						b.setTabla("ComprobanteContable");
+						b.setAccion("Update");
+						b.setDescripcion("Se modifico " + comdao.getById(ccj.getId()).getGlosaGeneral());
+						bidao.guardar(b);
 						comdao.update(c);
 						return Constantes.MENSAJE_REST_OK;
 					}
@@ -302,7 +321,7 @@ public class ComprobanteContableRD {
 			}
 
 		} catch (Exception e) {
-			log.error("No se pudo modificar la cuenta contable");
+			log.error("No se pudo modificar el comprobante contable");
 			return e.getMessage();
 		}
 	}
@@ -335,6 +354,7 @@ public class ComprobanteContableRD {
 	public String eliminar(ComprobanteContableJson bj) {
 		try {
 			ComprobanteContable c = comdao.getById(bj.getId());
+			
 			comdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {

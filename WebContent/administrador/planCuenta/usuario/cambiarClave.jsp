@@ -88,6 +88,9 @@
 			</form>
 		</div>
 	</div>
+		<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
+	
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
@@ -121,7 +124,8 @@ $(document).ready(function () {
 		}
 		var submitJson = {
 			id : document.getElementById("id").value,
-			password : document.getElementById("password").value
+			password : document.getElementById("password").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		$
 				.post('/byeContabilidad/rest-services/private/usuario/updatePass',

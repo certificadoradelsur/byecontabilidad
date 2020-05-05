@@ -25,6 +25,7 @@ public class ConciliacionJson {
 	private Long idNoConciliado;
 	private String numCartola;
 	private Long idEmpresa;
+	private String idUsuario;
 
 	
 	public Long getIdEmpresa() {
@@ -122,6 +123,12 @@ public class ConciliacionJson {
 	}
 	public void setNumCartola(String numCartola) {
 		this.numCartola = numCartola;
+	}
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 	
 	

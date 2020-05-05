@@ -294,7 +294,6 @@
 						$("#empresa1").select2();
 						$("#empresa2").select2();
 						$("#empresa3").select2();
-
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
@@ -311,7 +310,6 @@
 											}
 											document.getElementById("empresa").innerHTML = str;
 										}, "json");
-
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
@@ -328,7 +326,6 @@
 											}
 											document.getElementById("empresa1").innerHTML = str;
 										}, "json");
-
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
@@ -345,7 +342,6 @@
 											}
 											document.getElementById("empresa2").innerHTML = str;
 										}, "json");
-
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
@@ -362,16 +358,12 @@
 											}
 											document.getElementById("empresa3").innerHTML = str;
 										}, "json");
-
 						ComboAnio();
 						ComboAnioClasificado();
-
 					});
-
 	function ComboAnio() {
 		var str = "";
 		var n = (new Date()).getFullYear();
-
 		for (var i = n - 5; i <= (n + 5); i++) {
 			if (i == n) {
 				str += "<option value="+i+" selected>"+i+"</option>";
@@ -381,11 +373,9 @@
 	}
 		document.getElementById("anio").innerHTML = str;
 	};
-
 	function ComboAnioClasificado() {
 		var str = "";
 		var n = (new Date()).getFullYear();
-
 		for (var i = n - 5; i <= (n + 5); i++) {
 			if (i == n) {
 				str += "<option value="+i+" selected>"+i+"</option>";
@@ -395,27 +385,22 @@
 	}
 		document.getElementById("anioClasificado").innerHTML = str;
 	};
-
 	function reporte() {
-
 		if ($('#empresa option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-
 		if (document.getElementById('filtro1').value == ""
 				|| document.getElementById('filtro2').value == "") {
 			alert('No pueden haber campos vacios');
 			return;
 		}
-
 		var fechaDesde = new Date(document.getElementById('filtro1').value);
 		var fechaHasta = new Date(document.getElementById('filtro2').value);
 		if (fechaDesde > fechaHasta) {
 			alert('Fecha Inicial no debe ser mayor que fecha final');
 			return;
 		}
-
 		location.href = "/byeContabilidad/rest-services/private/reporte/getLibroDiario?fechaDesde="
 				+ document.getElementById('filtro1').value
 				+ "&fechaHasta="
@@ -424,16 +409,12 @@
 				+ document.getElementById('idUsuario').value
 				+ "&idEmpresa="
 				+ document.getElementById('empresa').value
-
 	}
-
 	function reporteMayor() {
-
 		if ($('#empresa1 option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-
 		if (document.getElementById('filtro1Mayor').value == ""
 				|| document.getElementById('filtro2Mayor').value == ""
 				|| document.getElementById('inicialMayor').value == ""
@@ -447,14 +428,12 @@
 			alert('Fecha Inicial no debe ser mayor que fecha final');
 			return;
 		}
-
 		var inicialMayor = document.getElementById('inicialMayor').value;
 		var finalMayor = document.getElementById('finalMayor').value;
 		if (inicialMayor > finalMayor) {
 			alert('La cuenta inicial no debe ser mayor a la cuenta final');
 			return;
 		}
-
 		location.href = "/byeContabilidad/rest-services/private/reporte/getLibroMayor?fechaDesde="
 				+ document.getElementById('filtro1Mayor').value
 				+ "&fechaHasta="
@@ -467,21 +446,17 @@
 				+ document.getElementById('idUsuario').value
 				+ "&idEmpresa=" + document.getElementById('empresa1').value
 	}
-
 	function reporteGeneral() {
-
 		if ($('#empresa2 option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-
 		var fechaDesde = document.getElementById('mesInicio').value;
 		var fechaHasta = document.getElementById('mesFinal').value;
 		if (fechaDesde > fechaHasta) {
 			alert('Fecha Inicial no debe ser mayor que fecha final');
 			return;
 		}
-
 		location.href = "/byeContabilidad/rest-services/private/reporte/getBalanceGeneral?fechaDesde="
 				+ document.getElementById('mesInicio').value
 				+ "&fechaHasta="
@@ -493,21 +468,17 @@
 				+ "&idEmpresa="
 				+ document.getElementById('empresa2').value
 	}
-
 	function reporteClasificado() {
-
 		if ($('#empresa3 option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-
 		var fechaDesde = document.getElementById('mesInicioClasificado').value;
 		var fechaHasta = document.getElementById('mesFinalClasificado').value;
 		if (fechaDesde > fechaHasta) {
 			alert('Fecha Inicial no debe ser mayor que fecha final');
 			return;
 		}
-
 		location.href = "/byeContabilidad/rest-services/private/reporte/getBalanceClasificado?fechaDesde="
 				+ document.getElementById('mesInicioClasificado').value
 				+ "&fechaHasta="

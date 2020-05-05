@@ -1,6 +1,7 @@
 package cl.certificadoradelsur.byecontabilidad.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,14 +20,14 @@ import javax.persistence.Table;
  * 
  * @author juan
  *
- *         and c.descripcion <> 'Sin descripción'
+ *      
  */
 
 @Entity
 @Table(name = "cuenta_contable")
 @SequenceGenerator(name = "seq_cuenta_contable", sequenceName = "seq_cuenta_contable")
 @NamedQueries({
-		@NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) ORDER BY c.claseCuenta.id"),
+		@NamedQuery(name = "CuentaContable.getAll", query = "SELECT c FROM CuentaContable c where c.eliminado = false and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta) ORDER BY c.claseCuenta.id"),
 		@NamedQuery(name = "CuentaContable.countAll", query = "SELECT count(c.id) FROM CuentaContable c where c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral)  like :glosaGeneral) and (true =:ignoreIdClaseCuenta or c.claseCuenta.id=:idClaseCuenta) and (true =:ignoreIdGrupoCuenta or c.grupoCuenta.id =:idGrupoCuenta)"),
 		@NamedQuery(name = "CuentaContable.getByCodigo", query = "SELECT c FROM CuentaContable c where  c.codigo= :codigo and c.empresa.oficinaContable.id =:idOficinaContable"),
 		@NamedQuery(name = "CuentaContable.getAllListaEmpresa", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.empresa.id =:idEmpresa"),
@@ -35,7 +36,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "CuentaContable.getbyIdSucursal", query = "SELECT c FROM CuentaContable c where c.sucursal.codigo =:idSucursal"),
 		@NamedQuery(name = "CuentaContable.getbyIdCuenta", query = "SELECT c FROM CuentaContable c where c.cuenta.id =:idCuenta"),
 		@NamedQuery(name = "CuentaContable.getbyIdClasificacion", query = "SELECT c FROM CuentaContable c where c.clasificacion.id =:idClasificacion"),
-		@NamedQuery(name = "CuentaContable.getByIdEmpresa", query = "SELECT c FROM CuentaContable c  where c.empresa.oficinaContable.id =:idOficinaContable  and  c.empresa.id=:idEmpresa"),
+		@NamedQuery(name = "CuentaContable.getByIdEmpresa", query = "SELECT c FROM CuentaContable c where c.eliminado = false and c.empresa.oficinaContable.id =:idOficinaContable  and  c.empresa.id=:idEmpresa"),
 		@NamedQuery(name = "CuentaContable.getBalance", query = "SELECT c FROM CuentaContable c where c.empresa.oficinaContable.id =:idOficinaContable and c.empresa.id =:idEmpresa and c.claseCuenta.id <=2") })
 
 public class CuentaContable implements Serializable {
@@ -55,6 +56,8 @@ public class CuentaContable implements Serializable {
 	private Empresa empresa;
 	private Sucursal sucursal;
 	private ComprobanteContable comprobanteContable;
+	private Boolean eliminado;
+	private Timestamp fechaCreacion;
 
 	@Id
 	@GeneratedValue(generator = "seq_cuenta_contable", strategy = GenerationType.AUTO)
@@ -189,6 +192,24 @@ public class CuentaContable implements Serializable {
 
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
+	}
+
+	@Column(name = "eliminado", nullable = true)
+	public boolean isEliminado() {
+		return eliminado;
+	}
+
+	public void setEliminado(boolean eliminado) {
+		this.eliminado = eliminado;
+	}
+	
+	@Column(name = "fecha_creacion", nullable = true)
+	public Timestamp getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Timestamp fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 
 }

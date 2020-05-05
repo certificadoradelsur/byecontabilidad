@@ -99,6 +99,8 @@
 			</form>
 		</div>
 	</div>
+	<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
@@ -133,7 +135,8 @@ $(document).ready(function () {
 			rut : document.getElementById("rut").value,
 			giro : document.getElementById("giro").value,
 			activo : document.getElementById("activo").value,
-			razonSocial : document.getElementById("razonSocial").value
+			razonSocial : document.getElementById("razonSocial").value,
+			idUsuario : document.getElementById("idUsuario").value
 
 		}
 		$.post('/byeContabilidad/rest-services/private/empresa/update',

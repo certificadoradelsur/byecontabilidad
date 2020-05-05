@@ -1,13 +1,16 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.PerfilDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Usuario;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.UsuarioJson;
@@ -27,6 +30,8 @@ public class UsuarioRD {
 	private UsuarioDAO udao;
 	@Inject
 	private PerfilDAO pdao;
+	@Inject
+	private BitacoraDAO bidao;
 
 	/**
 	 * funcion que almacena
@@ -135,6 +140,13 @@ public class UsuarioRD {
 				usuario.setActivo(uj.isActivo());
 				usuario.setPerfil(pdao.getById(uj.getPerfil()));
 				udao.update(usuario);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(uj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Usuario");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico " + udao.getById(uj.getId()).getId());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -157,6 +169,13 @@ public class UsuarioRD {
 			} else {
 				usuario.setPassword(Utilidades.encriptar(uj.getPassword()));
 				udao.updatePass(usuario);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(uj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Usuario");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico la contraseña a " + udao.getById(uj.getId()).getId());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -191,6 +210,13 @@ public class UsuarioRD {
 		try {
 			Usuario usuario = udao.getById(pj.getId());
 			usuario.setEliminado(true);
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(pj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Usuario");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino " + udao.getById(pj.getId()).getId());
+			bidao.guardar(b);
 			udao.update(usuario);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {

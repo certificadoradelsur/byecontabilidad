@@ -1,5 +1,6 @@
 package cl.certificadoradelsur.byecontabilidad.restdao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -7,12 +8,14 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BancoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CartolaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaContableDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Cuenta;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CuentaJson;
@@ -42,9 +45,8 @@ public class CuentaRD {
 	private UsuarioDAO udao;
 	@Inject
 	private CuentaContableDAO cuentaCondao;
-
-	
-
+	@Inject
+	private BitacoraDAO bidao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -63,6 +65,7 @@ public class CuentaRD {
 				cuenta.setSaldoInicial(cj.getSaldoInicial());
 				cuenta.setBanco(bdao.getById(cj.getIdBanco()));
 				cuenta.setEmpresa(edao.getById(cj.getIdEmpresa()));
+				cuenta.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				cuenta.setEliminado(false);
 				cdao.guardar(cuenta);
 				return Constantes.MENSAJE_REST_OK;
@@ -149,6 +152,13 @@ public class CuentaRD {
 				cuenta.setSaldoInicial(cj.getSaldoInicial());
 				cuenta.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				cdao.update(cuenta);
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(cj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Cuenta");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico " + cdao.getById(cj.getId()).getNumCuenta());
+				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -187,6 +197,13 @@ public class CuentaRD {
 			if (cuentaCondao.getbyIdCuenta(cj.getId())==null && cardao.getByIdCuenta(cj.getId())==null && mdao.getByIdCuenta(cj.getId())==null) {
 			Cuenta cuenta = cdao.getById(cj.getId());
 			cuenta.setEliminado(true);
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(cj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("Cuenta");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino " + cdao.getById(cj.getId()).getNumCuenta());
+			bidao.guardar(b);
 			cdao.update(cuenta);
 			return Constantes.MENSAJE_REST_OK;
 			} else {

@@ -103,6 +103,9 @@
 			</form>
 		</div>
 	</div>
+		<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
+	
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
@@ -138,7 +141,8 @@ $(document).ready(function () {
 			id : document.getElementById("id").value,
 			email : document.getElementById("email").value,
 			activo : document.getElementById("estado").value,
-			perfil : document.getElementById("perfil").value
+			perfil : document.getElementById("perfil").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
 		$.post('/byeContabilidad/rest-services/private/usuario/update',
 				JSON.stringify(submitJson)).done(function(data) {

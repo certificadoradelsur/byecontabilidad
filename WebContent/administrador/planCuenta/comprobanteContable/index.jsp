@@ -321,7 +321,8 @@
 		if (confirm('¿Esta seguro desea eliminar la el comprobante? Perdera todos los movimientos contenidos en el')) {
 			var submitJson = {
 				id : x.data.record.id,
-				idTransaccion : x.data.record.id
+				idComprobanteContable : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$
 					.post(
@@ -426,7 +427,8 @@
 	function eliminarMovimiento(x) {
 		if (confirm('¿Esta seguro desea eliminar el movimiento?')) {
 			var submitJson = {
-				id : x.data.record.id
+				id : x.data.record.id,
+				idUsuario : document.getElementById("idUsuario").value
 			}
 			$.post('/byeContabilidad/rest-services/private/movimiento/delete',
 					JSON.stringify(submitJson)).done(function(data) {
