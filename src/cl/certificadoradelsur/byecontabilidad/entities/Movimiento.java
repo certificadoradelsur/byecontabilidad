@@ -33,7 +33,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Movimiento.getByIdCuenta", query = "SELECT m FROM Movimiento m where m.cuenta.id= :idCuenta"),
 		@NamedQuery(name = "Movimiento.getByIdTransaccion", query = "SELECT m FROM Movimiento m where m.transaccion.id= :idTransaccion"),
 		@NamedQuery(name = "Movimiento.getByIdComprobante", query = "SELECT m FROM Movimiento m where m.comprobanteContable.id= :idComprobante"),
-		@NamedQuery(name = "Movimiento.getbyIdCuentaContable", query = "SELECT m FROM Movimiento m where m.cuentaContable.id= :idCuentaContable and m.eliminado= true"),
+		@NamedQuery(name = "Movimiento.getbyIdCuentaContable", query = "SELECT m FROM Movimiento m where m.cuentaContable.id= :idCuentaContable and m.eliminado= false"),
 		@NamedQuery(name = "Movimiento.getbyIdCliente", query = "SELECT m FROM Movimiento m where  m.cliente.id= :idCliente"),
 		@NamedQuery(name = "Movimiento.getByIdComprobanteReporte", query = "SELECT m FROM Movimiento m where  m.comprobanteContable.id= :idComprobante and m.empresa.id =:idEmpresa and m.comprobanteContable.borrador=false"),
 		@NamedQuery(name = "Movimiento.getAllFecha", query = "SELECT m  from Movimiento m where m.empresa.id = :idEmpresa and m.cuenta.banco.id = :idBanco and m.cuenta.id =:idCuenta and m.fecha between :fechaI and :fechaF  "),
