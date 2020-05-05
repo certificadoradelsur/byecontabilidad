@@ -216,6 +216,7 @@ public class ComprobanteContableRD {
 							m.setNumComprobante(ccj.getNumero());
 							m.setFecha(Utilidades.convertidorFechaSinHora((ccj.getFecha())));
 						}
+						comdao.update(c);
 						Bitacora b = new Bitacora();
 						b.setUsuario(udao.getById(ccj.getIdUsuario()));
 						b.setFecha(new Timestamp(System.currentTimeMillis()));
@@ -223,8 +224,8 @@ public class ComprobanteContableRD {
 						b.setAccion("Update");
 						b.setDescripcion("Se modifico " + comdao.getById(ccj.getId()).getGlosaGeneral());
 						bidao.guardar(b);
-						comdao.update(c);
 						return Constantes.MENSAJE_REST_OK;
+						
 					}
 				} else {
 					return "No se puede modificar el comprobante contable, ya que está en uso por el proceso de conciliacíon";
@@ -351,10 +352,16 @@ public class ComprobanteContableRD {
 	 * @param pj json de comprobante contable
 	 * @return mensaje de exito o error
 	 */
-	public String eliminar(ComprobanteContableJson bj) {
+	public String eliminar(ComprobanteContableJson cj) {
 		try {
-			ComprobanteContable c = comdao.getById(bj.getId());
-			
+			ComprobanteContable c = comdao.getById(cj.getId());
+			Bitacora b = new Bitacora();
+			b.setUsuario(udao.getById(cj.getIdUsuario()));
+			b.setFecha(new Timestamp(System.currentTimeMillis()));
+			b.setTabla("ComprobanteContable");
+			b.setAccion("Delete");
+			b.setDescripcion("Se elimino " + comdao.getById(cj.getId()).getGlosaGeneral());
+			bidao.guardar(b);
 			comdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {

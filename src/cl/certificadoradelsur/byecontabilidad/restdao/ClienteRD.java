@@ -173,7 +173,7 @@ public class ClienteRD {
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el CLiente");
+			log.error("No se pudo modificar el Cliente");
 			return e.getMessage();
 		}
 	}

@@ -21,6 +21,9 @@
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Transaccion</class>
         <class>cl.certificadoradelsur.byecontabilidad.entities.Cliente</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.NoConciliadoCartola</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Venta</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Compra</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Honorario</class>
 		
 		
 		
