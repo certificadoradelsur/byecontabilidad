@@ -242,7 +242,7 @@ public class ClienteRD {
 
 		List<ClienteJson> lcj = new ArrayList<>();
 		try {
-			List<Cliente> c = clidao.getLista(udao.getById(cj.getIdUsuario()).getOficinaContable().getId());
+			List<Cliente> c = clidao.getLista(udao.getById(cj.getIdUsuario()).getOficinaContable().getId(),cj.getIdEmpresa());
 			for (int i = 0; i < c.size(); i++) {
 				ClienteJson cjj = new ClienteJson();
 				cjj.setId(c.get(i).getId());

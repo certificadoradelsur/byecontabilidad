@@ -368,6 +368,7 @@ public class CuentaContableRD {
 				cuentaContable.setClaseCuenta(clasedao.getById(c.get(i).getClaseCuenta().getId()));
 				cuentaContable.setGrupoCuenta(grupodao.getById(c.get(i).getGrupoCuenta().getId()));
 				cuentaContable.setEmpresa(edao.getById(edao.maxId()));
+				cuentaContable.setEliminado(false);
 				cuentaContable.setSucursal(sudao.getById(sudao.maxId()));
 				if (c.get(i).isConciliacion().equals(true)) {
 					cuentaContable.setBanco(bdao.getById(c.get(i).getBanco().getId()));

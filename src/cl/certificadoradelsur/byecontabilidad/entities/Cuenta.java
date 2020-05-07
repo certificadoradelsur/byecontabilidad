@@ -28,7 +28,7 @@ import javax.persistence.Table;
 @NamedQueries({
 		@NamedQuery(name = "Cuenta.getAll", query = "SELECT c FROM Cuenta c  where  c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and c.eliminado = false and (true = :ignoreNumCuenta or  upper(c.numCuenta)  like :numCuenta )"),
 		@NamedQuery(name = "Cuenta.countAll", query = "SELECT count(c.numCuenta) FROM Cuenta c  where c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and c.eliminado = false and (true = :ignoreNumCuenta or  upper(c.numCuenta)  like :numCuenta )"),
-		@NamedQuery(name = "Cuenta.getByIdBanco", query = "SELECT c FROM Cuenta c  where c.empresa.oficinaContable.id =:idOficinaContable and c.eliminado = false and  c.banco.id=:idBanco ") })
+		@NamedQuery(name = "Cuenta.getByIdBanco", query = "SELECT c FROM Cuenta c  where c.empresa.oficinaContable.id =:idOficinaContable and c.eliminado = false and  c.banco.id=:idBanco and c.empresa.id =:idEmpresa") })
 
 public class Cuenta implements Serializable {
 

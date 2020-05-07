@@ -10,15 +10,17 @@ package cl.certificadoradelsur.byecontabilidad.json;
 public class HonorarioJson {
 
 	private Long id;
-	private String rut;
+	private Long idCliente;
 	private String nombre;
 	private String numBoleta;
+	private String rut;
 	private String fecha;
 	private Long montoBruto;
 	private Long retencion;
 	private Long montoLiquido;
 	private Long idEmpresa;
 	private String idUsuario;
+	private Boolean retencionEstado;
 
 	
 	public String getIdUsuario() {
@@ -29,6 +31,14 @@ public class HonorarioJson {
 		this.idUsuario = idUsuario;
 	}
 
+	public String getRut() {
+		return rut;
+	}
+
+	public void setRut(String rut) {
+		this.rut = rut;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -37,12 +47,12 @@ public class HonorarioJson {
 		this.id = id;
 	}
 
-	public String getRut() {
-		return rut;
+	public Long getIdCliente() {
+		return idCliente;
 	}
 
-	public void setRut(String rut) {
-		this.rut = rut;
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 
 	public String getNombre() {
@@ -100,6 +110,15 @@ public class HonorarioJson {
 	public void setIdEmpresa(Long idEmpresa) {
 		this.idEmpresa = idEmpresa;
 	}
+
+	public Boolean isRetencionEstado() {
+		return retencionEstado;
+	}
+
+	public void setRetencionEstado(Boolean retencionEstado) {
+		this.retencionEstado = retencionEstado;
+	}
+	
 	
 
 }

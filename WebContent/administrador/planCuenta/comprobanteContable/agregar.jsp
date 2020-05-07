@@ -354,23 +354,23 @@
 											document.getElementById("empresa").innerHTML = str;
 										}, "json");
 
-						var submitJson = {
-								idUsuario : document.getElementById("idUsuario").value
-							}
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/cliente/getLista',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].rut
-														+ "</option>";
-											}
-											document.getElementById("cliente").innerHTML = str;
+// 						var submitJson = {
+// 								idUsuario : document.getElementById("idUsuario").value
+// 							}
+// 						$
+// 								.post(
+// 										'/byeContabilidad/rest-services/private/cliente/getLista',
+// 										JSON.stringify(submitJson),
+// 										function(res, code) {
+// 											var str;
+// 											for (var i = 0, len = res.length; i < len; i++) {
+// 												str += "<option value="+res[i].id+">"
+// 														+ res[i].rut
+// 														+ "</option>";
+// 											}
+// 											document.getElementById("cliente").innerHTML = str;
 
-										}, "json");
+// 										}, "json");
 						
 
 
@@ -483,8 +483,7 @@
 
 
 	
-	$('#empresa')
-			.on(
+	$('#empresa').on(
 					'change',
 					function() {
 						var submitJson = {
@@ -540,6 +539,32 @@
 										}, "json");
 
 					});
+	
+	
+	$('#empresa').on('change',
+			function() {
+				var submitJson = {
+
+					idUsuario : document.getElementById("idUsuario").value,
+					idEmpresa : document.getElementById("empresa").value
+				}
+				
+				$
+				.post(
+						'/byeContabilidad/rest-services/private/cliente/getLista',
+						JSON.stringify(submitJson),
+						function(res, code) {
+							var str;
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+">"
+										+ res[i].rut
+										+ "</option>";
+							}
+							document.getElementById("cliente").innerHTML = str;
+
+						}, "json");
+
+			});
 
 	$('#cuentaContable')
 			.on(
@@ -910,7 +935,8 @@
 
 		var submitJson = {
 			idBanco : document.getElementById("banco").value,
-			idUsuario : document.getElementById("idUsuario").value
+			idUsuario : document.getElementById("idUsuario").value,
+			idEmpresa : document.getElementById("empresa").value
 		}
 		$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
 				JSON.stringify(submitJson), function(res, code) {

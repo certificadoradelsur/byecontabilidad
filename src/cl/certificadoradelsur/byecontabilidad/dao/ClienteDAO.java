@@ -108,9 +108,10 @@ public class ClienteDAO {
 	 * @return la lista de Clientes
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Cliente> getLista(Long idOficinaContable) {
+	public List<Cliente> getLista(Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Cliente.getAllLista");
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 }

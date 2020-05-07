@@ -30,11 +30,12 @@ public class HonorarioSvcBean implements HonorarioSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin) {
+	public Response list(Integer inicio, Integer fin,String fechaDesde, String fechaHasta,
+			String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<HonorarioJson> lcj = hrd.getAll(inicio, fin);
+		List<HonorarioJson> lcj = hrd.getAll(inicio, fin, fechaDesde, fechaHasta, idUsuario, idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lcj, new TypeToken<List<HonorarioJson>>() {
-		}.getType()) + ", \"total\": " + hrd.countAll() + "}";
+		}.getType()) + ", \"total\": " + hrd.countAll(fechaDesde, fechaHasta, idUsuario, idEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 

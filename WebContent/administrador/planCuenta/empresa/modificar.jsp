@@ -46,7 +46,7 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav.jsp" %>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 		<div class="container">
 			<form name="formulario" id="formulario">
@@ -63,9 +63,9 @@
 					</div>
 					<div class="form-group">
 						<div class="col-1"></div>
-						<label for="colFormLabel" class="col-sm-2 col-form-label">Razon social</label>
-						<input type="text" id="razonSocial" name="razonSocial" class="in"
-							placeholder="Ingrese razon social" required="required" />
+						<label for="colFormLabel" class="col-sm-2 col-form-label">Razon
+							social</label> <input type="text" id="razonSocial" name="razonSocial"
+							class="in" placeholder="Ingrese razon social" required="required" />
 					</div>
 					<div class="form-group">
 						<div class="col-1"></div>
@@ -83,8 +83,7 @@
 							</select>
 						</div>
 					</div>
-					<br>
-					<br>
+					<br> <br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"

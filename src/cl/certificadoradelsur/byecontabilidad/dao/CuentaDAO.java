@@ -106,10 +106,11 @@ public class CuentaDAO {
 	 * @return lista de cuentas
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Cuenta> getByIdBanco(Long idBanco, Long idOficinaContable) {
+	public List<Cuenta> getByIdBanco(Long idBanco, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Cuenta.getByIdBanco");
 		query.setParameter("idBanco", idBanco);
 		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 }

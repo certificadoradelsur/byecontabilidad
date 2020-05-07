@@ -103,37 +103,35 @@
 			<div class="modal fade bd-example-modal-sm" id="myModal"
 				tabindex="-1" role="dialog"
 				aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-				<div class="modal-dialog modal-sm"
-					role="document">
+				<div class="modal-dialog modal-sm" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title" id="exampleModalCenterTitle">Seleccione
-									una empresa</h5>
+								una empresa</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close" id="modalclose">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
 
-								<div class="container">
-								<div class="row"></div>
-								<div class="form-group col-md-2">
+						<div class="container">
+							<div class="row"></div>
+							<div class="form-group col-md-2">
 								<div class="col-sm-2"></div>
-									<label for="empresa">&nbsp;Empresa</label> <select
-										class="browser-default custom-select" id="empresa"
-										required="required">	
-									</select>
-								</div>
-								<div class="col-sm-2">
-									<button type="button" class="btn btn-primary"
-										onclick="copiar()">Copiar</button>
-								</div>
-								<br>	
+								<label for="empresa">&nbsp;Empresa</label> <select
+									class="browser-default custom-select" id="empresa"
+									required="required">
+								</select>
 							</div>
+							<div class="col-sm-2">
+								<button type="button" class="btn btn-primary" onclick="copiar()">Copiar</button>
+							</div>
+							<br>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 
 	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"

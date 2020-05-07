@@ -107,7 +107,7 @@ public interface CuentaContableSvc {
 	@Path("/getByIdEmpresa")
 	@Produces("application/json")
 	Response getByIdEmpresa(String datos);
-	
+
 	/**
 	 * funcion que obtiene una lista de cuentas por idEmpresa
 	 * 

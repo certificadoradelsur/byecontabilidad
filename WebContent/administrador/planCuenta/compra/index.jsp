@@ -46,12 +46,12 @@
 </head>
 <body>
 
-	<%@ include file="../../../complementos/nav2.jsp"%>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-				<h1 class="h2">Lista cartolas</h1>
+				<h1 class="h2">Lista boletas de honorario</h1>
 			</div>
 			<input type="hidden" name="id" id="id" />
 		</form>
@@ -74,23 +74,10 @@
 				<div class="form-group col-md-2">
 					<label for="empresa">&nbsp;Empresa</label> <select
 						class="browser-default custom-select" id="empresa"
-						required="required"><option value="1"></option>
+						required="required">
 					</select>
 				</div>
 
-				<div class="form-group col-md-2">
-					<label for="banco">&nbsp;Banco</label> <select
-						class="browser-default custom-select" id="banco"
-						required="required">
-						<option value="1">Estado</option>
-					</select>
-				</div>
-				<div class="form-group col-md-2">
-					<label for="cuenta">&nbsp;N° Cuenta</label> <select
-						class="browser-default custom-select" id="cuenta"
-						required="required">
-					</select>
-				</div>
 				<div class="form-group col-md-2">
 					<div class="form-row">
 						<label>&nbsp;</label>
@@ -110,8 +97,6 @@
 	$(document)
 			.ready(
 					function() {
-						$("#banco").select2();
-						$("#cuenta").select2();
 						$("#empresa").select2({
 							width : '180'
 						});
@@ -131,29 +116,7 @@
 														+ "</option>";
 											}
 											document.getElementById("empresa").innerHTML = str;
-// 											if (document.getElementById("empresa").value != "") {
-// 												grid.reload({
-// 													idEmpresa : $('#empresa').val()
-// 												});
-// 											}
 											
-										}, "json");
-
-						var submitJson = {
-							idUsuario : document.getElementById("idUsuario").value
-						}
-
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/banco/getLista',
-										function(res, code) {
-											var str = "<option>Seleccione banco</option>";
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].nombre
-														+ "</option>";
-											}
-											document.getElementById("banco").innerHTML = str;
 										}, "json");
 
 						fecha();
@@ -178,7 +141,7 @@
 		.grid(
 				{
 					primaryKey : 'ID',
-					dataSource : '/byeContabilidad/rest-services/private/cartola/getAll',
+					dataSource : '/byeContabilidad/rest-services/private/honorario/getAll',
 					autoLoad : false,
 					columns : [
 							{
@@ -189,35 +152,48 @@
 
 							},
 							{
-								field : 'numCartola',
-								title : 'N° Cartola',
-								sortable : true
-
+								field : 'numBoleta',
+								title : 'N° Boleta',
+								width : 100
 							},
 							{
-								field : 'numDocumento',
-								title : 'N° documento',
-								sortable : true
+								field : 'rut',
+								title : 'Rut',
+								width : 100
+							},
+							{
+								field : 'nombre',
+								title : 'Nombre',
+								width : 100
 							},
 							{
 								field : 'fecha',
 								title : 'Fecha',
-								sortable : true
+								width : 100
 							},
 							{
-								field : 'descripcion',
-								title : 'Descripcion',
-								sortable : true
+								field : 'montoBruto',
+								title : 'Monto Bruto',
+								width : 100
 							},
 							{
-								field : 'tipoMovimiento',
-								title : 'Movimiento',
-								sortable : true
+								field : 'retencion',
+								title : 'Retención',
+								width : 100
 							},
 							{
-								field : 'monto',
-								title : 'Monto',
-								sortable : true
+								field : 'montoLiquido',
+								title : 'Monto Liquido',
+								width : 100
+							},
+							{
+								width : 100,
+								title : 'Modificar',
+								tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+								align : 'center',
+								events : {
+									'click' : modificar
+								}
 							},
 							{
 								width : 100,
@@ -237,12 +213,11 @@
 	}
 	
 	function busca(){
-		if (document.getElementById("empresa").value != "" && document.getElementById("cuenta").value != "" && document.getElementById("banco").value != "") {
+		if (document.getElementById("empresa").value != "") {
 			grid.reload({
 				idEmpresa : $('#empresa').val(),
 				fechaInicial : $('#filtro1').val(),
-				fechaFinal : $('#filtro2').val(),
-				idBanco : $('#banco').val()
+				fechaFinal : $('#filtro2').val()
 			});
 		}
 	}
@@ -260,30 +235,17 @@
 								.getElementById('filtro1').value);
 						var fechaFinal = new Date(document
 								.getElementById('filtro2').value);
-						var idBanco = document.getElementById('banco').value;
-						var idCuenta = document.getElementById('cuenta').value;
 						if (fechaInicial > fechaFinal) {
 							alert('Fecha inicial no debe ser mayor que fecha final');
 							return;
 						}
-						
-						if ($('#banco option:selected').text() == 'Seleccione banco') {
-							alert("Debe seleccionar un banco");
-							return;
-						}
 
-						if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
-							alert("Debe seleccionar una cuenta");
-							return;
-						}
-						
+
 						if (document.getElementById("empresa").value != "") {
 							grid.reload({
 								idEmpresa : $('#empresa').val(),
 								fechaInicial : $('#filtro1').val(),
-								fechaFinal : $('#filtro2').val(),
-								idBanco : $('#banco').val(),
-								idCuenta : $('#cuenta').val()
+								fechaFinal : $('#filtro2').val()
 							});
 						}
 						//clear();
@@ -294,74 +256,6 @@
 		document.getElementById("filtro2").value = "";
 	}
 	
-
-	$('#banco')
-			.on(
-					'change',
-					function() {
-						var submitJson = {
-
-							idUsuario : document.getElementById("idUsuario").value,
-							idBanco : document.getElementById("banco").value,
-							idEmpresa : document.getElementById("empresa").value
-						}
-
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str = "<option>Seleccione cuenta</option>";
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].numCuenta
-														+ "</option>";
-											}
-											document.getElementById("cuenta").innerHTML = str;
-										}, "json");
-					});
-	
-	$('#empresa')
-	.on(
-			'change',
-			function() {
-				var submitJson = {
-						idUsuario : document.getElementById("idUsuario").value
-					}
-
-					$
-							.post(
-									'/byeContabilidad/rest-services/private/banco/getLista',
-									function(res, code) {
-										var str = "<option>Seleccione banco</option>";
-										for (var i = 0, len = res.length; i < len; i++) {
-											str += "<option value="+res[i].id+">"
-													+ res[i].nombre
-													+ "</option>";
-										}
-										document.getElementById("banco").innerHTML = str;
-									}, "json");
-				var submitJson = {
-
-					idUsuario : document.getElementById("idUsuario").value,
-					idBanco : document.getElementById("banco").value,
-					idEmpresa : document.getElementById("empresa").value
-				}
-
-				$
-						.post(
-								'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
-								JSON.stringify(submitJson),
-								function(res, code) {
-									var str = "<option>Seleccione cuenta</option>";
-									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">"
-												+ res[i].numCuenta
-												+ "</option>";
-									}
-									document.getElementById("cuenta").innerHTML = str;
-								}, "json");
-			});
 
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.id;
@@ -383,26 +277,27 @@
 	}
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la cartola')) {
+		if (confirm('¿Esta seguro desea eliminar la boleta de honorario')) {
 			var submitJson = {
 				id : x.data.record.id,
 				idUsuario : document.getElementById("idUsuario").value
+				
 			}
-			$.post('/byeContabilidad/rest-services/private/cartola/delete',
-					JSON.stringify(submitJson)).done(function(data) {
-				if (data == 'OK') {
-					alert('Cartola eliminada correctamente');
-					grid.reload();
-				} else {
-					alert(data);
-				}
-			}).fail(function() {
-				alert('Error al eliminar la cartola.');
-			});
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/honorario/delete',
+							JSON.stringify(submitJson)).done(function(data) {
+						if (data == 'OK') {
+							alert('Boleta de honorario eliminada correctamente');
+							grid.reload();
+						} else {
+							alert(data);
+						}
+					}).fail(function() {
+						alert('Error al eliminar la boleta de honorario');
+					});
 		}
 	}
 
-	$("#banco").trigger('change');
-	$("#empresa").trigger('change');
 </script>
 </html>

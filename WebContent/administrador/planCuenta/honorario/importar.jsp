@@ -66,7 +66,6 @@
 						&nbsp;&nbsp; Empresa</label>
 					<div class="col-3">
 						<select class="browser-default custom-select" id="empresa">
-						<option value="1"></option>
 						</select>
 					</div>
 				</div>
@@ -203,32 +202,11 @@
 											}
 											document.getElementById("empresa").innerHTML = str;
 										}, "json");
-						
-						var submitJson = {
-								idUsuario : document.getElementById("idUsuario").value}
-						
-						$.post('/byeContabilidad/rest-services/private/banco/getLista',
-								function(res, code) {
-							 var str = "<option>Seleccione banco</option>";
-									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">" + res[i].nombre
-												+ "</option>";
-									}
-									document.getElementById("banco").innerHTML = str;
-								}, "json");
-							
-						
 						ComboAnio();
 						$("#importCartola")
 								.submit(
 										function(event) {
 											event.preventDefault();
-											
-											if ($('#banco option:selected')
-													.text() == 'Seleccione banco') {
-												alert("Debe seleccionar un banco");
-												return;
-											}
 											
 											if ($('#cuenta option:selected')
 													.text() == 'Seleccione cuenta') {
@@ -326,48 +304,19 @@
 		document.getElementById("anio").innerHTML = str;
 	};
 
+	var submitJson = {
+		idUsuario : document.getElementById("idUsuario").value
+	}
 
-	$('#empresa') .on(
-			'change',
-			function() {
-				var submitJson = {
-						idUsuario : document.getElementById("idUsuario").value
-					}
-
-					$
-							.post(
-									'/byeContabilidad/rest-services/private/banco/getLista',
-									function(res, code) {
-										var str = "<option>Seleccione banco</option>";
-										for (var i = 0, len = res.length; i < len; i++) {
-											str += "<option value="+res[i].id+">"
-													+ res[i].nombre
-													+ "</option>";
-										}
-										document.getElementById("banco").innerHTML = str;
-									}, "json");
-				var submitJson = {
-
-					idUsuario : document.getElementById("idUsuario").value,
-					idBanco : document.getElementById("banco").value,
-					idEmpresa : document.getElementById("empresa").value
-				}
-
-				$
-						.post(
-								'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
-								JSON.stringify(submitJson),
-								function(res, code) {
-									var str = "<option>Seleccione cuenta</option>";
-									for (var i = 0, len = res.length; i < len; i++) {
-										str += "<option value="+res[i].id+">"
-												+ res[i].numCuenta
-												+ "</option>";
-									}
-									document.getElementById("cuenta").innerHTML = str;
-								}, "json");
-			});
-
+	// 	$.post('/byeContabilidad/rest-services/private/banco/getLista',
+	// 			function(res, code) {
+	// 				var str;
+	// 				for (var i = 0, len = res.length; i < len; i++) {
+	// 					str += "<option value="+res[i].id+">" + res[i].nombre
+	// 							+ "</option>";
+	// 				}
+	// 				document.getElementById("banco").innerHTML = str;
+	// 			}, "json");
 
 	$('#banco')
 			.on(
@@ -376,8 +325,7 @@
 						var submitJson = {
 
 							idUsuario : document.getElementById("idUsuario").value,
-							idBanco : document.getElementById("banco").value, 
-							idEmpresa : document.getElementById("empresa").value
+							idBanco : document.getElementById("banco").value
 						}
 
 						$

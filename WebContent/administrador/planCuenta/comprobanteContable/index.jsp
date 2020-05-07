@@ -398,7 +398,7 @@
 									{
 										field : 'tipoDocumento',
 										title : 'Documento',
-										width : 100
+										width : 120
 									},
 									// 									{
 									// 										width : 160,
@@ -491,8 +491,7 @@
 	});
 
 	function modificarComprobante(e) {
-		document.getElementById("id").value = document
-				.getElementById("idComprobante").value;
+		document.getElementById("id").value = document.getElementById("idComprobante").value;
 		document.getElementById("formulario").action = 'modificarComprobante.jsp';
 		document.getElementById("formulario").method = 'POST';
 		document.getElementById("formulario").submit();

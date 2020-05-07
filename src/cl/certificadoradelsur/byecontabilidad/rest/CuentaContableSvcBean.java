@@ -95,7 +95,7 @@ public class CuentaContableSvcBean implements CuentaContableSvc {
 		return Response.ok(json).build();
 
 	}
-	
+
 	@Override
 	public Response getByIdEmpresaList(String datos) {
 		Gson gson = new GsonBuilder().create();

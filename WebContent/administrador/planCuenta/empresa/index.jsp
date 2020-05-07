@@ -46,30 +46,33 @@
 </head>
 <body>
 
- <%@ include file = "../../../complementos/nav.jsp" %>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
-		<form name="formulario" id="formulario"><input type="hidden" name="id" id="id" /></form>
-				<div
-					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-					<h1 class="h2">Lista de empresas</h1>
-				</div>
-				<div>
-						<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
-				</div>
-			<br>
-			<div class="form-group">
-				<div class="col-1"></div>
-				<input type="text" id="filtro" name="filtro"
-					placeholder="Filtrar por razon social" />
-				<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
-			</div>
-			<div class="table-responsive">
-				<table class="table" id="grid"></table>
-			</div>
+		<form name="formulario" id="formulario">
+			<input type="hidden" name="id" id="id" />
+		</form>
+		<div
+			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+			<h1 class="h2">Lista de empresas</h1>
 		</div>
-  	<input type="hidden" name="idUsuario" id="idUsuario" value=<%=request.getUserPrincipal().getName()%> />
-		
-	
+		<div>
+			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
+		</div>
+		<br>
+		<div class="form-group">
+			<div class="col-1"></div>
+			<input type="text" id="filtro" name="filtro"
+				placeholder="Filtrar por razon social" />
+			<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+		</div>
+		<div class="table-responsive">
+			<table class="table" id="grid"></table>
+		</div>
+	</div>
+	<input type="hidden" name="idUsuario" id="idUsuario"
+		value=<%=request.getUserPrincipal().getName()%> />
+
+
 </body>
 <script type="text/javascript">
 	$(document)

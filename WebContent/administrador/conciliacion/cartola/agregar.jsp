@@ -67,6 +67,7 @@
 						&nbsp; &nbsp;Empresa</label>
 					<div class="col-3">
 						<select class="browser-default custom-select" id="empresa">
+						<option value="1"></option>
 						</select>
 					</div>
 				</div>
@@ -168,6 +169,19 @@
 											}
 											document.getElementById("empresa").innerHTML = str;
 										}, "json");	
+						
+						var submitJson = {
+								idUsuario : document.getElementById("idUsuario").value}
+						
+						$.post('/byeContabilidad/rest-services/private/banco/getLista',
+								function(res, code) {
+							 var str = "<option>Seleccione banco</option>";
+									for (var i = 0, len = res.length; i < len; i++) {
+										str += "<option value="+res[i].id+">" + res[i].nombre
+												+ "</option>";
+									}
+									document.getElementById("banco").innerHTML = str;
+								}, "json");
 							
 					});
 
@@ -215,36 +229,52 @@
 		});
 	}
 
-	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la cartola')) {
-			var submitJson = {
-				id : x.data.record.id
-			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/cartola/delete',
-							JSON.stringify(submitJson)).done(function(data) {
-						if (data == 'OK') {
-							alert('Cartola eliminada correctamente');
-							grid.reload();
-						} else {
-							alert(data);
-						}
-					}).fail(function() {
-						alert('Error al eliminar la cartola.');
-					});
-		}
-	}
+	$('#empresa')
+	.on(
+			'change',
+			function() {
+				var submitJson = {
+						idUsuario : document.getElementById("idUsuario").value
+					}
+
+					$
+							.post(
+									'/byeContabilidad/rest-services/private/banco/getLista',
+									function(res, code) {
+										var str = "<option>Seleccione banco</option>";
+										for (var i = 0, len = res.length; i < len; i++) {
+											str += "<option value="+res[i].id+">"
+													+ res[i].nombre
+													+ "</option>";
+										}
+										document.getElementById("banco").innerHTML = str;
+									}, "json");
+				var submitJson = {
+
+					idUsuario : document.getElementById("idUsuario").value,
+					idBanco : document.getElementById("banco").value,
+					idEmpresa : document.getElementById("empresa").value
+				}
+
+				$
+						.post(
+								'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+								JSON.stringify(submitJson),
+								function(res, code) {
+									var str = "<option>Seleccione cuenta</option>";
+									for (var i = 0, len = res.length; i < len; i++) {
+										str += "<option value="+res[i].id+">"
+												+ res[i].numCuenta
+												+ "</option>";
+									}
+									document.getElementById("cuenta").innerHTML = str;
+								}, "json");
+			});
+
 
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
-
-	var submitJson = {
-		idUsuario : document.getElementById("idUsuario").value
-	}
-
-
 
 	function limpia() {
 		document.getElementById("banco").value = "";
@@ -255,21 +285,8 @@
 		document.getElementById("descripcion").value = "";
 		document.getElementById("tipoMovimiento").value = "";
 		document.getElementById("monto").value = "";
-		document.getElementById("idUsuario").value = "";
-
 	}
-	var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value}
-	
-	$.post('/byeContabilidad/rest-services/private/banco/getLista',
-			function(res, code) {
-				var str;
-				for (var i = 0, len = res.length; i < len; i++) {
-					str += "<option value="+res[i].id+">" + res[i].nombre
-							+ "</option>";
-				}
-				document.getElementById("banco").innerHTML = str;
-			}, "json");
+
 
 
 	$('#banco').on('change',
@@ -277,7 +294,9 @@
 				var submitJson = { 
 
 					    idUsuario : document.getElementById("idUsuario").value,
-						idBanco : document.getElementById("banco").value
+						idBanco : document.getElementById("banco").value,
+						idEmpresa : document.getElementById("empresa").value,
+						idEmpresa : document.getElementById("empresa").value
 				}
 
 				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',

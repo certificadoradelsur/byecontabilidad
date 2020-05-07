@@ -76,6 +76,7 @@
 					<label for="empresa">&nbsp;Empresa</label> <select
 						class="browser-default custom-select" id="empresa"
 						required="required">
+					<option value="1"></option>
 					</select>
 				</div>
 
@@ -148,9 +149,7 @@
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/empresa/getLista',
+						$.post('/byeContabilidad/rest-services/private/empresa/getLista',
 										JSON.stringify(submitJson),
 										function(res, code) {
 											var str;
@@ -161,22 +160,15 @@
 											}
 											document.getElementById("empresa").innerHTML = str;
 
-											// 											if (document.getElementById("empresa").value != "") {
-											// 												grid.reload({
-											// 													idEmpresa : $('#empresa').val(),
-											// 													idBanco : $('#banco').val()
-											// 												});
-											// 											}
+			
 										}, "json");
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
 
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/banco/getLista',
+						$.post('/byeContabilidad/rest-services/private/banco/getLista',
 										function(res, code) {
-											var str;
+							             var str = "<option>Seleccione banco</option>";
 											for (var i = 0, len = res.length; i < len; i++) {
 												str += "<option value="+res[i].id+">"
 														+ res[i].nombre
@@ -282,21 +274,9 @@
 								limit : 10
 							}
 						});
-
-		busca();
-
 	}
 
-	function busca() {
-		if (document.getElementById("empresa").value != "") {
-			grid.reload({
-				idEmpresa : $('#empresa').val(),
-				fechaInicial : $('#filtro1').val(),
-				fechaFinal : $('#filtro2').val(),
-				idBanco : $('#banco').val()
-			});
-		}
-	}
+
 
 	$('#buscar')
 			.on(
@@ -318,12 +298,17 @@
 							return;
 						}
 
+						if ($('#banco option:selected').text() == 'Seleccione banco') {
+							alert("Debe seleccionar un banco");
+							return;
+						}
+
 						if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
 							alert("Debe seleccionar una cuenta");
 							return;
 						}
 
-						if (document.getElementById("empresa").value != "") {
+						if (document.getElementById("empresa").value != "" && document.getElementById("cuenta").value != "" && document.getElementById("banco").value != "") {
 							grid.reload({
 								idEmpresa : $('#empresa').val(),
 								fechaInicial : $('#filtro1').val(),
@@ -470,7 +455,8 @@
 						var submitJson = {
 
 							idUsuario : document.getElementById("idUsuario").value,
-							idBanco : document.getElementById("banco").value
+							idBanco : document.getElementById("banco").value,
+							idEmpresa : document.getElementById("empresa").value
 						}
 
 						$
@@ -488,6 +474,49 @@
 										}, "json");
 					});
 
+	$('#empresa')
+	.on(
+			'change',
+			function() {
+				var submitJson = {
+						idUsuario : document.getElementById("idUsuario").value
+					}
+
+					$
+							.post(
+									'/byeContabilidad/rest-services/private/banco/getLista',
+									function(res, code) {
+										var str = "<option>Seleccione banco</option>";
+										for (var i = 0, len = res.length; i < len; i++) {
+											str += "<option value="+res[i].id+">"
+													+ res[i].nombre
+													+ "</option>";
+										}
+										document.getElementById("banco").innerHTML = str;
+									}, "json");
+				var submitJson = {
+
+					idUsuario : document.getElementById("idUsuario").value,
+					idBanco : document.getElementById("banco").value,
+					idEmpresa : document.getElementById("empresa").value
+				}
+
+				$
+						.post(
+								'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+								JSON.stringify(submitJson),
+								function(res, code) {
+									var str = "<option>Seleccione cuenta</option>";
+									for (var i = 0, len = res.length; i < len; i++) {
+										str += "<option value="+res[i].id+">"
+												+ res[i].numCuenta
+												+ "</option>";
+									}
+									document.getElementById("cuenta").innerHTML = str;
+								}, "json");
+			});
+	
 	$("#banco").trigger('change');
+	$("#empresa").trigger('change');
 </script>
 </html>

@@ -26,19 +26,20 @@ import javax.persistence.Table;
 @Table(name = "honorario")
 @SequenceGenerator(name = "seq_honorario", sequenceName = "seq_honorario")
 @NamedQueries({
-		@NamedQuery(name = "Honorario.getAll", query = "SELECT h FROM Honorario h  "),
-		@NamedQuery(name = "Honorario.countAll", query = "SELECT count(h.id) FROM Honorario h") })
+		@NamedQuery(name = "Honorario.getAll", query = "SELECT h FROM Honorario h where h.fecha between :fechaInicial and :fechaFinal and h.empresa.id =:idEmpresa and h.empresa.oficinaContable.id =:idOficinaContable"),
+		@NamedQuery(name = "Honorario.countAll", query = "SELECT count(h.id) FROM Honorario h where h.fecha between :fechaInicial and :fechaFinal and h.empresa.id =:idEmpresa and h.empresa.oficinaContable.id =:idOficinaContable") })
 
 public class Honorario implements Serializable {
 
 	private static final long serialVersionUID = 1331181439392145452L;
 	private Long id;
-	private String rut;
+	private Cliente cliente;
 	private String nombre;
 	private String numBoleta;
 	private Timestamp fecha;
 	private Long montoBruto;
 	private Long retencion;
+	private Boolean retencionEstado;
 	private Long montoLiquido;
 	private Empresa empresa;
 	private Timestamp fechaCreacion;
@@ -63,18 +64,19 @@ public class Honorario implements Serializable {
 		this.nombre = nombre;
 	}
 
-	@Column(name = "rut", nullable = false)
-	public String getRut() {
-		return rut;
-	}
-
-	public void setRut(String rut) {
-		this.rut = rut;
-	}
-
 	@Column(name = "numero_boleta", nullable = false)
 	public String getNumBoleta() {
 		return numBoleta;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "id_cliente", nullable = true)
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public void setNumBoleta(String numBoleta) {
@@ -135,4 +137,15 @@ public class Honorario implements Serializable {
 	public void setFechaCreacion(Timestamp fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
+
+	@Column(name = "retencion_estado", nullable = true)
+	public Boolean isRetencionEstado() {
+		return retencionEstado;
+	}
+
+	public void setRetencionEstado(Boolean retencionEstado) {
+		this.retencionEstado = retencionEstado;
+	}
+	
+	
 }

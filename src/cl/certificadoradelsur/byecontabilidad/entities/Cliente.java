@@ -27,7 +27,7 @@ import javax.persistence.Table;
 @NamedQueries({ 
 	@NamedQuery(name = "Cliente.getAll", query = "SELECT c FROM Cliente  c where c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreRut or upper(c.rut) like :rut) "),
 	@NamedQuery(name = "Cliente.countAll", query = "SELECT count(C.id) FROM Cliente c where c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreRut or upper(c.rut) like :rut)"),
-	@NamedQuery(name = "Cliente.getAllLista", query = "SELECT c FROM Cliente c  where c.empresa.oficinaContable.id =:idOficinaContable and c.activo = true ")
+	@NamedQuery(name = "Cliente.getAllLista", query = "SELECT c FROM Cliente c  where c.empresa.oficinaContable.id =:idOficinaContable and c.empresa.id =:idEmpresa and c.activo = true ")
 })
 
 public class Cliente implements Serializable {

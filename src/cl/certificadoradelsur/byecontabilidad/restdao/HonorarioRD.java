@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.HonorarioDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
@@ -35,6 +36,8 @@ public class HonorarioRD {
 	private UsuarioDAO udao;
 	@Inject
 	private BitacoraDAO bidao;
+	@Inject
+	private ClienteDAO cdao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -45,17 +48,17 @@ public class HonorarioRD {
 		try {
 			Honorario h = new Honorario();
 			if (Utilidades.containsScripting(hj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(hj.getRut()).compareTo(true) == 0
 					||Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				h.setRut(hj.getRut());
+				h.setCliente(cdao.getById(hj.getIdCliente()));
 				h.setNombre(hj.getNombre());
 				h.setNumBoleta(hj.getNumBoleta());
 				h.setRetencion(hj.getRetencion());
 				h.setFecha(Utilidades.convertidorFechaSinHora(hj.getFecha()));
-				h.setMontoBruto(hj.getMontoLiquido());
+				h.setMontoBruto(hj.getMontoBruto());
 				h.setMontoLiquido(hj.getMontoLiquido());
+				h.setRetencionEstado(hj.isRetencionEstado());
 				h.setEmpresa(edao.getById(hj.getIdEmpresa()));
 				h.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				hdao.guardar(h);
@@ -74,9 +77,18 @@ public class HonorarioRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll() {
-		try {
-			return hdao.countAll();
+	public Long countAll(String fechaDesde, String fechaHasta, String idUsuario,
+			Long idEmpresa) {
+		try {			
+		Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
+		Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
+		
+		if (fechaDesde!=null || fechaHasta!=null) {
+			fechaInicial = Utilidades.fechaDesde(fechaDesde);
+			fechaFinal = Utilidades.fechaHasta(fechaHasta);
+		}
+			return hdao.countAll(fechaInicial,fechaFinal,
+					udao.getById(idUsuario).getOficinaContable().getId(),idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de Honorarios ", e);
 			return 0L;
@@ -90,7 +102,8 @@ public class HonorarioRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Honorarios
 	 */
-	public List<HonorarioJson> getAll(Integer page, Integer limit) {
+	public List<HonorarioJson> getAll(Integer page, Integer limit, String fechaDesde,
+			String fechaHasta, String idUsuario, Long idEmpresa) {
 		List<HonorarioJson> lhj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -99,16 +112,22 @@ public class HonorarioRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
+			
+			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
+			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
 
-			List<Honorario> lh = hdao.getAll(inicio, limit);
+			List<Honorario> lh = hdao.getAll(inicio, limit,fechaInicial,fechaFinal,
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lh.size(); i++) {
 				HonorarioJson hj = new HonorarioJson();
 				hj.setId(lh.get(i).getId());
-				hj.setNombre(lh.get(i).getNombre());
+				hj.setNombre(cdao.getById(lh.get(i).getCliente().getId()).getNombre());
+				hj.setIdCliente(cdao.getById(lh.get(i).getCliente().getId()).getId());
+				hj.setRut(cdao.getById(lh.get(i).getCliente().getId()).getRut());
 				hj.setNumBoleta(lh.get(i).getNumBoleta());
 				hj.setRetencion(lh.get(i).getRetencion());
 				hj.setFecha(Utilidades.timestamAStringSinHora(lh.get(i).getFecha()));
-				hj.setMontoBruto(lh.get(i).getMontoLiquido());
+				hj.setMontoBruto(lh.get(i).getMontoBruto());
 				hj.setMontoLiquido(lh.get(i).getMontoLiquido());
 				lhj.add(hj);
 			}
@@ -128,16 +147,16 @@ public class HonorarioRD {
 		try {
 			Honorario h = hdao.getById(hj.getId());
 			if (Utilidades.containsScripting(hj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(hj.getRut()).compareTo(true) == 0
 					||Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				h.setRut(hj.getRut());
+				h.setCliente(cdao.getById(hj.getIdCliente()));
 				h.setNombre(hj.getNombre());
 				h.setNumBoleta(hj.getNumBoleta());
 				h.setRetencion(hj.getRetencion());
 				h.setFecha(Utilidades.convertidorFechaSinHora(hj.getFecha()));
-				h.setMontoBruto(hj.getMontoLiquido());
+				h.setMontoBruto(hj.getMontoBruto());
+				h.setRetencionEstado(hj.isRetencionEstado());
 				h.setMontoLiquido(hj.getMontoLiquido());
 				h.setEmpresa(edao.getById(hj.getIdEmpresa()));
 				hdao.update(h);
@@ -146,7 +165,7 @@ public class HonorarioRD {
 				b.setFecha(new Timestamp(System.currentTimeMillis()));
 				b.setTabla("Honorario");
 				b.setAccion("Update");
-				b.setDescripcion("Se modifico " + hdao.getById(hj.getId()).getRut());
+				b.setDescripcion("Se modifico " + hdao.getById(hj.getId()).getNombre());
 				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -166,12 +185,13 @@ public class HonorarioRD {
 		Honorario h = hdao.getById(cj.getId());
 		HonorarioJson hJson = new HonorarioJson();
 		hJson.setId(h.getId());
-		hJson.setRut(h.getRut());
+		hJson.setIdCliente(h.getCliente().getId());
 		hJson.setNombre(h.getNombre());
 		hJson.setNumBoleta(h.getNumBoleta());
 		hJson.setMontoBruto(h.getMontoBruto());
 		hJson.setMontoLiquido(h.getMontoLiquido());
 		hJson.setRetencion(h.getRetencion());
+		hJson.setRetencionEstado(h.isRetencionEstado());
 		hJson.setFecha(h.getFecha().toString().substring(0, 10));
 		hJson.setIdEmpresa(h.getEmpresa().getId());
 		return hJson;
@@ -191,7 +211,7 @@ public class HonorarioRD {
 			b.setFecha(new Timestamp(System.currentTimeMillis()));
 			b.setTabla("Honorario");
 			b.setAccion("Delete");
-			b.setDescripcion("Se elimino " + hdao.getById(hj.getId()).getRut());
+			b.setDescripcion("Se elimino " + hdao.getById(hj.getId()).getNombre());
 			bidao.guardar(b);
 			hdao.eliminar(h);
 			return Constantes.MENSAJE_REST_OK;

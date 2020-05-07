@@ -75,6 +75,7 @@
 					<label for="empresa">&nbsp;Empresa</label> <select
 						class="browser-default custom-select" id="empresa"
 						required="required">
+						<option value="1"></option>
 					</select>
 				</div>
 
@@ -115,168 +116,160 @@
 						$("#empresa").select2({
 							width : '180'
 						});
-						
+
 						var submitJson = {
-								idUsuario : document.getElementById("idUsuario").value
-							}
-							$
-									.post(
-											'/byeContabilidad/rest-services/private/empresa/getLista',
-											JSON.stringify(submitJson),
-											function(res, code) {
-												var str;
-												for (var i = 0, len = res.length; i < len; i++) {
-													str += "<option value="+res[i].id+">"
-															+ res[i].razonSocial
-															+ "</option>";
-												}
-												document.getElementById("empresa").innerHTML = str;
-												
-// 												if (document.getElementById("empresa").value != "") {
-// 													grid.reload({
-// 														idEmpresa : $('#empresa').val(),
-// 														idBanco : $('#banco').val()
-// 													});
-// 												}
-											}, "json");
-							
+							idUsuario : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/empresa/getLista',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str;
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].razonSocial
+														+ "</option>";
+											}
+											document.getElementById("empresa").innerHTML = str;
+
+										}, "json");
+
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/banco/getLista',
+										function(res, code) {
+											var str = "<option>Seleccione banco</option>";
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].nombre
+														+ "</option>";
+											}
+											document.getElementById("banco").innerHTML = str;
+										}, "json");	
 						fecha();
 
-					
-
 					});
-	
-	function fecha(){
+
+	function fecha() {
 		var now = new Date();
-	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	    var today = now.getFullYear()+"-"+(month)+"-"+("01") ;
-	    $("#filtro1").val(today);
-	    
-		var now = new Date();  
-	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	    var dia =new Date(now.getFullYear() || new Date().getFullYear(), month, 0).getDate();
-	    var today2 = now.getFullYear()+"-"+(month)+"-"+(dia) ;
-	    $("#filtro2").val(today2);
-	    cargaTabla();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear() + "-" + (month) + "-" + ("01");
+		$("#filtro1").val(today);
+
+		var now = new Date();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var dia = new Date(now.getFullYear() || new Date().getFullYear(),
+				month, 0).getDate();
+		var today2 = now.getFullYear() + "-" + (month) + "-" + (dia);
+		$("#filtro2").val(today2);
+		cargaTabla();
 	}
-	
+
 	function cargaTabla() {
-		
+
 		grid = $('#grid')
-		.grid(
-				{
-					primaryKey : 'ID',
-					dataSource : "/byeContabilidad/rest-services/private/conciliacion/getAll?idUsuario="
-						+ document
-						.getElementById('idUsuario').value
-				+ "",
-					autoLoad : true,
-					columns : [
-							{
-								field : 'id',
-								title : 'Identificador',
-								width : 100,
-								hidden : true
+				.grid(
+						{
+							primaryKey : 'ID',
+							dataSource : "/byeContabilidad/rest-services/private/conciliacion/getAll?idUsuario="
+									+ document.getElementById('idUsuario').value
+									+ "",
+							autoLoad : true,
+							columns : [
+									{
+										field : 'id',
+										title : 'Identificador',
+										width : 100,
+										hidden : true
 
-							},
-							{
-								field : 'idMovimiento',
-								title : 'N° Movimiento',
-								width : 120,
+									},
+									{
+										field : 'idMovimiento',
+										title : 'N° Movimiento',
+										width : 120,
 
-							},
-							{
-								field : 'montoMovimiento',
-								title : 'Monto Movimiento',
-								width : 140,
-							},
-							{
-								field : 'fechaMovimiento',
-								title : 'F. Movimiento',
-								sortable : true
-							},
-							{
-								field : 'numCartola',
-								title : 'N° Cartola',
-								sortable : true
-							},
-							{
-								field : 'numDocumento',
-								title : 'N° Documento',
-								sortable : true
-							},
-							{
-								field : 'montoCartola',
-								title : 'Monto Cartola',
-								sortable : true
-							},
-							{
-								field : 'fechaCartola',
-								title : 'F. Cartola',
-								sortable : true
-							},
-							{
-								field : 'descripcionCartola',
-								title : 'Detalle Cartola',
-								sortable : true
-							},
-							{
-								field : 'fechaConciliacion',
-								title : 'F. Conciliación',
-								sortable : true
-							},
+									},
+									{
+										field : 'montoMovimiento',
+										title : 'Monto Movimiento',
+										width : 140,
+									},
+									{
+										field : 'fechaMovimiento',
+										title : 'F. Movimiento',
+										sortable : true
+									},
+									{
+										field : 'numCartola',
+										title : 'N° Cartola',
+										sortable : true
+									},
+									{
+										field : 'numDocumento',
+										title : 'N° Documento',
+										sortable : true
+									},
+									{
+										field : 'montoCartola',
+										title : 'Monto Cartola',
+										sortable : true
+									},
+									{
+										field : 'fechaCartola',
+										title : 'F. Cartola',
+										sortable : true
+									},
+									{
+										field : 'descripcionCartola',
+										title : 'Detalle Cartola',
+										sortable : true
+									},
+									{
+										field : 'fechaConciliacion',
+										title : 'F. Conciliación',
+										sortable : true
+									},
 
-							{
-								width : 80,
-								title : 'Eliminar',
-								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-								align : 'center',
-								events : {
-									'click' : eliminar
-								}
-							}, ],
-					pager : {
-						limit : 1000
-					}
-				});
-		busca();
+									{
+										width : 80,
+										title : 'Eliminar',
+										tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+										align : 'center',
+										events : {
+											'click' : eliminar
+										}
+									}, ],
+							pager : {
+								limit : 1000
+							}
+						});
 	}
 
-	function busca(){
-		if (document.getElementById("empresa").value != "") {
-			grid.reload({
-			idEmpresa : $('#empresa').val(),
-			fechaInicial : $('#filtro1').val(),
-			fechaFinal : $('#filtro2').val(),
-			idBanco : $('#banco').val()
-		});
-		}
-	}
-	
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la conciliación?')) {
 			var submitJson = {
 				id : x.data.record.id,
 				idUsuario : document.getElementById("idUsuario").value
-				
+
 			}
 			$
 					.post(
 							'/byeContabilidad/rest-services/private/conciliacion/delete',
-							JSON.stringify(submitJson))
-					.done(
-							function(data) {
-								if (data == 'OK') {
-									alert('Transacción eliminada correctamente');
-									grid.reload();
-								} else {
-									alert(data);
-								}
-							})
-					.fail(
-							function() {
-								alert('Error al eliminar la conciliación.');
-							});
+							JSON.stringify(submitJson)).done(function(data) {
+						if (data == 'OK') {
+							alert('Transacción eliminada correctamente');
+							grid.reload();
+						} else {
+							alert(data);
+						}
+					}).fail(function() {
+						alert('Error al eliminar la conciliación.');
+					});
 		}
 	}
 
@@ -286,82 +279,126 @@
 		document.getElementById("formulario").method = 'POST';
 		document.getElementById("formulario").submit();
 	}
-	$('#buscar').on(
-			'click',
-			function() {
-				if (document.getElementById('filtro1').value == ''
-						|| document.getElementById('filtro2').value == '') {
-					alert('Debe ingresar fecha de inicia y hasta');
-					return;
-				}
-				var fechaInicial = new Date(
-						document.getElementById('filtro1').value);
-				var fechaFinal = new Date(
-						document.getElementById('filtro2').value);
-				var idBanco = document.getElementById('banco').value;
-				var idCuenta = document.getElementById('cuenta').value;
-				if (fechaInicial > fechaFinal) {
-					alert('Fecha inicial no debe ser mayor que fecha final');
-					return;
-				}
-				if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
-					alert("Debe seleccionar una cuenta");
-					return;
-				}
+	
+	$('#buscar')
+			.on(
+					'click',
+					function() {
+						if (document.getElementById('filtro1').value == ''
+								|| document.getElementById('filtro2').value == '') {
+							alert('Debe ingresar fecha de inicia y hasta');
+							return;
+						}
+						var fechaInicial = new Date(document
+								.getElementById('filtro1').value);
+						var fechaFinal = new Date(document
+								.getElementById('filtro2').value);
+						var idBanco = document.getElementById('banco').value;
+						var idCuenta = document.getElementById('cuenta').value;
+						if (fechaInicial > fechaFinal) {
+							alert('Fecha inicial no debe ser mayor que fecha final');
+							return;
+						}
+						
+						if ($('#banco option:selected').text() == 'Seleccione banco') {
+							alert("Debe seleccionar un banco");
+							return;
+						}
+						
+						if ($('#cuenta option:selected').text() == 'Seleccione cuenta') {
+							alert("Debe seleccionar una cuenta");
+							return;
+						}
 
-				if (document.getElementById("empresa").value != "") {
-					grid.reload({
-					idEmpresa : $('#empresa').val(),
-					fechaInicial : $('#filtro1').val(),
-					fechaFinal : $('#filtro2').val(),
-					idBanco : $('#banco').val(),
-					idCuenta : $('#cuenta').val()
+						if (document.getElementById("empresa").value != "" && document.getElementById("cuenta").value != "" && document.getElementById("banco").value != "") {
+							grid.reload({
+								idEmpresa : $('#empresa').val(),
+								fechaInicial : $('#filtro1').val(),
+								fechaFinal : $('#filtro2').val(),
+								idBanco : $('#banco').val(),
+								idCuenta : $('#cuenta').val()
 
-				});
-				}
-				//clear();
-			});
+							});
+						}
+						//clear();
+					});
 
 	function clear() {
 		document.getElementById("filtro1").value = "";
 		document.getElementById("filtro2").value = "";
 	}
 
-	var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value}
-	
-	$.post('/byeContabilidad/rest-services/private/banco/getLista',
-			function(res, code) {
-				var str;
-				for (var i = 0, len = res.length; i < len; i++) {
-					str += "<option value="+res[i].id+">" + res[i].nombre
-							+ "</option>";
-				}
-				document.getElementById("banco").innerHTML = str;
-			}, "json");
 
 
-	$('#banco').on('change',
-			function() {
-				var submitJson = { 
+	$('#banco')
+			.on(
+					'change',
+					function() {
+						var submitJson = {
 
-					    idUsuario : document.getElementById("idUsuario").value,
-						idBanco : document.getElementById("banco").value
-				}
+							idUsuario : document.getElementById("idUsuario").value,
+							idBanco : document.getElementById("banco").value,
+							idEmpresa : document.getElementById("empresa").value
+						}
 
-				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
-								JSON.stringify(submitJson),
-								function(res, code) {
-									var str = "<option>Seleccione cuenta</option>";
-									for (var i = 0, len = res.length; i < len; i++) {
-									str += "<option value="+res[i].id+">"
-												+ res[i].numCuenta
-												+ "</option>";
-									}
-									document.getElementById("cuenta").innerHTML = str;
-								}, "json");
-			}); 	
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str = "<option>Seleccione cuenta</option>";
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].numCuenta
+														+ "</option>";
+											}
+											document.getElementById("cuenta").innerHTML = str;
+										}, "json");
+					});
 
+	$('#empresa')
+			.on(
+					'change',
+					function() {
+						var submitJson = {
+							idUsuario : document.getElementById("idUsuario").value
+						}
+
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/banco/getLista',
+										function(res, code) {
+											var str = "<option>Seleccione banco</option>";
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].nombre
+														+ "</option>";
+											}
+											document.getElementById("banco").innerHTML = str;
+										}, "json");
+						var submitJson = {
+
+							idUsuario : document.getElementById("idUsuario").value,
+							idBanco : document.getElementById("banco").value,
+							idEmpresa : document.getElementById("empresa").value
+						}
+
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+										JSON.stringify(submitJson),
+										function(res, code) {
+											var str = "<option>Seleccione cuenta</option>";
+											for (var i = 0, len = res.length; i < len; i++) {
+												str += "<option value="+res[i].id+">"
+														+ res[i].numCuenta
+														+ "</option>";
+											}
+											document.getElementById("cuenta").innerHTML = str;
+										}, "json");
+					});
+
+	$("#empresa").trigger('change');
 	$("#banco").trigger('change');
 </script>
 </html>
