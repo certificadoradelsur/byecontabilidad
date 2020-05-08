@@ -222,5 +222,4 @@ public class Movimiento implements Serializable {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-
 }

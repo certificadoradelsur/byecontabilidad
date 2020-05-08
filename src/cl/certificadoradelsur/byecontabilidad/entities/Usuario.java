@@ -1,13 +1,19 @@
 package cl.certificadoradelsur.byecontabilidad.entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -32,6 +38,9 @@ public class Usuario implements Serializable {
 	private Boolean eliminado;
 	private Perfil perfil;
 	private OficinaContable oficinaContable;
+	private Timestamp fechaCreacion;
+	private List<UsuarioEmpresa> usuarioEmpresa;
+	
 
 	@Id
 	public String getId() {
@@ -98,4 +107,25 @@ public class Usuario implements Serializable {
 		this.oficinaContable = oficinaContable;
 	}
 
+	@Column(name = "fecha_creacion", nullable = true)
+	public Timestamp getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Timestamp fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public List<UsuarioEmpresa> getUsuarioEmpresa() {
+		return usuarioEmpresa;
+	}
+
+	public void setUsuarioEmpresa(List<UsuarioEmpresa> usuarioEmpresa) {
+		this.usuarioEmpresa = usuarioEmpresa;
+	}
+
+
+	
+	
 }

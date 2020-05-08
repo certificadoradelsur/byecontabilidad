@@ -8,11 +8,15 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.PerfilDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
+import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 import cl.certificadoradelsur.byecontabilidad.entities.Usuario;
+import cl.certificadoradelsur.byecontabilidad.entities.UsuarioEmpresa;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
+import cl.certificadoradelsur.byecontabilidad.json.EmpresaJson;
 import cl.certificadoradelsur.byecontabilidad.json.UsuarioJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
 import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
@@ -31,6 +35,8 @@ public class UsuarioRD {
 	@Inject
 	private PerfilDAO pdao;
 	@Inject
+	private EmpresaDAO edao;
+	@Inject
 	private BitacoraDAO bidao;
 
 	/**
@@ -44,7 +50,7 @@ public class UsuarioRD {
 		try {
 			Usuario uold = udao.getById(uj.getId());
 			if (uold != null) {
-				throw new ByeContabilidadException("Usuario ya existe");
+				return "Usuario ya existe";
 			}
 			Usuario usuario = new Usuario();
 			if (Utilidades.containsScripting(uj.getId()).compareTo(true) == 0
@@ -59,6 +65,16 @@ public class UsuarioRD {
 				usuario.setOficinaContable(udao.getById(uj.getIdUsuario()).getOficinaContable());
 				usuario.setPerfil(pdao.getById(uj.getPerfil()));
 				usuario.setEliminado(false);
+				usuario.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
+				List <UsuarioEmpresa> usere = new ArrayList<>();
+				for (int i = 0; i < uj.getEmpresas().size(); i++) {
+					UsuarioEmpresa ue = new UsuarioEmpresa();					
+					Empresa e = edao.getById(uj.getEmpresas().get(i).getId());
+					ue.setEmpresa(e);
+					ue.setUsuario(usuario);
+					usere.add(ue);					
+				}
+				usuario.setUsuarioEmpresa(usere);
 				udao.guardar(usuario);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -197,6 +213,13 @@ public class UsuarioRD {
 		uJson.setEmail(usuario.getEmail());
 		uJson.setActivo(usuario.isActivo());
 		uJson.setPerfil(usuario.getPerfil().getId());
+		List <EmpresaJson> ej = new ArrayList<>();
+		for (int i = 0; i < usuario.getUsuarioEmpresa().size(); i++) {
+			EmpresaJson ejj = new EmpresaJson();
+			ejj.setId(usuario.getUsuarioEmpresa().get(i).getEmpresa().getId());
+			ej.add(ejj);
+		}
+		uJson.setEmpresas(ej);
 		return uJson;
 	}
 

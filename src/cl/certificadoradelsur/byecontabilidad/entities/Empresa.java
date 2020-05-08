@@ -38,7 +38,8 @@ public class Empresa implements Serializable {
 	private String giro;
 	private OficinaContable oficinaContable;
 	private Boolean activo;
-	private Timestamp fechaCreacion;	
+	private Timestamp fechaCreacion;
+	private UsuarioEmpresa usuarioEmpresa;
 
 	@Id
 	@GeneratedValue(generator = "seq_empresa", strategy = GenerationType.AUTO)
@@ -104,7 +105,17 @@ public class Empresa implements Serializable {
 	public void setFechaCreacion(Timestamp fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
-	
-	
-	
+
+	@ManyToOne
+	@JoinColumn(name = "id_usuario_empresa", nullable = true)
+	public UsuarioEmpresa getUsuarioEmpresa() {
+		return usuarioEmpresa;
+	}
+
+	public void setUsuarioEmpresa(UsuarioEmpresa usuarioEmpresa) {
+		this.usuarioEmpresa = usuarioEmpresa;
+	}
+
+
+
 }

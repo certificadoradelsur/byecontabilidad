@@ -65,30 +65,39 @@
 					<div class="form-group">
 						<div class="col-1"></div>
 						<label for="colFormLabel" class="col-sm-2 col-form-label">Email</label>
-						<input type="text" id="email" name="email" class="in"
-							placeholder="Ingrese email" />
+						<input type="email" id="email" name="email" class="in"
+							placeholder="Ingrese email" required="required" />
 					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
-							Perfil</label>
-						<div class="col-3">
-							<select class="browser-default custom-select" id="perfil">
-								<option value="USER">Usuario</option>
-								<option value="ADMIN">Administrador</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<label for="colFormLabel" class="col-sm-2 col-form-label">&nbsp;
-							Estado</label>
+				    <div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Estado</label>
 						<div class="col-3">
 							<select class="browser-default custom-select" id="estado">
-								<option value="true">Activo</option>
+								<option selected value="true">Activo</option>
 								<option value="false">Inactivo</option>
 							</select>
 						</div>
 					</div>
-					<br><br>
+					<div class="row">
+						<label for="colFormLabel" class="col-sm-2 col-form-label">
+							&nbsp;&nbsp; Perfil</label>
+						<div class="col-3">
+							<select class="browser-default custom-select" id="perfil">
+								<option selected value="ADMIN">Administrador</option>
+								<option value="USER">Usuario</option>
+							</select>
+						</div>
+					</div>
+					<div class="row collapse" id="collapse">
+					  <div class="col-sm-2">&nbsp;&nbsp; Empresas</div>
+					<div class="col-sm-10" id="empresas">
+						<div class="form-check">
+
+						</div>
+					</div>
+					</div>
+					<br>
+					<br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"
@@ -109,7 +118,7 @@
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
-
+	cargaEmpresas();
 	var submitjson = {id:"<%=request.getParameter("id")%>" ,};
 	
 						$.post('/byeContabilidad/rest-services/private/usuario/getById',
@@ -118,15 +127,29 @@ $(document).ready(function () {
 											document.getElementById("email").value = data.email;
 											document.getElementById("perfil").value = data.perfil;
 											document.getElementById("estado").value = data.activo;
+											
+											if (document.getElementById("perfil").value=="USER") {
+										    $('#collapse').collapse('show');
+											}
+											
+											for (var i = 0; i < data.empresas.length; i++) {
+												document.getElementById(data.empresas[i].id).checked = true;
+												
+											}
+
+											$("#estado").select2();
+											$("#perfil").select2();
 										}).fail(function(jqxhr, settings, ex) {
 											alert('No se pudo modificar el usuario '
 													+ ex);});
 						
-						$("#estado").select2();
-						$("#perfil").select2();
-						
-						
-					});
+
+	});
+
+   var list = [];
+   var indice = 0;
+   var listCheck = [];
+   var ind = 0;
 
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
@@ -137,12 +160,25 @@ $(document).ready(function () {
 			alert("Los campos deben estar llenos");
 			return;
 		}
+		
+		for(var i = 0, len = list.length; i < len; i++){
+			if (document.getElementById(list[i]).checked){
+				listCheck[ind]=list[i];
+				ind++
+			}
+		}
+		
 		var submitJson = {
 			id : document.getElementById("id").value,
 			email : document.getElementById("email").value,
 			activo : document.getElementById("estado").value,
 			perfil : document.getElementById("perfil").value,
-			idUsuario : document.getElementById("idUsuario").value
+			idUsuario : document.getElementById("idUsuario").value,
+			empresas : listCheck.map(function(value) {
+				return {
+					id : value
+				}
+			}),
 		}
 		$.post('/byeContabilidad/rest-services/private/usuario/update',
 				JSON.stringify(submitJson)).done(function(data) {
@@ -157,6 +193,35 @@ $(document).ready(function () {
 		});
 	}
 
+	$('#perfil').on('change',function() {
+		if (document.getElementById("perfil").value=="USER") {
+			cargaEmpresas();
+			$('#collapse').collapse('show');
+		} else if (document.getElementById("perfil").value=="ADMIN"){
+			$('#collapse').collapse('hide');
+			list = [];
+			indice = 0;
+	  }
+    });
+	
+	function cargaEmpresas() {
+		var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value
+		}
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str = "";
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<div class='form-check'><input class='form-check-input' type='checkbox' id='"+res[i].id+"'>"
+								+ res[i].razonSocial+"</div>";
+								
+								list[indice]=res[i].id;
+								indice++
+							}
+							document.getElementById("empresas").innerHTML = str;
+						}, "json");
+	}
+	
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);

@@ -121,6 +121,4 @@ public class ComprobanteContable implements Serializable {
 	public void setFechaCreacion(Timestamp fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
-
-
 }
