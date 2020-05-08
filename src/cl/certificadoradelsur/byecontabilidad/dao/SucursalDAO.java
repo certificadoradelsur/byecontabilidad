@@ -119,8 +119,9 @@ public class SucursalDAO {
 	 * 
 	 * @return max(id)
 	 */
-	public Long maxId() {
+	public Long maxId(Long idEmpresa) {
 		Query query = em.createNamedQuery("Sucursal.maxId");
+		query.setParameter("idEmpresa", idEmpresa);
 		return (Long) query.getSingleResult();
 	}
 }

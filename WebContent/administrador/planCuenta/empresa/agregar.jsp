@@ -187,11 +187,8 @@
 			direccion : document.getElementById("direccion").value
 		}
 
-		$
-				.post('/byeContabilidad/rest-services/private/empresa/add',
-						JSON.stringify(submitJson))
-				.done(
-						function(data) {
+		$.post('/byeContabilidad/rest-services/private/empresa/add',
+						JSON.stringify(submitJson)).done(function(data) {
 							if (data == 'OK') {
 								//alert('Se guardo la empresa exitosamente');
 								clear();
@@ -199,7 +196,7 @@
 									ver();
 								} else {
 									location.href = "index.jsp";
-								}							
+								}
 							} else {
 								alert(data);
 							}
@@ -207,44 +204,46 @@
 						}).fail(function(jqxhr, settings, ex) {
 					alert('No se pudo guardar la empresa ' + ex);
 				});
-
 	}
-	
+
 	function ver() {
 
 		var submitJson = {
-				idUsuario : document.getElementById("idUsuario").value
+			idUsuario : document.getElementById("idUsuario").value
+		}
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista', JSON
+				.stringify(submitJson), function(res, code) {
+			var str;
+			for (var i = 0, len = res.length; i < len; i++) {
+				str += "<option value="+res[i].id+">" + res[i].razonSocial
+						+ "</option>";
 			}
-			$.post('/byeContabilidad/rest-services/private/empresa/getLista',
-							JSON.stringify(submitJson),
-							function(res, code) {
-								var str;
-								for (var i = 0, len = res.length; i < len; i++) {
-									str += "<option value="+res[i].id+">"
-											+ res[i].razonSocial
-											+ "</option>";
-								}
-								document.getElementById("empresa").innerHTML = str;
-							}, "json");
-		
+			document.getElementById("empresa").innerHTML = str;
+		}, "json");
+
 		document.getElementById('modal').click();
 	}
-	
-	function copiar(){
+
+
+	function copiar() {
 		var submitJson = {
-				idEmpresa : document.getElementById("empresa").value,
-				idUsuario : document.getElementById("idUsuario").value
+			idEmpresa : document.getElementById("empresa").value,
+			idUsuario : document.getElementById("idUsuario").value
 		}
-		
+
 		$.post('/byeContabilidad/rest-services/private/cuentaContable/copiar',
 				JSON.stringify(submitJson)).done(function(data) {
-					location.href = "index.jsp";
-			}).fail(function() {
-				alert('Error al copiar el plan de cuentas');
-			});
+			if (data == 'OK') {
+				location.href = "index.jsp";
+			} else {
+				alert(data);
+			}
+		}).fail(function(jqxhr, settings, ex) {
+			alert('Error al copiar el plan de cuentas '+ ex);
+		});
 	}
-	
-	function clear(){
+
+	function clear() {
 		document.getElementById("rut").value = "";
 		document.getElementById("razonSocial").value = "";
 		document.getElementById("giro").value = "";

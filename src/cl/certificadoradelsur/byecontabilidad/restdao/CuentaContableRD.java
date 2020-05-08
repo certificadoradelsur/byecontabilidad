@@ -350,11 +350,8 @@ public class CuentaContableRD {
 	 * @param idEmpresa
 	 * @return
 	 */
-	public List<CuentaContableJson> getByIdEmpresaList(CuentaContableJson ccj) {
-
-		List<CuentaContableJson> lcj = new ArrayList<>();
+	public String getByIdEmpresaList(CuentaContableJson ccj) {
 		try {
-
 			List<CuentaContable> c = cuentadao.getByIdEmpresa(ccj.getIdEmpresa(),
 					udao.getById(ccj.getIdUsuario()).getOficinaContable().getId());
 			for (int i = 0; i < c.size(); i++) {
@@ -369,17 +366,18 @@ public class CuentaContableRD {
 				cuentaContable.setGrupoCuenta(grupodao.getById(c.get(i).getGrupoCuenta().getId()));
 				cuentaContable.setEmpresa(edao.getById(edao.maxId()));
 				cuentaContable.setEliminado(false);
-				cuentaContable.setSucursal(sudao.getById(sudao.maxId()));
+				cuentaContable.setSucursal(sudao.getById(sudao.maxId(edao.maxId())));
+				cuentaContable.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				if (c.get(i).isConciliacion().equals(true)) {
 					cuentaContable.setBanco(bdao.getById(c.get(i).getBanco().getId()));
 					cuentaContable.setCuenta(cdao.getById(c.get(i).getCuenta().getId()));
 				}
 				cuentadao.guardar(cuentaContable);
 			}
-			return lcj;
+			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
 			log.error("No se pudo obtener la lista de cuentas contables ", e);
-			return lcj;
+			return e.getMessage();
 		}
 
 	}

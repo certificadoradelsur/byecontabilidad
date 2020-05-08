@@ -207,6 +207,25 @@
 	             $('#collapse2').collapse('show');
 	             $('#collapse3').collapse('show');
 	             document.getElementById("analisis").disabled=true;
+	             
+	            var submitJson = { 
+
+	 				    idUsuario : document.getElementById("idUsuario").value,
+	 					idBanco : document.getElementById("banco").value,
+	 					idEmpresa : document.getElementById("empresa").value
+	 			}
+
+	 			$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
+	 							JSON.stringify(submitJson),
+	 							function(res, code) {
+	 				               var str = "<option>Seleccione cuenta</option>";
+	 								for (var i = 0, len = res.length; i < len; i++) {
+	 								str += "<option value="+res[i].id+">"
+	 											+ res[i].numCuenta
+	 											+ "</option>";
+	 								}
+	 								document.getElementById("cuenta").innerHTML = str;
+	 							}, "json");
 	   	}else{
 	             $('#collapse2').collapse('hide');
 	         	 $('#collapse3').collapse('hide');
@@ -253,10 +272,7 @@
 								document.getElementById("empresa").innerHTML = str;
 								cargaSucursal(document.getElementById("empresa").value);
 							}, "json");	 	
-			
-			
-	 
-
+		 
  })
 					
 			$('#banco').on('change',

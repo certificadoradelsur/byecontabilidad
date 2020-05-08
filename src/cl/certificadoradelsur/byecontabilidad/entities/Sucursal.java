@@ -30,7 +30,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Sucursal.countAll", query = "SELECT count(s.codigo) FROM Sucursal s where s.empresa.oficinaContable.id =:idOficinaContable and s.empresa.id =:idEmpresa"),
 		@NamedQuery(name = "Sucursal.getAllLista", query = "SELECT s FROM Sucursal s where s.empresa.oficinaContable.id =:idOficinaContable"),
 		@NamedQuery(name = "Sucursal.getByIdEmpresa", query = "SELECT s FROM Sucursal s  where s.empresa.oficinaContable.id =:idOficinaContable  and  s.empresa.id=:idEmpresa "),
-		@NamedQuery(name = "Sucursal.maxId", query = "SELECT MAX(s.codigo) FROM Sucursal s") })
+		@NamedQuery(name = "Sucursal.maxId", query = "SELECT MAX(s.codigo) FROM Sucursal s where s.empresa.id =:idEmpresa") })
 
 public class Sucursal implements Serializable {
 

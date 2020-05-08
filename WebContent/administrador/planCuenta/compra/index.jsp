@@ -56,38 +56,42 @@
 			<input type="hidden" name="id" id="id" />
 		</form>
 
+<div>
+			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
+		</div>
+		<br>
 		<div class="form-group">
 			<div class="form-row">
-				<div class="form-group col-md-2">
-					<div class="form-row">
-						<label for="desde">&nbsp;&nbsp;Desde</label>
-					</div>
-					<input type="date" id="filtro1" name="filtro1"
-						placeholder="Filtrar por fecha" class="form-control" />
-				</div>
-				<div class="form-group col-md-2">
-					<div class="form-row">
-						<label for="hasta">&nbsp; &nbsp;Hasta</label>
-					</div>
-					<input type="date" id="filtro2" name="filtro2" class="form-control" />
-				</div>
 				<div class="form-group col-md-2">
 					<label for="empresa">&nbsp;Empresa</label> <select
 						class="browser-default custom-select" id="empresa"
 						required="required">
 					</select>
 				</div>
-
 				<div class="form-group col-md-2">
 					<div class="form-row">
+						<label for="desde">&nbsp;&nbsp;Desde</label>
+					</div>
+					<input type="date" id="desde" name="desde" class="form-control"
+						class="in" />
+				</div>
+				<div class="form-group col-md-2">
+					<div class="form-row">
+						<label for="hasta">&nbsp; &nbsp;Hasta</label>
+					</div>
+					<input type="date" id="hasta" name="hasta" class="form-control"
+						class="in" />
+				</div>
+				<div class="form-group col-md-3">
+					<div class="form-row clo md 3">
 						<label>&nbsp;</label>
 					</div>
-					<button type="button" class="btn btn-primary" id="buscar">Filtrar</button>
+					<button type="button" class="btn btn-primary " id="buscar">Filtrar</button>
+				</div>
+				<div class="table-responsive">
+					<table id="grid"></table>
 				</div>
 			</div>
-		</div>
-		<div class="margen margin-top-10">
-			<table id="grid"></table>
 		</div>
 	</div>
 	<input type="hidden" name="idUsuario" id="idUsuario"
@@ -122,18 +126,23 @@
 						fecha();
 					});
 
-	function fecha(){
+	function fecha() {
 		var now = new Date();
-	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	    var today = now.getFullYear()+"-"+(month)+"-"+("01") ;
-	    $("#filtro1").val(today);
-	    
-		var now = new Date();  
-	    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-	    var dia =new Date(now.getFullYear() || new Date().getFullYear(), month, 0).getDate();
-	    var today2 = now.getFullYear()+"-"+(month)+"-"+(dia) ;
-	    $("#filtro2").val(today2);
-	    cargaTabla();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear() + "-" + (month) + "-" + ("01");
+		$("#desde").val(today);
+
+		var now = new Date();
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var dia = new Date(now.getFullYear() || new Date().getFullYear(),
+				month, 0).getDate();
+		var today2 = now.getFullYear() + "-" + (month) + "-" + (dia);
+		$("#hasta").val(today2);
+		cargaTabla();
+	}
+	
+	function agregar() {
+		location.href = "agregar.jsp";
 	}
 	
 	function cargaTabla(){
@@ -141,7 +150,9 @@
 		.grid(
 				{
 					primaryKey : 'ID',
-					dataSource : '/byeContabilidad/rest-services/private/honorario/getAll',
+					dataSource : "/byeContabilidad/rest-services/private/honorario/getAll?idUsuario="
+						+ document.getElementById('idUsuario').value
+						+ "",
 					autoLoad : false,
 					columns : [
 							{
@@ -212,45 +223,33 @@
 
 	}
 	
-	function busca(){
+	function busca() {
 		if (document.getElementById("empresa").value != "") {
 			grid.reload({
-				idEmpresa : $('#empresa').val(),
-				fechaInicial : $('#filtro1').val(),
-				fechaFinal : $('#filtro2').val()
+				fechaDesde : $('#desde').val(),
+				fechaHasta : $('#hasta').val(),
+				idEmpresa : $('#empresa').val()
 			});
 		}
 	}
 	
-	$('#buscar')
-			.on(
-					'click',
-					function() {
-						if (document.getElementById('filtro1').value == ''
-								|| document.getElementById('filtro2').value == '') {
-							alert('Debe ingresar fecha de inicia y hasta');
-							return;
-						}
-						var fechaInicial = new Date(document
-								.getElementById('filtro1').value);
-						var fechaFinal = new Date(document
-								.getElementById('filtro2').value);
-						if (fechaInicial > fechaFinal) {
-							alert('Fecha inicial no debe ser mayor que fecha final');
-							return;
-						}
-
-
-						if (document.getElementById("empresa").value != "") {
-							grid.reload({
-								idEmpresa : $('#empresa').val(),
-								fechaInicial : $('#filtro1').val(),
-								fechaFinal : $('#filtro2').val()
-							});
-						}
-						//clear();
-					});
-
+	$('#buscar').on('click', function() {
+		var fechaDesde = new Date(document.getElementById('desde').value);
+		var fechaHasta = new Date(document.getElementById('hasta').value);
+		if (fechaDesde > fechaHasta) {
+			alert('Fecha Inicial no debe ser mayor que fecha final');
+			return;
+		}
+		if (document.getElementById("empresa").value != "") {
+			grid.reload({
+				fechaDesde : $('#desde').val(),
+				fechaHasta : $('#hasta').val(),
+				idEmpresa : $('#empresa').val()
+			});
+		}
+		//clear();
+	});
+	
 	function clear() {
 		document.getElementById("filtro1").value = "";
 		document.getElementById("filtro2").value = "";

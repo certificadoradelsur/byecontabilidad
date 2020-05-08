@@ -319,7 +319,8 @@
 		 
 			var submitJson = {
 					idBanco : document.getElementById("banco").value,
-					idUsuario : document.getElementById("idUsuario").value
+					idUsuario : document.getElementById("idUsuario").value,
+					idEmpresa : document.getElementById("empresa").value
 				}
 
 				$.post('/byeContabilidad/rest-services/private/cuenta/getByIdBanco',
@@ -613,7 +614,7 @@
 
 		if (document.getElementById("analisis").checked) {
 			var submitJson = {
-					id :<%=request.getParameter("id")%> ,
+				id :<%=request.getParameter("id")%> ,
 				codigo : document.getElementById("codigo").value,
 				idClaseCuenta : document.getElementById("claseCuenta").value,
 				idGrupoCuenta : document.getElementById("grupoCuenta").value,

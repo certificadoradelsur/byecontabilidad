@@ -67,20 +67,23 @@
 						&nbsp; &nbsp;Empresa</label>
 					<div class="col-3">
 						<select class="browser-default custom-select" id="empresa">
+							<option value="1"></option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<label for="colFormLabel" class="col-sm-2 col-form-label">
+						&nbsp; &nbsp;Cliente</label>
+					<div class="col-3">
+						<select class="browser-default custom-select" id="cliente">
 						</select>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">Rut</label>
-					<input type="text" id="rut" name="rut" class="in"
-						placeholder="Ingrese rut" required="required" />
-				</div>
-				<div class="form-group">
-					<div class="col-1"></div>
 					<label for="colFormLabel" class="col-sm-2 col-form-label">Nombre</label>
 					<input type="text" id="nombre" name="nombre" class="in"
-						placeholder="Ingrese nombre" required="required" />
+						placeholder="Ingrese nombre" required="required" readonly />
 				</div>
 				<div class="form-group">
 					<div class="col-1"></div>
@@ -109,14 +112,12 @@
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 					</label>
 					<div class="col-3">
-					     <label class="col-form-label">Porcentaje de retención
-					</label>
-						<input type="text" id="retencionValor" name="retencionValor" readonly />
+						<label class="col-form-label">Porcentaje de retención </label> <input
+							type="text" id="retencionValor" name="retencionValor" readonly />
 					</div>
-				   <div class="col-3">
-				   <label  class="col-form-label">Monto de retención
-					</label> 
-						<input type="number" id="retencion" name="retencion" readonly />
+					<div class="col-3">
+						<label class="col-form-label">Monto de retención </label> <input
+							type="number" id="retencion" name="retencion" readonly />
 					</div>
 				</div>
 				<br>
@@ -140,7 +141,6 @@
 		</form>
 	</div>
 
-	<input type="hidden" name="retencion" id="retencion" type=number />
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
@@ -148,7 +148,12 @@
 	$(document)
 			.ready(
 					function() {
-						$("#empresa").select2({width:'200'});
+						$("#empresa").select2({
+							width : '200'
+						});
+						$("#cliente").select2({
+							width : '200'
+						});
 						var submitjson = {id: "<%=request.getParameter("id")%>",};
 
 						$.post('/byeContabilidad/rest-services/private/honorario/getById',
@@ -156,17 +161,21 @@
 										function(data) {
 											document.getElementById("retencion").value = data.retencion;
 											document.getElementById("numBoleta").value = data.numBoleta;
-											document.getElementById("rut").value = data.rut;
 											document.getElementById("nombre").value = data.nombre;
 											document.getElementById("retencionEstado").checked = data.retencionEstado;
 											document.getElementById("fecha").value = data.fecha;
 											document.getElementById("montoBruto").value = data.montoBruto;
 											document.getElementById("montoLiquido").value = data.montoLiquido;
 
-											cargaEmpresa(data.idEmpresa);
+											cargaEmpresa(data.idEmpresa,data.idCliente);
 											
 											if(document.getElementById("retencionEstado").checked){
 												$("#montoBruto").prop("disabled", true);
+											}
+											
+											if(document.getElementById("retencionEstado").checked){
+												$("#retencionValor").val("10.750 %");
+												$('#collapse').collapse('show');
 											}
 										})
 								.fail(
@@ -179,61 +188,37 @@
 							var value = $(this).val();
 							$("#montoLiquido").val(value);
 						});
-						$('#retencionEstado')
-								.on(
-										'change',
-										function() {
-											if (document
-													.getElementById("retencionEstado").checked) {
-												if (document
-														.getElementById("montoBruto").value == "") {
-													alert("Debe ingresar monto bruto");
-													document
-															.getElementById("retencionEstado").checked = 0;
-													return;
-												}
-												$('#collapse').collapse('show');
-												$("#retencionValor").val('10.750');
-												$("#montoBruto").prop("disabled", true);
-
-												var bruto = document.getElementById("montoBruto").value;
-												var retencion = bruto * 10.750 / 100;
-												var liquido = Math.round(bruto - (retencion));
-												$("#montoLiquido").val(liquido);
-												$("#retencion").val(retencion);
-											} else {
-												$('#collapse').collapse('hide');
-												$("#montoLiquido").val(document.getElementById("montoBruto").value);
-												$("#montoBruto").prop("disabled", false);
-												$("#retencion").val(0);
-											}
-										})
+						
 
 					});
 
-	document.getElementById('rut')
-			.addEventListener(
-					'input',
-					function(evt) {
-						let value = this.value.replace(/\./g, '').replace('-',
-								'');
+	$('#retencionEstado').on(
+			'change',
+			function() {
+				if (document.getElementById("retencionEstado").checked) {
+					if (document.getElementById("montoBruto").value == "") {
+						alert("Debe ingresar monto bruto");
+						document.getElementById("retencionEstado").checked = 0;
+						return;
+					}
+					$('#collapse').collapse('show');
+					$("#retencionValor").val("10.750 %");
+					$("#montoBruto").prop("disabled", true);
 
-						if (value.match(/^(\d{2})(\d{3}){2}(\w{1})$/)) {
-							value = value.replace(
-									/^(\d{2})(\d{3})(\d{3})(\w{1})$/,
-									'$1.$2.$3-$4');
-						} else if (value.match(/^(\d)(\d{3}){2}(\w{0,1})$/)) {
-							value = value.replace(
-									/^(\d)(\d{3})(\d{3})(\w{0,1})$/,
-									'$1.$2.$3-$4');
-						} else if (value.match(/^(\d)(\d{3})(\d{0,2})$/)) {
-							value = value.replace(/^(\d)(\d{3})(\d{0,2})$/,
-									'$1.$2.$3');
-						} else if (value.match(/^(\d)(\d{0,2})$/)) {
-							value = value.replace(/^(\d)(\d{0,2})$/, '$1.$2');
-						}
-						this.value = value;
-					});
+					var bruto = document.getElementById("montoBruto").value;
+					var retencion = bruto * 10.750 / 100;
+					var liquido = Math.round(bruto - (retencion));
+					$("#montoLiquido").val(Math.round(liquido));
+					$("#retencion").val(Math.round(retencion));
+				} else {
+					$('#collapse').collapse('hide');
+					$("#montoLiquido").val(
+							document.getElementById("montoBruto").value);
+					$("#montoBruto").prop("disabled", false);
+					$("#retencion").val(0);
+				}
+			});
+	
 
 	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {
@@ -242,6 +227,11 @@
 
 		if ($('#empresa option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
+			return;
+		}
+		
+		if ($('#cliente option:selected').text() == 'Seleccione cliente') {
+			alert("Debe seleccionar un cliente valido");
 			return;
 		}
 
@@ -255,8 +245,8 @@
 		var submitJson = {
 			id :<%=request.getParameter("id")%>,
 			numBoleta : document.getElementById("numBoleta").value,
-			rut : document.getElementById("rut").value,
-			nombre : document.getElementById("nombre").value,
+			idCliente : varIdCliente,
+			nombre : varNombre,
 			retencionEstado : document.getElementById("retencionEstado").checked,
 			fecha : document.getElementById("fecha").value,
 			retencion : retencion,
@@ -281,7 +271,7 @@
 		});
 	}
 
-	function cargaEmpresa(idEmpresa) {
+	function cargaEmpresa(idEmpresa, idCliente) {
 		var submitJson = {
 			idUsuario : document.getElementById("idUsuario").value
 		}
@@ -300,7 +290,38 @@
 			}
 
 			document.getElementById("empresa").innerHTML = str;
+			cargaCliente(idCliente);
 		}, "json");
+	}
+	
+	function cargaCliente(idCliente) {
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value,
+				idEmpresa : document.getElementById("empresa").value
+			}
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/cliente/getLista',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str;
+								for (var i = 0, len = res.length; i < len; i++) {
+									if (idCliente == res[i].id){
+									str += "<option value="+res[i].id+"/"+res[i].nombre+" selected>"
+											+ res[i].rut
+											+ "</option>";
+									} else {
+										str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+										+ res[i].rut
+										+ "</option>";	
+								}
+							}		
+								document.getElementById("cliente").innerHTML = str;
+							        varIdCliente = idCliente; 		
+							        var nombre = document.getElementById("cliente").value.split("/");
+									varNombre = nombre[1]
+							}, "json");
+
 	}
 
 	back.addEventListener("click", function() {
@@ -309,12 +330,48 @@
 
 	function limpia() {
 		document.getElementById("numBoleta").value = "";
-		document.getElementById("rut").value = "";
 		document.getElementById("nombre").value = "";
 		document.getElementById("retencionEstado").value = "";
 		//		document.getElementById("fecha").value = "";
 		document.getElementById("montoBruto").value = "";
 		document.getElementById("montoLiquido").value = "";
 	}
+	
+	$('#empresa')
+	.on(
+			'change',
+			function() {
+
+				var submitJson = {
+					idUsuario : document.getElementById("idUsuario").value,
+					idEmpresa : document.getElementById("empresa").value
+				}
+				$
+				        .post(
+						'/byeContabilidad/rest-services/private/cliente/getLista',
+						JSON.stringify(submitJson),
+						function(res, code) {
+							var str = "<option>Seleccione cliente</option>";
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+										+ res[i].rut
+										+ "</option>";
+							}
+							document.getElementById("cliente").innerHTML = str;
+						}, "json");
+				$("#nombre").val("");
+			});
+	
+	$('#cliente').on(
+			'change',
+			function() {			
+				var idCliente = document.getElementById("cliente").value.split("/");
+		        varIdCliente = idCliente[0];
+		        var nombre = document.getElementById("cliente").value.split("/");
+		        varNombre = nombre[1]
+		        $("#nombre").val(varNombre);
+			});
+	$("#empresa").trigger('change');
+	$("#cliente").trigger('change');
 </script>
 </html>
