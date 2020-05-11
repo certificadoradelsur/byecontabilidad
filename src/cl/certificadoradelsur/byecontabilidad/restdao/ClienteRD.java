@@ -57,18 +57,22 @@ public class ClienteRD {
 					|| Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				c.setRut(cj.getRut());
-				c.setNombre(cj.getNombre());
-				c.setDireccion(cj.getDireccion());
-				c.setCiudad(cj.getCiudad());
-				c.setGiro(cj.getGiro());
-				c.setEmail(cj.getEmail());
-				c.setTelefono(cj.getTelefono());
-				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
-				c.setActivo(true);
-				c.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
-				clidao.guardar(c);
-				return Constantes.MENSAJE_REST_OK;
+				if (Utilidades.validarRut(cj.getRut()).equals(true)) {
+					c.setRut(cj.getRut());
+					c.setNombre(cj.getNombre());
+					c.setDireccion(cj.getDireccion());
+					c.setCiudad(cj.getCiudad());
+					c.setGiro(cj.getGiro());
+					c.setEmail(cj.getEmail());
+					c.setTelefono(cj.getTelefono());
+					c.setEmpresa(edao.getById(cj.getIdEmpresa()));
+					c.setActivo(true);
+					c.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
+					clidao.guardar(c);
+					return Constantes.MENSAJE_REST_OK;
+				} else {
+					return "El rut ingresado no es valido";
+				}
 			}
 		} catch (Exception e) {
 			log.error("No se pudo guardar el cliente ", e);
@@ -153,24 +157,28 @@ public class ClienteRD {
 					|| Utilidades.containsScripting(cj.getCiudad()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				c.setRut(cj.getRut());
-				c.setNombre(cj.getNombre());
-				c.setDireccion(cj.getDireccion());
-				c.setCiudad(cj.getCiudad());
-				c.setGiro(cj.getGiro());
-				c.setEmail(cj.getEmail());
-				c.setTelefono(cj.getTelefono());
-				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
-				c.setActivo(cj.isActivo());
-				clidao.update(c);
-				Bitacora b = new Bitacora();
-				b.setUsuario(udao.getById(cj.getIdUsuario()));
-				b.setFecha(new Timestamp(System.currentTimeMillis()));
-				b.setTabla("Cliente");
-				b.setAccion("Update");
-				b.setDescripcion("Se modifico " + clidao.getById(cj.getId()).getNombre());
-				bidao.guardar(b);
-				return Constantes.MENSAJE_REST_OK;
+				if (Utilidades.validarRut(cj.getRut()).equals(true)) {
+					c.setRut(cj.getRut());
+					c.setNombre(cj.getNombre());
+					c.setDireccion(cj.getDireccion());
+					c.setCiudad(cj.getCiudad());
+					c.setGiro(cj.getGiro());
+					c.setEmail(cj.getEmail());
+					c.setTelefono(cj.getTelefono());
+					c.setEmpresa(edao.getById(cj.getIdEmpresa()));
+					c.setActivo(cj.isActivo());
+					clidao.update(c);
+					Bitacora b = new Bitacora();
+					b.setUsuario(udao.getById(cj.getIdUsuario()));
+					b.setFecha(new Timestamp(System.currentTimeMillis()));
+					b.setTabla("Cliente");
+					b.setAccion("Update");
+					b.setDescripcion("Se modifico " + clidao.getById(cj.getId()).getNombre());
+					bidao.guardar(b);
+					return Constantes.MENSAJE_REST_OK;
+				} else {
+					return "El rut ingresado no es valido";
+				}
 			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar el Cliente");
@@ -221,7 +229,8 @@ public class ClienteRD {
 				b.setFecha(new Timestamp(System.currentTimeMillis()));
 				b.setTabla("Cliente");
 				b.setAccion("Delete");
-				b.setDescripcion("Se cambio estado " + clidao.getById(cj.getId()).getNombre() +" "+ clidao.getById(cj.getId()).isActivo());
+				b.setDescripcion("Se cambio estado " + clidao.getById(cj.getId()).getNombre() + " "
+						+ clidao.getById(cj.getId()).isActivo());
 				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			} else {
@@ -242,7 +251,8 @@ public class ClienteRD {
 
 		List<ClienteJson> lcj = new ArrayList<>();
 		try {
-			List<Cliente> c = clidao.getLista(udao.getById(cj.getIdUsuario()).getOficinaContable().getId(),cj.getIdEmpresa());
+			List<Cliente> c = clidao.getLista(udao.getById(cj.getIdUsuario()).getOficinaContable().getId(),
+					cj.getIdEmpresa());
 			for (int i = 0; i < c.size(); i++) {
 				ClienteJson cjj = new ClienteJson();
 				cjj.setId(c.get(i).getId());

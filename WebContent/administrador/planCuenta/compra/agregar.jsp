@@ -111,11 +111,15 @@
 				</div>
 				<div class="row collapse" id="collapse">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
-					</label>
-						<label>&nbsp;&nbsp;&nbsp; Agregar otros impuestos</label> <input type="button" id="btnAdd"
-							value="+" /> <input type="button" id="btnDel" value="-" />
-
+					</label> <label>&nbsp;&nbsp;&nbsp; Agregar otros impuestos</label> <input
+						type="button" id="btnAdd" value="+" onclick="add()"/> <input
+						type="button" id="btnDel" value="-" onclick="del()"/>
+					<div class="col-sm-10" id="empresas">
+						<div class="form-check"></div>
+					</div>
 				</div>
+
+
 				<br>
 
 				<div class="form-group">
@@ -197,8 +201,6 @@
 											}
 											document.getElementById("empresa").innerHTML = str;
 										}, "json");	
-				     	
-
 					});
 
 	
@@ -225,6 +227,20 @@
 				}
 				this.value = value;
 			});
+	
+	function add() {
+		  var btn = document.createElement("BUTTON");
+		  empresas.innerHTML = "CLICK ME";
+		  document.body.appendChild(btn);
+		}
+	
+	
+	
+	function del() {
+		
+		
+	}
+	
 	
 	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {

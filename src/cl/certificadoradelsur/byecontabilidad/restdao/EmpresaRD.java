@@ -19,6 +19,7 @@ import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Clasificacion;
 import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 import cl.certificadoradelsur.byecontabilidad.entities.Sucursal;
+import cl.certificadoradelsur.byecontabilidad.entities.Usuario;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.EmpresaJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -65,20 +66,24 @@ public class EmpresaRD {
 					|| Utilidades.containsScripting(ej.getDireccion()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				e.setGiro(ej.getGiro());
-				e.setRazonSocial(ej.getRazonSocial());
-				e.setRut(ej.getRut());
-				e.setActivo(true);
-				e.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
-				e.setOficinaContable(udao.getById(ej.getIdUsuario()).getOficinaContable());
-				edao.guardar(e);
-				saveClasificacion(e.getId());
-				Sucursal s = new Sucursal();
-				s.setDireccion(ej.getDireccion());
-				s.setEmpresa(edao.getById(e.getId()));
-				s.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
-				sudao.guardar(s);
-				return Constantes.MENSAJE_REST_OK;
+				if (Utilidades.validarRut(ej.getRut()).equals(true)) {
+					e.setGiro(ej.getGiro());
+					e.setRazonSocial(ej.getRazonSocial());
+					e.setRut(ej.getRut());
+					e.setActivo(true);
+					e.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
+					e.setOficinaContable(udao.getById(ej.getIdUsuario()).getOficinaContable());
+					edao.guardar(e);
+					saveClasificacion(e.getId());
+					Sucursal s = new Sucursal();
+					s.setDireccion(ej.getDireccion());
+					s.setEmpresa(edao.getById(e.getId()));
+					s.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
+					sudao.guardar(s);
+					return Constantes.MENSAJE_REST_OK;
+				} else {
+					return "El rut ingresado no es valido";
+				}
 			}
 		} catch (Exception e) {
 			log.error("No se pudo guardar la empresa ", e);
@@ -621,19 +626,23 @@ public class EmpresaRD {
 					|| Utilidades.containsScripting(ej.getRazonSocial()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
-				e.setGiro(ej.getGiro());
-				e.setRut(ej.getRut());
-				e.setRazonSocial(ej.getRazonSocial());
-				e.setActivo(ej.isActivo());
-				edao.update(e);
-				Bitacora b = new Bitacora();
-				b.setUsuario(udao.getById(ej.getIdUsuario()));
-				b.setFecha(new Timestamp(System.currentTimeMillis()));
-				b.setTabla("Empresa");
-				b.setAccion("Update");
-				b.setDescripcion("Se modifico " + edao.getById(ej.getId()).getRazonSocial());
-				bidao.guardar(b);
-				return Constantes.MENSAJE_REST_OK;
+				if (Utilidades.validarRut(ej.getRut()).equals(true)) {
+					e.setGiro(ej.getGiro());
+					e.setRut(ej.getRut());
+					e.setRazonSocial(ej.getRazonSocial());
+					e.setActivo(ej.isActivo());
+					edao.update(e);
+					Bitacora b = new Bitacora();
+					b.setUsuario(udao.getById(ej.getIdUsuario()));
+					b.setFecha(new Timestamp(System.currentTimeMillis()));
+					b.setTabla("Empresa");
+					b.setAccion("Update");
+					b.setDescripcion("Se modifico " + edao.getById(ej.getId()).getRazonSocial());
+					bidao.guardar(b);
+					return Constantes.MENSAJE_REST_OK;
+				} else {
+					return "El rut ingresado no es valido";
+				}
 			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar la empresa");
@@ -678,7 +687,8 @@ public class EmpresaRD {
 			b.setFecha(new Timestamp(System.currentTimeMillis()));
 			b.setTabla("Empresa");
 			b.setAccion("Delete");
-			b.setDescripcion("Se cambio estado " + edao.getById(ej.getId()).getRazonSocial() +" "+ edao.getById(ej.getId()).getActivo());
+			b.setDescripcion("Se cambio estado " + edao.getById(ej.getId()).getRazonSocial() + " "
+					+ edao.getById(ej.getId()).getActivo());
 			bidao.guardar(b);
 			edao.update(e);
 			return Constantes.MENSAJE_REST_OK;
@@ -701,6 +711,32 @@ public class EmpresaRD {
 				EmpresaJson gj = new EmpresaJson();
 				gj.setId(g.get(i).getId());
 				gj.setRazonSocial(g.get(i).getRazonSocial());
+				lgj.add(gj);
+			}
+			return lgj;
+		} catch (Exception e) {
+			log.error("No se pudo obtener la lista de empresas", e);
+			return lgj;
+		}
+
+	}
+
+	/**
+	 * funcion que trae todas las empresas asociadas al supervisor para llenar
+	 * select
+	 * 
+	 * @param ej
+	 * @return
+	 */
+	public List<EmpresaJson> getSupervisor(EmpresaJson ej) {
+		List<EmpresaJson> lgj = new ArrayList<>();
+		try {
+			Usuario usuario = udao.getById(ej.getIdUsuario());
+			for (int i = 0; i < usuario.getUsuarioEmpresa().size(); i++) {
+
+				EmpresaJson gj = new EmpresaJson();
+				gj.setId(usuario.getUsuarioEmpresa().get(i).getEmpresa().getId());
+				gj.setRazonSocial(usuario.getUsuarioEmpresa().get(i).getEmpresa().getRazonSocial());
 				lgj.add(gj);
 			}
 			return lgj;

@@ -11,6 +11,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.PerfilDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.UsuarioEmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 import cl.certificadoradelsur.byecontabilidad.entities.Usuario;
@@ -38,6 +39,8 @@ public class UsuarioRD {
 	private EmpresaDAO edao;
 	@Inject
 	private BitacoraDAO bidao;
+	@Inject
+	private UsuarioEmpresaDAO uedao;
 
 	/**
 	 * funcion que almacena
@@ -147,6 +150,10 @@ public class UsuarioRD {
 	public String update(UsuarioJson uj) {
 		try {
 			Usuario usuario = udao.getById(uj.getId());
+			List <UsuarioEmpresa> usem = uedao.getByIdUsuario(uj.getId());
+			for (int i = 0; i < usem.size(); i++) {
+				uedao.eliminar(uedao.getById(usem.get(i).getId()));
+			}
 			if (Utilidades.containsScripting(uj.getId()).compareTo(true) == 0
 					|| Utilidades.containsScripting(uj.getEmail()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
@@ -155,6 +162,15 @@ public class UsuarioRD {
 				usuario.setEmail(uj.getEmail());
 				usuario.setActivo(uj.isActivo());
 				usuario.setPerfil(pdao.getById(uj.getPerfil()));
+				List <UsuarioEmpresa> usere = new ArrayList<>();
+				for (int i = 0; i < uj.getEmpresas().size(); i++) {
+					UsuarioEmpresa ue = new UsuarioEmpresa();					
+					Empresa e = edao.getById(uj.getEmpresas().get(i).getId());
+					ue.setEmpresa(e);
+					ue.setUsuario(usuario);
+					usere.add(ue);					
+				}
+				usuario.setUsuarioEmpresa(usere);
 				udao.update(usuario);
 				Bitacora b = new Bitacora();
 				b.setUsuario(udao.getById(uj.getIdUsuario()));

@@ -84,7 +84,8 @@
 						<div class="col-3">
 							<select class="browser-default custom-select" id="perfil">
 								<option selected value="ADMIN">Administrador</option>
-								<option value="USER">Usuario</option>
+								<option value="SUPER">Supervisor</option>
+								<option value="ADMINISTRATIVO">Administrativo</option>
 							</select>
 						</div>
 					</div>
@@ -118,39 +119,57 @@
 </body>
 <script type="text/javascript">
 $(document).ready(function () {
-	cargaEmpresas();
-	var submitjson = {id:"<%=request.getParameter("id")%>" ,};
+	var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value
+		}
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista',JSON.stringify(submitJson),
+						function(res, code) {
+							var str = "";
+							for (var i = 0, len = res.length; i < len; i++) {
+								str += "<div class='form-check'><input class='form-check-input' type='checkbox' id='"+res[i].id+"'>"
+								+ res[i].razonSocial+"</div>";
+								
+								list[indice]=res[i].id;
+								indice++
+							}
+							document.getElementById("empresas").innerHTML = str;
+							cargaDatos();
+						}, "json");
 	
-						$.post('/byeContabilidad/rest-services/private/usuario/getById',
-										JSON.stringify(submitjson)).done(function(data) {
-											document.getElementById("id").value = data.id;
-											document.getElementById("email").value = data.email;
-											document.getElementById("perfil").value = data.perfil;
-											document.getElementById("estado").value = data.activo;
-											
-											if (document.getElementById("perfil").value=="USER") {
-										    $('#collapse').collapse('show');
-											}
-											
-											for (var i = 0; i < data.empresas.length; i++) {
-												document.getElementById(data.empresas[i].id).checked = true;
-												
-											}
-
-											$("#estado").select2();
-											$("#perfil").select2();
-										}).fail(function(jqxhr, settings, ex) {
-											alert('No se pudo modificar el usuario '
-													+ ex);});
-						
-
+	
+	
 	});
 
-   var list = [];
-   var indice = 0;
-   var listCheck = [];
-   var ind = 0;
+var list = [];
+var indice = 0;
+var listCheck = [];
+var ind = 0;
 
+   function cargaDatos(){
+	   var submitjson = {id:"<%=request.getParameter("id")%>"};
+		
+		$.post('/byeContabilidad/rest-services/private/usuario/getById',
+						JSON.stringify(submitjson)).done(function(data) {
+							document.getElementById("id").value = data.id;
+							document.getElementById("email").value = data.email;
+							document.getElementById("perfil").value = data.perfil;
+							document.getElementById("estado").value = data.activo;
+							
+							if (document.getElementById("perfil").value=="SUPER"|| document.getElementById("perfil").value=="ADMINISTRATIVO") {
+						    $('#collapse').collapse('show');
+							}
+							for (var i = 0; i < data.empresas.length; i++) {
+								document.getElementById(data.empresas[i].id).checked = true;
+								
+							}
+
+							$("#estado").select2();
+							$("#perfil").select2();
+						}).fail(function(jqxhr, settings, ex) {
+							alert('No se pudo modificar el usuario '
+									+ ex);});
+   }
+   
 	function modificar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
@@ -194,10 +213,10 @@ $(document).ready(function () {
 	}
 
 	$('#perfil').on('change',function() {
-		if (document.getElementById("perfil").value=="USER") {
+		if (document.getElementById("perfil").value=="SUPER"|| document.getElementById("perfil").value=="ADMINISTRATIVO") {
 			cargaEmpresas();
 			$('#collapse').collapse('show');
-		} else if (document.getElementById("perfil").value=="ADMIN"){
+		} else {
 			$('#collapse').collapse('hide');
 			list = [];
 			indice = 0;

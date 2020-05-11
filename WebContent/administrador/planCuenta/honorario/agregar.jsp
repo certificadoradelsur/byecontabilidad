@@ -178,26 +178,30 @@
 
 											}
 											document.getElementById("empresa").innerHTML = str;
+											cliente();
 										}, "json");
 
-						var submitJson = {
-							idUsuario : document.getElementById("idUsuario").value,
-							idEmpresa : document.getElementById("empresa").value
-						}
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/cliente/getLista',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str = "<option>Seleccione cliente</option>";
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+"/"+res[i].nombre+">"
-														+ res[i].rut
-														+ "</option>";
-											}
-											document.getElementById("cliente").innerHTML = str;
-										}, "json");
 					});
+	
+	function cliente(){
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value,
+				idEmpresa : document.getElementById("empresa").value
+			}
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/cliente/getLista',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str = "<option>Seleccione cliente</option>";
+								for (var i = 0, len = res.length; i < len; i++) {
+									str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+											+ res[i].rut
+											+ "</option>";
+								}
+								document.getElementById("cliente").innerHTML = str;
+							}, "json");
+	}
 
 	$('#retencionEstado').on(
 			'change',
@@ -298,7 +302,7 @@
 				JSON.stringify(submitJson)).done(function(data) {
 			if (data == 'OK') {
 				alert('Se guardo exitosamente la boleta de honorario');
-				location.href = "agregar.jsp";
+				location.href = "index.jsp";
 				limpia()
 			} else {
 				alert(data);

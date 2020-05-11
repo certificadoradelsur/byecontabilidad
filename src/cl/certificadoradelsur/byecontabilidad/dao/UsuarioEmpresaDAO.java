@@ -1,10 +1,14 @@
 package cl.certificadoradelsur.byecontabilidad.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import cl.certificadoradelsur.byecontabilidad.entities.UsuarioEmpresa;
 
 /**
@@ -46,6 +50,22 @@ public class UsuarioEmpresaDAO {
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public UsuarioEmpresa getById(Long id) {
 		return em.find(UsuarioEmpresa.class, id);
+	}
+	
+    /**
+     * Funcion para buscar UsuarioEmpresa por idUsuario
+     * @param idUsuario
+     * @return
+      */
+	@SuppressWarnings("unchecked")
+	public List <UsuarioEmpresa> getByIdUsuario(String idUsuario) {
+		Query query = em.createNamedQuery("UsuarioEmpresa.getByIdUsuario");
+		try {
+			query.setParameter("idUsuario", idUsuario);
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	/**

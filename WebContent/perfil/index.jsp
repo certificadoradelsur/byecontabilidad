@@ -19,8 +19,11 @@ $(document).ready(function () {
     $.post('/byeContabilidad/rest-services/private/usuario/getById', JSON.stringify(submitJson)).done(function(data) {
 		if(data.perfil == "ADMIN"){			
 			location.href="/byeContabilidad/administrador/index.jsp";			
-		}else if(data.perfil == "USER") {
-			location.href="/byeContabilidad/usuario/index.jsp";
+		}else if(data.perfil == "SUPER") {
+			location.href="/byeContabilidad/supervisor/index.jsp";
+		}
+		else if(data.perfil == "ADMINISTRATIVO") {
+			location.href="/byeContabilidad/administrativo/index.jsp";
 		}
 		
 		})

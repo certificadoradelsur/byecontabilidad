@@ -60,12 +60,21 @@
        	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 
-			<li class="nav-item"><a class="color nav-link"
-				href="../administrador/planCuenta/empresa/index.jsp" style="color: white;"><img
-					src="../images/empresa.ico" alt="Icono" /> Empresa</a></li>
-			<li class="nav-item"><a class="color nav-link"
-				href="../administrador/planCuenta/sucursal/index.jsp" style="color: white;"><img
-					src="../images/sucur.ico" alt="Icono" /> Sucursal</a></li>
+				<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" style="color: white;"
+				id="navbarDropdown" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"> <img
+					src="../images/empresa.ico" alt="Icono" /> Empresa
+			</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="../administrador/planCuenta/empresa/index.jsp"><img
+						src="../images/empresa.ico" alt="Icono" /> Empresa</a>
+					<div class="dropdown-divider"></div>	
+					<a class="dropdown-item" href="../administrador/planCuenta/sucursal/index.jsp"><img
+						src="../images/sucur.ico" alt="Icono" /> Sucursal</a>
+				</div>
+			
+			</li>
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/cuenta/index.jsp" style="color: white;"><img
 					src="../images/banco.ico" alt="Icono" /> Cuenta Banco</a></li>
@@ -81,6 +90,9 @@
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/comprobanteContable/index.jsp" style="color: white;"><img
 					src="../images/reporte.ico" alt="Icono" /> Comprobante Contable</a></li>
+			<li class="nav-item"><a class="color nav-link"
+				href="../administrador/planCuenta/honorario/index.jsp" style="color: white;"><img
+					src="../images/honorario.ico" alt="Icono" /> Honorario</a></li>
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/reporte/index.jsp" style="color: white;"><img
 					src="../images/informe.ico" alt="Icono" /> Reportes</a></li>		

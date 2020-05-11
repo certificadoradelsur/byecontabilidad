@@ -11,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import cl.certificadoradelsur.byecontabilidad.entities.Empresa;
 
-
 /**
  * clase que implementa las funciones dao para la  empresa
  * @author juan
@@ -119,6 +118,7 @@ public class EmpresaDAO {
 		query.setParameter("idOficinaContable", idOficinaContable);
 		return query.getResultList();
 	}
+	
 	
 	/**
 	 * Funcion que trae el id más grande

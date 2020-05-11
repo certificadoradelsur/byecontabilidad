@@ -74,5 +74,14 @@ public class EmpresaSvcBean implements EmpresaSvc {
 		return Response.ok(json).build();
 	}
 	
+	@Override
+	public Response getSupervisor(String datos) {
+		Gson gson = new GsonBuilder().create();
+		EmpresaJson ccj = gson.fromJson(datos, EmpresaJson.class);
+		List<EmpresaJson> lbj = erd.getSupervisor(ccj);
+		String json = gson.toJson(lbj, new TypeToken<List<EmpresaJson>>() {}.getType());
+		return Response.ok(json).build();
+	}
+	
 
 }

@@ -53,7 +53,7 @@
 		</form>
 		<div
 			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-			<h1 class="h2">Lista de cuentas</h1>
+			<h1 class="h2">Lista de cuentas bancarias</h1>
 		</div>
 		<div>
 				<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>

@@ -95,7 +95,8 @@
 						<div class="col-3">
 							<select class="browser-default custom-select" id="perfil">
 								<option selected value="ADMIN">Administrador</option>
-								<option value="USER">Usuario</option>
+								<option value="SUPER">Supervisor</option>
+								<option value="ADMINISTRATIVO">Administrativo</option>
 							</select>
 						</div>
 					</div>
@@ -195,10 +196,10 @@
 	}
 
 	$('#perfil').on('change',function() {
-				if (document.getElementById("perfil").value=="USER") {
+				if (document.getElementById("perfil").value=="SUPER" || document.getElementById("perfil").value=="ADMINISTRATIVO") {
 					cargaEmpresas();
 					$('#collapse').collapse('show');
-				} else if (document.getElementById("perfil").value=="ADMIN"){
+				} else {
 					$('#collapse').collapse('hide');
 					list = [];
 					indice = 0;

@@ -83,5 +83,15 @@ public interface EmpresaSvc {
 	@Path("/getLista")
 	@Produces("application/json")
 	Response getLista(String datos);
+	
+	 /**
+     * funcion que obtiene las empresas
+     * @param datos
+     * @return empresas que seran mostrados en el select
+     */
+	@POST
+	@Path("/getSupervisor")
+	@Produces("application/json")
+	Response getSupervisor(String datos);
 
 }
