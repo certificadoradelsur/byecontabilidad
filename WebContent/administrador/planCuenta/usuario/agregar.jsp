@@ -219,7 +219,7 @@
 								+ res[i].razonSocial+"</div>";
 								
 								list[indice]=res[i].id;
-								indice++
+								indice++;
 							}
 							document.getElementById("empresas").innerHTML = str;
 						}, "json");

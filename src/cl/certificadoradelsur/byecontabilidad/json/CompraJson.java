@@ -1,5 +1,7 @@
 package cl.certificadoradelsur.byecontabilidad.json;
 
+import java.util.List;
+
 /**
  * Clase json de compra
  * 
@@ -19,6 +21,7 @@ public class CompraJson {
 	private Long montoTotal;
 	private Long idEmpresa;
 	private String idUsuario;
+	List<OtroImpuestoJson> otrosImpuestos;
 
 	public String getIdUsuario() {
 		return idUsuario;
@@ -107,5 +110,15 @@ public class CompraJson {
 	public void setIdEmpresa(Long idEmpresa) {
 		this.idEmpresa = idEmpresa;
 	}
+
+	public List<OtroImpuestoJson> getOtrosImpuestos() {
+		return otrosImpuestos;
+	}
+
+	public void setOtrosImpuestos(List<OtroImpuestoJson> otrosImpuestos) {
+		this.otrosImpuestos = otrosImpuestos;
+	}
+	
+	
 
 }

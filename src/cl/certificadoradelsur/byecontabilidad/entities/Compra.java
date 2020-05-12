@@ -2,9 +2,12 @@ package cl.certificadoradelsur.byecontabilidad.entities;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -39,7 +43,7 @@ public class Compra implements Serializable {
 	private Timestamp fecha;
 	private Long montoNeto;
 	private Long iva;
-	private Long otroImpuesto;
+	private List<OtroImpuesto> otrosImpuestos;
 	private Long montoTotal;
 	private Empresa empresa;
 	private Timestamp fechaCreacion;
@@ -109,15 +113,6 @@ public class Compra implements Serializable {
 		this.iva = iva;
 	}
 
-	@Column(name = "otro_impuesto", nullable = false)
-	public Long getOtroImpuesto() {
-		return otroImpuesto;
-	}
-
-	public void setOtroImpuesto(Long otroImpuesto) {
-		this.otroImpuesto = otroImpuesto;
-	}
-
 	@Column(name = "monto_total", nullable = false)
 	public Long getMontoTotal() {
 		return montoTotal;
@@ -145,5 +140,16 @@ public class Compra implements Serializable {
 	public void setFechaCreacion(Timestamp fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
+
+	@OneToMany(mappedBy = "compra", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public List<OtroImpuesto> getOtrosImpuestos() {
+		return otrosImpuestos;
+	}
+
+	public void setOtrosImpuestos(List<OtroImpuesto> otrosImpuestos) {
+		this.otrosImpuestos = otrosImpuestos;
+	}
+	
+	
 
 }

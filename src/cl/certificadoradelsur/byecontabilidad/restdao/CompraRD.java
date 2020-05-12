@@ -13,6 +13,7 @@ import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Compra;
+import cl.certificadoradelsur.byecontabilidad.entities.OtroImpuesto;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CompraJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -55,11 +56,18 @@ public class CompraRD {
 				c.setFecha(Utilidades.convertidorFechaSinHora(cj.getFecha()));
 				c.setFolio(cj.getFolio());
 				c.setIva(cj.getIva());
-				c.setOtroImpuesto(cj.getOtroImpuesto());
 				c.setMontoNeto(cj.getMontoNeto());
 				c.setMontoTotal(cj.getMontoTotal());
 				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				c.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
+				List <OtroImpuesto> otroi = new ArrayList<>();
+				for (int i = 0; i < cj.getOtrosImpuestos().size(); i++) {
+					OtroImpuesto oi = new OtroImpuesto();	
+					oi.setCodigo(cj.getOtrosImpuestos().get(i).getCodigo());
+					oi.setMonto(cj.getOtrosImpuestos().get(i).getMonto());
+					otroi.add(oi);					
+				}
+				c.setOtrosImpuestos(otroi);
 				cdao.guardar(c);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -112,7 +120,6 @@ public class CompraRD {
 				cj.setFolio(lc.get(i).getFolio());
 				cj.setFecha(Utilidades.timestamAStringSinHora(lc.get(i).getFecha()));
 				cj.setIva(lc.get(i).getIva());
-				cj.setOtroImpuesto(lc.get(i).getOtroImpuesto());
 				cj.setMontoTotal(lc.get(i).getMontoTotal());
 				cj.setMontoNeto(lc.get(i).getMontoNeto());
 				lcj.add(cj);
@@ -141,7 +148,6 @@ public class CompraRD {
 				c.setFecha(Utilidades.convertidorFechaSinHora(cj.getFecha()));
 				c.setFolio(cj.getFolio());
 				c.setIva(cj.getIva());
-				c.setOtroImpuesto(cj.getOtroImpuesto());
 				c.setMontoNeto(cj.getMontoNeto());
 				c.setMontoTotal(cj.getMontoTotal());
 				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
@@ -169,7 +175,6 @@ public class CompraRD {
 		cJson.setFolio(c.getFolio());
 		cJson.setFecha(c.getFecha().toString().substring(0, 10));
 		cJson.setIva(c.getIva());
-		cJson.setOtroImpuesto(c.getOtroImpuesto());
 		cJson.setMontoNeto(c.getMontoNeto());
 		cJson.setMontoTotal(c.getMontoTotal());
 		cJson.setIdEmpresa(c.getEmpresa().getId());
