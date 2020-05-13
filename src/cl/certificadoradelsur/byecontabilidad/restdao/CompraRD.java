@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CompraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
@@ -36,7 +37,8 @@ public class CompraRD {
 	private UsuarioDAO udao;
 	@Inject
 	private BitacoraDAO bidao;
-
+	@Inject
+	private ClienteDAO clidao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -47,12 +49,11 @@ public class CompraRD {
 		try {
 			Compra c = new Compra();
 			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getRut()).compareTo(true) == 0
 					||Utilidades.containsScripting(cj.getFolio()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				c.setNombre(cj.getNombre());
-				c.setRut(cj.getRut());
+				c.setCliente(clidao.getById(cj.getIdCliente()));
 				c.setFecha(Utilidades.convertidorFechaSinHora(cj.getFecha()));
 				c.setFolio(cj.getFolio());
 				c.setIva(cj.getIva());
@@ -60,14 +61,19 @@ public class CompraRD {
 				c.setMontoTotal(cj.getMontoTotal());
 				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
 				c.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
-				List <OtroImpuesto> otroi = new ArrayList<>();
-				for (int i = 0; i < cj.getOtrosImpuestos().size(); i++) {
-					OtroImpuesto oi = new OtroImpuesto();	
-					oi.setCodigo(cj.getOtrosImpuestos().get(i).getCodigo());
-					oi.setMonto(cj.getOtrosImpuestos().get(i).getMonto());
-					otroi.add(oi);					
+				c.setOtrosEstado(cj.isOtrosEstado());
+				c.setIvaEstado(cj.isIvaEstado());
+				if(cj.isOtrosEstado().equals(true)) {
+					List <OtroImpuesto> otroi = new ArrayList<>();
+					for (int i = 0; i < cj.getOtrosImpuestos().size(); i++) {
+						OtroImpuesto oi = new OtroImpuesto();
+						oi.setCompra(c);
+						oi.setCodigo(cj.getOtrosImpuestos().get(i).getCodigo());
+						oi.setMonto(cj.getOtrosImpuestos().get(i).getMonto());
+						otroi.add(oi);					
+					}
+					c.setOtrosImpuestos(otroi);	
 				}
-				c.setOtrosImpuestos(otroi);
 				cdao.guardar(c);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -116,7 +122,7 @@ public class CompraRD {
 				CompraJson cj = new CompraJson();
 				cj.setId(lc.get(i).getId());
 				cj.setNombre(lc.get(i).getNombre());
-				cj.setRut(lc.get(i).getRut());
+				cj.setIdCliente(cdao.getById(lc.get(i).getCliente().getId()).getId());
 				cj.setFolio(lc.get(i).getFolio());
 				cj.setFecha(Utilidades.timestamAStringSinHora(lc.get(i).getFecha()));
 				cj.setIva(lc.get(i).getIva());
@@ -143,8 +149,8 @@ public class CompraRD {
 			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
+				c.setCliente(clidao.getById(cj.getIdCliente()));
 				c.setNombre(cj.getNombre());
-				c.setRut(cj.getRut());
 				c.setFecha(Utilidades.convertidorFechaSinHora(cj.getFecha()));
 				c.setFolio(cj.getFolio());
 				c.setIva(cj.getIva());
@@ -171,7 +177,7 @@ public class CompraRD {
 		CompraJson cJson = new CompraJson();
 		cJson.setId(c.getId());
 		cJson.setNombre(c.getNombre());
-		cJson.setRut(c.getRut());
+		cJson.setIdCliente(c.getCliente().getId());
 		cJson.setFolio(c.getFolio());
 		cJson.setFecha(c.getFecha().toString().substring(0, 10));
 		cJson.setIva(c.getIva());
@@ -195,7 +201,7 @@ public class CompraRD {
 			b.setFecha(new Timestamp(System.currentTimeMillis()));
 			b.setTabla("Compra");
 			b.setAccion("Delete");
-			b.setDescripcion("Se elimino " + cdao.getById(cj.getId()).getRut());
+			b.setDescripcion("Se elimino " + cdao.getById(cj.getId()).getNombre());
 			bidao.guardar(b);
 			cdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;

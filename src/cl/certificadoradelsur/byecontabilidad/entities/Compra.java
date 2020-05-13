@@ -37,13 +37,15 @@ public class Compra implements Serializable {
 
 	private static final long serialVersionUID = 1338781439378645452L;
 	private Long id;
-	private String rut;
+	private Cliente cliente;
 	private String nombre;
 	private String folio;
 	private Timestamp fecha;
 	private Long montoNeto;
 	private Long iva;
 	private List<OtroImpuesto> otrosImpuestos;
+	private Boolean ivaEstado;
+	private Boolean otrosEstado;
 	private Long montoTotal;
 	private Empresa empresa;
 	private Timestamp fechaCreacion;
@@ -68,13 +70,14 @@ public class Compra implements Serializable {
 		this.nombre = nombre;
 	}
 
-	@Column(name = "rut", nullable = false)
-	public String getRut() {
-		return rut;
+	@ManyToOne
+	@JoinColumn(name = "id_cliente", nullable = true)
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setRut(String rut) {
-		this.rut = rut;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	
 	@Column(name = "folio", nullable = false)
@@ -149,6 +152,25 @@ public class Compra implements Serializable {
 	public void setOtrosImpuestos(List<OtroImpuesto> otrosImpuestos) {
 		this.otrosImpuestos = otrosImpuestos;
 	}
+
+	@Column(name = "iva_estado", nullable = true)
+	public Boolean isIvaEstado() {
+		return ivaEstado;
+	}
+
+	public void setIvaEstado(Boolean ivaEstado) {
+		this.ivaEstado = ivaEstado;
+	}
+
+	@Column(name = "otro_estado", nullable = true)
+	public Boolean isOtrosEstado() {
+		return otrosEstado;
+	}
+
+	public void setOtrosEstado(Boolean otrosEstado) {
+		this.otrosEstado = otrosEstado;
+	}
+	
 	
 	
 

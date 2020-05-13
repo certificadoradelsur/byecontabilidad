@@ -52,12 +52,6 @@ public class TransaccionSvcBean implements TransaccionSvc {
 	}
 
 	@Override
-	public Response update(String datos) {
-
-		return null;
-	}
-
-	@Override
 	public Response eliminar(String datos) {
 		Gson gson = new GsonBuilder().create();
 		TransaccionJson tj = gson.fromJson(datos, TransaccionJson.class);

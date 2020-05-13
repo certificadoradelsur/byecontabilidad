@@ -152,6 +152,7 @@
 						$("#empresa").select2({
 							width : '200'
 						});
+						borraName();
 						$("#cliente").select2({
 							width : '200'
 						});
@@ -284,6 +285,8 @@
 		}
 
 		var retencion = Math.round(document.getElementById("retencion").value)
+		var montoBruto = Math.round(document.getElementById("montoBruto").value)
+		var montoLiquido = Math.round(document.getElementById("montoLiquido").value)
 		
 		var submitJson = {
 			numBoleta : document.getElementById("numBoleta").value,
@@ -292,8 +295,8 @@
 			retencionEstado : document.getElementById("retencionEstado").checked,
 			fecha : document.getElementById("fecha").value,
 			retencion : retencion,
-			montoBruto : document.getElementById("montoBruto").value,
-			montoLiquido : document.getElementById("montoLiquido").value,
+			montoBruto : montoBruto,
+			montoLiquido : montoLiquido,
 			idUsuario : document.getElementById("idUsuario").value,
 			idEmpresa : document.getElementById("empresa").value
 		}
@@ -317,11 +320,15 @@
 		window.history.back();
 	}, false);
 
+	function borraName(){
+		document.getElementById("nombre").value = "";	
+	}
+	
 	function limpia() {
 		document.getElementById("numBoleta").value = "";
 		document.getElementById("nombre").value = "";
 		document.getElementById("retencionEstado").value = "";
-		//		document.getElementById("fecha").value = "";
+		//document.getElementById("fecha").value = "";
 		document.getElementById("montoBruto").value = "";
 		document.getElementById("montoLiquido").value = "";
 	}

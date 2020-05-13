@@ -354,23 +354,6 @@
 											document.getElementById("empresa").innerHTML = str;
 										}, "json");
 
-// 						var submitJson = {
-// 								idUsuario : document.getElementById("idUsuario").value
-// 							}
-// 						$
-// 								.post(
-// 										'/byeContabilidad/rest-services/private/cliente/getLista',
-// 										JSON.stringify(submitJson),
-// 										function(res, code) {
-// 											var str;
-// 											for (var i = 0, len = res.length; i < len; i++) {
-// 												str += "<option value="+res[i].id+">"
-// 														+ res[i].rut
-// 														+ "</option>";
-// 											}
-// 											document.getElementById("cliente").innerHTML = str;
-
-// 										}, "json");
 						
 
 
@@ -782,9 +765,6 @@
 	
 	function limpiaAdd() {
 		document.getElementById("numDocumento").value = "";
-	//	document.getElementById("glosaSin").value = document.getElementById("glosaConciliacion").value;
-	//	document.getElementById("glosaConciliacion").value = document.getElementById("glosaConciliacion").value;
-	//	document.getElementById("glosaAnalisis").value = document.getElementById("glosaConciliacion").value;
 		document.getElementById("monto").value = "";
 	}
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class CompraJson {
 
 	private Long id;
-	private String rut;
+	private Long idCliente;
 	private String nombre;
 	private String folio;
 	private String fecha;
@@ -21,6 +21,8 @@ public class CompraJson {
 	private Long montoTotal;
 	private Long idEmpresa;
 	private String idUsuario;
+	private Boolean ivaEstado;
+	private Boolean otrosEstado;
 	List<OtroImpuestoJson> otrosImpuestos;
 
 	public String getIdUsuario() {
@@ -39,12 +41,12 @@ public class CompraJson {
 		this.id = id;
 	}
 
-	public String getRut() {
-		return rut;
+	public Long getIdCliente() {
+		return idCliente;
 	}
 
-	public void setRut(String rut) {
-		this.rut = rut;
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 
 	public String getNombre() {
@@ -117,6 +119,22 @@ public class CompraJson {
 
 	public void setOtrosImpuestos(List<OtroImpuestoJson> otrosImpuestos) {
 		this.otrosImpuestos = otrosImpuestos;
+	}
+
+	public Boolean isIvaEstado() {
+		return ivaEstado;
+	}
+
+	public void setIvaEstado(Boolean ivaEstado) {
+		this.ivaEstado = ivaEstado;
+	}
+
+	public Boolean isOtrosEstado() {
+		return otrosEstado;
+	}
+
+	public void setOtrosEstado(Boolean otrosEstado) {
+		this.otrosEstado = otrosEstado;
 	}
 	
 	

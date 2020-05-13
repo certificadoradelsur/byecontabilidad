@@ -22,8 +22,8 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "otroImpuesto")
-@SequenceGenerator(name = "seq_otroImpuesto", sequenceName = "seq_otroImpuesto")
+@Table(name = "otro_impuesto")
+@SequenceGenerator(name = "seq_otro_impuesto", sequenceName = "seq_otro_impuesto")
 @NamedQueries({
 		@NamedQuery(name = "OtroImpuesto.getAll", query = "SELECT o FROM OtroImpuesto o"),
 		@NamedQuery(name = "OtroImpuesto.countAll", query = "SELECT count(o.id) FROM OtroImpuesto o"),
@@ -38,7 +38,7 @@ public class OtroImpuesto implements Serializable {
 	private Compra compra;
 
 	@Id
-	@GeneratedValue(generator = "seq_otroImpuesto", strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "seq_otro_impuesto", strategy = GenerationType.AUTO)
 	public Long getId() {
 		return id;
 	}

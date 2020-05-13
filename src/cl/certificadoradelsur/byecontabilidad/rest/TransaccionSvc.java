@@ -44,17 +44,6 @@ public interface TransaccionSvc {
 	Response list(@QueryParam("page") Integer inicio, @QueryParam("limit") Integer fin, @QueryParam("glosaTransaccion") String glosaTransaccion);
 
 	/**
-	 * Funcion para modificar una transaccion
-	 * @param id
-	 * @return Mensaje de exito o error
-	 */
-	@POST
-	@Path("/update")
-	@Produces("application/json")
-	Response update(String datos);
-
-
-	/**
 	 * Funcion para buscar transaccion por id
 	 * 
 	 * @param id transaccion
