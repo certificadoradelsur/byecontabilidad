@@ -263,18 +263,6 @@
 		document.getElementById("formulario").submit();
 	}
 
-	function limpia() {
-		document.getElementById("banco").value = "";
-		document.getElementById("cuenta").value = "";
-		document.getElementById("numDocumento").value = "";
-		document.getElementById("fecha").value = "";
-		document.getElementById("descripcion").value = "";
-		document.getElementById("tipoMovimiento").value = "";
-		document.getElementById("monto").value = "";
-		document.getElementById("idUsuario").value = "";
-
-	}
-
 	function eliminar(x) {
 		if (confirm('¿Esta seguro desea eliminar la boleta de honorario')) {
 			var submitJson = {

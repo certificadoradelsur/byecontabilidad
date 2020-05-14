@@ -165,7 +165,7 @@ public class HonorarioRD {
 				b.setFecha(new Timestamp(System.currentTimeMillis()));
 				b.setTabla("Honorario");
 				b.setAccion("Update");
-				b.setDescripcion("Se modifico " + hdao.getById(hj.getId()).getNombre());
+				b.setDescripcion("Se modifico " + hj.getNumBoleta());
 				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
 			}
@@ -211,7 +211,7 @@ public class HonorarioRD {
 			b.setFecha(new Timestamp(System.currentTimeMillis()));
 			b.setTabla("Honorario");
 			b.setAccion("Delete");
-			b.setDescripcion("Se elimino " + hdao.getById(hj.getId()).getNombre());
+			b.setDescripcion("Se elimino " + hj.getNumBoleta());
 			bidao.guardar(b);
 			hdao.eliminar(h);
 			return Constantes.MENSAJE_REST_OK;

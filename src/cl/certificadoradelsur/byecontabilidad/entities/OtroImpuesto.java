@@ -25,9 +25,8 @@ import javax.persistence.Table;
 @Table(name = "otro_impuesto")
 @SequenceGenerator(name = "seq_otro_impuesto", sequenceName = "seq_otro_impuesto")
 @NamedQueries({
-		@NamedQuery(name = "OtroImpuesto.getAll", query = "SELECT o FROM OtroImpuesto o"),
-		@NamedQuery(name = "OtroImpuesto.countAll", query = "SELECT count(o.id) FROM OtroImpuesto o"),
-		@NamedQuery(name = "OtroImpuesto.getAllLista", query = "SELECT o FROM OtroImpuesto o ") })
+		@NamedQuery(name = "OtroImpuesto.getByIdCompra", query = "SELECT oi FROM OtroImpuesto oi  where oi.compra.id =:idCompra"),
+		@NamedQuery(name = "OtroImpuesto.getByIdVenta", query = "SELECT oi FROM OtroImpuesto oi  where oi.venta.id =:idVenta")})
 
 public class OtroImpuesto implements Serializable {
 
@@ -36,6 +35,7 @@ public class OtroImpuesto implements Serializable {
 	private Long codigo;
 	private Long monto;
 	private Compra compra;
+	private Venta venta;
 
 	@Id
 	@GeneratedValue(generator = "seq_otro_impuesto", strategy = GenerationType.AUTO)
@@ -53,10 +53,20 @@ public class OtroImpuesto implements Serializable {
 		return compra;
 	}
 
-	public Long getMonto() {
-		return monto;
+	public void setCompra(Compra compra) {
+		this.compra = compra;
 	}
-	
+
+	@ManyToOne
+	@JoinColumn(name = "id_venta", nullable = true)
+	public Venta getVenta() {
+		return venta;
+	}
+
+	public void setVenta(Venta venta) {
+		this.venta = venta;
+	}
+
 	@Column(name = "codigo", nullable = false)
 	public Long getCodigo() {
 		return codigo;
@@ -71,9 +81,8 @@ public class OtroImpuesto implements Serializable {
 		this.monto = monto;
 	}
 
-	public void setCompra(Compra compra) {
-		this.compra = compra;
+	public Long getMonto() {
+		return monto;
 	}
-	
-	
+
 }

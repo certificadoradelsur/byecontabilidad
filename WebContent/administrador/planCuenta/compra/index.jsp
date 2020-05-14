@@ -51,12 +51,11 @@
 		<form name="formulario" id="formulario">
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-				<h1 class="h2">Lista boletas de honorario</h1>
+				<h1 class="h2">Lista compras</h1>
 			</div>
 			<input type="hidden" name="id" id="id" />
 		</form>
-
-<div>
+		<div>
 			<button type="button" class="btn btn-primary " onclick="agregar()">Agregar</button>
 		</div>
 		<br>
@@ -120,7 +119,7 @@
 														+ "</option>";
 											}
 											document.getElementById("empresa").innerHTML = str;
-											
+
 										}, "json");
 
 						fecha();
@@ -140,89 +139,95 @@
 		$("#hasta").val(today2);
 		cargaTabla();
 	}
-	
+
 	function agregar() {
 		location.href = "agregar.jsp";
 	}
-	
-	function cargaTabla(){
-		grid = $('#grid')
-		.grid(
-				{
-					primaryKey : 'ID',
-					dataSource : "/byeContabilidad/rest-services/private/honorario/getAll?idUsuario="
-						+ document.getElementById('idUsuario').value
-						+ "",
-					autoLoad : false,
-					columns : [
-							{
-								field : 'id',
-								title : 'Identificador',
-								width : 100,
-								hidden : true
 
-							},
-							{
-								field : 'numBoleta',
-								title : 'N° Boleta',
-								width : 100
-							},
-							{
-								field : 'rut',
-								title : 'Rut',
-								width : 100
-							},
-							{
-								field : 'nombre',
-								title : 'Nombre',
-								width : 100
-							},
-							{
-								field : 'fecha',
-								title : 'Fecha',
-								width : 100
-							},
-							{
-								field : 'montoBruto',
-								title : 'Monto Bruto',
-								width : 100
-							},
-							{
-								field : 'retencion',
-								title : 'Retención',
-								width : 100
-							},
-							{
-								field : 'montoLiquido',
-								title : 'Monto Liquido',
-								width : 100
-							},
-							{
-								width : 100,
-								title : 'Modificar',
-								tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
-								align : 'center',
-								events : {
-									'click' : modificar
-								}
-							},
-							{
-								width : 100,
-								title : 'Eliminar',
-								tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
-								align : 'center',
-								events : {
-									'click' : eliminar
-								}
-							}, ],
-					pager : {
-						limit : 10
-					}
-				});
+	function cargaTabla() {
+		grid = $('#grid')
+				.grid(
+						{
+							primaryKey : 'ID',
+							dataSource : "/byeContabilidad/rest-services/private/compra/getAll?idUsuario="
+									+ document.getElementById('idUsuario').value
+									+ "",
+							autoLoad : false,
+							columns : [
+									{
+										field : 'id',
+										title : 'Identificador',
+										width : 100,
+										hidden : true
+
+									},
+									{
+										field : 'folio',
+										title : 'Folio',
+										width : 100
+									},
+									{
+										field : 'nombre',
+										title : 'Cliente',
+										width : 100
+									},
+									{
+										field : 'rut',
+										title : 'Rut',
+										width : 140
+									},
+
+									{
+										field : 'fecha',
+										title : 'Fecha',
+										width : 100
+									},
+									{
+										field : 'montoNeto',
+										title : 'Monto Neto',
+										width : 100
+									},
+									{
+										field : 'iva',
+										title : 'IVA',
+										width : 100
+									},
+									{
+										field : 'otroImpuesto',
+										title : 'Otros',
+										width : 100
+									},
+									{
+										field : 'montoTotal',
+										title : 'Monto Total',
+										width : 100
+									},
+									{
+										width : 100,
+										title : 'Modificar',
+										tmpl : '<span class="material-icons gj-cursor-pointer">edit</span>',
+										align : 'center',
+										events : {
+											'click' : modificar
+										}
+									},
+									{
+										width : 100,
+										title : 'Eliminar',
+										tmpl : '<span class="material-icons gj-cursor-pointer">delete</span>',
+										align : 'center',
+										events : {
+											'click' : eliminar
+										}
+									}, ],
+							pager : {
+								limit : 10
+							}
+						});
 		busca();
 
 	}
-	
+
 	function busca() {
 		if (document.getElementById("empresa").value != "") {
 			grid.reload({
@@ -232,7 +237,7 @@
 			});
 		}
 	}
-	
+
 	$('#buscar').on('click', function() {
 		var fechaDesde = new Date(document.getElementById('desde').value);
 		var fechaHasta = new Date(document.getElementById('hasta').value);
@@ -249,12 +254,11 @@
 		}
 		//clear();
 	});
-	
+
 	function clear() {
 		document.getElementById("filtro1").value = "";
 		document.getElementById("filtro2").value = "";
 	}
-	
 
 	function modificar(e) {
 		document.getElementById("id").value = e.data.record.id;
@@ -263,40 +267,25 @@
 		document.getElementById("formulario").submit();
 	}
 
-	function limpia() {
-		document.getElementById("banco").value = "";
-		document.getElementById("cuenta").value = "";
-		document.getElementById("numDocumento").value = "";
-		document.getElementById("fecha").value = "";
-		document.getElementById("descripcion").value = "";
-		document.getElementById("tipoMovimiento").value = "";
-		document.getElementById("monto").value = "";
-		document.getElementById("idUsuario").value = "";
-
-	}
-
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la boleta de honorario')) {
+		if (confirm('¿Esta seguro desea eliminar la compra?')) {
 			var submitJson = {
 				id : x.data.record.id,
 				idUsuario : document.getElementById("idUsuario").value
-				
+
 			}
-			$
-					.post(
-							'/byeContabilidad/rest-services/private/honorario/delete',
-							JSON.stringify(submitJson)).done(function(data) {
-						if (data == 'OK') {
-							alert('Boleta de honorario eliminada correctamente');
-							grid.reload();
-						} else {
-							alert(data);
-						}
-					}).fail(function() {
-						alert('Error al eliminar la boleta de honorario');
-					});
+			$.post('/byeContabilidad/rest-services/private/compra/delete',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('La compra fue eliminada correctamente');
+					grid.reload();
+				} else {
+					alert(data);
+				}
+			}).fail(function() {
+				alert('Error al eliminar la boleta de honorario');
+			});
 		}
 	}
-
 </script>
 </html>

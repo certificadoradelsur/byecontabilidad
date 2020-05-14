@@ -42,32 +42,44 @@
 	type="text/javascript">
 	$('.dropdown-toggle').dropdown()
 </script>
+<style type="text/css">
+.collapsing {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: hidden;
+}
+
+.collapse.show {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: visible;
+}
+</style>
 
 </head>
 <body>
 
-	<%@ include file="../../../complementos/nav.jsp"%>
+<%-- 	<%@ include file="../../../complementos/nav.jsp"%> --%>
 	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<input type="hidden" name="id" id="id" />
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-				<h1 class="h2">Modificar boleta honorario</h1>
+				<h1 class="h2">Modificar compra</h1>
 			</div>
 			<div class="container">
 				<div class="form-group">
 					<div class="col-1"></div>
-					<label for="colFormLabel" class="col-sm-2 col-form-label">N°
-						Boleta</label> <input type="number" id="numBoleta" name="numBoleta"
-						class="in" placeholder="Ingrese número" required="required"
-						min="0" pattern="^[0-9]+" />
+					<label for="colFormLabel" class="col-sm-2 col-form-label">Folio</label>
+					<input type="number" id="folio" name="folio" class="in"
+						placeholder="Ingrese folio" required="required" min="0"
+						pattern="^[0-9]+" />
 				</div>
 				<div class="row">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
 						&nbsp; &nbsp;Empresa</label>
 					<div class="col-3">
 						<select class="browser-default custom-select" id="empresa">
-							<option value="1"></option>
 						</select>
 					</div>
 				</div>
@@ -94,39 +106,53 @@
 				<div class="form-group">
 					<div class="col-1"></div>
 					<label for="colFormLabel" class="col-sm-2 col-form-label">Monto
-						bruto</label> <input type="number" id="montoBruto" name="montoBruto"
-						placeholder="Ingrese monto bruto" required="required" min="0"
-						pattern="^[0-9]+" />
+						neto</label> <input type="number" id="montoNeto" name="montoNeto"
+						placeholder="Ingrese monto bruto" class="in" required="required"
+						min="0" pattern="^[0-9]+" />
 				</div>
 				<div class="row">
 					<div class="col-sm-2">&nbsp;&nbsp; Seleccione</div>
 					<div class="col-sm-10">
 						<div class="form-check">
-							<input class="form-check-input" type="checkbox"
-								id="retencionEstado"> <label class="form-check-label"
-								for="gridCheck1"> Retención </label>
+							<input class="form-check-input" type="checkbox" id="ivaEstado">
+							<label class="form-check-label" for="gridCheck1"> Iva </label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="otrosEstado">
+							<label class="form-check-label" for="gridCheck2"> Otros
+								impuestos </label>
 						</div>
 					</div>
 				</div>
 				<div class="row collapse" id="collapse">
 					<label for="colFormLabel" class="col-sm-2 col-form-label">
-					</label>
-					<div class="col-3">
-						<label class="col-form-label">Porcentaje de retención </label> <input
-							type="text" id="retencionValor" name="retencionValor" readonly />
+					</label> <label>&nbsp;&nbsp;&nbsp; Agregar otros impuestos</label> &nbsp;<input
+						type="button" id="btnAdd" value="+" onclick="add()" /> &nbsp;<input
+						type="button" id="btnDel" value="-" onclick="delet()" />
+					<div class="col-12" id="otros">
+						<div class='row'>
+							<div class='col-sm-2'></div>
+							<div class='col-sm-1 col-form' id='codigo'>
+								<!-- 								<label class='col-form-label'>Código </label> <input type='number' style='width: 60px;' id='codigo1' class='in' required='required' /> -->
+							</div>
+							<div class='col-sm-2 col-form' id='monto'>
+								<!-- 								<label class='col-form-label'>Monto</label> <input type='number' onkeyup='sumar()' style='width: 140px;' id='monto1' class='montoS' required='required' min='0' pattern='^[0-9]+'/> -->
+							</div>
+						</div>
 					</div>
-					<div class="col-3">
-						<label class="col-form-label">Monto de retención </label> <input
-							type="number" id="retencion" name="retencion" readonly />
-					</div>
+
 				</div>
+
 				<br>
+
 				<div class="form-group">
 					<div class="col-1"></div>
 					<label for="colFormLabel" class="col-sm-2 col-form-label">Monto
-						Liquido</label> <input type="number" id="montoLiquido" name="montoLiquido"
+						total</label> <input type="number" id="montoTotal" name="montoTotal"
 						class="in" required="required" min="0" pattern="^[0-9]+" readonly />
 				</div>
+
+
 				<div class="row">
 					<div class="col-xs-6 col-md-2">
 						<button class=" btt btn btn-primary btn-lg btn-block"
@@ -140,7 +166,8 @@
 			</div>
 		</form>
 	</div>
-
+	<input type="hidden" name="spTotal" id="spTotal" />
+	<input type="hidden" name="iva" id="iva" />
 	<input type="hidden" name="idUsuario" id="idUsuario"
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
@@ -154,123 +181,464 @@
 						$("#cliente").select2({
 							width : '200'
 						});
-						var submitjson = {id: "<%=request.getParameter("id")%>",};
+						$("#montoNeto").keyup(function() {
+							var value = $(this).val();
+							$("#montoTotal").val(value);
+						});
 
-						$.post('/byeContabilidad/rest-services/private/honorario/getById',
+						var submitjson = {id: "<%=request.getParameter("id")%>"};
+
+						$.post('/byeContabilidad/rest-services/private/compra/getById',
 										JSON.stringify(submitjson)).done(
 										function(data) {
-											document.getElementById("retencion").value = data.retencion;
-											document.getElementById("numBoleta").value = data.numBoleta;
+											document.getElementById("folio").value = data.folio;
 											document.getElementById("nombre").value = data.nombre;
-											document.getElementById("retencionEstado").checked = data.retencionEstado;
 											document.getElementById("fecha").value = data.fecha;
-											document.getElementById("montoBruto").value = data.montoBruto;
-											document.getElementById("montoLiquido").value = data.montoLiquido;
+											document.getElementById("montoNeto").value = data.montoNeto;
+											document.getElementById("montoTotal").value = data.montoTotal;
+											document.getElementById("iva").value = data.iva;
+											document.getElementById("ivaEstado").checked = data.ivaEstado;
+											document.getElementById("otrosEstado").checked = data.otrosEstado;
+											document.getElementById("spTotal").value =data.otroImpuesto;
 
+											
 											cargaEmpresa(data.idEmpresa,data.idCliente);
 											
-											if(document.getElementById("retencionEstado").checked){
-												$("#montoBruto").prop("disabled", true);
+											if(document.getElementById("ivaEstado").checked && document.getElementById("otrosEstado").checked){
+												$("#montoNeto").prop("disabled", true);
 											}
-											
-											if(document.getElementById("retencionEstado").checked){
-												$("#retencionValor").val("10.750 %");
+
+											if(document.getElementById("otrosEstado").checked){
+                                                cargaOtros(data.otrosImpuestos);
 												$('#collapse').collapse('show');
 											}
 										})
 								.fail(
 										function(jqxhr, settings, ex) {
-											alert('No se pudo modificar la boleta de honorario '
+											alert('No se pudo modificar la compra '
 													+ ex);
 										});
-
-						$("#montoBruto").keyup(function() {
-							var value = $(this).val();
-							$("#montoLiquido").val(value);
-						});
 						
-
 					});
 
-	$('#retencionEstado').on(
-			'change',
-			function() {
-				if (document.getElementById("retencionEstado").checked) {
-					if (document.getElementById("montoBruto").value == "") {
-						alert("Debe ingresar monto bruto");
-						document.getElementById("retencionEstado").checked = 0;
-						return;
-					}
-					$('#collapse').collapse('show');
-					$("#retencionValor").val("10.750 %");
-					$("#montoBruto").prop("disabled", true);
-
-					var bruto = document.getElementById("montoBruto").value;
-					var retencion = bruto * 10.750 / 100;
-					var liquido = Math.round(bruto - (retencion));
-					$("#montoLiquido").val(Math.round(liquido));
-					$("#retencion").val(Math.round(retencion));
-				} else {
-					$('#collapse').collapse('hide');
-					$("#montoLiquido").val(
-							document.getElementById("montoBruto").value);
-					$("#montoBruto").prop("disabled", false);
-					$("#retencion").val(0);
-				}
-			});
+	var xx = 2;
+	var list = [];
+	var indice = 1;
+	list[0] = [ 2 ];
+	list[0][0] = 'codigo1';
+	list[0][1] = 'monto1';
 	
+	function cargaOtros(otrosImpuestos){
+		xx = 1;
+		c = "<label class='col-form-label'>Código </label>";
+		document.getElementById("codigo").innerHTML = c;
+		m = "<label class='col-form-label'>Monto</label>";
+		document.getElementById("monto").innerHTML = m;
+		
+		for (var i = 0; i < otrosImpuestos.length; i++) {
+			var p = document.getElementById("codigo");
+			var inp = document.createElement("INPUT");
+			inp.type = 'number';
+			inp.id = 'codigo' + xx;
+			inp.style = 'width:60px;';
+			inp.className = 'in';
+			p.appendChild(inp);
+			$("#codigo" + xx).val(otrosImpuestos[i].codigo);
+			var pd = document.getElementById("monto");
+			var ipt = document.createElement("INPUT");
+			ipt.type = 'number';
+			ipt.id = 'monto' + xx;
+			ipt.style = 'width:140px;';
+			ipt.className = 'montoS';
+//  			$(ipt).on('keyup', function() {
+//  				sumar();
+//  			});
+			pd.appendChild(ipt);
+			$('#monto' + xx).val(otrosImpuestos[i].monto);
+			list[indice] = [ 2 ];
+			list[indice][0] = 'codigo' + xx;
+			list[indice][1] = 'monto' + xx;
+
+			$("#codigo" + (xx)).prop("disabled", true);
+			$("#monto" + (xx)).prop("disabled", true);
+			indice++;
+			xx++;
+			console.log(list);
+		}
+	}
+
+	$('#otrosEstado').on(
+					'change',
+					function() {
+						if (document.getElementById("otrosEstado").checked) {
+							if (document.getElementById("montoNeto").value == "") {
+								alert("Debe ingresar monto neto");
+								document.getElementById("otrosEstado").checked = 0;
+								return;
+							}
+							$("#montoNeto").prop("disabled", true);
+							c = "<label class='col-form-label'>Código </label> <input type='number' style='width: 60px;' id='codigo1' class='in' required='required' />";
+							document.getElementById("codigo").innerHTML = c;
+							m = "<label class='col-form-label'>Monto</label> <input type='number' onkeyup='sumar()' style='width: 140px;' id='monto1' class='montoS' required='required' min='0' pattern='^[0-9]+'/>";
+							document.getElementById("monto").innerHTML = m;
+							$('#collapse').collapse('show');
+							xx = 2;
+							list = [];
+							indice = 1;
+							list[0] = [ 2 ];
+							list[0][0] = 'codigo1';
+							list[0][1] = 'monto1';
+
+							if (document.getElementById("otrosEstado").checked
+									&& document.getElementById("ivaEstado").checked) {
+								var i = Math.round(document
+										.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								var s = Math.round(document
+										.getElementById("spTotal").value);
+								var sumatoria = (m) + (i) + (s);
+								$("#montoTotal").val(sumatoria);
+							} else if (document.getElementById("otrosEstado").checked
+									&& !document.getElementById("ivaEstado").checked) {
+								//var i =Math.round(document.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								var s = Math.round(document
+										.getElementById("spTotal").value)
+								var sumatoria = (s) + (m);
+								$("#montoTotal").val(sumatoria);
+							}
+
+						} else if (!document.getElementById("otrosEstado").checked) {
+							if (!document.getElementById("otrosEstado").checked
+									&& !document.getElementById("ivaEstado").checked) {
+								$("#montoNeto").prop("disabled", false);
+							}
+							$('#collapse').collapse('hide');
+							$(codigo).empty()
+							$(monto).empty()
+
+							if (!document.getElementById("otrosEstado").checked
+									&& document.getElementById("ivaEstado").checked) {
+								var i = Math.round(document
+										.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								//var s = Math.round(document.getElementById("spTotal").value);
+								$("#spTotal").val(0);
+								var sumatoria = (m) + (i);
+								$("#montoTotal").val(sumatoria);
+							} else if (!document.getElementById("otrosEstado").checked
+									&& !document.getElementById("ivaEstado").checked) {
+								//var i =Math.round(document.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								// var s =Math.round(document.getElementById("spTotal").value);
+								$("#spTotal").val(0);
+								var sumatoria = (m);
+								$("#montoTotal").val(sumatoria);
+							}
+						}
+					})
+
+	$('#ivaEstado').on(
+					'change',
+					function() {
+						if (document.getElementById("ivaEstado").checked) {
+							if (document.getElementById("montoNeto").value == "") {
+								alert("Debe ingresar monto neto");
+								document.getElementById("ivaEstado").checked = 0;
+								return;
+							}
+							$("#montoNeto").prop("disabled", true);
+							var neto = document.getElementById("montoNeto").value;
+							var iva = (neto * 0.19);
+							var total = Math.round(Number(neto) + Number(iva));
+							$("#iva").val(iva);
+
+							if (document.getElementById("otrosEstado").checked
+									&& document.getElementById("ivaEstado").checked) {
+								var i = Math.round(document
+										.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								var s = Math.round(document
+										.getElementById("spTotal").value);
+								var sumatoria = (i) + (m) + (s);
+																
+								$("#montoTotal").val(sumatoria);
+							} else if (!document.getElementById("otrosEstado").checked
+									&& document.getElementById("ivaEstado").checked) {
+								var i = Math.round(document
+										.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								//var s = Math.round(document.getElementById("spTotal").value);
+								$("#spTotal").val(0);
+								var sumatoria = (i) + (m);
+								$("#montoTotal").val(sumatoria);
+							}
+
+						} else {
+
+							if (!document.getElementById("otrosEstado").checked
+									&& !document.getElementById("ivaEstado").checked) {
+								$("#montoNeto").prop("disabled", false);
+							}
+							$("#montoTotal").val(
+									document.getElementById("montoNeto").value);
+							$("#iva").val(0);
+
+							if (document.getElementById("otrosEstado").checked
+									&& !document.getElementById("ivaEstado").checked) {
+								//var i = Math.round(document.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								var s = Math.round(document
+										.getElementById("spTotal").value);
+								var sumatoria = (m) + (s);
+								$("#montoTotal").val(sumatoria);
+							} else if (!document.getElementById("otrosEstado").checked
+									&& !document.getElementById("ivaEstado").checked) {
+								//var i =Math.round(document.getElementById("iva").value);
+								var m = Math.round(document
+										.getElementById("montoNeto").value);
+								//var s =Math.round(document.getElementById("spTotal").value);
+								$("#spTotal").val(0);
+								var sumatoria = (m);
+								$("#montoTotal").val(sumatoria);
+							}
+						}
+					})
+
+
+
+	
+
+	function add() {
+		if (document.getElementById("codigo" + (xx - 1)).value == ''
+				|| document.getElementById("monto" + (xx - 1)).value == '') {
+			alert('Debe ingresar valores valido');
+			return;
+		}
+		var p = document.getElementById("codigo");
+		var inp = document.createElement("INPUT");
+		inp.type = 'number';
+		inp.id = 'codigo' + xx;
+		inp.style = 'width:60px;';
+		inp.className = 'in';
+		p.appendChild(inp);
+		var pd = document.getElementById("monto");
+		var ipt = document.createElement("INPUT");
+		ipt.type = 'number';
+		ipt.id = 'monto' + xx;
+		ipt.style = 'width:140px;';
+		ipt.className = 'montoS';
+		$(ipt).on('keyup', function() {
+			sumar();
+		});
+		pd.appendChild(ipt);
+		list[indice] = [ 2 ];
+		list[indice][0] = 'codigo' + xx;
+		list[indice][1] = 'monto' + xx;
+
+		$("#codigo" + (xx - 1)).prop("disabled", true);
+		$("#monto" + (xx - 1)).prop("disabled", true);
+		indice++;
+		xx++;
+		console.log(list);
+
+	}
+
+	function delet() {
+		if (xx >= 3) {
+			xx--;
+			var menos = document.getElementById("monto" + xx).value;
+			console.log(menos);
+			var total = document.getElementById("montoTotal").value;
+			console.log(total);
+			console.log(xx);
+
+			indice--;
+			$("#codigo" + xx).remove();
+			$("#monto" + xx).remove();
+			list.splice(indice, xx);
+			$("#codigo" + (xx - 1)).prop("disabled", false);
+			$("#monto" + (xx - 1)).prop("disabled", false);
+			console.log(list);
+			var resultado = (total) - (menos);
+			$("#montoTotal").val(resultado);
+		}else if(xx == 2){
+			document.getElementById("otrosEstado").click();
+		}
+	}
+
+	function sumar() {
+		var total = 0;
+		$(".montoS").each(function() {
+			if (isNaN(parseFloat($(this).val()))) {
+				total += 0;
+			} else {
+				total += parseFloat($(this).val());
+			}
+		});
+		$("#spTotal").val(total);
+
+		calculaTotal();
+	}
+
+	function calculaTotal() {
+
+		if (document.getElementById("otrosEstado").checked
+				&& document.getElementById("ivaEstado").checked) {
+			var i = Math.round(document.getElementById("iva").value);
+			var m = Math.round(document.getElementById("montoNeto").value);
+			var s = Math.round(document.getElementById("spTotal").value);
+			var sumatoria = (i) + (m) + (s);
+			$("#montoTotal").val(sumatoria);
+		} else if (!document.getElementById("otrosEstado").checked
+				&& document.getElementById("ivaEstado").checked) {
+			var i = Math.round(document.getElementById("iva").value);
+			var m = Math.round(document.getElementById("montoNeto").value);
+			//var s = Math.round(document.getElementById("spTotal").value);
+			var sumatoria = (i) + (m);
+			$("#montoTotal").val(sumatoria);
+		} else if (document.getElementById("otrosEstado").checked
+				&& !document.getElementById("ivaEstado").checked) {
+			//var i = Math.round(document.getElementById("iva").value);
+			var m = Math.round(document.getElementById("montoNeto").value);
+			var s = Math.round(document.getElementById("spTotal").value);
+			var sumatoria = (m) + (s);
+			$("#montoTotal").val(sumatoria);
+		} else if (!document.getElementById("otrosEstado").checked
+				&& !document.getElementById("ivaEstado").checked) {
+			//var i =Math.round(document.getElementById("iva").value);
+			var m = Math.round(document.getElementById("montoNeto").value);
+			// var s =Math.round(document.getElementById("spTotal").value)
+			var sumatoria = +(m);
+			$("#montoTotal").val(sumatoria);
+		}
+	}
+
+	var listValores = [];
+	var indiceValores = 0;
 
 	function guardar() {
 		var bool = $('.in').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
 
+		var mon = $('.montoS').toArray().some(function(el) {
+			return $(el).val().length < 1
+		});
+
+		if (document.getElementById("folio").value == 0) {
+			alert("Todos los campos deben estar llenos");
+			return;
+		}
+
+		if (document.getElementById("montoNeto").value == 0) {
+			alert("Todos los campos deben estar llenos");
+			return;
+		}
+
 		if ($('#empresa option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
 		}
-		
+
 		if ($('#cliente option:selected').text() == 'Seleccione cliente') {
 			alert("Debe seleccionar un cliente valido");
 			return;
 		}
 
-		if (bool) {
+		if (bool && mon) {
 			alert("Todos los campos deben estar llenos");
 			return;
 		}
 
-		var retencion = Math.round(document.getElementById("retencion").value)
-		
-		var submitJson = {
-			id :<%=request.getParameter("id")%>,
-			numBoleta : document.getElementById("numBoleta").value,
-			idCliente : varIdCliente,
-			nombre : varNombre,
-			retencionEstado : document.getElementById("retencionEstado").checked,
-			fecha : document.getElementById("fecha").value,
-			retencion : retencion,
-			montoBruto : document.getElementById("montoBruto").value,
-			montoLiquido : document.getElementById("montoLiquido").value,
-			idUsuario : document.getElementById("idUsuario").value,
-			idEmpresa : document.getElementById("empresa").value
-		}
+		var montoNeto = Math.round(document.getElementById("montoNeto").value)
+		var montoTotal = Math
+				.round(document.getElementById("montoTotal").value)
+		var iva = Math.round(document.getElementById("iva").value)
 
-		$.post('/byeContabilidad/rest-services/private/honorario/update',
-				JSON.stringify(submitJson)).done(function(data) {
-			if (data == 'OK') {
-				alert('Cambios guardados exitosamente');
-				location.href = "index.jsp";
-				limpia()
-			} else {
-				alert(data);
+		if (document.getElementById("otrosEstado").checked) {
+			for (var i = 0; i < list.length; i++) {
+				listValores[indiceValores] = [ 2 ];
+				listValores[indiceValores][0] = document
+						.getElementById(list[i][0]).value;
+				listValores[indiceValores][1] = document
+						.getElementById(list[i][1]).value;
+				indiceValores++;
 			}
 
-		}).fail(function(jqxhr, settings, ex) {
-			alert('No se pudo modificar la boleta de honorario ' + ex);
-		});
-	}
+			var submitJson = {
+				id :<%=request.getParameter("id")%>,	
+				folio : document.getElementById("folio").value,
+				idCliente : varIdCliente,
+				nombre : varNombre,
+				ivaEstado : document.getElementById("ivaEstado").checked,
+				otrosEstado : document.getElementById("otrosEstado").checked,
+				fecha : document.getElementById("fecha").value,
+				iva : iva,
+				montoNeto : montoNeto,
+				montoTotal : montoTotal,
+				idUsuario : document.getElementById("idUsuario").value,
+				idEmpresa : document.getElementById("empresa").value,
+				otrosImpuestos : listValores.map(function(value) {
+					return {
+						codigo : value[0],
+						monto : value[1]
+					}
+				}),
+			}
 
+			$.post('/byeContabilidad/rest-services/private/compra/update',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('Cambios guardados exitosamente');
+					location.href = "index.jsp";
+					limpia()
+				} else {
+					alert(data);
+				}
+			}).fail(function(jqxhr, settings, ex) {
+				alert('No se pudo guardar la compra ' + ex);
+			});
+
+		} else if (!document.getElementById("otrosEstado").checked) {
+			var submitJson = {
+				id :<%=request.getParameter("id")%>,	
+				folio : document.getElementById("folio").value,
+				idCliente : varIdCliente,
+				nombre : varNombre,
+				ivaEstado : document.getElementById("ivaEstado").checked,
+				otrosEstado : document.getElementById("otrosEstado").checked,
+				fecha : document.getElementById("fecha").value,
+				iva : iva,
+				montoNeto : montoNeto,
+				montoTotal : montoTotal,
+				idUsuario : document.getElementById("idUsuario").value,
+				idEmpresa : document.getElementById("empresa").value,
+			}
+
+			$.post('/byeContabilidad/rest-services/private/compra/update',
+					JSON.stringify(submitJson)).done(function(data) {
+				if (data == 'OK') {
+					alert('Cambios guardados exitosamente');
+					location.href = "index.jsp";
+					limpia()
+				} else {
+					alert(data);
+				}
+
+			}).fail(function(jqxhr, settings, ex) {
+				alert('No se pudo guardar la compra ' + ex);
+			});
+		}
+	}
+	
 	function cargaEmpresa(idEmpresa, idCliente) {
 		var submitJson = {
 			idUsuario : document.getElementById("idUsuario").value
@@ -329,38 +697,35 @@
 	}, false);
 
 	function limpia() {
-		document.getElementById("numBoleta").value = "";
+		document.getElementById("folio").value = "";
 		document.getElementById("nombre").value = "";
-		document.getElementById("retencionEstado").value = "";
-		//		document.getElementById("fecha").value = "";
-		document.getElementById("montoBruto").value = "";
-		document.getElementById("montoLiquido").value = "";
+		document.getElementById("ivaEstado").value = "";
+		//document.getElementById("fecha").value = "";
+		document.getElementById("montoNeto").value = "";
+		document.getElementById("montoTotal").value = "";
 	}
 	
-	$('#empresa')
-	.on(
-			'change',
-			function() {
-
-				var submitJson = {
-					idUsuario : document.getElementById("idUsuario").value,
-					idEmpresa : document.getElementById("empresa").value
-				}
-				$
-				        .post(
-						'/byeContabilidad/rest-services/private/cliente/getLista',
-						JSON.stringify(submitJson),
-						function(res, code) {
-							var str = "<option>Seleccione cliente</option>";
-							for (var i = 0, len = res.length; i < len; i++) {
-								str += "<option value="+res[i].id+"/"+res[i].nombre+">"
-										+ res[i].rut
-										+ "</option>";
-							}
-							document.getElementById("cliente").innerHTML = str;
-						}, "json");
-				$("#nombre").val("");
-			});
+// 	$('#empresa').on(
+// 			'change',
+// 			function() {
+// alert();
+// 				var submitJson = {
+// 					idUsuario : document.getElementById("idUsuario").value,
+// 					idEmpresa : document.getElementById("empresa").value
+// 				}
+// 				$.post('/byeContabilidad/rest-services/private/cliente/getLista',
+// 						JSON.stringify(submitJson),
+// 						function(res, code) {
+// 							var str = "<option>Seleccione cliente</option>";
+// 							for (var i = 0, len = res.length; i < len; i++) {
+// 								str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+// 										+ res[i].rut
+// 										+ "</option>";
+// 							}
+// 							document.getElementById("cliente").innerHTML = str;
+// 						}, "json");
+// 				$("#nombre").val("");
+// 			});
 	
 	$('#cliente').on(
 			'change',
@@ -370,7 +735,7 @@
 		        var nombre = document.getElementById("cliente").value.split("/");
 		        varNombre = nombre[1]
 		        $("#nombre").val(varNombre);
-			});
+	});
 	$("#empresa").trigger('change');
 	$("#cliente").trigger('change');
 </script>

@@ -2,9 +2,12 @@ package cl.certificadoradelsur.byecontabilidad.entities;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,20 +30,22 @@ import javax.persistence.Table;
 @Table(name = "venta")
 @SequenceGenerator(name = "seq_venta", sequenceName = "seq_venta")
 @NamedQueries({
-		@NamedQuery(name = "Venta.getAll", query = "SELECT v FROM Venta v"),
-		@NamedQuery(name = "Venta.countAll", query = "SELECT count(v.id) FROM Venta v") })
+		@NamedQuery(name = "Venta.getAll", query = "SELECT v FROM Venta v where v.fecha between :fechaInicial and :fechaFinal and v.empresa.id =:idEmpresa and v.empresa.oficinaContable.id =:idOficinaContable"),
+		@NamedQuery(name = "Venta.countAll", query = "SELECT count(v.id) FROM Venta v where v.fecha between :fechaInicial and :fechaFinal and v.empresa.id =:idEmpresa and v.empresa.oficinaContable.id =:idOficinaContable") })
 
 public class Venta implements Serializable {
 
 	private static final long serialVersionUID = 1338781439378645452L;
 	private Long id;
-	private String rut;
+	private Cliente cliente;
 	private String nombre;
 	private String folio;
 	private Timestamp fecha;
 	private Long montoNeto;
 	private Long iva;
-	private Long otroImpuesto;
+	private List<OtroImpuesto> otrosImpuestos;
+	private Boolean ivaEstado;
+	private Boolean otrosEstado;
 	private Long montoTotal;
 	private Empresa empresa;
 	private Timestamp fechaCreacion;
@@ -64,13 +70,14 @@ public class Venta implements Serializable {
 		this.nombre = nombre;
 	}
 
-	@Column(name = "rut", nullable = false)
-	public String getRut() {
-		return rut;
+	@ManyToOne
+	@JoinColumn(name = "id_cliente", nullable = true)
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setRut(String rut) {
-		this.rut = rut;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 	
 	@Column(name = "folio", nullable = false)
@@ -109,15 +116,6 @@ public class Venta implements Serializable {
 		this.iva = iva;
 	}
 
-	@Column(name = "otro_impuesto", nullable = false)
-	public Long getOtroImpuesto() {
-		return otroImpuesto;
-	}
-
-	public void setOtroImpuesto(Long otroImpuesto) {
-		this.otroImpuesto = otroImpuesto;
-	}
-
 	@Column(name = "monto_total", nullable = false)
 	public Long getMontoTotal() {
 		return montoTotal;
@@ -126,7 +124,7 @@ public class Venta implements Serializable {
 	public void setMontoTotal(Long montoTotal) {
 		this.montoTotal = montoTotal;
 	}
-
+	
 	@ManyToOne
 	@JoinColumn(name = "id_empresa", nullable = true)
 	public Empresa getEmpresa() {
@@ -145,4 +143,35 @@ public class Venta implements Serializable {
 	public void setFechaCreacion(Timestamp fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
+
+	@OneToMany(mappedBy = "compra", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public List<OtroImpuesto> getOtrosImpuestos() {
+		return otrosImpuestos;
+	}
+
+	public void setOtrosImpuestos(List<OtroImpuesto> otrosImpuestos) {
+		this.otrosImpuestos = otrosImpuestos;
+	}
+
+	@Column(name = "iva_estado", nullable = true)
+	public Boolean isIvaEstado() {
+		return ivaEstado;
+	}
+
+	public void setIvaEstado(Boolean ivaEstado) {
+		this.ivaEstado = ivaEstado;
+	}
+
+	@Column(name = "otro_estado", nullable = true)
+	public Boolean isOtrosEstado() {
+		return otrosEstado;
+	}
+
+	public void setOtrosEstado(Boolean otrosEstado) {
+		this.otrosEstado = otrosEstado;
+	}
+	
+	
+	
+
 }

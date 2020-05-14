@@ -23,6 +23,7 @@ public class CompraJson {
 	private String idUsuario;
 	private Boolean ivaEstado;
 	private Boolean otrosEstado;
+	private String rut;
 	List<OtroImpuestoJson> otrosImpuestos;
 
 	public String getIdUsuario() {
@@ -71,6 +72,14 @@ public class CompraJson {
 
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
+	}
+
+	public String getRut() {
+		return rut;
+	}
+
+	public void setRut(String rut) {
+		this.rut = rut;
 	}
 
 	public Long getMontoNeto() {

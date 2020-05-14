@@ -1,5 +1,6 @@
 package cl.certificadoradelsur.byecontabilidad.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -33,8 +34,13 @@ public class CompraDAO {
 	 * 
 	 * @return el total de compras
 	 */
-	public Long countAll() {
+	public Long countAll(Timestamp fechaInicial, Timestamp fechaFinal, Long idOficinaContable,
+			Long idEmpresa) {
 		Query query = em.createNamedQuery("Compra.countAll");
+		query.setParameter("fechaInicial", fechaInicial);
+		query.setParameter("fechaFinal", fechaFinal);
+		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return (Long) query.getSingleResult();
 	}
 
@@ -47,10 +53,13 @@ public class CompraDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Compra> getAll(Integer inicio, Integer fin) {
+	public List<Compra> getAll(Integer inicio, Integer fin,Timestamp fechaInicial,
+			Timestamp fechaFinal, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Compra.getAll");
-		query.setFirstResult(inicio);
-		query.setMaxResults(fin);
+		query.setParameter("fechaInicial", fechaInicial);
+		query.setParameter("fechaFinal", fechaFinal);
+		query.setParameter("idOficinaContable", idOficinaContable);
+		query.setParameter("idEmpresa", idEmpresa);
 		return query.getResultList();
 	}
 

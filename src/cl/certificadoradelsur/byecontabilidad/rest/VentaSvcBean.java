@@ -31,11 +31,12 @@ public class VentaSvcBean implements VentaSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin) {
+	public Response list(Integer inicio, Integer fin,String fechaDesde, String fechaHasta,
+			String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<VentaJson> lcj = vrd.getAll(inicio, fin);
+		List<VentaJson> lcj = vrd.getAll(inicio, fin, fechaDesde, fechaHasta, idUsuario, idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lcj, new TypeToken<List<VentaJson>>() {
-		}.getType()) + ", \"total\": " + vrd.countAll() + "}";
+		}.getType()) + ", \"total\": " + vrd.countAll(fechaDesde, fechaHasta, idUsuario, idEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 

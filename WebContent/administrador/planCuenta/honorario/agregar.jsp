@@ -42,6 +42,19 @@
 	type="text/javascript">
 	$('.dropdown-toggle').dropdown()
 </script>
+<style type="text/css">
+.collapsing {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: hidden;
+}
+
+.collapse.show {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: visible;
+}
+</style>
 
 </head>
 <body>

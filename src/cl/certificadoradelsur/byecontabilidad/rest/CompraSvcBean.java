@@ -30,11 +30,12 @@ public class CompraSvcBean implements CompraSvc {
 	}
 
 	@Override
-	public Response list(Integer inicio, Integer fin) {
+	public Response list(Integer inicio, Integer fin,String fechaDesde, String fechaHasta,
+			String idUsuario, Long idEmpresa) {
 		Gson gson = new GsonBuilder().create();
-		List<CompraJson> lcj = crd.getAll(inicio, fin);
+		List<CompraJson> lcj = crd.getAll(inicio, fin, fechaDesde, fechaHasta, idUsuario, idEmpresa);
 		String json = "{\"records\": " + gson.toJson(lcj, new TypeToken<List<CompraJson>>() {
-		}.getType()) + ", \"total\": " + crd.countAll() + "}";
+		}.getType()) + ", \"total\": " + crd.countAll(fechaDesde, fechaHasta, idUsuario, idEmpresa) + "}";
 		return Response.ok(json).build();
 	}
 

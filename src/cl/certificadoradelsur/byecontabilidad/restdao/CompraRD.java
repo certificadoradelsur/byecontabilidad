@@ -11,12 +11,14 @@ import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CompraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.OtroImpuestoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Compra;
 import cl.certificadoradelsur.byecontabilidad.entities.OtroImpuesto;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CompraJson;
+import cl.certificadoradelsur.byecontabilidad.json.OtroImpuestoJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
 import cl.certificadoradelsur.byecontabilidad.utils.Utilidades;
 
@@ -39,6 +41,9 @@ public class CompraRD {
 	private BitacoraDAO bidao;
 	@Inject
 	private ClienteDAO clidao;
+	@Inject
+	private OtroImpuestoDAO oidao;
+
 	/**
 	 * funcion que almacena
 	 * 
@@ -49,7 +54,7 @@ public class CompraRD {
 		try {
 			Compra c = new Compra();
 			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(cj.getFolio()).compareTo(true) == 0) {
+					|| Utilidades.containsScripting(cj.getFolio()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				c.setNombre(cj.getNombre());
@@ -63,16 +68,16 @@ public class CompraRD {
 				c.setFechaCreacion(new Timestamp(System.currentTimeMillis()));
 				c.setOtrosEstado(cj.isOtrosEstado());
 				c.setIvaEstado(cj.isIvaEstado());
-				if(cj.isOtrosEstado().equals(true)) {
-					List <OtroImpuesto> otroi = new ArrayList<>();
+				if (cj.isOtrosEstado().equals(true)) {
+					List<OtroImpuesto> otroi = new ArrayList<>();
 					for (int i = 0; i < cj.getOtrosImpuestos().size(); i++) {
 						OtroImpuesto oi = new OtroImpuesto();
 						oi.setCompra(c);
 						oi.setCodigo(cj.getOtrosImpuestos().get(i).getCodigo());
 						oi.setMonto(cj.getOtrosImpuestos().get(i).getMonto());
-						otroi.add(oi);					
+						otroi.add(oi);
 					}
-					c.setOtrosImpuestos(otroi);	
+					c.setOtrosImpuestos(otroi);
 				}
 				cdao.guardar(c);
 				return Constantes.MENSAJE_REST_OK;
@@ -90,10 +95,18 @@ public class CompraRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll() {
+	public Long countAll(String fechaDesde, String fechaHasta, String idUsuario,
+			Long idEmpresa) {
 		try {
-
-			return cdao.countAll();
+			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
+			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
+			
+			if (fechaDesde!=null || fechaHasta!=null) {
+				fechaInicial = Utilidades.fechaDesde(fechaDesde);
+				fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			}
+			return cdao.countAll(fechaInicial,fechaFinal,
+					udao.getById(idUsuario).getOficinaContable().getId(),idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de compras ", e);
 			return 0L;
@@ -107,7 +120,8 @@ public class CompraRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de compras
 	 */
-	public List<CompraJson> getAll(Integer page, Integer limit) {
+	public List<CompraJson> getAll(Integer page, Integer limit, String fechaDesde,
+			String fechaHasta, String idUsuario, Long idEmpresa) {
 		List<CompraJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -117,17 +131,27 @@ public class CompraRD {
 				inicio = (page * limit) - limit;
 			}
 
-			List<Compra> lc = cdao.getAll(inicio, limit);
+			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
+			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
+			
+			List<Compra> lc = cdao.getAll(inicio, limit,fechaInicial,fechaFinal,
+					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lc.size(); i++) {
 				CompraJson cj = new CompraJson();
 				cj.setId(lc.get(i).getId());
 				cj.setNombre(lc.get(i).getNombre());
-				cj.setIdCliente(cdao.getById(lc.get(i).getCliente().getId()).getId());
+				cj.setIdCliente(clidao.getById(lc.get(i).getCliente().getId()).getId());
+				cj.setRut(clidao.getById(lc.get(i).getCliente().getId()).getRut());
 				cj.setFolio(lc.get(i).getFolio());
 				cj.setFecha(Utilidades.timestamAStringSinHora(lc.get(i).getFecha()));
 				cj.setIva(lc.get(i).getIva());
 				cj.setMontoTotal(lc.get(i).getMontoTotal());
 				cj.setMontoNeto(lc.get(i).getMontoNeto());
+				Long sumaOtros = 0L;
+				for (int j = 0; j < lc.get(i).getOtrosImpuestos().size(); j++) {
+					sumaOtros = sumaOtros + (lc.get(i).getOtrosImpuestos().get(j).getMonto());
+				}
+				cj.setOtroImpuesto(sumaOtros);
 				lcj.add(cj);
 			}
 
@@ -146,6 +170,10 @@ public class CompraRD {
 	public String update(CompraJson cj) {
 		try {
 			Compra c = cdao.getById(cj.getId());
+			List<OtroImpuesto> otroI = oidao.getByIdCompra(cj.getId());
+			for (int i = 0; i < otroI.size(); i++) {
+				oidao.eliminar(oidao.getById(otroI.get(i).getId()));
+			}
 			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
@@ -157,7 +185,29 @@ public class CompraRD {
 				c.setMontoNeto(cj.getMontoNeto());
 				c.setMontoTotal(cj.getMontoTotal());
 				c.setEmpresa(edao.getById(cj.getIdEmpresa()));
+				c.setOtrosEstado(cj.isOtrosEstado());
+				c.setIvaEstado(cj.isIvaEstado());
+				if (cj.isOtrosEstado().equals(true)) {
+					List<OtroImpuesto> otroi = new ArrayList<>();
+					for (int i = 0; i < cj.getOtrosImpuestos().size(); i++) {
+						OtroImpuesto oi = new OtroImpuesto();
+						oi.setCompra(c);
+						oi.setCodigo(cj.getOtrosImpuestos().get(i).getCodigo());
+						oi.setMonto(cj.getOtrosImpuestos().get(i).getMonto());
+						otroi.add(oi);
+					}
+					c.setOtrosImpuestos(otroi);
+				}
 				cdao.update(c);
+
+				Bitacora b = new Bitacora();
+				b.setUsuario(udao.getById(cj.getIdUsuario()));
+				b.setFecha(new Timestamp(System.currentTimeMillis()));
+				b.setTabla("Compra");
+				b.setAccion("Update");
+				b.setDescripcion("Se modifico la compra " + cj.getFolio());
+				bidao.guardar(b);
+
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
@@ -177,13 +227,30 @@ public class CompraRD {
 		CompraJson cJson = new CompraJson();
 		cJson.setId(c.getId());
 		cJson.setNombre(c.getNombre());
-		cJson.setIdCliente(c.getCliente().getId());
 		cJson.setFolio(c.getFolio());
 		cJson.setFecha(c.getFecha().toString().substring(0, 10));
 		cJson.setIva(c.getIva());
+		cJson.setIvaEstado(c.isIvaEstado());
+		cJson.setOtrosEstado(c.isOtrosEstado());
+		List<OtroImpuestoJson> oij = new ArrayList<>();
+		if (c.isOtrosEstado().equals(true)) {
+			for (int i = 0; i < c.getOtrosImpuestos().size(); i++) {
+				OtroImpuestoJson oi = new OtroImpuestoJson();
+				oi.setCodigo(c.getOtrosImpuestos().get(i).getCodigo());
+				oi.setMonto(c.getOtrosImpuestos().get(i).getMonto());
+				oij.add(oi);
+			}
+		}
+		cJson.setOtrosImpuestos(oij);
 		cJson.setMontoNeto(c.getMontoNeto());
 		cJson.setMontoTotal(c.getMontoTotal());
+		cJson.setIdCliente(c.getCliente().getId());
 		cJson.setIdEmpresa(c.getEmpresa().getId());
+		Long sumaOtros = 0L;
+		for (int j = 0; j < c.getOtrosImpuestos().size(); j++) {
+			sumaOtros = sumaOtros + (c.getOtrosImpuestos().get(j).getMonto());
+		}
+		cJson.setOtroImpuesto(sumaOtros);
 		return cJson;
 	}
 
@@ -201,7 +268,7 @@ public class CompraRD {
 			b.setFecha(new Timestamp(System.currentTimeMillis()));
 			b.setTabla("Compra");
 			b.setAccion("Delete");
-			b.setDescripcion("Se elimino " + cdao.getById(cj.getId()).getNombre());
+			b.setDescripcion("Se elimino " + cj.getFolio());
 			bidao.guardar(b);
 			cdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;

@@ -30,8 +30,8 @@ import javax.persistence.Table;
 @Table(name = "compra")
 @SequenceGenerator(name = "seq_compra", sequenceName = "seq_compra")
 @NamedQueries({
-		@NamedQuery(name = "Compra.getAll", query = "SELECT c FROM Compra c"),
-		@NamedQuery(name = "Compra.countAll", query = "SELECT count(c.id) FROM Compra c") })
+		@NamedQuery(name = "Compra.getAll", query = "SELECT c FROM Compra c where c.fecha between :fechaInicial and :fechaFinal and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable"),
+		@NamedQuery(name = "Compra.countAll", query = "SELECT count(c.id) FROM Compra c where c.fecha between :fechaInicial and :fechaFinal and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable") })
 
 public class Compra implements Serializable {
 

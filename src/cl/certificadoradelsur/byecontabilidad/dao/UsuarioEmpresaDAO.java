@@ -33,16 +33,6 @@ public class UsuarioEmpresaDAO {
 	}
 
 	/**
-	 * funcion que actualiza datos de UsuarioEmpresa
-	 * 
-	 * @param u objeto UsuarioEmpresa
-	 */
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void updatePass(UsuarioEmpresa ue) {
-		em.merge(ue);
-	}
-
-	/**
 	 * funcion para obtener una UsuarioEmpresa
 	 * 
 	 * @param id objeto UsuarioEmpresa
@@ -51,14 +41,15 @@ public class UsuarioEmpresaDAO {
 	public UsuarioEmpresa getById(Long id) {
 		return em.find(UsuarioEmpresa.class, id);
 	}
-	
-    /**
-     * Funcion para buscar UsuarioEmpresa por idUsuario
-     * @param idUsuario
-     * @return
-      */
+
+	/**
+	 * Funcion para buscar UsuarioEmpresa por idUsuario
+	 * 
+	 * @param idUsuario
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List <UsuarioEmpresa> getByIdUsuario(String idUsuario) {
+	public List<UsuarioEmpresa> getByIdUsuario(String idUsuario) {
 		Query query = em.createNamedQuery("UsuarioEmpresa.getByIdUsuario");
 		try {
 			query.setParameter("idUsuario", idUsuario);
@@ -79,4 +70,3 @@ public class UsuarioEmpresaDAO {
 	}
 
 }
-
