@@ -169,9 +169,6 @@ public class Compra implements Serializable {
 
 	public void setOtrosEstado(Boolean otrosEstado) {
 		this.otrosEstado = otrosEstado;
-	}
-	
-	
-	
+	}	
 
 }

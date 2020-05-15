@@ -144,7 +144,7 @@ public class Venta implements Serializable {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-	@OneToMany(mappedBy = "compra", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "venta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	public List<OtroImpuesto> getOtrosImpuestos() {
 		return otrosImpuestos;
 	}
@@ -170,8 +170,5 @@ public class Venta implements Serializable {
 	public void setOtrosEstado(Boolean otrosEstado) {
 		this.otrosEstado = otrosEstado;
 	}
-	
-	
-	
 
 }

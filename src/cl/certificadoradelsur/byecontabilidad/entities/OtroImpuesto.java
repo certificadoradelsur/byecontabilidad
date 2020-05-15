@@ -32,7 +32,7 @@ public class OtroImpuesto implements Serializable {
 
 	private static final long serialVersionUID = 1338781439392145452L;
 	private Long id;
-	private Long codigo;
+	private CodigoImpuesto codigo;
 	private Long monto;
 	private Compra compra;
 	private Venta venta;
@@ -67,12 +67,13 @@ public class OtroImpuesto implements Serializable {
 		this.venta = venta;
 	}
 
-	@Column(name = "codigo", nullable = false)
-	public Long getCodigo() {
+	@ManyToOne
+	@JoinColumn(name = "id_codigo_impuesto", nullable = true)
+	public CodigoImpuesto getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(Long codigo) {
+	public void setCodigo(CodigoImpuesto codigo) {
 		this.codigo = codigo;
 	}
 

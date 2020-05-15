@@ -57,12 +57,13 @@ public class HonorarioDAO {
 	public List<Honorario> getAll(Integer inicio, Integer fin,Timestamp fechaInicial,
 			Timestamp fechaFinal, Long idOficinaContable, Long idEmpresa) {
 		Query query = em.createNamedQuery("Honorario.getAll");
-		query.setFirstResult(inicio);
-		query.setMaxResults(fin);
+
 		query.setParameter("fechaInicial", fechaInicial);
 		query.setParameter("fechaFinal", fechaFinal);
 		query.setParameter("idOficinaContable", idOficinaContable);
 		query.setParameter("idEmpresa", idEmpresa);
+		query.setFirstResult(inicio);
+		query.setMaxResults(fin);
 		return query.getResultList();
 	}
 

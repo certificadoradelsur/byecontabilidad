@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.CodigoImpuestoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.OtroImpuestoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
@@ -43,6 +44,8 @@ public class VentaRD {
 	private ClienteDAO clidao;
 	@Inject
 	private OtroImpuestoDAO oidao;
+	@Inject
+	private CodigoImpuestoDAO cidao;
 
 	/**
 	 * funcion que almacena
@@ -54,7 +57,6 @@ public class VentaRD {
 		try {
 			Venta v = new Venta();
 			if (Utilidades.containsScripting(vj.getNombre()).compareTo(true) == 0
-					|| Utilidades.containsScripting(vj.getRut()).compareTo(true) == 0
 					|| Utilidades.containsScripting(vj.getFolio()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
@@ -74,7 +76,7 @@ public class VentaRD {
 					for (int i = 0; i < vj.getOtrosImpuestos().size(); i++) {
 						OtroImpuesto oi = new OtroImpuesto();
 						oi.setVenta(v);
-						oi.setCodigo(vj.getOtrosImpuestos().get(i).getCodigo());
+						oi.setCodigo(cidao.getById(vj.getOtrosImpuestos().get(i).getCodigo()));
 						oi.setMonto(vj.getOtrosImpuestos().get(i).getMonto());
 						otroi.add(oi);
 					}
@@ -102,10 +104,10 @@ public class VentaRD {
 			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
 			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
 			
-			if (fechaDesde!=null || fechaHasta!=null) {
+			if (fechaDesde!=null && fechaHasta!=null) {
 				fechaInicial = Utilidades.fechaDesde(fechaDesde);
 				fechaFinal = Utilidades.fechaHasta(fechaHasta);
-			}
+			} 
 			return vdao.countAll(fechaInicial,fechaFinal,
 					udao.getById(idUsuario).getOficinaContable().getId(),idEmpresa);
 		} catch (Exception e) {
@@ -135,6 +137,10 @@ public class VentaRD {
 			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
 			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
 			
+			if (fechaDesde!=null && fechaHasta!=null) {
+				fechaInicial = Utilidades.fechaDesde(fechaDesde);
+				fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			} 
 			List<Venta> lv = vdao.getAll(inicio, limit,fechaInicial,fechaFinal,
 					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lv.size(); i++) {
@@ -193,7 +199,7 @@ public class VentaRD {
 					for (int i = 0; i < vj.getOtrosImpuestos().size(); i++) {
 						OtroImpuesto oi = new OtroImpuesto();
 						oi.setVenta(v);
-						oi.setCodigo(vj.getOtrosImpuestos().get(i).getCodigo());
+						oi.setCodigo(cidao.getById(vj.getOtrosImpuestos().get(i).getCodigo()));
 						oi.setMonto(vj.getOtrosImpuestos().get(i).getMonto());
 						otroi.add(oi);
 					}
@@ -237,7 +243,7 @@ public class VentaRD {
 		if (v.isOtrosEstado().equals(true)) {
 			for (int i = 0; i < v.getOtrosImpuestos().size(); i++) {
 				OtroImpuestoJson oi = new OtroImpuestoJson();
-				oi.setCodigo(v.getOtrosImpuestos().get(i).getCodigo());
+				oi.setCodigo(v.getOtrosImpuestos().get(i).getCodigo().getId());
 				oi.setMonto(v.getOtrosImpuestos().get(i).getMonto());
 				oij.add(oi);
 			}

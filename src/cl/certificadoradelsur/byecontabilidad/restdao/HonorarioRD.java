@@ -38,6 +38,7 @@ public class HonorarioRD {
 	private BitacoraDAO bidao;
 	@Inject
 	private ClienteDAO cdao;
+
 	/**
 	 * funcion que almacena
 	 * 
@@ -48,7 +49,7 @@ public class HonorarioRD {
 		try {
 			Honorario h = new Honorario();
 			if (Utilidades.containsScripting(hj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
+					|| Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				h.setCliente(cdao.getById(hj.getIdCliente()));
@@ -77,18 +78,17 @@ public class HonorarioRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String fechaDesde, String fechaHasta, String idUsuario,
-			Long idEmpresa) {
-		try {			
-		Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
-		Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
-		
-		if (fechaDesde!=null || fechaHasta!=null) {
-			fechaInicial = Utilidades.fechaDesde(fechaDesde);
-			fechaFinal = Utilidades.fechaHasta(fechaHasta);
-		}
-			return hdao.countAll(fechaInicial,fechaFinal,
-					udao.getById(idUsuario).getOficinaContable().getId(),idEmpresa);
+	public Long countAll(String fechaDesde, String fechaHasta, String idUsuario, Long idEmpresa) {
+		try {
+			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
+			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
+
+			if (fechaDesde != null && fechaHasta != null) {
+				fechaInicial = Utilidades.fechaDesde(fechaDesde);
+				fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			}
+			return hdao.countAll(fechaInicial, fechaFinal, udao.getById(idUsuario).getOficinaContable().getId(),
+					idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de Honorarios ", e);
 			return 0L;
@@ -102,8 +102,8 @@ public class HonorarioRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de Honorarios
 	 */
-	public List<HonorarioJson> getAll(Integer page, Integer limit, String fechaDesde,
-			String fechaHasta, String idUsuario, Long idEmpresa) {
+	public List<HonorarioJson> getAll(Integer page, Integer limit, String fechaDesde, String fechaHasta,
+			String idUsuario, Long idEmpresa) {
 		List<HonorarioJson> lhj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -112,11 +112,16 @@ public class HonorarioRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-			
+
 			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
 			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
 
-			List<Honorario> lh = hdao.getAll(inicio, limit,fechaInicial,fechaFinal,
+			if (fechaDesde != null && fechaHasta != null) {
+				fechaInicial = Utilidades.fechaDesde(fechaDesde);
+				fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			}
+
+			List<Honorario> lh = hdao.getAll(inicio, limit, fechaInicial, fechaFinal,
 					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lh.size(); i++) {
 				HonorarioJson hj = new HonorarioJson();
@@ -147,7 +152,7 @@ public class HonorarioRD {
 		try {
 			Honorario h = hdao.getById(hj.getId());
 			if (Utilidades.containsScripting(hj.getNombre()).compareTo(true) == 0
-					||Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
+					|| Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {
 				h.setCliente(cdao.getById(hj.getIdCliente()));

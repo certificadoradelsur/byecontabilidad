@@ -151,8 +151,7 @@
 				{
 					primaryKey : 'ID',
 					dataSource : "/byeContabilidad/rest-services/private/honorario/getAll?idUsuario="
-						+ document.getElementById('idUsuario').value
-						+ "",
+						+ document.getElementById('idUsuario').value + "",
 					autoLoad : false,
 					columns : [
 							{

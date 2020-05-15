@@ -54,7 +54,6 @@
 	transition-delay: 0s;
 	visibility: visible;
 }
-
  input[class="montoS"]
  {
  -webkit-appearance:textfield !important;
@@ -66,13 +65,13 @@
 </head>
 <body>
 
-	<%@ include file="../../../complementos/nav.jsp"%> 
+<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<input type="hidden" name="id" id="id" />
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-				<h1 class="h2">Agregar compra</h1>
+				<h1 class="h2">Modificar venta</h1>
 			</div>
 			<div class="container">
 				<div class="form-group">
@@ -177,39 +176,53 @@
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(document)
+			.ready(
+					function() {
 						$("#empresa").select2({
 							width : '200'
 						});
 						$("#cliente").select2({
 							width : '200'
 						});
-						borraName();
 						$("#montoNeto").keyup(function() {
 							var value = $(this).val();
 							$("#montoTotal").val(value);
 						});
-						
 
-						var submitJson = {
-							idUsuario : document.getElementById("idUsuario").value
-						}
+						var submitjson = {id: "<%=request.getParameter("id")%>"};
 
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/empresa/getLista',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str;
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+">"
-														+ res[i].razonSocial
-														+ "</option>";
+						$.post('/byeContabilidad/rest-services/private/venta/getById',
+										JSON.stringify(submitjson)).done(
+										function(data) {
+											document.getElementById("folio").value = data.folio;
+											document.getElementById("nombre").value = data.nombre;
+											document.getElementById("fecha").value = data.fecha;
+											document.getElementById("montoNeto").value = data.montoNeto;
+											document.getElementById("montoTotal").value = data.montoTotal;
+											document.getElementById("iva").value = data.iva;
+											document.getElementById("ivaEstado").checked = data.ivaEstado;
+											document.getElementById("otrosEstado").checked = data.otrosEstado;
+											document.getElementById("spTotal").value =data.otroImpuesto;
 
+											
+											cargaEmpresa(data.idEmpresa,data.idCliente);
+											
+											if(document.getElementById("ivaEstado").checked && document.getElementById("otrosEstado").checked){
+												$("#montoNeto").prop("disabled", true);
 											}
-											document.getElementById("empresa").innerHTML = str;
-											cliente();
-										}, "json");
+
+											if(document.getElementById("otrosEstado").checked){
+                                                cargaOtros(data.otrosImpuestos);
+												$('#collapse').collapse('show');
+											}
+										})
+								.fail(
+										function(jqxhr, settings, ex) {
+											alert('No se pudo modificar la venta '
+													+ ex);
+										});
+						
 					});
 
 	var xx = 2;
@@ -218,9 +231,46 @@
 	list[0] = [ 2 ];
 	list[0][0] = 'codigo1';
 	list[0][1] = 'monto1';
+	
+	function cargaOtros(otrosImpuestos){
+		xx = 1;
+		c = "<label class='col-form-label'>Código </label>";
+		document.getElementById("codigo").innerHTML = c;
+		m = "<label class='col-form-label'>Monto</label>";
+		document.getElementById("monto").innerHTML = m;
+		
+		for (var i = 0; i < otrosImpuestos.length; i++) {
+			var p = document.getElementById("codigo");
+			var inp = document.createElement("select");
+			inp.id = 'codigo' + xx;
+			inp.style = 'width:60px;';
+			inp.className = 'in';
+			p.appendChild(inp);
+			cargaCodigoMod(xx,otrosImpuestos[i].codigo);
+			var pd = document.getElementById("monto");
+			var ipt = document.createElement("INPUT");
+			ipt.type = 'number';
+			ipt.id = 'monto' + xx;
+			ipt.style = 'width:140px;height:28px' ;
+			ipt.className = 'montoS';
+//  			$(ipt).on('keyup', function() {
+//  				sumar();
+//  			});
+			pd.appendChild(ipt);
+			$('#monto' + xx).val(otrosImpuestos[i].monto);
+			list[indice] = [ 2 ];
+			list[indice][0] = 'codigo' + xx;
+			list[indice][1] = 'monto' + xx;
 
-	$('#otrosEstado')
-			.on(
+			$("#codigo" + (xx)).prop("disabled", true);
+			$("#monto" + (xx)).prop("disabled", true);
+			indice++;
+			xx++;
+//			console.log(list);
+		}
+	}
+
+	$('#otrosEstado').on(
 					'change',
 					function() {
 						if (document.getElementById("otrosEstado").checked) {
@@ -296,7 +346,9 @@
 						}
 					})
 
-	$('#ivaEstado').on('change',function() {
+	$('#ivaEstado').on(
+					'change',
+					function() {
 						if (document.getElementById("ivaEstado").checked) {
 							if (document.getElementById("montoNeto").value == "") {
 								alert("Debe ingresar monto neto");
@@ -318,6 +370,7 @@
 								var s = Math.round(document
 										.getElementById("spTotal").value);
 								var sumatoria = (i) + (m) + (s);
+																
 								$("#montoTotal").val(sumatoria);
 							} else if (!document.getElementById("otrosEstado").checked
 									&& document.getElementById("ivaEstado").checked) {
@@ -363,52 +416,9 @@
 						}
 					})
 
-	function cliente() {
-		var submitJson = {
-			idUsuario : document.getElementById("idUsuario").value,
-			idEmpresa : document.getElementById("empresa").value
-		}
-		$.post('/byeContabilidad/rest-services/private/cliente/getLista', JSON
-				.stringify(submitJson), function(res, code) {
-			var str = "<option>Seleccione cliente</option>";
-			for (var i = 0, len = res.length; i < len; i++) {
-				str += "<option value="+res[i].id+"/"+res[i].nombre+">"
-						+ res[i].rut + "</option>";
-			}
-			document.getElementById("cliente").innerHTML = str;
-		}, "json");
-	}
 
-	$('#empresa').on('change',
-					function() {
 
-						var submitJson = {
-							idUsuario : document.getElementById("idUsuario").value,
-							idEmpresa : document.getElementById("empresa").value
-						}
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/cliente/getLista',
-										JSON.stringify(submitJson),
-										function(res, code) {
-											var str = "<option>Seleccione cliente</option>";
-											for (var i = 0, len = res.length; i < len; i++) {
-												str += "<option value="+res[i].id+"/"+res[i].nombre+">"
-														+ res[i].rut
-														+ "</option>";
-											}
-											document.getElementById("cliente").innerHTML = str;
-										}, "json");
-						$("#nombre").val("");
-					});
-
-	$('#cliente').on('change', function() {
-		var idCliente = document.getElementById("cliente").value.split("/");
-		varIdCliente = idCliente[0];
-		var nombre = document.getElementById("cliente").value.split("/");
-		varNombre = nombre[1]
-		$("#nombre").val(varNombre);
-	});
+	
 
 	function add() {
 		if (document.getElementById("monto" + (xx - 1)).value == '') {
@@ -441,6 +451,7 @@
 		indice++;
 		xx++;
 //		console.log(list);
+
 
 	}
 
@@ -568,6 +579,7 @@
 			}
 
 			var submitJson = {
+				id :<%=request.getParameter("id")%>,	
 				folio : document.getElementById("folio").value,
 				idCliente : varIdCliente,
 				nombre : varNombre,
@@ -587,21 +599,22 @@
 				}),
 			}
 
-			$.post('/byeContabilidad/rest-services/private/compra/add',
+			$.post('/byeContabilidad/rest-services/private/venta/update',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('Se guardo exitosamente la compra');
+					alert('Cambios guardados exitosamente');
 					location.href = "index.jsp";
 					limpia()
 				} else {
 					alert(data);
 				}
 			}).fail(function(jqxhr, settings, ex) {
-				alert('No se pudo guardar la compra ' + ex);
+				alert('No se pudo guardar la venta ' + ex);
 			});
 
 		} else if (!document.getElementById("otrosEstado").checked) {
 			var submitJson = {
+				id :<%=request.getParameter("id")%>,	
 				folio : document.getElementById("folio").value,
 				idCliente : varIdCliente,
 				nombre : varNombre,
@@ -615,10 +628,10 @@
 				idEmpresa : document.getElementById("empresa").value,
 			}
 
-			$.post('/byeContabilidad/rest-services/private/compra/add',
+			$.post('/byeContabilidad/rest-services/private/venta/update',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('Se guardo exitosamente la compra');
+					alert('Cambios guardados exitosamente');
 					location.href = "index.jsp";
 					limpia()
 				} else {
@@ -626,18 +639,67 @@
 				}
 
 			}).fail(function(jqxhr, settings, ex) {
-				alert('No se pudo guardar la compra ' + ex);
+				alert('No se pudo guardar la venta ' + ex);
 			});
 		}
+	}
+	
+	function cargaEmpresa(idEmpresa, idCliente) {
+		var submitJson = {
+			idUsuario : document.getElementById("idUsuario").value
+		}
+		$.post('/byeContabilidad/rest-services/private/empresa/getLista', JSON
+				.stringify(submitJson), function(res, code) {
+			var str;
+			for (var i = 0, len = res.length; i < len; i++) {
+				if (idEmpresa == res[i].id) {
+					str += "<option value="+res[i].id+" selected>"
+							+ res[i].razonSocial + "</option>";
+				} else {
+
+					str += "<option value="+res[i].id+">" + res[i].razonSocial
+							+ "</option>";
+				}
+			}
+
+			document.getElementById("empresa").innerHTML = str;
+			cargaCliente(idCliente);
+		}, "json");
+	}
+	
+	function cargaCliente(idCliente) {
+		var submitJson = {
+				idUsuario : document.getElementById("idUsuario").value,
+				idEmpresa : document.getElementById("empresa").value
+			}
+			$
+					.post(
+							'/byeContabilidad/rest-services/private/cliente/getLista',
+							JSON.stringify(submitJson),
+							function(res, code) {
+								var str;
+								for (var i = 0, len = res.length; i < len; i++) {
+									if (idCliente == res[i].id){
+									str += "<option value="+res[i].id+"/"+res[i].nombre+" selected>"
+											+ res[i].rut
+											+ "</option>";
+									} else {
+										str += "<option value="+res[i].id+"/"+res[i].nombre+">"
+										+ res[i].rut
+										+ "</option>";	
+								}
+							}		
+								document.getElementById("cliente").innerHTML = str;
+							        varIdCliente = idCliente; 		
+							        var nombre = document.getElementById("cliente").value.split("/");
+									varNombre = nombre[1]
+							}, "json");
+
 	}
 
 	back.addEventListener("click", function() {
 		window.history.back();
 	}, false);
-
-	function borraName() {
-		document.getElementById("nombre").value = "";
-	}
 
 	function limpia() {
 		document.getElementById("folio").value = "";
@@ -663,7 +725,9 @@
 		});
 	}
 	
-	function cargaCodigoXX(xx){
+
+	
+	function cargaCodigoMod(xx, id){
 		$.post('/byeContabilidad/rest-services/private/codigoImpuesto/getLista',
 				function(res, code) {
 			var cim;
@@ -672,10 +736,23 @@
 								+" / "+res[i].descripcion+ "</option>";
 					}
 					document.getElementById("codigo"+xx).innerHTML = cim;
+					document.getElementById("codigo"+xx).value = id;
 				}, "json");
 		$("#codigo"+xx).select2({
 			width: '300'
 		});
 	}
+	
+	$('#cliente').on(
+			'change',
+			function() {			
+				var idCliente = document.getElementById("cliente").value.split("/");
+		        varIdCliente = idCliente[0];
+		        var nombre = document.getElementById("cliente").value.split("/");
+		        varNombre = nombre[1]
+		        $("#nombre").val(varNombre);
+	});
+	$("#empresa").trigger('change');
+	$("#cliente").trigger('change');
 </script>
 </html>

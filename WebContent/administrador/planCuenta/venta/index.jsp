@@ -51,7 +51,7 @@
 		<form name="formulario" id="formulario">
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-				<h1 class="h2">Lista compras</h1>
+				<h1 class="h2">Lista ventas</h1>
 			</div>
 			<input type="hidden" name="id" id="id" />
 		</form>
@@ -149,7 +149,7 @@
 				.grid(
 						{
 							primaryKey : 'ID',
-							dataSource : "/byeContabilidad/rest-services/private/compra/getAll?idUsuario="
+							dataSource : "/byeContabilidad/rest-services/private/venta/getAll?idUsuario="
 									+ document.getElementById('idUsuario').value + "",
 							autoLoad : false,
 							columns : [
@@ -267,16 +267,16 @@
 	}
 
 	function eliminar(x) {
-		if (confirm('¿Esta seguro desea eliminar la compra?')) {
+		if (confirm('¿Esta seguro desea eliminar la venta?')) {
 			var submitJson = {
 				id : x.data.record.id,
 				idUsuario : document.getElementById("idUsuario").value
 
 			}
-			$.post('/byeContabilidad/rest-services/private/compra/delete',
+			$.post('/byeContabilidad/rest-services/private/venta/delete',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('La compra fue eliminada correctamente');
+					alert('La venta fue eliminada correctamente');
 					grid.reload();
 				} else {
 					alert(data);

@@ -66,13 +66,13 @@
 </head>
 <body>
 
-	<%@ include file="../../../complementos/nav.jsp"%> 
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<input type="hidden" name="id" id="id" />
 			<div
 				class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-				<h1 class="h2">Agregar compra</h1>
+				<h1 class="h2">Agregar venta</h1>
 			</div>
 			<div class="container">
 				<div class="form-group">
@@ -145,9 +145,7 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
-
 				<br>
 
 				<div class="form-group">
@@ -156,7 +154,6 @@
 						total</label> <input type="number" id="montoTotal" name="montoTotal"
 						class="in" required="required" min="0" pattern="^[0-9]+" readonly />
 				</div>
-
 
 				<div class="row">
 					<div class="col-xs-6 col-md-2">
@@ -177,7 +174,9 @@
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(document)
+			.ready(
+					function() {
 						$("#empresa").select2({
 							width : '200'
 						});
@@ -189,15 +188,12 @@
 							var value = $(this).val();
 							$("#montoTotal").val(value);
 						});
-						
 
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value
 						}
 
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/empresa/getLista',
+						$.post('/byeContabilidad/rest-services/private/empresa/getLista',
 										JSON.stringify(submitJson),
 										function(res, code) {
 											var str;
@@ -219,10 +215,7 @@
 	list[0][0] = 'codigo1';
 	list[0][1] = 'monto1';
 
-	$('#otrosEstado')
-			.on(
-					'change',
-					function() {
+	$('#otrosEstado').on('change',function() {
 						if (document.getElementById("otrosEstado").checked) {
 							if (document.getElementById("montoNeto").value == "") {
 								alert("Debe ingresar monto neto");
@@ -379,16 +372,13 @@
 		}, "json");
 	}
 
-	$('#empresa').on('change',
-					function() {
+	$('#empresa').on('change',function() {
 
 						var submitJson = {
 							idUsuario : document.getElementById("idUsuario").value,
 							idEmpresa : document.getElementById("empresa").value
 						}
-						$
-								.post(
-										'/byeContabilidad/rest-services/private/cliente/getLista',
+						$.post('/byeContabilidad/rest-services/private/cliente/getLista',
 										JSON.stringify(submitJson),
 										function(res, code) {
 											var str = "<option>Seleccione cliente</option>";
@@ -587,17 +577,17 @@
 				}),
 			}
 
-			$.post('/byeContabilidad/rest-services/private/compra/add',
+			$.post('/byeContabilidad/rest-services/private/venta/add',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('Se guardo exitosamente la compra');
+					alert('Se guardo exitosamente la venta');
 					location.href = "index.jsp";
 					limpia()
 				} else {
 					alert(data);
 				}
 			}).fail(function(jqxhr, settings, ex) {
-				alert('No se pudo guardar la compra ' + ex);
+				alert('No se pudo guardar la venta ' + ex);
 			});
 
 		} else if (!document.getElementById("otrosEstado").checked) {
@@ -615,10 +605,10 @@
 				idEmpresa : document.getElementById("empresa").value,
 			}
 
-			$.post('/byeContabilidad/rest-services/private/compra/add',
+			$.post('/byeContabilidad/rest-services/private/venta/add',
 					JSON.stringify(submitJson)).done(function(data) {
 				if (data == 'OK') {
-					alert('Se guardo exitosamente la compra');
+					alert('Se guardo exitosamente la venta');
 					location.href = "index.jsp";
 					limpia()
 				} else {
@@ -626,7 +616,7 @@
 				}
 
 			}).fail(function(jqxhr, settings, ex) {
-				alert('No se pudo guardar la compra ' + ex);
+				alert('No se pudo guardar la venta ' + ex);
 			});
 		}
 	}

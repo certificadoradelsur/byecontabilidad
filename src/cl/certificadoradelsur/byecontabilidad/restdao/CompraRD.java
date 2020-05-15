@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.CodigoImpuestoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CompraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.OtroImpuestoDAO;
@@ -43,6 +44,9 @@ public class CompraRD {
 	private ClienteDAO clidao;
 	@Inject
 	private OtroImpuestoDAO oidao;
+	@Inject
+	private CodigoImpuestoDAO cidao;
+
 
 	/**
 	 * funcion que almacena
@@ -73,7 +77,7 @@ public class CompraRD {
 					for (int i = 0; i < cj.getOtrosImpuestos().size(); i++) {
 						OtroImpuesto oi = new OtroImpuesto();
 						oi.setCompra(c);
-						oi.setCodigo(cj.getOtrosImpuestos().get(i).getCodigo());
+						oi.setCodigo(cidao.getById(cj.getOtrosImpuestos().get(i).getCodigo()));
 						oi.setMonto(cj.getOtrosImpuestos().get(i).getMonto());
 						otroi.add(oi);
 					}
@@ -95,18 +99,17 @@ public class CompraRD {
 	 * 
 	 * @return el total
 	 */
-	public Long countAll(String fechaDesde, String fechaHasta, String idUsuario,
-			Long idEmpresa) {
+	public Long countAll(String fechaDesde, String fechaHasta, String idUsuario, Long idEmpresa) {
 		try {
 			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
 			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
-			
-			if (fechaDesde!=null || fechaHasta!=null) {
+
+			if (fechaDesde != null && fechaHasta != null) {
 				fechaInicial = Utilidades.fechaDesde(fechaDesde);
 				fechaFinal = Utilidades.fechaHasta(fechaHasta);
 			}
-			return cdao.countAll(fechaInicial,fechaFinal,
-					udao.getById(idUsuario).getOficinaContable().getId(),idEmpresa);
+			return cdao.countAll(fechaInicial, fechaFinal, udao.getById(idUsuario).getOficinaContable().getId(),
+					idEmpresa);
 		} catch (Exception e) {
 			log.error("No se puede contar el total de compras ", e);
 			return 0L;
@@ -120,8 +123,8 @@ public class CompraRD {
 	 * @param limit largo de la pagina
 	 * @return json con total de compras
 	 */
-	public List<CompraJson> getAll(Integer page, Integer limit, String fechaDesde,
-			String fechaHasta, String idUsuario, Long idEmpresa) {
+	public List<CompraJson> getAll(Integer page, Integer limit, String fechaDesde, String fechaHasta, String idUsuario,
+			Long idEmpresa) {
 		List<CompraJson> lcj = new ArrayList<>();
 		try {
 			Integer inicio = 0;
@@ -130,11 +133,14 @@ public class CompraRD {
 			} else {
 				inicio = (page * limit) - limit;
 			}
-
 			Timestamp fechaInicial = Utilidades.fechaDesde(Utilidades.fechaActualDesde().toString());
 			Timestamp fechaFinal = Utilidades.fechaHasta(Utilidades.fechaActualHasta().toString());
-			
-			List<Compra> lc = cdao.getAll(inicio, limit,fechaInicial,fechaFinal,
+
+			if (fechaDesde != null && fechaHasta != null) {
+				fechaInicial = Utilidades.fechaDesde(fechaDesde);
+				fechaFinal = Utilidades.fechaHasta(fechaHasta);
+			}
+			List<Compra> lc = cdao.getAll(inicio, limit, fechaInicial, fechaFinal,
 					udao.getById(idUsuario).getOficinaContable().getId(), idEmpresa);
 			for (int i = 0; i < lc.size(); i++) {
 				CompraJson cj = new CompraJson();
@@ -192,7 +198,7 @@ public class CompraRD {
 					for (int i = 0; i < cj.getOtrosImpuestos().size(); i++) {
 						OtroImpuesto oi = new OtroImpuesto();
 						oi.setCompra(c);
-						oi.setCodigo(cj.getOtrosImpuestos().get(i).getCodigo());
+						oi.setCodigo(cidao.getById(cj.getOtrosImpuestos().get(i).getCodigo()));
 						oi.setMonto(cj.getOtrosImpuestos().get(i).getMonto());
 						otroi.add(oi);
 					}
@@ -236,7 +242,7 @@ public class CompraRD {
 		if (c.isOtrosEstado().equals(true)) {
 			for (int i = 0; i < c.getOtrosImpuestos().size(); i++) {
 				OtroImpuestoJson oi = new OtroImpuestoJson();
-				oi.setCodigo(c.getOtrosImpuestos().get(i).getCodigo());
+				oi.setCodigo(c.getOtrosImpuestos().get(i).getCodigo().getId());
 				oi.setMonto(c.getOtrosImpuestos().get(i).getMonto());
 				oij.add(oi);
 			}

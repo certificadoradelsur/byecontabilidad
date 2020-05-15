@@ -54,12 +54,18 @@
 	transition-delay: 0s;
 	visibility: visible;
 }
+ input[class="montoS"]
+ {
+ -webkit-appearance:textfield !important;
+ margin:=;
+ -moz-zppearance:textfield !important;
+}
 </style>
 
 </head>
 <body>
 
-<%-- 	<%@ include file="../../../complementos/nav.jsp"%> --%>
+<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 		<form name="formulario" id="formulario">
 			<input type="hidden" name="id" id="id" />
@@ -132,11 +138,9 @@
 					<div class="col-12" id="otros">
 						<div class='row'>
 							<div class='col-sm-2'></div>
-							<div class='col-sm-1 col-form' id='codigo'>
-								<!-- 								<label class='col-form-label'>Código </label> <input type='number' style='width: 60px;' id='codigo1' class='in' required='required' /> -->
+							<div class='col-sm-4 col-form' id='codigo'>
 							</div>
 							<div class='col-sm-2 col-form' id='monto'>
-								<!-- 								<label class='col-form-label'>Monto</label> <input type='number' onkeyup='sumar()' style='width: 140px;' id='monto1' class='montoS' required='required' min='0' pattern='^[0-9]+'/> -->
 							</div>
 						</div>
 					</div>
@@ -172,9 +176,7 @@
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						$("#empresa").select2({
 							width : '200'
 						});
@@ -237,18 +239,17 @@
 		
 		for (var i = 0; i < otrosImpuestos.length; i++) {
 			var p = document.getElementById("codigo");
-			var inp = document.createElement("INPUT");
-			inp.type = 'number';
+			var inp = document.createElement("select");
 			inp.id = 'codigo' + xx;
 			inp.style = 'width:60px;';
 			inp.className = 'in';
 			p.appendChild(inp);
-			$("#codigo" + xx).val(otrosImpuestos[i].codigo);
+			cargaCodigoMod(xx,otrosImpuestos[i].codigo);
 			var pd = document.getElementById("monto");
 			var ipt = document.createElement("INPUT");
 			ipt.type = 'number';
 			ipt.id = 'monto' + xx;
-			ipt.style = 'width:140px;';
+			ipt.style = 'width:140px;height:28px' ;
 			ipt.className = 'montoS';
 //  			$(ipt).on('keyup', function() {
 //  				sumar();
@@ -263,13 +264,11 @@
 			$("#monto" + (xx)).prop("disabled", true);
 			indice++;
 			xx++;
-			console.log(list);
+//			console.log(list);
 		}
 	}
 
-	$('#otrosEstado').on(
-					'change',
-					function() {
+	$('#otrosEstado').on('change',function() {
 						if (document.getElementById("otrosEstado").checked) {
 							if (document.getElementById("montoNeto").value == "") {
 								alert("Debe ingresar monto neto");
@@ -277,10 +276,11 @@
 								return;
 							}
 							$("#montoNeto").prop("disabled", true);
-							c = "<label class='col-form-label'>Código </label> <input type='number' style='width: 60px;' id='codigo1' class='in' required='required' />";
+ 							c = "<label class='col-form-label'>Código </label> <select  id='codigo1'> </select>";
 							document.getElementById("codigo").innerHTML = c;
-							m = "<label class='col-form-label'>Monto</label> <input type='number' onkeyup='sumar()' style='width: 140px;' id='monto1' class='montoS' required='required' min='0' pattern='^[0-9]+'/>";
+							m = "<label class='col-form-label'>Monto</label> <input type='number' onkeyup='sumar()' style='width: 140px;height:28px' id='monto1' class='montoS' required='required' min='0' pattern='^[0-9]+'/>";
 							document.getElementById("monto").innerHTML = m;
+							cargaCodigo1();
 							$('#collapse').collapse('show');
 							xx = 2;
 							list = [];
@@ -342,9 +342,7 @@
 						}
 					})
 
-	$('#ivaEstado').on(
-					'change',
-					function() {
+	$('#ivaEstado').on('change',function() {
 						if (document.getElementById("ivaEstado").checked) {
 							if (document.getElementById("montoNeto").value == "") {
 								alert("Debe ingresar monto neto");
@@ -417,23 +415,22 @@
 	
 
 	function add() {
-		if (document.getElementById("codigo" + (xx - 1)).value == ''
-				|| document.getElementById("monto" + (xx - 1)).value == '') {
-			alert('Debe ingresar valores valido');
+		if (document.getElementById("monto" + (xx - 1)).value == '') {
+			alert('Debe ingresar un monto valido');
 			return;
 		}
 		var p = document.getElementById("codigo");
-		var inp = document.createElement("INPUT");
-		inp.type = 'number';
+		var inp = document.createElement("select");
 		inp.id = 'codigo' + xx;
 		inp.style = 'width:60px;';
 		inp.className = 'in';
 		p.appendChild(inp);
+		cargaCodigoXX(xx);
 		var pd = document.getElementById("monto");
 		var ipt = document.createElement("INPUT");
 		ipt.type = 'number';
 		ipt.id = 'monto' + xx;
-		ipt.style = 'width:140px;';
+		ipt.style = 'width:140px;height:28px' ;
 		ipt.className = 'montoS';
 		$(ipt).on('keyup', function() {
 			sumar();
@@ -447,7 +444,8 @@
 		$("#monto" + (xx - 1)).prop("disabled", true);
 		indice++;
 		xx++;
-		console.log(list);
+//		console.log(list);
+
 
 	}
 
@@ -455,18 +453,19 @@
 		if (xx >= 3) {
 			xx--;
 			var menos = document.getElementById("monto" + xx).value;
-			console.log(menos);
+//			console.log(menos);
 			var total = document.getElementById("montoTotal").value;
-			console.log(total);
-			console.log(xx);
+//			console.log(total);
+//			console.log(xx);
 
 			indice--;
+			$("#codigo" + xx).select2('destroy');
 			$("#codigo" + xx).remove();
 			$("#monto" + xx).remove();
 			list.splice(indice, xx);
 			$("#codigo" + (xx - 1)).prop("disabled", false);
 			$("#monto" + (xx - 1)).prop("disabled", false);
-			console.log(list);
+//			console.log(list);
 			var resultado = (total) - (menos);
 			$("#montoTotal").val(resultado);
 		}else if(xx == 2){
@@ -705,27 +704,51 @@
 		document.getElementById("montoTotal").value = "";
 	}
 	
-// 	$('#empresa').on(
-// 			'change',
-// 			function() {
-// alert();
-// 				var submitJson = {
-// 					idUsuario : document.getElementById("idUsuario").value,
-// 					idEmpresa : document.getElementById("empresa").value
-// 				}
-// 				$.post('/byeContabilidad/rest-services/private/cliente/getLista',
-// 						JSON.stringify(submitJson),
-// 						function(res, code) {
-// 							var str = "<option>Seleccione cliente</option>";
-// 							for (var i = 0, len = res.length; i < len; i++) {
-// 								str += "<option value="+res[i].id+"/"+res[i].nombre+">"
-// 										+ res[i].rut
-// 										+ "</option>";
-// 							}
-// 							document.getElementById("cliente").innerHTML = str;
-// 						}, "json");
-// 				$("#nombre").val("");
-// 			});
+	function cargaCodigo1(){
+		$.post('/byeContabilidad/rest-services/private/codigoImpuesto/getLista',
+				function(res, code) {
+			var cim;
+					for (var i = 0, len = res.length; i < len; i++) {
+						cim += "<option value="+res[i].id+">" + res[i].codigo
+								+" / "+res[i].descripcion+ "</option>";
+					}
+					document.getElementById("codigo1").innerHTML = cim;
+				}, "json");
+		$("#codigo1").select2({
+			width: '300'
+		});
+	}
+	
+	function cargaCodigoXX(xx){
+		$.post('/byeContabilidad/rest-services/private/codigoImpuesto/getLista',
+				function(res, code) {
+			var cim;
+					for (var i = 0, len = res.length; i < len; i++) {
+						cim += "<option value="+res[i].id+">" + res[i].codigo
+								+" / "+res[i].descripcion+ "</option>";
+					}
+					document.getElementById("codigo"+xx).innerHTML = cim;
+				}, "json");
+		$("#codigo"+xx).select2({
+			width: '300'
+		});
+	}
+	
+	function cargaCodigoMod(xx, id){
+		$.post('/byeContabilidad/rest-services/private/codigoImpuesto/getLista',
+				function(res, code) {
+			var cim;
+					for (var i = 0, len = res.length; i < len; i++) {
+						cim += "<option value="+res[i].id+">" + res[i].codigo
+								+" / "+res[i].descripcion+ "</option>";
+					}
+					document.getElementById("codigo"+xx).innerHTML = cim;
+					document.getElementById("codigo"+xx).value = id;
+				}, "json");
+		$("#codigo"+xx).select2({
+			width: '300'
+		});
+	}
 	
 	$('#cliente').on(
 			'change',
