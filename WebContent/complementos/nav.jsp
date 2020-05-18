@@ -38,9 +38,24 @@
 			<li class="nav-item"><a class="color nav-link"
 				href="../comprobanteContable/index.jsp" style="color: white;"><img
 					src="../../../images/reporte.ico" alt="Icono" /> Comprobante Contable</a></li>
-			<li class="nav-item"><a class="color nav-link"
-				href="../honorario/index.jsp" style="color: white;"><img
-					src="../../../images/honorario.ico" alt="Icono" /> Honorario</a></li>
+		
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" style="color: white;"
+				id="navbarDropdown" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"> <img
+					src="../../../images/libro.ico" alt="Icono" /> Libros
+			</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="../honorario/index.jsp"><img
+						src="../../../images/honorario.ico" alt="Icono" /> Honorario</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="../compra/index.jsp"><img
+						src="../../../images/compra.ico" alt="Icono" /> Compra</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="../venta/index.jsp"><img
+						src="../../../images/venta.ico" alt="Icono" /> Venta</a>	
+				</div></li>
+								
 			<li class="nav-item"><a class="color nav-link"
 				href="../reporte/index.jsp" style="color: white;"><img
 					src="../../../images/informe.ico" alt="Icono" /> Reportes</a></li>

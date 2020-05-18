@@ -536,6 +536,11 @@
 			alert("Todos los campos deben estar llenos");
 			return;
 		}
+		
+		if(document.getElementById("fecha").value == ""){
+			alert("Todos los campos deben estar llenos");
+			return;
+		}
 
 		if ($('#empresa option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");

@@ -90,9 +90,24 @@
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/comprobanteContable/index.jsp" style="color: white;"><img
 					src="../images/reporte.ico" alt="Icono" /> Comprobante Contable</a></li>
-			<li class="nav-item"><a class="color nav-link"
-				href="../administrador/planCuenta/honorario/index.jsp" style="color: white;"><img
-					src="../images/honorario.ico" alt="Icono" /> Honorario</a></li>
+					
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" style="color: white;"
+				id="navbarDropdown" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"> <img
+					src="../images/libro.ico" alt="Icono" /> Libros
+			</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="../administrador/planCuenta/honorario/index.jsp"><img
+						src="../images/honorario.ico" alt="Icono" /> Honorario</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="../administrador/planCuenta/compra/index.jsp"><img
+						src="../images/compra.ico" alt="Icono" /> Compra</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="../administrador/planCuenta/venta/index.jsp"><img
+						src="../images/venta.ico" alt="Icono" /> Venta</a>	
+				</div></li>
+					
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/reporte/index.jsp" style="color: white;"><img
 					src="../images/informe.ico" alt="Icono" /> Reportes</a></li>		

@@ -77,7 +77,7 @@ public class OtroImpuesto implements Serializable {
 		this.codigo = codigo;
 	}
 
-	@Column(name = "monto", nullable = false)
+	@Column(name = "monto", nullable = true)
 	public void setMonto(Long monto) {
 		this.monto = monto;
 	}

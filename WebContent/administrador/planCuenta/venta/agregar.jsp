@@ -516,6 +516,11 @@
 		var mon = $('.montoS').toArray().some(function(el) {
 			return $(el).val().length < 1
 		});
+		
+		if(document.getElementById("fecha").value == ""){
+			alert("Todos los campos deben estar llenos");
+			return;
+		}
 
 		if (document.getElementById("folio").value == 0) {
 			alert("Todos los campos deben estar llenos");

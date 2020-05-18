@@ -542,6 +542,11 @@
 			return;
 		}
 
+		if(document.getElementById("fecha").value == ""){
+			alert("Todos los campos deben estar llenos");
+			return;
+		}
+		
 		if ($('#empresa option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
@@ -558,8 +563,7 @@
 		}
 
 		var montoNeto = Math.round(document.getElementById("montoNeto").value)
-		var montoTotal = Math
-				.round(document.getElementById("montoTotal").value)
+		var montoTotal = Math.round(document.getElementById("montoTotal").value)
 		var iva = Math.round(document.getElementById("iva").value)
 
 		if (document.getElementById("otrosEstado").checked) {

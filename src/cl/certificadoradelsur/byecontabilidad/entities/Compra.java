@@ -61,7 +61,7 @@ public class Compra implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "nombre", nullable = false)
+	@Column(name = "nombre", nullable = true)
 	public String getNombre() {
 		return nombre;
 	}
@@ -80,7 +80,7 @@ public class Compra implements Serializable {
 		this.cliente = cliente;
 	}
 	
-	@Column(name = "folio", nullable = false)
+	@Column(name = "folio", nullable = true)
 	public String getFolio() {
 		return folio;
 	}
@@ -89,7 +89,7 @@ public class Compra implements Serializable {
 		this.folio = folio;
 	}
 
-	@Column(name = "fecha", nullable = false)
+	@Column(name = "fecha", nullable = true)
 	public Timestamp getFecha() {
 		return fecha;
 	}
@@ -98,7 +98,7 @@ public class Compra implements Serializable {
 		this.fecha = fecha;
 	}
 
-	@Column(name = "monto_neto", nullable = false)
+	@Column(name = "monto_neto", nullable = true)
 	public Long getMontoNeto() {
 		return montoNeto;
 	}
@@ -107,7 +107,7 @@ public class Compra implements Serializable {
 		this.montoNeto = montoNeto;
 	}
 
-	@Column(name = "iva", nullable = false)
+	@Column(name = "iva", nullable = true)
 	public Long getIva() {
 		return iva;
 	}
@@ -116,7 +116,7 @@ public class Compra implements Serializable {
 		this.iva = iva;
 	}
 
-	@Column(name = "monto_total", nullable = false)
+	@Column(name = "monto_total", nullable = true)
 	public Long getMontoTotal() {
 		return montoTotal;
 	}

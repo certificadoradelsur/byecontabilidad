@@ -548,6 +548,11 @@
 			return;
 		}
 
+		if(document.getElementById("fecha").value == ""){
+			alert("Todos los campos deben estar llenos");
+			return;
+		}
+		
 		if ($('#empresa option:selected').text() == '') {
 			alert("Debe seleccionar una empresa valida");
 			return;
@@ -564,12 +569,12 @@
 		}
 
 		var montoNeto = Math.round(document.getElementById("montoNeto").value)
-		var montoTotal = Math
-				.round(document.getElementById("montoTotal").value)
+		var montoTotal = Math.round(document.getElementById("montoTotal").value)
 		var iva = Math.round(document.getElementById("iva").value)
 
 		if (document.getElementById("otrosEstado").checked) {
 			for (var i = 0; i < list.length; i++) {
+				alert(i);
 				listValores[indiceValores] = [ 2 ];
 				listValores[indiceValores][0] = document
 						.getElementById(list[i][0]).value;
@@ -725,7 +730,20 @@
 		});
 	}
 	
-
+	function cargaCodigoXX(xx){
+		$.post('/byeContabilidad/rest-services/private/codigoImpuesto/getLista',
+				function(res, code) {
+			var cim;
+					for (var i = 0, len = res.length; i < len; i++) {
+						cim += "<option value="+res[i].id+">" + res[i].codigo
+								+" / "+res[i].descripcion+ "</option>";
+					}
+					document.getElementById("codigo"+xx).innerHTML = cim;
+				}, "json");
+		$("#codigo"+xx).select2({
+			width: '300'
+		});
+	}
 	
 	function cargaCodigoMod(xx, id){
 		$.post('/byeContabilidad/rest-services/private/codigoImpuesto/getLista',
