@@ -12,25 +12,29 @@
 		value=<%=request.getUserPrincipal().getName()%> />
 </body>
 <script type="text/javascript">
-$(document).ready(function () {
-	var submitJson = {
-		 id: document.getElementById("idUsuario").value
-	}
-    $.post('/byeContabilidad/rest-services/private/usuario/getById', JSON.stringify(submitJson)).done(function(data) {
-		if(data.perfil == "ADMIN"){			
-			location.href="/byeContabilidad/administrador/index.jsp";			
-		}else if(data.perfil == "SUPER") {
-			location.href="/byeContabilidad/supervisor/index.jsp";
-		}
-		else if(data.perfil == "ADMINISTRATIVO") {
-			location.href="/byeContabilidad/administrativo/index.jsp";
-		}
-		
-		})
-		.fail(function(jqxhr, settings, ex) { 
-		    	alert('No se pudo obtener usuario ' + ex); 
-	});
-});
+	$(document)
+			.ready(
+					function() {
+						var submitJson = {
+							id : document.getElementById("idUsuario").value
+						}
+						$
+								.post(
+										'/byeContabilidad/rest-services/private/usuario/getById',
+										JSON.stringify(submitJson))
+								.done(
+										function(data) {
+											if (data.perfil == "ADMIN") {
+												location.href = "/byeContabilidad/administrador/index.jsp";
+											} else if (data.perfil == "SUPER") {
+												location.href = "/byeContabilidad/supervisor/index.jsp";
+											} else if (data.perfil == "ADMINISTRATIVO") {
+												location.href = "/byeContabilidad/administrativo/index.jsp";
+											}
 
+										}).fail(function(jqxhr, settings, ex) {
+									alert('No se pudo obtener usuario ' + ex);
+								});
+					});
 </script>
 </html>

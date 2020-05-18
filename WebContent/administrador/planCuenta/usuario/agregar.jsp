@@ -42,7 +42,19 @@
 	type="text/javascript">
 	$('.dropdown-toggle').dropdown()
 </script>
+<style type="text/css">
+.collapsing {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: hidden;
+}
 
+.collapse.show {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+	visibility: visible;
+}
+</style>
 </head>
 <body>
 
@@ -79,7 +91,7 @@
 						<input type="email" id="email" name="email" class="in"
 							placeholder="Ingrese email" required="required" />
 					</div>
-				    <div class="row">
+					<div class="row">
 						<label for="colFormLabel" class="col-sm-2 col-form-label">
 							&nbsp;&nbsp; Estado</label>
 						<div class="col-3">
@@ -101,15 +113,12 @@
 						</div>
 					</div>
 					<div class="row collapse" id="collapse">
-					  <div class="col-sm-2">&nbsp;&nbsp; Empresas</div>
-					<div class="col-sm-10" id="empresas">
-						<div class="form-check">
-
+						<div class="col-sm-2">&nbsp;&nbsp; Empresas</div>
+						<div class="col-sm-10" id="empresas">
+							<div class="form-check"></div>
 						</div>
 					</div>
-					</div>
-					<br>
-					<br>
+					<br> <br>
 					<div class="row">
 						<div class="col-xs-6 col-md-2">
 							<button class=" btt btn btn-primary btn-lg btn-block"

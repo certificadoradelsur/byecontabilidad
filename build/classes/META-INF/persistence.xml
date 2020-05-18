@@ -24,6 +24,13 @@
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Venta</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Compra</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Honorario</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.UsuarioEmpresa</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.OtroImpuesto</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.CodigoImpuesto</class>
+		<class>cl.certificadoradelsur.byecontabilidad.entities.Bitacora</class>
+		
+		
+		
 		
 		
 		

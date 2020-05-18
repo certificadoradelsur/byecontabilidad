@@ -46,7 +46,7 @@
 </head>
 <body>
 
-	<%@ include file="../../../complementos/nav2.jsp"%>
+	<%@ include file="../../../complementos/nav.jsp"%>
 	<div class="container-lg">
 
 		<form name="importCartola" id="importCartola"
