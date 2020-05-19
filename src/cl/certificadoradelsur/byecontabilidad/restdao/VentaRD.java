@@ -176,11 +176,12 @@ public class VentaRD {
 	 */
 	public String update(VentaJson vj) {
 		try {
-			Venta v = vdao.getById(vj.getId());
+			
 			List<OtroImpuesto> otroI = oidao.getByIdVenta(vj.getId());
 			for (int i = 0; i < otroI.size(); i++) {
 				oidao.eliminar(oidao.getById(otroI.get(i).getId()));
 			}
+			Venta v = vdao.getById(vj.getId());
 			if (Utilidades.containsScripting(vj.getNombre()).compareTo(true) == 0) {
 				throw new ByeContabilidadException(Constantes.MENSAJE_CARACATERES_INVALIDOS);
 			} else {

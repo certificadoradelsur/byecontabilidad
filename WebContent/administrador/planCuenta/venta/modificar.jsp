@@ -227,10 +227,8 @@
 
 	var xx = 2;
 	var list = [];
-	var indice = 1;
-	list[0] = [ 2 ];
-	list[0][0] = 'codigo1';
-	list[0][1] = 'monto1';
+	var indice = 0;
+
 	
 	function cargaOtros(otrosImpuestos){
 		xx = 1;
@@ -574,7 +572,6 @@
 
 		if (document.getElementById("otrosEstado").checked) {
 			for (var i = 0; i < list.length; i++) {
-				alert(i);
 				listValores[indiceValores] = [ 2 ];
 				listValores[indiceValores][0] = document
 						.getElementById(list[i][0]).value;
