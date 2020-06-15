@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Inicio Bye Contabilidad Certificadora del Sur</title>
+    <title>Inicio ByeContabilidad Certificadora del Sur</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
 
