@@ -2,6 +2,7 @@ package cl.certificadoradelsur.byecontabilidad.restdao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,10 +17,12 @@ import cl.certificadoradelsur.byecontabilidad.dao.CuentaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.MovimientoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.NoConciliadoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.PeriodoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.ComprobanteContable;
 import cl.certificadoradelsur.byecontabilidad.entities.Movimiento;
+import cl.certificadoradelsur.byecontabilidad.entities.Periodo;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.ComprobanteContableJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -54,7 +57,9 @@ public class ComprobanteContableRD {
 	private MovimientoDAO mdao;
 	@Inject
 	private BitacoraDAO bidao;
-
+	@Inject
+	private PeriodoDAO peridao;
+	
 	/**
 	 * funcion que almacena
 	 * 
@@ -63,6 +68,13 @@ public class ComprobanteContableRD {
 	 */
 	public String save(ComprobanteContableJson ccj) {
 		try {
+			Timestamp fech = Utilidades.convertidorFechaSinHora(ccj.getFecha());
+			Long mes = getMes(fech);
+			Long anio = getAnio(fech);
+			Periodo per = peridao.getBymesPeriodo(mes, anio,ccj.getIdEmpresa());
+			
+			if(per.isEstado() == true) {
+			
 			ComprobanteContable c = new ComprobanteContable();
 			if (comdao.getByNumero(ccj.getNumero(), ccj.getIdEmpresa()) == null) {
 				if (Utilidades.containsScripting(ccj.getGlosaGeneral()).compareTo(true) == 0) {
@@ -115,13 +127,33 @@ public class ComprobanteContableRD {
 			} else {
 				return "El número ingresado, ya se encuentra registrado";
 			}
-
+			}else {
+				return "El periodo ya esta cerrado";
+			}
 		} catch (Exception e) {
 			log.error("No se pudo guardar el comprobante contable ", e);
 			return Constantes.MENSAJE_REST_FAIL;
 		}
 	}
-
+	
+	public Long getMes(Timestamp fechaInicioReposo) {
+		Long mes = 0L;
+		Calendar fecha = Calendar.getInstance();
+		fecha.setTime(fechaInicioReposo);
+		
+		mes = (long)fecha.get(Calendar.MONTH);
+		return mes+1;
+	}
+	
+	public Long getAnio(Timestamp fechaInicioReposo) {
+		Long anio = 0L;
+		Calendar fecha = Calendar.getInstance();
+		fecha.setTime(fechaInicioReposo);
+		
+		anio = (long)fecha.get(Calendar.YEAR);
+		return anio;
+	}
+	
 	/**
 	 * Cuenta el total de las filas
 	 * 
@@ -201,6 +233,13 @@ public class ComprobanteContableRD {
 	 */
 	public String update(ComprobanteContableJson ccj) {
 		try {
+			Timestamp fech = Utilidades.convertidorFechaSinHora(ccj.getFecha());
+			Long mes = getMes(fech);
+			Long anio = getAnio(fech);
+			Periodo per = peridao.getBymesPeriodo(mes, anio,ccj.getIdEmpresa());
+			
+			if(per.isEstado() == true) {
+			
 			ComprobanteContable c = comdao.getById(ccj.getId());
 			if (condao.getByIdComprobante(c.getId()) == null && ncdao.getByIdComprobante(c.getId()) == null) {
 				if (comdao.getByNumero(ccj.getNumero(),ccj.getIdEmpresa()) == null
@@ -233,7 +272,9 @@ public class ComprobanteContableRD {
 			} else {
 				return "El codigo ingresado, ya se encuentra registrado";
 			}
-
+			}else {
+				return "El periodo ya esta cerrado";
+			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar la cuenta contable");
 			return e.getMessage();
@@ -248,6 +289,12 @@ public class ComprobanteContableRD {
 	 */
 	public String modificar(ComprobanteContableJson ccj) {
 		try {
+			Timestamp fech = Utilidades.convertidorFechaSinHora(ccj.getFecha());
+			Long mes = getMes(fech);
+			Long anio = getAnio(fech);
+			Periodo per = peridao.getBymesPeriodo(mes, anio,ccj.getIdEmpresa());
+			
+			if(per.isEstado() == true) {
 			if (condao.getByIdComprobante(ccj.getId()) == null && ncdao.getByIdComprobante(ccj.getId()) == null) {
 				List<Movimiento> lm = mdao.getByIdComprobante(ccj.getId());
 				for (int i = 0; i < lm.size(); i++) {
@@ -320,7 +367,9 @@ public class ComprobanteContableRD {
 			} else {
 				return "El codigo ingresado, ya se encuentra registrado";
 			}
-
+			}else {
+				return "El periodo ya esta cerrado";
+			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar el comprobante contable");
 			return e.getMessage();

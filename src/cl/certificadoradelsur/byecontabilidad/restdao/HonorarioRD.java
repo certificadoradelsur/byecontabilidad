@@ -2,6 +2,7 @@ package cl.certificadoradelsur.byecontabilidad.restdao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -11,9 +12,11 @@ import cl.certificadoradelsur.byecontabilidad.dao.BitacoraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.ClienteDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.HonorarioDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.PeriodoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Honorario;
+import cl.certificadoradelsur.byecontabilidad.entities.Periodo;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.HonorarioJson;
 import cl.certificadoradelsur.byecontabilidad.utils.Constantes;
@@ -38,6 +41,8 @@ public class HonorarioRD {
 	private BitacoraDAO bidao;
 	@Inject
 	private ClienteDAO cdao;
+	@Inject
+	private PeriodoDAO peridao;
 
 	/**
 	 * funcion que almacena
@@ -47,6 +52,12 @@ public class HonorarioRD {
 	 */
 	public String save(HonorarioJson hj) {
 		try {
+			Timestamp fech = Utilidades.convertidorFechaSinHora(hj.getFecha());
+			Long mes = getMes(fech);
+			Long anio = getAnio(fech);
+			Periodo per = peridao.getBymesPeriodo(mes, anio,hj.getIdEmpresa());
+			
+			if(per.isEstado() == true) {
 			Honorario h = new Honorario();
 			if (Utilidades.containsScripting(hj.getNombre()).compareTo(true) == 0
 					|| Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
@@ -65,12 +76,33 @@ public class HonorarioRD {
 				hdao.guardar(h);
 				return Constantes.MENSAJE_REST_OK;
 			}
+			}else {
+				return "El periodo ya esta cerrado";
+			}
 		} catch (
 
 		Exception e) {
 			log.error("No se pudo guardar la Honorario ", e);
 			return Constantes.MENSAJE_REST_FAIL;
 		}
+	}
+	
+	public Long getMes(Timestamp fechaInicioReposo) {
+		Long mes = 0L;
+		Calendar fecha = Calendar.getInstance();
+		fecha.setTime(fechaInicioReposo);
+		
+		mes = (long)fecha.get(Calendar.MONTH);
+		return mes+1;
+	}
+	
+	public Long getAnio(Timestamp fechaInicioReposo) {
+		Long anio = 0L;
+		Calendar fecha = Calendar.getInstance();
+		fecha.setTime(fechaInicioReposo);
+		
+		anio = (long)fecha.get(Calendar.YEAR);
+		return anio;
 	}
 
 	/**
@@ -150,6 +182,12 @@ public class HonorarioRD {
 	 */
 	public String update(HonorarioJson hj) {
 		try {
+			Timestamp fech = Utilidades.convertidorFechaSinHora(hj.getFecha());
+			Long mes = getMes(fech);
+			Long anio = getAnio(fech);
+			Periodo per = peridao.getBymesPeriodo(mes, anio,hj.getIdEmpresa());
+			
+			if(per.isEstado() == true) {
 			Honorario h = hdao.getById(hj.getId());
 			if (Utilidades.containsScripting(hj.getNombre()).compareTo(true) == 0
 					|| Utilidades.containsScripting(hj.getNumBoleta()).compareTo(true) == 0) {
@@ -173,6 +211,9 @@ public class HonorarioRD {
 				b.setDescripcion("Se modifico " + hj.getNumBoleta());
 				bidao.guardar(b);
 				return Constantes.MENSAJE_REST_OK;
+			}
+			}else {
+				return "El periodo esta cerrado";
 			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar el Honorario");

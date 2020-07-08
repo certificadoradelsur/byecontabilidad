@@ -108,12 +108,28 @@
 						src="../images/venta.ico" alt="Icono" /> Venta</a>	
 				</div></li>
 					
+					
+					
+					
 			<li class="nav-item"><a class="color nav-link"
 				href="../administrador/planCuenta/reporte/index.jsp" style="color: white;"><img
 					src="../images/informe.ico" alt="Icono" /> Reportes</a></li>		
-			<li class="nav-item"><a class="color nav-link"
-				href="../administrador/planCuenta/usuario/index.jsp" style="color: white;"><img
-					src="../images/user.ico" alt="Icono" /> Usuarios</a></li>				
+			
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" style="color: white;"
+				id="navbarDropdown" role="button" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false"> <img
+					src="../images/config.ico" alt="Icono" /> Ajustes del sistema
+			</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="../administrador/planCuenta/usuario/index.jsp"><img
+						src="../images/user.ico" alt="Icono" /> Usuarios</a>
+					<div class="dropdown-divider"></div>
+
+					<a class="dropdown-item" href="../administrador/planCuenta/periodo/index.jsp"><img
+						src="../images/periodo.ico" alt="Icono" /> Periodos</a>
+
+				</div></li>
 		</ul>
 
 

@@ -2,6 +2,7 @@ package cl.certificadoradelsur.byecontabilidad.restdao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -13,10 +14,12 @@ import cl.certificadoradelsur.byecontabilidad.dao.CodigoImpuestoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.CompraDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.EmpresaDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.OtroImpuestoDAO;
+import cl.certificadoradelsur.byecontabilidad.dao.PeriodoDAO;
 import cl.certificadoradelsur.byecontabilidad.dao.UsuarioDAO;
 import cl.certificadoradelsur.byecontabilidad.entities.Bitacora;
 import cl.certificadoradelsur.byecontabilidad.entities.Compra;
 import cl.certificadoradelsur.byecontabilidad.entities.OtroImpuesto;
+import cl.certificadoradelsur.byecontabilidad.entities.Periodo;
 import cl.certificadoradelsur.byecontabilidad.exception.ByeContabilidadException;
 import cl.certificadoradelsur.byecontabilidad.json.CompraJson;
 import cl.certificadoradelsur.byecontabilidad.json.OtroImpuestoJson;
@@ -46,8 +49,8 @@ public class CompraRD {
 	private OtroImpuestoDAO oidao;
 	@Inject
 	private CodigoImpuestoDAO cidao;
-
-
+	@Inject
+	private PeriodoDAO peridao;
 	/**
 	 * funcion que almacena
 	 * 
@@ -56,6 +59,14 @@ public class CompraRD {
 	 */
 	public String save(CompraJson cj) {
 		try {
+			
+			Timestamp fech = Utilidades.convertidorFechaSinHora(cj.getFecha());
+			Long mes = getMes(fech);
+			Long anio = getAnio(fech);
+			Periodo per = peridao.getBymesPeriodo(mes, anio,cj.getIdEmpresa());
+			
+			if(per.isEstado() == true) {
+			
 			Compra c = new Compra();
 			if (Utilidades.containsScripting(cj.getNombre()).compareTo(true) == 0
 					|| Utilidades.containsScripting(cj.getFolio()).compareTo(true) == 0) {
@@ -86,6 +97,9 @@ public class CompraRD {
 				cdao.guardar(c);
 				return Constantes.MENSAJE_REST_OK;
 			}
+			}else {
+				return "El periodo esta cerrado";
+			}
 		} catch (
 
 		Exception e) {
@@ -93,6 +107,24 @@ public class CompraRD {
 			return Constantes.MENSAJE_REST_FAIL;
 		}
 	}
+		
+		public Long getMes(Timestamp fechaInicioReposo) {
+			Long mes = 0L;
+			Calendar fecha = Calendar.getInstance();
+			fecha.setTime(fechaInicioReposo);
+			
+			mes = (long)fecha.get(Calendar.MONTH);
+			return mes+1;
+		}
+		
+		public Long getAnio(Timestamp fechaInicioReposo) {
+			Long anio = 0L;
+			Calendar fecha = Calendar.getInstance();
+			fecha.setTime(fechaInicioReposo);
+			
+			anio = (long)fecha.get(Calendar.YEAR);
+			return anio;
+		}
 
 	/**
 	 * Cuenta el total de las filas
@@ -175,6 +207,12 @@ public class CompraRD {
 	 */
 	public String update(CompraJson cj) {
 		try {
+			Timestamp fech = Utilidades.convertidorFechaSinHora(cj.getFecha());
+			Long mes = getMes(fech);
+			Long anio = getAnio(fech);
+			Periodo per = peridao.getBymesPeriodo(mes, anio,cj.getIdEmpresa());
+			
+			if(per.isEstado() == true) {
 			Compra c = cdao.getById(cj.getId());
 			List<OtroImpuesto> otroI = oidao.getByIdCompra(cj.getId());
 			for (int i = 0; i < otroI.size(); i++) {
@@ -215,6 +253,9 @@ public class CompraRD {
 				bidao.guardar(b);
 
 				return Constantes.MENSAJE_REST_OK;
+			}
+			}else {
+				return "Periodo esta cerrado";
 			}
 		} catch (Exception e) {
 			log.error("No se pudo modificar el compra");
