@@ -29,7 +29,7 @@
 		<class>cl.certificadoradelsur.byecontabilidad.entities.CodigoImpuesto</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Bitacora</class>
 		<class>cl.certificadoradelsur.byecontabilidad.entities.Periodo</class>
-		
+		<class>cl.certificadoradelsur.byecontabilidad.entities.CentroResultado</class>
 		
 		
 		

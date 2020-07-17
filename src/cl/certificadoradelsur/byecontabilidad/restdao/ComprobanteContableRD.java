@@ -72,8 +72,7 @@ public class ComprobanteContableRD {
 			Long mes = getMes(fech);
 			Long anio = getAnio(fech);
 			Periodo per = peridao.getBymesPeriodo(mes, anio,ccj.getIdEmpresa());
-			
-			if(per.isEstado() == true) {
+			if(per.isEstado() == true || per != null) {
 			
 			ComprobanteContable c = new ComprobanteContable();
 			if (comdao.getByNumero(ccj.getNumero(), ccj.getIdEmpresa()) == null) {
