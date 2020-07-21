@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Clase que crea la tabla comprobante contable
@@ -27,7 +28,7 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "comprobante_contable")
+@Table(name = "comprobante_contable", uniqueConstraints = {@UniqueConstraint(columnNames = {"numero"}) })
 @SequenceGenerator(name = "seq_comprobante_contable", sequenceName = "seq_comprobante_contable")
 @NamedQueries({
 		@NamedQuery(name = "ComprobanteContable.getAll", query = "SELECT c FROM ComprobanteContable c where c.fecha between :fechaInicial and :fechaFinal and c.empresa.id =:idEmpresa and c.empresa.oficinaContable.id =:idOficinaContable and (true = :ignoreGlosaGeneral or upper(c.glosaGeneral) like :glosaGeneral)"),

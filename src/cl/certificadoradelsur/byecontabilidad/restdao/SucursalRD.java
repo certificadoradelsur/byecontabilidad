@@ -205,7 +205,7 @@ public class SucursalRD {
 			}
 			return lcj;
 		} catch (Exception e) {
-			log.error("No se pudo obtener la lista de cuenta ", e);
+			log.error("No se pudo obtener la lista de sucursal ", e);
 			return lcj;
 		}
 

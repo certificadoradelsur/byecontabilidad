@@ -35,9 +35,9 @@ public class CentroResultadoDAO {
 	 * 
 	 * @return el total de centro resultado
 	 */
-	public Long countAll() {
+	public Long countAll(Long idSucursal) {
 		Query query = em.createNamedQuery("CentroResultado.countAll");
-		
+		query.setParameter("idSucursal", idSucursal);
 		return (Long) query.getSingleResult();
 	}
 
@@ -50,9 +50,9 @@ public class CentroResultadoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<CentroResultado> getAll(Integer inicio, Integer fin) {
+	public List<CentroResultado> getAll(Integer inicio, Integer fin,Long idSucursal) {
 		Query query = em.createNamedQuery("CentroResultado.getAll");
-		
+		query.setParameter("idSucursal", idSucursal);
 		query.setFirstResult(inicio);
 		query.setMaxResults(fin);
 		return query.getResultList();
