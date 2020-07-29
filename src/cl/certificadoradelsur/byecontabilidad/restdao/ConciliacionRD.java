@@ -186,7 +186,7 @@ public class ConciliacionRD {
 			return Constantes.MENSAJE_REST_OK;
 
 		} catch (Exception e) {
-			log.error("No se pudo modificar la conciliación ");
+			log.error("No se pudo modificar la conciliación ",e);
 			return e.getMessage();
 		}
 	}
@@ -235,7 +235,7 @@ public class ConciliacionRD {
 			}
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la conciliacion");
+			log.error("No se pudo eliminar la conciliacion ",e);
 			return e.getMessage();
 		}
 	}

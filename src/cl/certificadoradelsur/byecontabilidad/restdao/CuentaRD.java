@@ -162,7 +162,7 @@ public class CuentaRD {
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar la cuenta");
+			log.error("No se pudo modificar la cuenta ",e);
 			return e.getMessage();
 		}
 	}
@@ -210,7 +210,7 @@ public class CuentaRD {
 				return "No se puede eliminar la cuenta, ya que se encuentra en uso";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la cuenta");
+			log.error("No se pudo eliminar la cuenta ",e);
 			return e.getMessage();
 		}
 	}

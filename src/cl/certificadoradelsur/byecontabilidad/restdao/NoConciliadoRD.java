@@ -147,7 +147,7 @@ public class NoConciliadoRD {
 			return Constantes.MENSAJE_REST_OK;
 
 		} catch (Exception e) {
-			log.error("No se pudo modificar el movimiento no conciliado");
+			log.error("No se pudo modificar el movimiento no conciliado ",e);
 			return e.getMessage();
 		}
 	}
@@ -185,7 +185,7 @@ public class NoConciliadoRD {
 			bidao.guardar(b);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar el movimiento no conciliado");
+			log.error("No se pudo eliminar el movimiento no conciliado ",e);
 			return e.getMessage();
 		}
 	}

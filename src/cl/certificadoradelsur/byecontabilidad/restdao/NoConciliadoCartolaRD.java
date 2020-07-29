@@ -140,7 +140,7 @@ public class NoConciliadoCartolaRD {
 			return Constantes.MENSAJE_REST_OK;
 
 		} catch (Exception e) {
-			log.error("No se pudo modificar la cartola no conciliada");
+			log.error("No se pudo modificar la cartola no conciliada ",e);
 			return e.getMessage();
 		}
 	}
@@ -178,7 +178,7 @@ public class NoConciliadoCartolaRD {
 			bidao.guardar(b);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la cartola no conciliada");
+			log.error("No se pudo eliminar la cartola no conciliada ",e);
 			return e.getMessage();
 		}
 	}

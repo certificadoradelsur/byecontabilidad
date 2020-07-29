@@ -122,7 +122,7 @@ public class MovimientoRD {
 				return "No se puede eliminar el movimiento, ya que esta en uso por el proceso de conciliacíon";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo eliminar el movimiento");
+			log.error("No se pudo eliminar el movimiento ",e);
 			return e.getMessage();
 		}
 
@@ -456,7 +456,7 @@ public class MovimientoRD {
 				return "No se puede modificar el movimiento, ya que está en uso por el proceso de conciliacíon";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el movimiento");
+			log.error("No se pudo modificar el movimiento ",e);
 			return e.getMessage();
 		}
 	}

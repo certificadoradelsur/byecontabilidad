@@ -645,7 +645,7 @@ public class EmpresaRD {
 				}
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar la empresa");
+			log.error("No se pudo modificar la empresa ",e);
 			return e.getMessage();
 		}
 	}
@@ -693,7 +693,7 @@ public class EmpresaRD {
 			edao.update(e);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la empresa");
+			log.error("No se pudo eliminar la empresa ",e);
 			return e.getMessage();
 		}
 	}

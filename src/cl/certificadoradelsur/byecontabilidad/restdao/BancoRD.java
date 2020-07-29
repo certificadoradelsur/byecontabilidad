@@ -121,7 +121,7 @@ public class BancoRD {
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el banco");
+			log.error("No se pudo modificar el banco ",e);
 			return e.getMessage();
 		}
 	}
@@ -153,7 +153,7 @@ public class BancoRD {
 			bdao.update(banco);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar el banco");
+			log.error("No se pudo eliminar el banco ",e);
 			return e.getMessage();
 		}
 	}

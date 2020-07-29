@@ -216,7 +216,7 @@ public class HonorarioRD {
 				return "El periodo esta cerrado";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el Honorario");
+			log.error("No se pudo modificar el Honorario ",e);
 			return e.getMessage();
 		}
 	}
@@ -262,7 +262,7 @@ public class HonorarioRD {
 			hdao.eliminar(h);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la Honorario");
+			log.error("No se pudo eliminar la Honorario ",e);
 			return e.getMessage();
 		}
 	}

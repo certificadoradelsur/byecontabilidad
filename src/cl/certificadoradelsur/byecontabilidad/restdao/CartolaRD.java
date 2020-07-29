@@ -192,7 +192,7 @@ public class CartolaRD {
 				return Constantes.MENSAJE_REST_OK;
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar la cartola");
+			log.error("No se pudo modificar la cartola ",e);
 			return e.getMessage();
 		}
 	}
@@ -237,7 +237,7 @@ public class CartolaRD {
 			cdao.eliminar(cartola);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la cartola");
+			log.error("No se pudo eliminar la cartola ",e);
 			return e.getMessage();
 		}
 	}

@@ -258,7 +258,7 @@ public class CompraRD {
 				return "Periodo esta cerrado";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el compra");
+			log.error("No se pudo modificar el compra ",e);
 			return e.getMessage();
 		}
 	}
@@ -320,7 +320,7 @@ public class CompraRD {
 			cdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la compra");
+			log.error("No se pudo eliminar la compra ",e);
 			return e.getMessage();
 		}
 	}

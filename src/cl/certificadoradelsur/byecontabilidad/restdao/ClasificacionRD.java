@@ -158,7 +158,7 @@ public class ClasificacionRD {
 				return "No se puede modificar la clasificación, ya que está asociada a una cuenta contable";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar la clasificación");
+			log.error("No se pudo modificar la clasificación ",e);
 			return e.getMessage();
 		}
 	}
@@ -203,7 +203,7 @@ public class ClasificacionRD {
 				return "No se puede eliminar la clasificación, ya que está asociada a una cuenta contable";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la clasificación");
+			log.error("No se pudo eliminar la clasificación ",e);
 			return e.getMessage();
 		}
 	}

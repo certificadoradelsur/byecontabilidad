@@ -208,7 +208,7 @@ public class CuentaContableRD {
 			}
 
 		} catch (Exception e) {
-			log.error("No se pudo modificar la cuenta contable");
+			log.error("No se pudo modificar la cuenta contable ",e);
 			return e.getMessage();
 		}
 	}
@@ -267,7 +267,7 @@ public class CuentaContableRD {
 				return "No se puede eliminar la cuenta contable, ya que posee movimientos asociados";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo eliminar la cuenta contable");
+			log.error("No se pudo eliminar la cuenta contable ",e);
 			return e.getMessage();
 		}
 	}

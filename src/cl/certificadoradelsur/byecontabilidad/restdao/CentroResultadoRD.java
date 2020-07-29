@@ -168,7 +168,7 @@ public class CentroResultadoRD {
 			crdao.eliminar(centro);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar el Centro Resultado");
+			log.error("No se pudo eliminar el Centro Resultado ",e);
 			return e.getMessage();
 		}
 	}

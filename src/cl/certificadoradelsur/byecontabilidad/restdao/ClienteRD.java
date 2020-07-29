@@ -181,7 +181,7 @@ public class ClienteRD {
 				}
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el Cliente");
+			log.error("No se pudo modificar el Cliente ",e);
 			return e.getMessage();
 		}
 	}
@@ -237,7 +237,7 @@ public class ClienteRD {
 				return "No se puede cambiar el estado, ya que se encuentra asociado a un comprobante contable";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo cambiar estado al Cliente");
+			log.error("No se pudo cambiar estado al Cliente ",e);
 			return e.getMessage();
 		}
 	}

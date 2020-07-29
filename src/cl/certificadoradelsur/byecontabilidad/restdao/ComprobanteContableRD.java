@@ -275,7 +275,7 @@ public class ComprobanteContableRD {
 				return "El periodo ya esta cerrado";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar la cuenta contable");
+			log.error("No se pudo modificar la cuenta contable ",e);
 			return e.getMessage();
 		}
 	}
@@ -370,7 +370,7 @@ public class ComprobanteContableRD {
 				return "El periodo ya esta cerrado";
 			}
 		} catch (Exception e) {
-			log.error("No se pudo modificar el comprobante contable");
+			log.error("No se pudo modificar el comprobante contable ",e);
 			return e.getMessage();
 		}
 	}
@@ -413,7 +413,7 @@ public class ComprobanteContableRD {
 			comdao.eliminar(c);
 			return Constantes.MENSAJE_REST_OK;
 		} catch (Exception e) {
-			log.error("No se pudo eliminar el comprobante contable");
+			log.error("No se pudo eliminar el comprobante contable ",e);
 			return e.getMessage();
 		}
 	}
